@@ -104,7 +104,7 @@ function WarrenBuffer(node,
   }
   function render(renderLineContainers = false) {
     if (lastRender.lineCount !== Model.lastIndex + 1 ) {
-      $lineCounter.textContent = lastRender.lineCount = Model.lastIndex + 1;
+      $lineCounter.textContent = `${lastRender.lineCount = Model.lastIndex + 1}L`;
     }
 
     $gutter.textContent = null;
