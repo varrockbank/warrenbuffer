@@ -15,6 +15,12 @@
       font-family: monospace;
       border: 1px solid black;
   }
+  .no-select {
+      user-select: none;       /* Standard */
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none;    /* Firefox */
+      -ms-user-select: none;     /* IE/Edge (old) */
+  }
   .wb .wb-lines>pre::before {
       content: "\200B";
   }
@@ -53,7 +59,7 @@
     Append at Line number: <input id="append-at-line" value="1"></input>
   </div>
 </details>
-  <blockquote cite="" class="💪 🍜 🥷 🌕 🪜 wb" tabindex="0">
+  <blockquote cite="" class="💪 🍜 🥷 🌕 🪜 wb no-select" tabindex="0">
       <div class="💪">
           <div class="wb-gutter"></div>
           <div class="wb-lines 🌳 🥷"></div>
