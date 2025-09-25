@@ -14,16 +14,13 @@ function WarrenBuffer(id) {
 
   const Model = {
     lines: [],
-    lc: 0,
     get lastIndex() { return this.lines.length - 1 },
     set text(text) {
       this.lines = text.split("\n");
-      this.lc = this.lines.length;
       render(true);
     },
     splice(i, lines) {
       this.lines.splice(i - 1, 0, ...lines);
-      this.lc = this.lines.length;
       render();
     }
   }
@@ -36,11 +33,11 @@ function WarrenBuffer(id) {
     // @param i, amount to scroll viewport by.
     scroll(i) {
       this.start += i;
-      this.start = $clamp(this.start, 0, this._lc - 1);
+      this.start = $clamp(this.start, 0, Model.lastIndex);
       render();
     },
     set(start, size) {
-      this.start = $clamp(start, 0, this._lc - 1);
+      this.start = $clamp(start, 0, Model.lastIndex);
       this.size = size;
       render();
     },
@@ -49,8 +46,14 @@ function WarrenBuffer(id) {
     },
   };
 
+  const lastRender = {
+    lineCount: -1
+  };
   function render(renderLineContainers = false) {
-    $lc.innerHTML = `Line Count: ${Model.lc}`;
+    if (lastRender.lineCount !== Model.lastIndex + 1 ) {
+      lastRender.lineCount = Model.lastIndex + 1 ;
+      $lc.textContent = `Line Count: ${Model.lastIndex + 1}`;
+    }
 
     // Renders the containers for the viewport lines
     if(renderLineContainers) {
