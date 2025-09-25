@@ -35,11 +35,12 @@ function WarrenBuffer(node,
   const fragmentSelections = document.createDocumentFragment();
   const fragmentGutters = document.createDocumentFragment();
 
+  const detachedTail = { row : 0, col : 2};
   // In case where we have cursor, we want tail === head.
   let tail = head = { row: 0, col: 2 };
   let maxCol = tail.col;
   const Selection = {
-    get edges() { return [head, tail] },
+    get ordered() { return this.isForwardSelection ? [head, tail] : [tail, head] },
     moveRow(value) {
       if (value > 0) {
         if (tail.row < (Viewport.end - Viewport.start)) {                      // Inner line, Move down
@@ -106,6 +107,23 @@ function WarrenBuffer(node,
       }
       render();
     },
+    get isSelection() {
+      return tail !== head
+    },
+    // Assumes we are in selection
+    get isForwardSelection() {
+      return head.row == tail.row && head.col < tail.col || head.row < tail.row;
+    },
+    makeCursor() {
+      head.row = tail.row;
+      head.col = tail.col;
+      tail = head;
+    },
+    makeSelection() {
+      tail = detachedTail;
+      tail.row = head.row;
+      tail.col = head.col;
+    }
   };
 
   const Model = {
@@ -209,7 +227,7 @@ function WarrenBuffer(node,
     for (let i = 0; i < $selections.length; i++) {
       $selections[i].style.visibility = 'hidden';
     }
-    const [firstEdge, secondEdge] = Selection.edges;
+    const [firstEdge, secondEdge] = Selection.ordered;
 
     // Render selection lines lines. Behavior is consistent with vim/vscode but not Intellij.
     for (let i = firstEdge.row + 1; i <= secondEdge.row - 1; i++) {
@@ -259,14 +277,20 @@ function WarrenBuffer(node,
 
   // Bind keyboard control to move viewport
   node.addEventListener('keydown', event => {
-    if (event.key === "ArrowDown") {
-      Selection.moveRow(1);
-    } else if (event.key === "ArrowUp") {
-      Selection.moveRow(-1);
-    } else if (event.key === "ArrowLeft") {
-      Selection.moveCol(-1);
-    } else if (event.key === "ArrowRight") {
-      Selection.moveCol(1);
+    if(event.key.startsWith("Arrow")) {
+      if (event.shiftKey) {
+        if (!Selection.isSelection) Selection.makeSelection();
+      } else if (Selection.isSelection) Selection.makeCursor();
+
+      if (event.key === "ArrowDown") {
+        Selection.moveRow(1);
+      } else if (event.key === "ArrowUp") {
+        Selection.moveRow(-1);
+      } else if (event.key === "ArrowLeft") {
+        Selection.moveCol(-1);
+      } else if (event.key === "ArrowRight") {
+        Selection.moveCol(1);
+      }
     }
   });
 }
