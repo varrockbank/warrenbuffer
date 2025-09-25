@@ -35,11 +35,66 @@ function WarrenBuffer(node,
   const fragmentSelections = document.createDocumentFragment();
   const fragmentGutters = document.createDocumentFragment();
 
+  // In case where we have cursor, we want tail === head.
+  let tail = head = { row: 0, col: 2 };
   const Selection = {
-    head: { row: 0, col: 2 },
-    tail: { row: 5, col: 11 },
-    get edges() { return [this.head, this.tail] },
-
+    get edges() { return [head, tail] },
+    moveRow(value) {
+      if (value > 0) {
+        if (tail.row < (Viewport.end - Viewport.start)) {                      // Inner line, Move down
+          tail.row += value;
+          tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length-1));
+        } else {                                                                // Last line of viewport, scroll viewport down
+          if (Viewport.end !== Model.lastIndex) {
+            Viewport.scroll(1);
+            tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length - 1));
+          } else { }                                                             // Last line of file, No-Op.
+        }
+      } else {
+        if (tail.row === 0) {                                                    // First line of viewport, scroll viewport up
+          Viewport.scroll(-1);
+          tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length - 1 ));
+        } else {                                                                 // Inner line, move up.
+          tail.row += value;
+          tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length - 1));
+        }
+      }
+      render(true);
+    },
+    moveCol(value) {
+      if (value === 1) {
+        if (tail.col + 1 < Viewport.lines[tail.row].length) {    // Move right 1 character.
+          tail.col++;
+        } else {
+          if (tail.row < (Viewport.end - Viewport.start)) {     // Move to beginning of next line.
+            tail.col = 0;
+            tail.row++;
+          } else {
+            if (Viewport.end < Model.lastIndex) {               // Scroll from last line.
+              tail.col = 0;
+              Viewport.scroll(1);
+            } else {}                                         // End of file
+          }
+        }
+      } else if (value === -1) {
+        if (tail.col > 0) {                                   // Move left 1 character.
+          tail.col += value;
+        } else {
+          if (tail.row > 0) {                                 // Move to end of previous line
+            tail.row--;
+            tail.col = Math.max(0, Viewport.lines[tail.row].length - 1);
+          } else {
+            if (Viewport.start !== 0) {                       // Scroll then move tail to end of new current line.
+              Viewport.scroll(-1);
+              tail.col = Math.max(0, Viewport.lines[tail.row].length - 1);
+            } else {}
+          }
+        }
+      } else {
+        console.warning(`Do not support moving by multiple values (${value}) yet `);
+      }
+      render();
+    },
   };
 
   const Model = {
@@ -189,9 +244,13 @@ function WarrenBuffer(node,
   // Bind keyboard control to move viewport
   node.addEventListener('keydown', event => {
     if (event.key === "ArrowDown") {
-      warrenBuffer.Viewport.scroll(1);
+      Selection.moveRow(1);
     } else if (event.key === "ArrowUp") {
-      warrenBuffer.Viewport.scroll(-1);
+      Selection.moveRow(-1);
+    } else if (event.key === "ArrowLeft") {
+      Selection.moveCol(-1);
+    } else if (event.key === "ArrowRight") {
+      Selection.moveCol(1);
     }
   });
 }
