@@ -163,6 +163,21 @@ function WarrenBuffer(node,
       }
       render(true);
     },
+    newLine() {
+      // TODO: handle redundant rendering
+      if (this.isSelection) Selection.insert('');
+
+      const { index, left, right } = this.partitionLine(head);
+      Model.lines[index] = left;
+      Model.splice(index + 1, [right]);
+      tail.col = 0;
+      if (head.row < Viewport.size - 1) {
+        tail.row++;
+      } else {
+        Viewport.scroll(1);
+      }
+      render(true);
+    },
     // Utility to extract the text left, right, and character at the col of the
     // position for the row of the position.
     partitionLine({ row, col }) {
@@ -350,6 +365,8 @@ function WarrenBuffer(node,
     } else if (event.key === "Backspace") {
       Selection.delete();
     } else if (event.key === "Shift") {
+    } else if (event.key === "Enter") {
+      Selection.newLine();
     } else {
       Selection.insert(event.key);
     }
