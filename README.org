@@ -1,0 +1,142 @@
+* WarrenBuffer
+
+WarrenBuffer is a JavaScript library that manages billions... lines of source text.
+Think =<textarea>= but times 10000000.
+
+WarrenBuffer lives modestly in several hundred bytes and has zero-dependencies.
+
+This project serve as proof-of-concept that a high-performance text editor on the web
+is feasible without needing esoteric optimization. In fact, it naively uses a JavaScript array as a line-based buffer
+and hands off the computer science to the witchcraft that is V8. This works spookily well.
+WarrenBuffer owes its superpower to the technique of "clipping" in graphics programming wherein only viewport lines
+are rendered. This avoids the bottleneck of =<textarea>= libraries that mount the entire source
+text to the DOM that renders the web browser tab unresponsive after several 万
+(in East Asian cultures there's a specific word 10,000) LOC.
+
+WarrenBuffer is amenable to multi-cursor/multi-selection features in a text editor which is a limitation
+of libraries especially those literally built on top of "<textarea>". Even in the single-cursor case
+=<textarea>= has browser-dependent idiosyncrasies that are inconsistent with canonical text
+editors including vim, VScode and is ill-suited for developing a text editor on top.
+
+** problem space
+
+I sought to build a web-based text editor that would (1) partially implement Emacs' OrgMode and (2) serve as a log viewer.
+In both cases 10,000+ LOC files are common.
+
+Pre-existing code editor widgets mount the source-lines to DOM elements.
+This is a non-issue for code snippets but is unusable for a text editor. These widgets could barely
+handle 10^5 LOC files.
+
+For reference, =vim= on the same ~32GB computer was handling several hundred million LoC files
+and serves as a northstar of performance.
+
+Ace.js was a standout among the web-based code editors. As mentioned on their README (As of September 2025):
+"Handles huge documents (at last check, 4,000,000 lines is the upper limit)". In my prior tests on a ~32GB
+ram M1 Mac, Ace could handle 8 million LoC. This is several orders of magnitude better than the
+rest of the web-based pack.
+
+*** VScode
+
+Monaco and VSCode are fine platforms to build an enriched text editor experience on top of but
+they are heavyweight. My rule of thumb for web app is that should fit on a floppy disk
+which precludes VSCode.
+
+Circa 2022 when I investigated this domain local VSCode would choke on 10^7 ~LOC 50MB files. It would take
+be unresponsive for up to minute until the file was loaded into memory. Sometimes it would exceed
+the time limit allotted by the OS. VSCode had already adopted a
+somewhat esoteric data structure called a Piece Table adapted with a balanced tree.
+see: https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation. Here in september 2025,
+VSCode seemed to have improved on this issue by being context aware of large files and opts out of
+processing or syntax highlighting by default. =vim= syntax highlighting work on huge files so syntax highlighting
+is not inherently the issue.
+
+Monaco, the web-based version of VSCode, follows the VSCode implementation and has similar performance
+characteristics.
+
+The sourcecode for VSCode's text buffer implementation is available here:
+https://github.com/microsoft/vscode-textbuffer/tree/main. It's ~50KB which is reasonable for all practical purposes.
+The first reason I don't like it is because I don't fully understand it. The second reason is the text
+editor I aim to build must fit in 14KB - the size of the initial TCP packet. https://www.tunetheweb.com/blog/critical-resources-and-the-first-14kb/
+The text buffer should at least be smaller than React.JS which is my baseline for a bloated web library.
+
+warrenbuffer uses a simple array buffer of the text lines. V8 is impressive in its real time optimizations around
+arrays especially large 10^7/10^8 ones. The tradeoffs with the more complicated Piece Table seems
+unwarranted, no pun intended.
+
+** Inspiration from Ace
+I preface that Ace.js is a wonderful library to develop a serious text editor on top of.
+I'd recommend it.
+
+The Ace codebase is exemplary. Nevertheless, it has legacy remnants and code debt. Ace is burdened
+with compatibility and providing fallbacks. I am not. Ace also has bells and whistles which if I don't use it then it is bloat.
+
+I seek to isolate the problem of text buffering to its bare essential. The trick Ace uses to achieve
+high-capacity is to only rendering the LOC that are in view.
+
+** solution
+
+Game programming calls this technique "clipping" - rendering only the segment of the world
+that the user sees. This idea lends itself to occlusion culling in 3d graphics programming.
+
+=warrenbuffer= keeps the source file in an in-memory buffer. Namely, an array with one element
+ for each line in the source file. v8 proves brilliant in its optimizations such that a more esoteric
+ data structure such as a piece table with balanced tree doesn't seem appealing versus this naive
+ solution which just works without caveat.
+
+=warrenbuffer= renders only the relevant viewport lines to the DOM. Changing the viewport
+changes the relevant lines, and vice versa.
+
+*** The DOM is slow. The JavaScript engine (V8+) is not.
+
+The DOM is the bottleneck. If you lift storing the source LOC from the DOM to JavaScript memory then it turns out all is good.
+
+The solution is to have a JavaScript array, each element corresponding to a line in the source file.
+Track the line numbers that are in view and render these lines, and only these lines to viewport.
+Moving the viewport means changing the tracked lines, and vice versa.
+
+Not only did V8 far exceed expectations, it blew my mind. Operations on 10^8 arrays felt indistinguishable from C++.
+Perhaps even faster. Any overhead or latency is below the speed of human perception and that's all it matters
+outside the realms of quantitative finance.
+
+**** textarea
+
+For editing and input, Ace instantiates a hidden =<textarea>= around the user's cursor that binds
+to the user keyboard input. Then the actual
+rendered LOC are synchronized to this textarea, with Ace mediating this.
+
+If the motivation is to have semantically meaning HTML, then all of these code editor widgets, Ace included,
+are being delusional about HTML semantics in a webapp; the behavior of these webapps transcend
+HTML semantics.
+
+Perhaps this is just an implementation detail where =<textarea>= out-of-the-box has default behavior on various
+text operations (delete, input, new line), cursor movement and selection.
+
+Various behavior of =<textarea>= is inconsistent with vim,
+vscode and canonical editors who seemingly reference each other's behavior.
+It requires overriding =<textarea>='s default event handler with edge cases to the extent it is no longer =<textarea>=.
+=<textarea>= is an archaic HTML element and it's also not obvious how consistent browser implementations are
+w.r.t. its behavior. Safeguarding against browser regressions would
+require the same amount of effort as avoiding textarea altogether. Another non-hypothetical issue is that
+selecting a large line range would require having a large DOM-bound textarea, rather than just abstract cursors,
+which brings back the performance issues with the DOM.
+
+Then there is multi-cursor support. =<textarea>= is single-cursor. Multi-cursor
+in Ace requires hacking around this and virtualizing subsequent cursors. This defeats the purpose of
+relying on =textarea= in the first place. Now we have two overlapping implementations and the complexities
+in between.
+
+It's worth pointing out single-cursor behavior is actually a special case of multi-cursor
+ and multi-selection.
+
+
+
+
+
+
+
+
+
+
+
+
+
