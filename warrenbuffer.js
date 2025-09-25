@@ -10,7 +10,35 @@ function WarrenBuffer(id) {
   elWrapper.appendChild(elStatusLine);
   elWrapper.appendChild(this._elEditor);
 
-  this._renderCount = 0;
+  function render() {
+    this._elLineCount.innerHTML = `Line Count: ${this._lc}`;
+    // Begin render editor
+    this._elEditor.innerHTML = null;
+
+    const viewportLines = this._lines.slice(
+      this._viewportStartIndex,
+      this._viewportStartIndex + this._viewportSize
+    );
+
+    // Render viewport lines;
+    for (let i = 0; i < viewportLines.length; i++) {
+      const lineContents = viewportLines[i];
+
+      const elLineDiv = document.createElement("div");
+      elLineDiv.appendChild(document.createTextNode(lineContents));
+      // Prevent empty-line from having zero height
+      elLineDiv.style.lineHeight = '1.2em';
+      elLineDiv.style.minHeight = '1.2em';
+
+      // TODO: faster if we append to a fragment then render in a single go
+      this._elEditor.appendChild(elLineDiv);
+    }
+    // End render editor
+
+    return this;
+  }
+  this.render = render;
+
   this.setText("");
 }
 
@@ -33,31 +61,6 @@ WarrenBuffer.prototype.splice = function (i, lines) {
   this.render();
 };
 
-WarrenBuffer.prototype.render = function () {
-  const t0 = performance.now();
-
-  this._elLineCount.innerHTML = `Line Count: ${this._lc}`;
-  this.renderEditor();
-
-  const t1 = performance.now();
-  console.log(`Rendering frame #${this._renderCount} took ${t1 - t0} millis.`);
-  return this;
-};
-
-WarrenBuffer.prototype.renderEditor = function () {
-  this._elEditor.innerHTML = null;
-
-  const viewportLines = this._lines.slice(
-    this._viewportStartIndex,
-    this._viewportStartIndex + this._viewportSize
-  );
-
-  // Render viewport lines;
-  for (let i = 0; i < viewportLines.length; i++) {
-    // TODO: faster if we append to a fragment then render in a single go
-    this._elEditor.appendChild(renderLine(viewportLines[i]));
-  }
-}
 
 WarrenBuffer.prototype.viewportSet = function (startIndex, size) {
   this._viewportStartIndex = startIndex;
@@ -71,18 +74,6 @@ WarrenBuffer.prototype.viewportScroll = function (i) {
   this._viewportStartIndex += i;
   this._viewportStartIndex = $clamp(this._viewportStartIndex, 0, this._lc - 1);
   this.render();
-}
-
-function renderLine(lineContents) {
-  const elLineDiv = document.createElement("div");
-
-  elLineDiv.appendChild(document.createTextNode(lineContents));
-
-  // Prevent empty-line from having zero height
-  elLineDiv.style.lineHeight = '1.2em';
-  elLineDiv.style.minHeight = '1.2em';
-
-  return elLineDiv;
 }
 
 function $clamp(value, min, max) {
