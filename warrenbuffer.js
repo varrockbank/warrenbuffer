@@ -19,7 +19,7 @@ function WarrenBuffer(id) {
     set text(text) {
       this.lines = text.split("\n");
       this.lc = this.lines.length;
-      render();
+      render(true);
     },
     splice(i, lines) {
       this.lines.splice(i - 1, 0, ...lines);
@@ -49,35 +49,26 @@ function WarrenBuffer(id) {
     },
   };
 
-  function render() {
+  function render(renderLineContainers = false) {
     $lc.innerHTML = `Line Count: ${Model.lc}`;
-    // Begin render editor
-    $e.innerHTML = null;
 
-    const viewportLines = Viewport.lines;
-
-    // Render viewport lines;
-    for (let i = 0; i < viewportLines.length; i++) {
-      const lineContents = viewportLines[i];
-
-      const elLineDiv = document.createElement("div");
-      elLineDiv.appendChild(document.createTextNode(lineContents));
-      // Prevent empty-line from having zero height
-      elLineDiv.style.lineHeight = '1.2em';
-      elLineDiv.style.minHeight = '1.2em';
-
-      fragmentLines.appendChild(elLineDiv);
+    // Renders the containers for the viewport lines
+    if(renderLineContainers) {
+      $e.textContent = null;
+      for (let i = 0; i < Viewport.size; i++)
+        fragmentLines.appendChild(document.createElement("div"));
+      $e.appendChild(fragmentLines);
     }
-    $e.appendChild(fragmentLines);
-
-    // End render editor
+    // Update contents of line containers
+    for(let i = 0; i < Viewport.size; i++)
+      $e.children[i].textContent = Viewport.lines[i] || null;
 
     return this;
   }
   this.Viewport = Viewport;
   this.Model = Model;
 
-  render();
+  render(true);
 }
 
 function $clamp(value, min, max) {
