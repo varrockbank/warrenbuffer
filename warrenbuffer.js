@@ -123,6 +123,38 @@ function WarrenBuffer(node,
       tail = detachedTail;
       tail.row = head.row;
       tail.col = head.col;
+    },
+    insert(c) {
+      if (this.isSelection) {
+        // Sort head and tail by order of appearance ( depends on chirality )
+        const [first, second] = this.ordered;
+        const { index, left } = this.partitionLine(first);
+        const p = this.partitionLine({ row: second.row, col: second.col + 1 });
+        console.log(p)
+        const {right} = p;
+        console.log("index:" + index);
+        Model.splice(index, [left + c + right], second.row - first.row + 1);
+
+        tail.row = first.row;
+        tail.col = first.col;
+        this.makeCursor();
+      } else {
+        const { index, left, right } = this.partitionLine(head);
+        Model.lines[index] = left + c + right;
+        tail.col++;
+      }
+      render(true);
+    },
+    // Utility to extract the text left, right, and character at the col of the
+    // position for the row of the position.
+    partitionLine({ row, col }) {
+      const index = Viewport.start + row;
+      const line = Model.lines[index];
+      return {
+        index,
+        left: line.slice(0, col),
+        right: line.slice(col)
+      }
     }
   };
 
@@ -133,8 +165,8 @@ function WarrenBuffer(node,
       this.lines = text.split("\n");
       render(true);
     },
-    splice(i, lines) {
-      this.lines.splice(i - 1, 0, ...lines);
+    splice(i, lines, n = 0) {
+      this.lines.splice(i , n, ...lines);
       render();
     }
   }
@@ -277,6 +309,8 @@ function WarrenBuffer(node,
 
   // Bind keyboard control to move viewport
   node.addEventListener('keydown', event => {
+    event.preventDefault();
+
     if(event.key.startsWith("Arrow")) {
       if (event.shiftKey) {
         if (!Selection.isSelection) Selection.makeSelection();
@@ -291,6 +325,11 @@ function WarrenBuffer(node,
       } else if (event.key === "ArrowRight") {
         Selection.moveCol(1);
       }
+    } else if (event.metaKey) {
+    } else if (event.key === "Backspace") {
+    } else if (event.key === "Shift") {
+    } else {
+      Selection.insert(event.key);
     }
   });
 }
