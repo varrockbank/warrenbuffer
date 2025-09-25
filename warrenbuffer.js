@@ -1,7 +1,14 @@
-function WarrenBuffer(node, lineHeight = 24, initialViewportSize = 20) {
+function WarrenBuffer(node,
+    lineHeight = 24,
+    initialViewportSize = 20,
+    editorPaddingPX = 4 ) {
   const $e = node.querySelector('.🦄 .🌮');
   $e.style.lineHeight = `${lineHeight}px`;
   $e.style.fontSize = `${lineHeight}px`;
+  // forces the selections to be relative to this rather than the parent container
+  $e.style.position = "relative";
+  $e.style.margin = `${editorPaddingPX}px`;
+
   const $lineCounter = node.querySelector('.🦄 .🧛');
 
   // TOOD: make this width based on number of digits of line
@@ -10,7 +17,8 @@ function WarrenBuffer(node, lineHeight = 24, initialViewportSize = 20) {
             font-size: ${lineHeight}px;
             line-height: ${lineHeight}px;
             text-align: right;
-            padding-right: 8px;
+            padding-top: ${editorPaddingPX}px;
+            padding-right: ${editorPaddingPX * 2}px;
             background-color: black;
             color: white;
             width: ${3}ch;
