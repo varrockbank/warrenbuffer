@@ -8,31 +8,21 @@
   .🪜 { flex-flow: column }
   .🌳 { flex: 1 }                                       /* Grow like a tree.    */
 
-  /************* Legendary Buffer
-🦄 : The Legend
-🌮 : Lines *up for tacos*
-🧹 : cursed / cursor
-💸 : status bar
-/*********************************/
-  .🦄 {
+  /*** Classes for WarrenBuffer ***/
+  .wb {
       position: relative;
       outline: none;
       font-family: monospace;
       border: 1px solid black;
   }
-  .🦄 .🌮>pre::before {
+  .wb .wb-lines>pre::before {
       content: "\200B";
   }
-  .🦄 .🌮 pre {
+  .wb .wb-lines pre {
       margin: 0;
       overflow: hidden;
   }
-  .🦄 .💸 {
-      padding: 6px;
-      background: black;
-      color: white;
-  }
-  .🦄 .🧹 {
+  .wb .wb-selection {
       left: 0ch;
       top: 0ch;
       background-color: green;;
@@ -63,15 +53,15 @@
     Append at Line number: <input id="append-at-line" value="1"></input>
   </div>
 </details>
-  <blockquote cite="" class="💪 🍜 🥷 🌕 🪜 🦄" id="buffer-container">
+  <blockquote cite="" class="💪 🍜 🥷 🌕 🪜 wb">
       <div class="💪">
-          <div class="gutter"></div>
-          <div class="🌮 🌳 🥷"></div>
+          <div class="wb-gutter"></div>
+          <div class="wb-lines 🌳 🥷"></div>
       </div>
-      <div class="💪 💸">Line count: <span class="🧛"></span></div>
+      <div class="💪 wb-status">Line count: <span class="wb-linecount"></span></div>
   </blockquote>
   <script type="text/javascript">
-    const node = document.getElementById("buffer-container");
+    const node = document.querySelector(".wb"); <!-- This is unambiguous if only 1 instance -->
     const textDocument = "This is my first text document\nWoohoo\nFoobar\njfdhfjhfdg\njfdhj\ndh";
     const warrenBuffer = new WarrenBuffer(node);
     warrenBuffer.Model.text = textDocument;

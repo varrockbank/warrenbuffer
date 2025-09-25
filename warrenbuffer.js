@@ -2,17 +2,22 @@ function WarrenBuffer(node,
     lineHeight = 24,
     initialViewportSize = 20,
     editorPaddingPX = 4 ) {
-  const $e = node.querySelector('.🦄 .🌮');
+  const $e = node.querySelector('.wb .wb-lines');
   $e.style.lineHeight = `${lineHeight}px`;
   $e.style.fontSize = `${lineHeight}px`;
   // forces the selections to be relative to this rather than the parent container
   $e.style.position = "relative";
   $e.style.margin = `${editorPaddingPX}px`;
 
-  const $lineCounter = node.querySelector('.🦄 .🧛');
+  const $status = node.querySelector('.wb .wb-status');
+  $status.style.padding = "6px";
+  $status.style.background = "black";
+  $status.style.color = "white";
+
+  const $lineCounter = node.querySelector('.wb .wb-linecount');
 
   // TOOD: make this width based on number of digits of line
-  const $gutter = Object.assign(node.querySelector('.🦄 .gutter'), {
+  const $gutter = Object.assign(node.querySelector('.wb .wb-gutter'), {
     style: `
             font-size: ${lineHeight}px;
             line-height: ${lineHeight}px;
@@ -83,7 +88,7 @@ function WarrenBuffer(node,
     for (let i = 0; i < Viewport.size; i++) {
       $selections[i] = fragmentSelections.appendChild(
         Object.assign(document.createElement("div"), {
-          className: "🧹",
+          className: "wb-selection",
           style: `
             display: block;
             visibility: hidden;
