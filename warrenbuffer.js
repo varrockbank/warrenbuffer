@@ -186,7 +186,10 @@ function WarrenBuffer(node,
     splice(i, lines, n = 0) {
       this.lines.splice(i , n, ...lines);
       render();
-    }
+    },
+    delete(i) {
+      this.lines.splice(i, 1);
+    },
   }
   const Viewport = {
     start: 0,
