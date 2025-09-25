@@ -57,13 +57,18 @@ function WarrenBuffer(node, lineHeight = 24, initialViewportSize = 20) {
 
   function populateCursors() {
     for (let i = 0; i < Viewport.size; i++) {
-      const div = $cursors[i] = document.createElement('div');
-      div.style.display = 'block';
-      div.style.visibility = 'hidden';
-      div.style.width = `1ch`;
-      div.style.height = div.style.fontSize = `${lineHeight}px`;
-      div.classList.add('🧹');
-      fragmentSelections.appendChild(div);
+      $cursors[i] = fragmentSelections.appendChild(
+        Object.assign(document.createElement("div"), {
+          className: "🧹",
+          style: `
+            display: block;
+            visibility: hidden;
+            width: 1ch;
+            height: ${lineHeight}px;
+            font-size: ${lineHeight}px;
+          `
+        })
+      );
     }
     $container.appendChild(fragmentSelections);
   }
