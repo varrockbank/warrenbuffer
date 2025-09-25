@@ -37,13 +37,18 @@ function WarrenBuffer(node,
 
   // In case where we have cursor, we want tail === head.
   let tail = head = { row: 0, col: 2 };
+  let maxCol = tail.col;
   const Selection = {
     get edges() { return [head, tail] },
     moveRow(value) {
       if (value > 0) {
         if (tail.row < (Viewport.end - Viewport.start)) {                      // Inner line, Move down
-          tail.row += value;
-          tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length-1));
+          tail.row ++;
+          if(Viewport.lines[tail.row].length >= tail.col) {
+            tail.col = Math.min(maxCol, Math.max(0, Viewport.lines[tail.row].length-1));
+          } else {
+            tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length-1));
+          }
         } else {                                                                // Last line of viewport, scroll viewport down
           if (Viewport.end !== Model.lastIndex) {
             Viewport.scroll(1);
@@ -55,7 +60,13 @@ function WarrenBuffer(node,
           Viewport.scroll(-1);
           tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length - 1 ));
         } else {                                                                 // Inner line, move up.
-          tail.row += value;
+          tail.row--;
+          if(Viewport.lines[tail.row].length >= tail.col) {
+            tail.col = Math.min(maxCol, Math.max(0, Viewport.lines[tail.row].length-1));
+          } else {
+            tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length-1));
+          }
+
           tail.col = Math.min(tail.col, Math.max(0, Viewport.lines[tail.row].length - 1));
         }
       }
@@ -64,10 +75,10 @@ function WarrenBuffer(node,
     moveCol(value) {
       if (value === 1) {
         if (tail.col + 1 < Viewport.lines[tail.row].length) {    // Move right 1 character.
-          tail.col++;
+          maxCol = ++tail.col;
         } else {
           if (tail.row < (Viewport.end - Viewport.start)) {     // Move to beginning of next line.
-            tail.col = 0;
+            maxCol = tail.col = 0;
             tail.row++;
           } else {
             if (Viewport.end < Model.lastIndex) {               // Scroll from last line.
@@ -78,11 +89,11 @@ function WarrenBuffer(node,
         }
       } else if (value === -1) {
         if (tail.col > 0) {                                   // Move left 1 character.
-          tail.col += value;
+          maxCol = --tail.col;
         } else {
           if (tail.row > 0) {                                 // Move to end of previous line
             tail.row--;
-            tail.col = Math.max(0, Viewport.lines[tail.row].length - 1);
+            maxCol = tail.col = Math.max(0, Viewport.lines[tail.row].length - 1);
           } else {
             if (Viewport.start !== 0) {                       // Scroll then move tail to end of new current line.
               Viewport.scroll(-1);
