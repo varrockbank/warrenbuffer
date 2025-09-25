@@ -145,6 +145,24 @@ function WarrenBuffer(node,
       }
       render(true);
     },
+    delete() {
+      // TODO: Possibly, insert can be defined in terms of delete.
+      if (this.isSelection) {
+        return this.insert('');
+      }
+
+      const { index, left, right } = this.partitionLine(head);
+      if (head.col > 0) {
+        Model.lines[index] = left.slice(0, left.length - 1) + right;
+        tail.col--;
+      } else if (head.row > 0) {
+        tail.col = Model.lines[index - 1].length;
+        tail.row--;
+        Model.lines[index - 1] += Model.lines[index];
+        Model.delete(index);
+      }
+      render(true);
+    },
     // Utility to extract the text left, right, and character at the col of the
     // position for the row of the position.
     partitionLine({ row, col }) {
@@ -327,6 +345,7 @@ function WarrenBuffer(node,
       }
     } else if (event.metaKey) {
     } else if (event.key === "Backspace") {
+      Selection.delete();
     } else if (event.key === "Shift") {
     } else {
       Selection.insert(event.key);
