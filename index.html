@@ -2,14 +2,43 @@
 <head>
 <script src="warrenbuffer.js"></script>
 <style>
-  #buffer-container {
-    font-size: 20px;
-    width: 1000px;
+  /************* Boxes *************/
+  .💪 { display: flex }                                 /* Flex like muscles.   */
+
+  /************* Legendary Buffer
+🦄 : The Legender
+🌮 : Lines *up for tacos*
+💸 : status bar
+/*********************************/
+  .🦄 {
+      position: relative;
+      outline: none;
+      font-size: 24px;
+      font-family: monospace;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid black;
   }
-  #buffer-container .editor {
-    border: 1px solid;
-    font-family: monospace;
+  .🦄 .🌮 {
+      line-height: 24px;
+      flex-grow: 1;
+      overflow: hidden;
   }
+  .🦄 .🌮>pre::before {
+      content: "\200B";
+  }
+  .🦄 .🌮 pre {
+      margin: 0;
+      overflow: hidden;
+  }
+
+  .🦄 .💸 {
+      padding: 6px;
+      background: black;
+      color: white;
+  }
+
 </style>
 </head>
 
@@ -33,13 +62,16 @@
     Append at Line number: <input id="append-at-line" value="1"></input>
   </div>
   <hr />
-  <div id="buffer-container"></div>
-
+  <blockquote cite="" class="💪 🍜 🥷 🌕 " id="buffer-container">
+      <div class="🦄" >
+          <div class="🌮 🥷"></div>
+          <div class="💪 💸">Line count: <span class="🧛"></span></div>
+      </div>
+  </blockquote>
   <script type="text/javascript">
-    const elId = "buffer-container";
+    const node = document.getElementById("buffer-container");
     const textDocument = "This is my first text document\nWoohoo\nFoobar";
-
-    const warrenBuffer = new WarrenBuffer(elId);
+    const warrenBuffer = new WarrenBuffer(node);
     warrenBuffer.Model.text = textDocument;
 
     // Bind UI controls to move viewport
@@ -64,14 +96,14 @@
     });
 
     document.getElementById("file-input").addEventListener("change", () => {
-        const file = this.files[0];
-        const nBytes = file.size;
-        const aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-        let sOutput = "";
-        for (nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
-            sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
-        }
-        document.getElementById("fileSize").innerHTML = sOutput || (nBytes + " bytes");
+      const file = this.files[0];
+      const nBytes = file.size;
+      const aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+      let sOutput = "";
+      for (nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+        sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+      }
+      document.getElementById("fileSize").innerHTML = sOutput || (nBytes + " bytes");
     }, false);
     document.getElementById('load-file').addEventListener('click', () => {
       const t0 = performance.now();

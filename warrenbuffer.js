@@ -1,14 +1,6 @@
-function WarrenBuffer(id) {
-  const $e = document.createElement("div");
-  $e.setAttribute("class", "editor");
-
-  const $lc = document.createElement("div");
-  const elStatusLine = document.createElement("div");
-  elStatusLine.appendChild($lc);
-
-  const elWrapper = document.getElementById(id);
-  elWrapper.appendChild(elStatusLine);
-  elWrapper.appendChild($e);
+function WarrenBuffer(node) {
+  const $e = node.querySelector('.🌮');
+  const $lc = node.querySelector('.🧛');
 
   const fragmentLines = document.createDocumentFragment();
 
@@ -26,7 +18,7 @@ function WarrenBuffer(id) {
   }
   const Viewport = {
     start: 0,
-    size: 10,
+    size: 20,
     get end() {
       return Math.min(this.start + this.size - 1, Model.lastIndex);
     },
@@ -39,6 +31,8 @@ function WarrenBuffer(id) {
     set(start, size) {
       this.start = $clamp(start, 0, Model.lastIndex);
       this.size = size;
+      // TODO: there is a bug if change from 20 to 15 viewport. 5 dont get updated
+      // Perhaps need to call render(true);
       render();
     },
     get lines() {
@@ -51,15 +45,14 @@ function WarrenBuffer(id) {
   };
   function render(renderLineContainers = false) {
     if (lastRender.lineCount !== Model.lastIndex + 1 ) {
-      lastRender.lineCount = Model.lastIndex + 1 ;
-      $lc.textContent = `Line Count: ${Model.lastIndex + 1}`;
+      $lc.textContent = lastRender.lineCount = Model.lastIndex + 1;
     }
 
     // Renders the containers for the viewport lines
     if(renderLineContainers) {
       $e.textContent = null;
       for (let i = 0; i < Viewport.size; i++)
-        fragmentLines.appendChild(document.createElement("div"));
+        fragmentLines.appendChild(document.createElement("pre"));
       $e.appendChild(fragmentLines);
     }
     // Update contents of line containers
