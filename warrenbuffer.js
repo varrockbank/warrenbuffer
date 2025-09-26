@@ -358,7 +358,7 @@ function WarrenBuffer(node,
     // TODO: this is infrequently changed. Render it ad-hoc in the mutator method.
     $indentation.innerHTML = `Spaces: ${indentation}`;
 
-    $statusLineCoord.innerHTML = `Ln ${tail.row + 1 }, Col ${tail.col + 1 }`;
+    $statusLineCoord.innerHTML = `Ln ${Viewport.start + tail.row + 1 }, Col ${tail.col + 1 }`;
 
     return this;
   }
