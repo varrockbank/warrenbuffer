@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.2.1-alpha.1 [2025-12-24]  gz+min: 3.48 KB (-0.00), min: 9.57 KB (-0.01)
+*** golf 
+- render function doesn't need to return this 
+
 ** 12.2.0-alpha.1 [2025-12-24]  gz+min: 3.48 KB (-0.08), min: 9.58 KB (-0.25)
 *** extensions / rendering hooks
 - consolidate renderHooks from object with 3 arrays to single array

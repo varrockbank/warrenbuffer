@@ -26,7 +26,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4, logger, callbacks } = {}) {
-  this.version = "12.2.0-alpha.1";
+  this.version = "12.2.1-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -802,8 +802,6 @@ function Buffee($parent, { rows, cols, spaces = 4, logger, callbacks } = {}) {
     for (const hook of renderHooks) {
       hook($l, Viewport, rebuilt);
     }
-
-    return this;
   }
 
   // ============================================================================
