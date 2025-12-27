@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.2.2-alpha.1 [2025-12-24]  gz+min: 3.48 KB (+0.00), min: 9.57 KB (+0.00)
+*** golf 
+- export _insert, _delete to extensions instead of renaming as insert, delete
+
 ** 12.2.1-alpha.1 [2025-12-24]  gz+min: 3.48 KB (-0.00), min: 9.57 KB (-0.01)
 *** golf 
 - render function doesn't need to return this 
@@ -9,7 +13,6 @@
 - consolidate renderHooks from object with 3 arrays to single array
 - hooks receive (container, viewport, rebuilt) where rebuilt = Viewport.delta
 - remove onContainerRebuild, onRenderContent, onRenderComplete
-- add e() helper for document.createElement golf
 
 ** 12.1.1-alpha.1 [2025-12-24]  gz+min: 3.54 KB (-0.03), min: 9.78 KB (-0.04)
 *** golf 
@@ -80,7 +83,7 @@
 *** breaking
 - remove _internals object, expose internal API via editor._
 - editor._.head, editor._.tail (getters for cursor state)
-- editor._.insert, editor._.delete (wrappable primitives)
+- editor._._insert, editor._._delete (wrappable primitives)
 - editor._.render, editor._.renderHooks
 - editor._.$e, editor._.$l, editor._.$textLayer
 - editor._.contentOffset, editor._.appendLines

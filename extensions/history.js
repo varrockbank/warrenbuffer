@@ -13,7 +13,7 @@
  * const editor = BuffeeHistory(Buffee(container, config));
  */
 function BuffeeHistory(editor) {
-  const { render, insert: _insert, delete: _delete } = editor._;
+  const { render, _insert, _delete } = editor._;
 
   // State
   const undoStack = [];
@@ -72,7 +72,7 @@ function BuffeeHistory(editor) {
   }
 
   // Wrap insert to record history
-  editor._.insert = function(row, col, text) {
+  editor._._insert = function(row, col, text) {
     if (text.length === 0) return null;
 
     const cursorBefore = captureCursor();
@@ -99,7 +99,7 @@ function BuffeeHistory(editor) {
   };
 
   // Wrap delete to record history
-  editor._.delete = function(row, col, text) {
+  editor._._delete = function(row, col, text) {
     if (text.length === 0) return;
 
     const cursorBefore = captureCursor();

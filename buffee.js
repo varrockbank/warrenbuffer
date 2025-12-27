@@ -26,7 +26,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4, logger, callbacks } = {}) {
-  this.version = "12.2.1-alpha.1";
+  this.version = "12.2.2-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -841,8 +841,8 @@ function Buffee($parent, { rows, cols, spaces = 4, logger, callbacks } = {}) {
     $textLayer,
     render,
     renderHooks,
-    insert: _insert,
-    delete: _delete,
+    _insert,
+    _delete,
     appendLines(newLines, skipRender = false) {
       Model.lines.push(...newLines.map(expandTabs));
       if (!skipRender) render();

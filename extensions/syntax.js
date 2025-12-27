@@ -13,7 +13,7 @@
  * const editor = BuffeeSyntax(Buffee(container, config));
  */
 function BuffeeSyntax(editor) {
-  const { $e, $textLayer, renderHooks, insert: _insert, delete: _delete } = editor._;
+  const { $e, $textLayer, renderHooks, _insert, _delete } = editor._;
   const { Viewport, Model } = editor;
 
   // State cache: stateCache[lineIndex] = startState for that line
@@ -29,7 +29,7 @@ function BuffeeSyntax(editor) {
   // ============================================================================
 
   // Hook insert
-  editor._.insert = function(row, col, text) {
+  editor._._insert = function(row, col, text) {
     const result = _insert(row, col, text);
     if (enabled) {
       invalidateFrom(row);
@@ -38,7 +38,7 @@ function BuffeeSyntax(editor) {
   };
 
   // Hook delete
-  editor._.delete = function(row, col, text) {
+  editor._._delete = function(row, col, text) {
     _delete(row, col, text);
     if (enabled) {
       invalidateFrom(row);

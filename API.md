@@ -444,8 +444,8 @@ const {
   $textLayer,   // Text layer DOM element
   head,         // Cursor head position { row, col }
   tail,         // Cursor tail position { row, col }
-  insert,       // Primitive insert(row, col, text) function
-  delete: del,  // Primitive delete(row, col, text) function
+  _insert,      // Primitive insert(row, col, text) function
+  _delete,      // Primitive delete(row, col, text) function
   appendLines,  // appendLines(lines, skipRender?) function
   contentOffset // { ch, px, top } for positioning
 } = editor._;
