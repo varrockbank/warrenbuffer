@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.6.4-alpha.1";
+  this.version = "12.6.5-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s,
@@ -52,16 +52,16 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const lineHeight = prop("--buffee-cell");
   const editorPaddingPX = prop("--buffee-padding");
   const gutterDigitsMinimum = prop("--buffee-gutter-digits-initial");
-  let gutterDigits = -1; // as long as different from guggers digit minimum, we trigger setting gutter on first render
+  let gutterDigits = -1; // as long as different from gutters digit minimum, we trigger setting gutter on first render
   const gutterCols = () => gutterDigits + prop("--buffee-gutter-digits-padding");
-  const $ = (n, q) => n.querySelector(q); 
-  const $e = $($parent, '.buffee-elements');
-  const $l = $($e, '.buffee-lines');
-  const $cursor = $($e, '.buffee-cursor');
-  const $textLayer = $($e, '.buffee-layer-text');
-  const $selectionLayer = $($e, '.buffee-layer-selection');
-  const $clipboardBridge = $($parent, '.buffee-clipboard-bridge');
-  const $gutter = $($e, '.buffee-gutter');
+  const $ = q => $parent.querySelector(q); 
+  const $e = $('.buffee-elements');
+  const $l = $('.buffee-lines');
+  const $cursor = $('.buffee-cursor');
+  const $textLayer = $('.buffee-layer-text');
+  const $selectionLayer = $('.buffee-layer-selection');
+  const $clipboardBridge = $('.buffee-clipboard-bridge');
+  const $gutter = $('.buffee-gutter');
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
