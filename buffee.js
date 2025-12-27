@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.6.0-alpha.1";
+  this.version = "12.6.1-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s,
@@ -76,10 +76,13 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     $selectionLayer.style.height = linesHeight;
   }
 
-  const $lines = [], $gutters = [], $selections = [];
-
-  const [fragmentLines, fragmentSelections, fragmentGutters] = [0,0,0]
-    .map(() => document.createDocumentFragment());
+  // [array, fragment, parent, tagName]
+  const viewportLayers = [
+    [[], document.createDocumentFragment(), $textLayer, 'pre'],
+    [[], document.createDocumentFragment(), $gutter, 'div'],
+    [[], document.createDocumentFragment(), $selectionLayer, 'div']
+  ];
+  const [$lines, $gutters, $selections] = viewportLayers.map(l => l[0]);
 
   const detachedHead = { row : 0, col : 0};
   // head.row and tail.row are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -629,19 +632,13 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (rebuilt > 0) {
         // Add new line containers and selections
         for (let i = 0; i < rebuilt; i++) {
-          $lines.push(fragmentLines.appendChild(document.createElement('pre')));
-          $gutters.push(fragmentGutters.appendChild(document.createElement('div')));
-          $selections.push(fragmentSelections.appendChild(document.createElement('div')));
+          viewportLayers.forEach(([arr, frag, , tag]) => arr.push(frag.appendChild(document.createElement(tag))));
         }
-        $textLayer.appendChild(fragmentLines);
-        $selectionLayer.appendChild(fragmentSelections);
-        $gutter && $gutter.appendChild(fragmentGutters);
+        viewportLayers.forEach(([, frag, parent]) => parent?.appendChild(frag));
       } else {
         // Remove excess line containers and selections
         for (let i = 0; i < -rebuilt; i++) {
-          $gutters.pop()?.remove();
-          $lines.pop()?.remove();
-          $selections.pop()?.remove();
+          viewportLayers.forEach(([arr]) => arr.pop()?.remove());
         }
       }
       Viewport.delta = 0;
