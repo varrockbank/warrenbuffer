@@ -26,7 +26,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4, logger } = {}) {
-  this.version = "12.3.0-alpha.1";
+  this.version = "12.3.1-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s,
@@ -456,15 +456,9 @@ function Buffee($parent, { rows, cols, spaces = 4, logger } = {}) {
             cursor.col -= unindentationsFirstLine - indentableSpacesFromCursor;
         } else {
           const line = Model.lines[i];
-          let maxUnindent = 0;
-          for(let k = 0; k < Math.min(Mode.spaces, line.length); k++) {
-            if (line.charAt(k) === " ") {
-              maxUnindent++;
-            } else {
-              break;
-            }
-          }
-          Model.lines[i] = line.slice(maxUnindent);
+          let k = 0;
+          while (k < Mode.spaces && line[k] === ' ') k++;
+          Model.lines[i] = line.slice(k);
         }
       }
 
