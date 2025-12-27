@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.4.0-alpha.1";
+  this.version = "12.5.0-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s,
@@ -76,7 +76,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     $selectionLayer.style.height = linesHeight;
   }
 
-  const $selections = [];   // We place an invisible selection on each viewport line. We only display the active selection.
+  const $lines = [], $gutters = [], $selections = [];
 
   const [fragmentLines, fragmentSelections, fragmentGutters] = [0,0,0]
     .map(() => document.createDocumentFragment());
@@ -630,8 +630,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // Add new line containers and selections
         const base = $selections.length;
         for (let i = 0; i < rebuilt; i++) {
-          fragmentLines.appendChild(document.createElement('pre'));
-          fragmentGutters.appendChild(document.createElement('div'));
+          $lines.push(fragmentLines.appendChild(document.createElement('pre')));
+          $gutters.push(fragmentGutters.appendChild(document.createElement('div')));
           ($selections[base+i] = fragmentSelections.appendChild(document.createElement('div'))).className = 'buffee-selection';
         }
         $textLayer.appendChild(fragmentLines);
@@ -640,8 +640,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       } else {
         // Remove excess line containers and selections
         for (let i = 0; i < -rebuilt; i++) {
-          $gutter && $gutter.lastChild?.remove();
-          $textLayer.lastChild?.remove();
+          $gutters.pop()?.remove();
+          $lines.pop()?.remove();
           $selections.pop()?.remove();
         }
       }
@@ -650,8 +650,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     // Update contents of line containers
     for(let i = 0; i < Viewport.displayLines; i++) {
-      $gutter && ($gutter.children[i].textContent = Viewport.start + i + 1);
-      $textLayer.children[i].textContent = Model.lines[Viewport.start + i] ?? null;
+      $gutters[i] && ($gutters[i].textContent = Viewport.start + i + 1);
+      $lines[i].textContent = Model.lines[Viewport.start + i] ?? null;
       $selections[i].style.width = 0;
     }
 

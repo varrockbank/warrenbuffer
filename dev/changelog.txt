@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.5.0-alpha.1 [2025-12-24]  gz+min: 3.31 KB (+0.00), min: 9.14 KB (0)
+*** perf 
+- cache the children of lines and gutters
+
 ** 12.4.0-alpha.1 [2025-12-24]  gz+min: 3.31 KB (-0.00), min: 9.14 KB (+0.02)
 *** refactor 
 - add selection to their own layer 
