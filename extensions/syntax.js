@@ -13,8 +13,9 @@
  * const editor = BuffeeSyntax(Buffee(container, config));
  */
 function BuffeeSyntax(editor) {
-  const { $e, $textLayer, renderHooks, _insert, _delete } = editor._;
-  const { Viewport, Model } = editor;
+  const { renderHooks, _insert, _delete } = editor._;
+  const { Viewport, Model, $parent } = editor;
+  const $textLayer = $parent.querySelector('.buffee-layer-text');
 
   // State cache: stateCache[lineIndex] = startState for that line
   // State 0 = NORMAL, other states defined by language

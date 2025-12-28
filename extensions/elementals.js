@@ -14,9 +14,9 @@
  * const editor = BuffeeElementals(Buffee(container, config));
  */
 function BuffeeElementals(editor) {
-  const { $e, renderHooks } = editor._;
-  const { Viewport, lineHeight, render } = editor;
-  const $elementLayer = $e.querySelector('.buffee-layer-elements');
+  const { renderHooks } = editor._;
+  const { Viewport, lineHeight, render, $parent } = editor;
+  const $elementLayer = $parent.querySelector('.buffee-layer-elements');
 
   let enabled = false;
   let clickable = false;

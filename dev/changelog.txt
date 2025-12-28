@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.3-alpha.1 [2025-12-28]  gz+min: 3.24 KB (-0.01), min: 8.98 KB (-0.01)
+*** refactor
+- let extensions query for DOM elements instead of exporting them
+
 ** 12.7.2-alpha.1 [2025-12-28]  gz+min: 3.25 KB (+0.00), min: 8.99 KB (-0.09)
 *** refactor
 - move lineHeight into Mode

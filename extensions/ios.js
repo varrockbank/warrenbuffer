@@ -13,11 +13,11 @@
  * const editor = BuffeeIOS(Buffee(container, config));
  */
 function BuffeeIOS(editor) {
-  const $e = editor._.$e;
-  const lineHeight = editor.lineHeight;
-  const { Selection, Model, Viewport } = editor;
+  const { Selection, Model, Viewport, Mode, $parent } = editor;
+  const lineHeight = Mode.lineHeight;
+  const $e = $parent.querySelector('.buffee-elements');
 
-  const editingArea = $e.querySelector('.buffee-lines');
+  const editingArea = $parent.querySelector('.buffee-lines');
   const editorElement = $e;
 
   // Use contenteditable so tapping opens the keyboard

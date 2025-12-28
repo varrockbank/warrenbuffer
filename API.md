@@ -435,12 +435,18 @@ editor.UltraHighCapacity.deactivate();
 Internal state is exposed via `editor._` for building extensions. Extensions can hook into the render cycle without buffee needing to know about them.
 
 ```javascript
+// Public properties
+const { Viewport, Selection, Model, Mode, render, $parent } = editor;
+// Mode.frameCount - Number of render calls
+// Mode.lineHeight - Line height in pixels
+
+// Query DOM elements from $parent as needed:
+const $e = $parent.querySelector('.buffee-elements');
+const $textLayer = $parent.querySelector('.buffee-layer-text');
+
 // Internal API (for extensions) - accessed via editor._
 const {
   renderHooks,  // Hook registration array
-  $e,           // Elements container DOM element
-  $l,           // Lines container DOM element
-  $textLayer,   // Text layer DOM element
   head,         // Cursor head position { row, col }
   tail,         // Cursor tail position { row, col }
   _insert,      // Primitive insert(row, col, text) function
@@ -448,13 +454,6 @@ const {
   appendLines,  // appendLines(lines, skipRender?) function
   contentOffset // { ch, px, top } for positioning
 } = editor._;
-
-// Also available on editor directly:
-// editor.render()           - Trigger a render
-// editor.Mode.frameCount    - Number of render calls
-
-// Public properties
-const { Viewport, Selection, Model, Mode, lineHeight } = editor;
 ```
 
 ### Render Hooks
