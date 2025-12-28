@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.6.6-alpha.1";
+  this.version = "12.7.0-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -603,7 +603,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * Renders the editor viewport, selection, and calls extension hooks.
    * @private
    */
-  function render() {
+  this.render = function() {
     frameCount++;
 
     // Adjust gutter width based on largest visible line number
@@ -745,7 +745,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     $e,
     $l,
     $textLayer,
-    render,
     renderHooks,
     _insert,
     _delete,

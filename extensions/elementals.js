@@ -14,8 +14,8 @@
  * const editor = BuffeeElementals(Buffee(container, config));
  */
 function BuffeeElementals(editor) {
-  const { $e, render, renderHooks } = editor._;
-  const { Viewport, lineHeight } = editor;
+  const { $e, renderHooks } = editor._;
+  const { Viewport, lineHeight, render } = editor;
   const $elementLayer = $e.querySelector('.buffee-layer-elements');
 
   let enabled = false;

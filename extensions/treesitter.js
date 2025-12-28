@@ -17,8 +17,8 @@
  * editor.TreeSitter.enabled = true;
  */
 function BuffeeTreeSitter(editor, { parser, query }) {
-  const { $e, render, renderHooks } = editor._;
-  const { Viewport, Model } = editor;
+  const { $e, renderHooks } = editor._;
+  const { Viewport, Model, render } = editor;
 
   /** @type {boolean} */
   let enabled = false;
