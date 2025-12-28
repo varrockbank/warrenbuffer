@@ -13,11 +13,12 @@
  */
 function Buffee__NAME__(editor) {
   // === INTERNALS (via editor._) ===
-  // Available: renderHooks, contentOffset, appendLines, insert, delete
+  // Available: renderHooks, appendLines, _insert, _delete
   const { renderHooks } = editor._;
 
   // === EDITOR PROPERTIES ===
-  // Available: Model, Selection, Viewport, Mode, render, $parent (lineHeight on Mode)
+  // Available: Model, Selection, Viewport, Mode, render, $parent
+  // Selection.unordered returns [head, tail], Viewport.contentOffset returns { ch, px, top }
   const { Model, Viewport, Mode, render, $parent } = editor;
   const lineHeight = Mode.lineHeight;
   const $e = $parent.querySelector('.buffee-elements');

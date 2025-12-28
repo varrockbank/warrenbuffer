@@ -11,8 +11,8 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeHighlights(editor) {
-  const { contentOffset } = editor._;
-  const { $parent, Mode } = editor;
+  const { $parent, Mode, Viewport } = editor;
+  const { contentOffset } = Viewport;
   const lineHeight = Mode.lineHeight;
 
   // Create fixed layer for highlights (doesn't scroll with content)

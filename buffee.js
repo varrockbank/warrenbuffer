@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.3-alpha.1";
+  this.version = "12.7.5-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -40,7 +40,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * Editor mode settings (shared between internal and external code).
    * @namespace Mode
    */
-  const Mode = {
+  const Mode = this.Mode = {
     spaces,
     /**
      * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
@@ -51,6 +51,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     interactive: 1,
     frameCount: 0,
+    lineHeight
   };
 
   let gutterDigits = -1; // as long as different from gutters digit minimum, we trigger setting gutter on first render
@@ -99,6 +100,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @returns {[Position, Position]} Array of [start, end] positions
      */
     get ordered() { return this.isForwardSelection ? [tail, head] : [head, tail] },
+    get unordered() { return [head, tail] },
 
     /**
      * Moves the cursor/selection head vertically.
@@ -134,16 +136,14 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     moveCol(value) {
       if (value === 1) {
-        if (head.col < Model.lines[head.row].length) {                             // Move right 1 character (including to newline position).
-          maxCol = ++head.col;
-        } else if (head.row < Model.lastIndex) {                   // Move to beginning of next line.
+        if (head.col < Model.lines[head.row].length) maxCol = ++head.col; // Move right 1 character (including to newline position).
+        else if (head.row < Model.lastIndex) {                   // Move to beginning of next line.
           maxCol = head.col = 0;
           // Scroll viewport if cursor went below visible area
           if (++head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
         } // else: at end of file, No-Op
-      } else if (head.col > 0) {
-          maxCol = --head.col;
-      } else if (head.row > 0) {                                 // Move to end of previous line (phantom newline position)
+      } else if (head.col > 0) maxCol = --head.col;
+      else if (head.row > 0) {                                 // Move to end of previous line (phantom newline position)
           maxCol = head.col = Model.lines[--head.row].length;
           // Scroll viewport if cursor went above visible area
           if (head.row < Viewport.start) Viewport.start = head.row;
@@ -562,6 +562,13 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     get end() {
       return Math.min(this.start + this.size - 1, Model.lastIndex);
     },
+    get contentOffset() {
+      return {
+        ch: $gutter ? gutterCols() : 0,
+        px: $gutter ? (editorPaddingPX * 3) : editorPaddingPX,
+        top: editorPaddingPX
+      };
+    },
 
     /**
      * Scrolls the viewport by a relative amount.
@@ -715,33 +722,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   // ============================================================================
 
   /**
-   * Line height in pixels. Used for positioning elements and calculating viewport.
-   * @type {number}
-   * @readonly
-   * @warning Do not modify - changing this value will cause rendering issues.
-   */
-  this.lineHeight = lineHeight;
-
-  /**
-   * Editor mode settings (indentation, etc.)
-   * @type {Object}
-   */
-  this.Mode = Mode;
-
-  /**
    * Internal API for extensions (decorator pattern).
    * @private
    */
   this._ = {
-    get head() { return head; },
-    get tail() { return tail; },
-    get contentOffset() {
-      return {
-        ch: $gutter ? gutterCols() : 0,
-        px: $gutter ? (editorPaddingPX * 3) : editorPaddingPX,
-        top: editorPaddingPX
-      };
-    },
     renderHooks,
     _insert,
     _delete,

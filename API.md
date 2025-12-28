@@ -157,9 +157,11 @@ editor.Viewport.set(100, 25); // Go to line 100, show 25 lines
 ## Selection (`editor.Selection`)
 
 ```javascript
-// Cursor (row/col are viewport-relative)
+// Cursor position
 editor.Selection.setCursor({ row: 0, col: 5 });
 editor.Selection.isSelection;  // false if cursor, true if range
+editor.Selection.ordered;      // [start, end] in document order
+editor.Selection.unordered;    // [head, tail] - mutable position objects
 
 // Selected text
 editor.Selection.lines;  // Array of selected lines
@@ -447,13 +449,16 @@ const $textLayer = $parent.querySelector('.buffee-layer-text');
 // Internal API (for extensions) - accessed via editor._
 const {
   renderHooks,  // Hook registration array
-  head,         // Cursor head position { row, col }
-  tail,         // Cursor tail position { row, col }
   _insert,      // Primitive insert(row, col, text) function
   _delete,      // Primitive delete(row, col, text) function
-  appendLines,  // appendLines(lines, skipRender?) function
-  contentOffset // { ch, px, top } for positioning
+  appendLines   // appendLines(lines, skipRender?) function
 } = editor._;
+
+// Cursor positions via Selection.unordered
+const [head, tail] = editor.Selection.unordered;
+
+// Content offset via Viewport.contentOffset
+const { ch, px, top } = editor.Viewport.contentOffset;
 ```
 
 ### Render Hooks
@@ -475,7 +480,8 @@ renderHooks.push(($container, viewport, rebuilt) => {
 
 ```javascript
 function MyExtension(editor) {
-  const { render, renderHooks } = editor._;
+  const { renderHooks } = editor._;
+  const { render } = editor;
 
   // Register render hook
   renderHooks.push(($container, viewport, rebuilt) => {

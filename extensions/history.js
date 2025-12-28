@@ -13,7 +13,8 @@
  * const editor = BuffeeHistory(Buffee(container, config));
  */
 function BuffeeHistory(editor) {
-  const { render, _insert, _delete } = editor._;
+  const { _insert, _delete } = editor._;
+  const { render } = editor;
 
   // State
   const undoStack = [];
@@ -27,8 +28,7 @@ function BuffeeHistory(editor) {
   /** Capture current cursor/selection state */
   function captureCursor() {
     // Access via getters each time - head/tail references can change after makeSelection()
-    const head = editor._.head;
-    const tail = editor._.tail;
+    const [head, tail] = editor.Selection.unordered;
     return {
       headRow: head.row, headCol: head.col,
       tailRow: tail.row, tailCol: tail.col
@@ -47,8 +47,7 @@ function BuffeeHistory(editor) {
     }
 
     // Access via getters AFTER makeSelection/makeCursor - references change
-    const head = editor._.head;
-    const tail = editor._.tail;
+    const [head, tail] = editor.Selection.unordered;
     head.row = cursor.headRow;
     head.col = cursor.headCol;
     tail.row = cursor.tailRow;
