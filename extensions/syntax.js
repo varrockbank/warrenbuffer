@@ -13,7 +13,8 @@
  * const editor = BuffeeSyntax(Buffee(container, config));
  */
 function BuffeeSyntax(editor) {
-  const { renderHooks, _insert, _delete } = editor._;
+  const { _insert, _delete } = editor._;
+  const { renderHooks } = editor.Mode;
   const { Viewport, Model, $parent } = editor;
   const $textLayer = $parent.querySelector('.buffee-layer-text');
 
