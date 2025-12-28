@@ -12,8 +12,8 @@
  * const editor = Buffee__NAME__(Buffee(container, config));
  */
 function Buffee__NAME__(editor) {
-  // === INTERNALS (via editor._) ===
-  // Available: _insert, _delete
+  // === WRAPPABLE PRIMITIVES ===
+  // const { _insert, _delete } = editor;
   const { renderHooks } = editor.Mode;
 
   // === EDITOR PROPERTIES ===

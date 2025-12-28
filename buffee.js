@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.7-alpha.1";
+  this.version = "12.7.8-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -35,6 +35,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const prop = p => parseFloat(getComputedStyle($parent).getPropertyValue(p));
   const $ = q => $parent.querySelector(q);
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
+  const sizeSelection = (i, left, width, {style} = viewportLayers[2][0][i]) => {
+    style.left = left + 'ch';
+    style.width = width + 'ch';
+  };
 
   let gutterDigits = -1; // as long as different from gutters digit minimum, we trigger setting gutter on first render
 
@@ -229,8 +233,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
         // Get selected text before deleting
         const selectedText = this.lines.join('\n');
-        self._._delete(first.row, first.col, selectedText);
-        const insertedLines = self._._insert(first.row, first.col, s);
+        self._delete(first.row, first.col, selectedText);
+        const insertedLines = self._insert(first.row, first.col, s);
 
         head.row = first.row;
         // Update cursor to end of inserted text
@@ -241,7 +245,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         
         this.makeCursor();
       } else {
-        const insertedLines = self._._insert(tail.row, tail.col, s);
+        const insertedLines = self._insert(tail.row, tail.col, s);
 
         // Update cursor
         if (insertedLines?.length > 1) {
@@ -261,12 +265,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (tail.col > 0) {
         // Delete character before cursor
         const charToDelete = Model.lines[tail.row][tail.col - 1];
-        self._._delete(tail.row, tail.col - 1, charToDelete);
+        self._delete(tail.row, tail.col - 1, charToDelete);
         head.col--;
       } else if (tail.row > 0) {
         // At start of line - delete newline (join with previous line)
         const prevLineLen = Model.lines[tail.row - 1].length;
-        self._._delete(tail.row - 1, prevLineLen, '\n');
+        self._delete(tail.row - 1, prevLineLen, '\n');
         head.col = prevLineLen;
         if (--head.row < Viewport.start) Viewport.start = head.row;
       }
@@ -281,7 +285,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (this.isSelection) Selection.insert('', true); // skipRender - we render below
 
       // Insert newline character
-      self._._insert(tail.row, tail.col, '\n');
+      self._insert(tail.row, tail.col, '\n');
 
       head.col = 0, head.row++;
       if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
@@ -475,7 +479,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * @param {number} col - Column index
    * @param {string} text - Text to insert (may contain newlines)
    */
-  function _insert(row, col, text) {
+  this._insert = function(row, col, text) {
     if (text.length === 0) return null;
 
     // Fast path: single character (no newline)
@@ -515,7 +519,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * @param {number} col - Column index
    * @param {string} text - Text to delete (must match what's at position, may contain newlines)
    */
-  function _delete(row, col, text) {
+  this._delete = function(row, col, text) {
     if (text.length === 0) return;
 
     const lines = text.split('\n');
@@ -597,13 +601,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       return Model.lines.slice(this.start, this.end + 1);
     },
   };
-  
-
-  function sizeSelection(i, left, width) {
-    const style = viewportLayers[2][0][i].style;
-    style.left = left + 'ch';
-    style.width = width + 'ch';
-  }
 
   /**
    * Renders the editor viewport, selection, and calls extension hooks.
@@ -714,20 +711,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       hook($l, Viewport, rebuilt);
     }
   }
-
-  // ============================================================================
-  // Public API - exposed on the Buffee instance
-  // ============================================================================
-
-  /**
-   * Internal API for extensions (decorator pattern).
-   * @private
-   */
-  this._ = {
-    _insert,
-    _delete
-  };
-
+  
   // Auto-fit viewport to container height
   if (Viewport.autoFit) {
     const fitViewport = () => {

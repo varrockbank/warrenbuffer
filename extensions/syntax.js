@@ -13,7 +13,7 @@
  * const editor = BuffeeSyntax(Buffee(container, config));
  */
 function BuffeeSyntax(editor) {
-  const { _insert, _delete } = editor._;
+  const { _insert, _delete } = editor;
   const { renderHooks } = editor.Mode;
   const { Viewport, Model, $parent } = editor;
   const $textLayer = $parent.querySelector('.buffee-layer-text');
@@ -31,7 +31,7 @@ function BuffeeSyntax(editor) {
   // ============================================================================
 
   // Hook insert
-  editor._._insert = function(row, col, text) {
+  editor._insert = function(row, col, text) {
     const result = _insert(row, col, text);
     if (enabled) {
       invalidateFrom(row);
@@ -40,7 +40,7 @@ function BuffeeSyntax(editor) {
   };
 
   // Hook delete
-  editor._._delete = function(row, col, text) {
+  editor._delete = function(row, col, text) {
     _delete(row, col, text);
     if (enabled) {
       invalidateFrom(row);

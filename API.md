@@ -446,11 +446,8 @@ const { Viewport, Selection, Model, Mode, render, $parent } = editor;
 const $e = $parent.querySelector('.buffee-elements');
 const $textLayer = $parent.querySelector('.buffee-layer-text');
 
-// Internal API (for extensions) - accessed via editor._
-const {
-  _insert,      // Primitive insert(row, col, text) function
-  _delete       // Primitive delete(row, col, text) function
-} = editor._;
+// Wrappable primitives (for extensions like History, Syntax)
+const { _insert, _delete } = editor;
 
 // Render hooks via Mode.renderHooks
 const { renderHooks } = editor.Mode;
