@@ -39,8 +39,7 @@ function BuffeeUndoTree(editor) {
   // Capture cursor position
   // Access via getters each time - head/tail references can change
   function captureCursor() {
-    const head = editor._.head;
-    const tail = editor._.tail;
+    const [head, tail] = editor.Selection.unordered;
     return {
       headRow: head.row, headCol: head.col,
       tailRow: tail.row, tailCol: tail.col
@@ -62,8 +61,7 @@ function BuffeeUndoTree(editor) {
     }
 
     // Access via getters AFTER makeSelection/makeCursor - references change
-    const head = editor._.head;
-    const tail = editor._.tail;
+    const [head, tail] = editor.Selection.unordered;
     head.row = pos.headRow;
     head.col = pos.headCol;
     tail.row = pos.tailRow;
