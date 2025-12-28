@@ -14,7 +14,14 @@
  * await editor.FileLoader.streamMaterializedLoad(file);
  */
 function BuffeeFileLoader(editor) {
-  const { Model, $parent } = editor;
+  const { Model, Mode, render, $parent } = editor;
+
+  function appendLines(newLines, skipRender = false) {
+    const spaces = Mode.spaces;
+    const expandTabs = s => spaces ? s.replace(/\t/g, ' '.repeat(spaces)) : s;
+    Model.lines.push(...newLines.map(expandTabs));
+    if (!skipRender) render();
+  }
 
   // Create progress bar element
   const $progress = document.createElement('div');
@@ -107,7 +114,7 @@ function BuffeeFileLoader(editor) {
         if (lastNewlineIndex !== -1) {
           const completeText = fullText.substring(0, lastNewlineIndex);
           const lines = completeText.split('\n');
-          editor._.appendLines(lines);
+          appendLines(lines);
           totalLines += lines.length;
           remainder = fullText.substring(lastNewlineIndex + 1);
         } else {
@@ -118,7 +125,7 @@ function BuffeeFileLoader(editor) {
       }
 
       if (remainder.length > 0) {
-        editor._.appendLines([remainder]);
+        appendLines([remainder]);
         totalLines++;
       }
 
@@ -166,7 +173,7 @@ function BuffeeFileLoader(editor) {
         if (lastNewlineIndex !== -1) {
           const completeText = fullText.substring(0, lastNewlineIndex);
           const lines = completeText.split('\n');
-          editor._.appendLines(lines);
+          appendLines(lines);
           totalLines += lines.length;
           remainder = fullText.substring(lastNewlineIndex + 1);
         } else {
@@ -177,7 +184,7 @@ function BuffeeFileLoader(editor) {
       }
 
       if (remainder.length > 0) {
-        editor._.appendLines([remainder]);
+        appendLines([remainder]);
         totalLines++;
       }
 
@@ -223,7 +230,7 @@ function BuffeeFileLoader(editor) {
           if (lastNewlineIndex !== -1) {
             const completeText = fullText.substring(0, lastNewlineIndex);
             const lines = completeText.split('\n');
-            editor._.appendLines(lines);
+            appendLines(lines);
             totalLines += lines.length;
             remainder = fullText.substring(lastNewlineIndex + 1);
           } else {
@@ -238,7 +245,7 @@ function BuffeeFileLoader(editor) {
         }
 
         if (remainder.length > 0) {
-          editor._.appendLines([remainder]);
+          appendLines([remainder]);
           totalLines++;
         }
       } finally {
@@ -291,7 +298,7 @@ function BuffeeFileLoader(editor) {
 
             // Materialize strings to break V8 sliced string references
             const materializedLines = slicedLines.map(line => Array.from(line).join(''));
-            editor._.appendLines(materializedLines, true);
+            appendLines(materializedLines, true);
           } else {
             remainder += text;
           }
@@ -299,12 +306,12 @@ function BuffeeFileLoader(editor) {
           chunkCount++;
           if (chunkCount % yieldEvery === 0) {
             if (onProgress) onProgress(bytesRead / file.size);
-            editor._.appendLines([], false);
+            appendLines([], false);
             await new Promise(resolve => setTimeout(resolve, 0));
           }
         }
 
-        editor._.appendLines(remainder.length > 0 ? ['' + remainder] : [], false);
+        appendLines(remainder.length > 0 ? ['' + remainder] : [], false);
       } finally {
         reader.releaseLock();
       }
@@ -358,7 +365,7 @@ function BuffeeFileLoader(editor) {
             // Materialize strings to break V8 sliced string references
             const materializedLines = slicedLines.map(line => Array.from(line).join(''));
             // Render periodically within yield cycle
-            editor._.appendLines(materializedLines, chunkCount % yieldEvery !== renderEvery);
+            appendLines(materializedLines, chunkCount % yieldEvery !== renderEvery);
           } else {
             remainder += text;
           }
@@ -372,7 +379,7 @@ function BuffeeFileLoader(editor) {
           }
         }
 
-        editor._.appendLines(remainder.length > 0 ? ['' + remainder] : [], false);
+        appendLines(remainder.length > 0 ? ['' + remainder] : [], false);
       } finally {
         reader.releaseLock();
       }
