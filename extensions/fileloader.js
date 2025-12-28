@@ -14,8 +14,7 @@
  * await editor.FileLoader.streamMaterializedLoad(file);
  */
 function BuffeeFileLoader(editor) {
-  const { Model } = editor;
-  const $parent = editor._.$e.parentElement;
+  const { Model, $parent } = editor;
 
   // Create progress bar element
   const $progress = document.createElement('div');

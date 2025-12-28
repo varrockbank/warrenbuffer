@@ -15,8 +15,9 @@
  * await editor.UltraHighCapacity.appendLines(largeArrayOfLines);
  */
 function BuffeeUltraHighCapacity(editor) {
-  const { $e, renderHooks, appendLines } = editor._;
-  const { Viewport, Model, render } = editor;
+  const { renderHooks, appendLines } = editor._;
+  const { Viewport, Model, render, $parent } = editor;
+  const $e = $parent.querySelector('.buffee-elements');
 
   // Store original methods/getters
   const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'lastIndex').get;

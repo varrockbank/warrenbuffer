@@ -11,8 +11,9 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeHighlights(editor) {
-  const { $e, contentOffset } = editor._;
-  const { lineHeight } = editor;
+  const { contentOffset } = editor._;
+  const { $parent, Mode } = editor;
+  const lineHeight = Mode.lineHeight;
 
   // Create fixed layer for highlights (doesn't scroll with content)
   const $layer = document.createElement('div');
@@ -28,8 +29,8 @@ function BuffeeHighlights(editor) {
     fontSize: lineHeight + 'px',
     lineHeight: lineHeight + 'px'
   });
-  $e.parentElement.style.position = 'relative';
-  $e.parentElement.appendChild($layer);
+  $parent.style.position = 'relative';
+  $parent.appendChild($layer);
 
   const highlights = [];
 
