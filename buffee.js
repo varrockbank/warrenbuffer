@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.6-alpha.1";
+  this.version = "12.7.7-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -725,11 +725,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    */
   this._ = {
     _insert,
-    _delete,
-    appendLines(newLines, skipRender = false) {
-      Model.lines.push(...newLines.map(expandTabs));
-      if (!skipRender) render();
-    }
+    _delete
   };
 
   // Auto-fit viewport to container height

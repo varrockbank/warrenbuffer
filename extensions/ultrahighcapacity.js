@@ -15,14 +15,12 @@
  * await editor.UltraHighCapacity.appendLines(largeArrayOfLines);
  */
 function BuffeeUltraHighCapacity(editor) {
-  const { appendLines } = editor._;
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, render, $parent } = editor;
+  const { Viewport, Model, Mode, render, $parent } = editor;
   const $e = $parent.querySelector('.buffee-elements');
 
   // Store original methods/getters
   const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'lastIndex').get;
-  const originalAppendLines = appendLines;
 
   // Chunk state
   let enabled = false;
@@ -311,9 +309,6 @@ function BuffeeUltraHighCapacity(editor) {
         configurable: true
       });
 
-      // Override _appendLines
-      editor._.appendLines = appendChunkedLines;
-
       render(true);
     },
 
@@ -331,9 +326,6 @@ function BuffeeUltraHighCapacity(editor) {
 
       // Restore Model.lines to a regular array
       Model.lines = [];
-
-      // Restore original appendLines
-      editor._.appendLines = originalAppendLines;
 
       // Restore normal mode (full editing)
       editor.Mode.interactive = 1;

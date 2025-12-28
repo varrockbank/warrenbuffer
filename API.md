@@ -449,8 +449,7 @@ const $textLayer = $parent.querySelector('.buffee-layer-text');
 // Internal API (for extensions) - accessed via editor._
 const {
   _insert,      // Primitive insert(row, col, text) function
-  _delete,      // Primitive delete(row, col, text) function
-  appendLines   // appendLines(lines, skipRender?) function
+  _delete       // Primitive delete(row, col, text) function
 } = editor._;
 
 // Render hooks via Mode.renderHooks
