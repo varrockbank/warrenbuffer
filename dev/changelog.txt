@@ -1,5 +1,13 @@
 * Project Devlog
 
+** 12.7.2-alpha.1 [2025-12-28]  gz+min: 3.25 KB (+0.00), min: 8.99 KB (-0.09)
+*** refactor
+- move lineHeight into Mode
+
+** 12.7.1-alpha.1 [2025-12-24]  gz+min: 3.25 KB (-0.00), min: 9.08 KB (-0.01)
+*** refactor
+- make FrameCount a field on Mode
+
 ** 12.7.0-alpha.1 [2025-12-24]  gz+min: 3.26 KB (+0.00), min: 9.09 KB (+0.10)
 *** refactor 
 - make render a prototype function

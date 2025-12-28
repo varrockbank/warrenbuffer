@@ -437,9 +437,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 ```javascript
 // Internal API (for extensions) - accessed via editor._
 const {
-  render,       // render() function
   renderHooks,  // Hook registration array
-  frameCount,   // Number of render calls (getter)
   $e,           // Elements container DOM element
   $l,           // Lines container DOM element
   $textLayer,   // Text layer DOM element
@@ -450,6 +448,10 @@ const {
   appendLines,  // appendLines(lines, skipRender?) function
   contentOffset // { ch, px, top } for positioning
 } = editor._;
+
+// Also available on editor directly:
+// editor.render()           - Trigger a render
+// editor.Mode.frameCount    - Number of render calls
 
 // Public properties
 const { Viewport, Selection, Model, Mode, lineHeight } = editor;

@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.0-alpha.1";
+  this.version = "12.7.2-alpha.1";
   const self = this;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -48,7 +48,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * - -1: Read-only (no cursor/selection rendering, no navigation) - used by TUI
      * @type {-1|0|1}
      */
-    interactive: 1
+    interactive: 1,
+    frameCount: 0,
   };
 
   let gutterDigits = -1; // as long as different from gutters digit minimum, we trigger setting gutter on first render
@@ -591,7 +592,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
   };
   
-  let frameCount = 0;
 
   function sizeSelection(i, left, width) {
     const style = viewportLayers[2][0][i].style;
@@ -603,8 +603,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * Renders the editor viewport, selection, and calls extension hooks.
    * @private
    */
-  this.render = function() {
-    frameCount++;
+  const render = this.render = function() {
+    Mode.frameCount++;
 
     // Adjust gutter width based on largest visible line number
     // Minimum width from CSS variable to avoid jitter for small documents
@@ -734,7 +734,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   this._ = {
     get head() { return head; },
     get tail() { return tail; },
-    get frameCount() { return frameCount; },
     get contentOffset() {
       return {
         ch: $gutter ? gutterCols() : 0,
