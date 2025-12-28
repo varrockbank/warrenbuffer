@@ -13,8 +13,8 @@
  */
 function Buffee__NAME__(editor) {
   // === INTERNALS (via editor._) ===
-  // Available: renderHooks, appendLines, _insert, _delete
-  const { renderHooks } = editor._;
+  // Available: appendLines, _insert, _delete
+  const { renderHooks } = editor.Mode;
 
   // === EDITOR PROPERTIES ===
   // Available: Model, Selection, Viewport, Mode, render, $parent

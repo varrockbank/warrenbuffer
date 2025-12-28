@@ -448,11 +448,13 @@ const $textLayer = $parent.querySelector('.buffee-layer-text');
 
 // Internal API (for extensions) - accessed via editor._
 const {
-  renderHooks,  // Hook registration array
   _insert,      // Primitive insert(row, col, text) function
   _delete,      // Primitive delete(row, col, text) function
   appendLines   // appendLines(lines, skipRender?) function
 } = editor._;
+
+// Render hooks via Mode.renderHooks
+const { renderHooks } = editor.Mode;
 
 // Cursor positions via Selection.unordered
 const [head, tail] = editor.Selection.unordered;
@@ -480,7 +482,7 @@ renderHooks.push(($container, viewport, rebuilt) => {
 
 ```javascript
 function MyExtension(editor) {
-  const { renderHooks } = editor._;
+  const { renderHooks } = editor.Mode;
   const { render } = editor;
 
   // Register render hook

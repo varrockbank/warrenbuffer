@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.5-alpha.1";
+  this.version = "12.7.6-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -35,24 +35,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const prop = p => parseFloat(getComputedStyle($parent).getPropertyValue(p));
   const $ = q => $parent.querySelector(q);
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
-
-  /**
-   * Editor mode settings (shared between internal and external code).
-   * @namespace Mode
-   */
-  const Mode = this.Mode = {
-    spaces,
-    /**
-     * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
-     * - 1: Full editing (default)
-     * - 0: Navigation only (can move cursor, no editing) - used by UltraHighCapacity
-     * - -1: Read-only (no cursor/selection rendering, no navigation) - used by TUI
-     * @type {-1|0|1}
-     */
-    interactive: 1,
-    frameCount: 0,
-    lineHeight
-  };
 
   let gutterDigits = -1; // as long as different from gutters digit minimum, we trigger setting gutter on first render
 
@@ -416,8 +398,24 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   // Extension hooks - allows extensions to hook into editor without Buffee knowing about them
   // ============================================================================
 
-  /** Render hooks - called after text content is set. Args: ($l, Viewport, rebuilt) */
-  const renderHooks = [];
+  /**
+   * Editor mode settings (shared between internal and external code).
+   * @namespace Mode
+   */
+  const Mode = this.Mode = {
+    spaces,
+    /**
+     * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
+     * - 1: Full editing (default)
+     * - 0: Navigation only (can move cursor, no editing) - used by UltraHighCapacity
+     * - -1: Read-only (no cursor/selection rendering, no navigation) - used by TUI
+     * @type {-1|0|1}
+     */
+    interactive: 1,
+    frameCount: 0,
+    lineHeight,
+    renderHooks: []
+  };
 
   /**
    * Document model managing text content.
@@ -712,7 +710,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     }
 
     // Call extension hooks
-    for (const hook of renderHooks) {
+    for (const hook of Mode.renderHooks) {
       hook($l, Viewport, rebuilt);
     }
   }
@@ -726,7 +724,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * @private
    */
   this._ = {
-    renderHooks,
     _insert,
     _delete,
     appendLines(newLines, skipRender = false) {

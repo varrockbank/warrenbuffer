@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.6-alpha.1 [2025-12-28]  gz+min: 3.23 KB (-0.00), min: 8.97 KB (+0.01)
+*** refactor
+- move renderHook export to Mode.renderhooks
+
 ** 12.7.5-alpha.1 [2025-12-28]  gz+min: 3.23 KB (-0.01), min: 8.97 KB (-0.02)
 *** refactor
 - replace head/tail export with Selection.unordered

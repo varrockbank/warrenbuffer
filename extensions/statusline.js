@@ -6,7 +6,7 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeStatusLine(editor) {
-  const { renderHooks } = editor._;
+  const { renderHooks } = editor.Mode;
   const { Model, Mode, $parent } = editor;
 
   const $headRow = $parent.querySelector('.buffee-head-row');
