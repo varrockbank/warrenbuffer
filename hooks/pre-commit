@@ -137,7 +137,7 @@ if [ $? -eq 0 ]; then
         # Find line number of first version header, then append size info
         LINE_NUM=$(grep -n '^\*\* ' dev/changelog.txt | head -1 | cut -d: -f1)
         if [ -n "$LINE_NUM" ]; then
-            sed -i '' "${LINE_NUM}s/\]$/]${SIZE_INFO}/" dev/changelog.txt
+            sed -i '' "${LINE_NUM}s|\]$|]${SIZE_INFO}|" dev/changelog.txt
         fi
         git add dev/changelog.txt
         echo "✓ Updated changelog.txt with size info"
