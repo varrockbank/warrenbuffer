@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.25-alpha.1";
+  this.version = "12.7.26-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -285,48 +285,27 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
 
     /**
-     * Moves cursor backward by one word.
-     * Word boundaries are whitespace, word characters, or punctuation runs.
+     * Moves cursor by word in direction. dir: +1 forward, -1 backward.
+     * Future: other values for multi-word jumps.
      */
-    moveBackWord() {
-      if(head.col === 0) {
-        if(head.row > 0) {
-          head.col = Model.lines[--head.row].length;
-          if (head.row < Viewport.start) Viewport.start = head.row;
+    moveWord(dir) {
+      const s = Model.lines[head.row], n = s.length, fwd = dir > 0;
+      if (head.col === (fwd ? n : 0)) {
+        // At edge - move to adjacent line
+        if (fwd ? head.row < Model.lastIndex : head.row > 0) {
+          head.col = fwd ? 0 : Model.lines[--head.row].length;
+          if (fwd && ++head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
+          else if (!fwd && head.row < Viewport.start) Viewport.start = head.row;
         }
       } else {
-        const s = Model.lines[head.row];
         let j = head.col;
-        if (spaceRe.test(s[j])) { while (j > 0 && spaceRe.test(s[j])) j--; while (j > 0 && wordRe.test(s[j])) j--; } // whitespace
-        else if (wordRe.test(s[j])) while (j > 0 && wordRe.test(s[j])) j--; // word
-        else { const c = s[j--]; while(j > 0 && s[j] === c) j--; } // punctuation
+        const ok = fwd ? () => j < n : () => j > 0;
+        const step = () => fwd ? j++ : j--;
+        if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
+        else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
+        else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.col = j;
       }
-
-      render();
-    },
-
-    /**
-     * Moves cursor forward by one word.
-     * Word boundaries are whitespace, word characters, or punctuation runs.
-     */
-    moveWord() {
-      const s = Model.lines[head.row];
-      const n = s.length;
-      if(head.col === n) { // Edge case: At end of line
-        if (head.row < Model.lastIndex) {
-          head.col = 0;
-          if (++head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
-        }
-        // else: at end of file - do nothing
-      } else {
-        let j = head.col;
-        if (spaceRe.test(s[j])) { while (j < n && spaceRe.test(s[j])) j++; while (j < n && wordRe.test(s[j])) j++; } // whitespace
-        else if (wordRe.test(s[j])) while (j < n && wordRe.test(s[j])) j++; // word
-        else { const c = s[j++]; while(j < n && s[j] === c) j++; } // punctuation
-        head.col = j;
-      }
-
       render();
     },
 
@@ -757,7 +736,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if(!sh && Selection.dir) Selection.makeCursor();
         if(sh && !Selection.dir) Selection.makeSelection();
 
-        if (arrowCode % 2) Selection[direction > 0 ? 'moveWord' : 'moveBackWord']();
+        if (arrowCode % 2) Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.ordered[direction > 0]);

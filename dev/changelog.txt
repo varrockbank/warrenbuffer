@@ -1,6 +1,10 @@
 * Project Devlog
 
 
+** 12.7.26-alpha.1 [2025-12-30]  gz+min: 3192 bytes / 3.12 KB (-18), min: 8400 bytes / 8.20 KB
+*** refactor
+- combine moveWord and moveBackWord into one function with direction param
+
 ** 12.7.25-alpha.1 [2025-12-30]  gz+min: 3210 bytes / 3.13 KB (0), min: 8503 bytes / 8.30 KB
 *** refactor
 - replace isSpace/isWord functions with regex constants
