@@ -1,5 +1,10 @@
 * Project Devlog
 
+
+** 12.7.19-alpha.1 [2025-12-29]  gz+min: 3.15 KB (-0.01), min: 8.42 KB (+0.02)
+*** refactor 
+- add handler map for meta and special keys
+
 ** 12.7.18-alpha.1 [2025-12-29]  gz+min: 3.16 KB (-0.00), min: 8.40 KB (0)
 *** refactor 
 - consolidate 'Escape' keypress with other NoOps

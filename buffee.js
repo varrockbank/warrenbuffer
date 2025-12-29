@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.18-alpha.1";
+  this.version = "12.7.19-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -732,25 +732,24 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
   const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
   $l.addEventListener('keydown', event => {
-    const cmd = event.metaKey || event.ctrlKey, k = event.key, key = k.toLowerCase(), sh = event.shiftKey;
-    
-    // Do nothing for 1. Meta+V (on Mac) or Ctrl+V (on Windows/Linux) as to avoid conflict with the paste event.
-    // Also for Escape.
-    if (cmd && key === "v" || k === "Escape") return;
+    const cmd = event.metaKey || event.ctrlKey, k = event.key, sh = event.shiftKey;
 
-    // On Ctrl/⌘+C or Ctrl/⌘+X, *don't* preventDefault. Just redirect selection briefly.
-    if (cmd && (key === 'c' || key === 'x')) {
-      $clipboardBridge.focus({ preventScroll: true }); // Prevent browser from scrolling to textarea
-      $clipboardBridge.select();
-      return;
-    }
-
-    // Undo/Redo: Ctrl/⌘+Z / Ctrl/⌘+Shift+Z (requires BuffeeHistory extension)
-    if (cmd && key === 'z') {
-      event.preventDefault();
-      if (self.History) self.History[sh ? 'redo' : 'undo']();
-      return;
-    }
+    // Special key handlers: cmd+key (lowercase) and edit keys (capitalized)
+    const metaKeys = {
+      v: () => {},
+      c:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
+      x:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
+      z: () => { event.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
+    };
+    const special = {
+      // Edit keys (use raw key for lookup, only when Mode.interactive >= 1)
+      Backspace: () => { Selection.delete() },
+      Enter: () => { Selection.newLine() } ,
+      Tab: () => {
+        event.preventDefault();
+        sh ? Selection.unindent() : Selection.isSelection ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
+      },
+    };
 
     const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
@@ -794,22 +793,13 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if (sh && !Selection.isSelection) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
-    } else if (Mode.interactive < 1) { // navigation-only or read-only mode: no editing
-    } else if (k === "Backspace") {
-      Selection.delete();
-    } else if (k === "Enter") {
-      Selection.newLine();
-    } else if (k === "Tab" ) {
-      // Capture Tab for indentation (standard code editor behavior).
-      // Users needing keyboard navigation can use browser shortcuts or focus the editor container.
-      event.preventDefault();
-
-      if(sh) Selection.unindent();
-      else if(Selection.isSelection) Selection.indent();
-      else Selection.insert(" ".repeat(Mode.spaces));
-    } else if (k.length == 1) {
-      k === " " && event.preventDefault();
+    } else if (k.length === 1) {
+      if (cmd) return metaKeys[k.toLowerCase()]?.();
+      if (Mode.interactive < 1) return;
+      k === ' ' && event.preventDefault();
       Selection.insert(k);
+    } else if (special[k]) {
+      special[k]();
     }
   });
 }
