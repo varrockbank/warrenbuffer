@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.12-alpha.1";
+  this.version = "12.7.13-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -480,7 +480,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * @param {number} col - Column index
    * @param {string} text - Text to insert (may contain newlines)
    */
-  this._insert = function(row, col, text) {
+  this._insert = (row, col, text) => {
     if (text.length === 0) return null;
 
     // Fast path: single character (no newline)
@@ -520,7 +520,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * @param {number} col - Column index
    * @param {string} text - Text to delete (must match what's at position, may contain newlines)
    */
-  this._delete = function(row, col, text) {
+  this._delete = (row, col, text) => {
     if (text.length === 0) return;
 
     const lines = text.split('\n');
@@ -607,7 +607,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    * Renders the editor viewport, selection, and calls extension hooks.
    * @private
    */
-  const render = this.render = function() {
+  const render = this.render = () => {
     Mode.frameCount++;
 
     // Adjust gutter width based on largest visible line number

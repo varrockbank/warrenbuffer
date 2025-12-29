@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.13-alpha.1 [2025-12-29]  gz+min: 3.16 KB (-0.01), min: 8.47 KB (-0.02)
+*** refactor
+- convert _insert, _delete, render from function to arrow functions
+
 ** 12.7.12-alpha.1 [2025-12-29]  gz+min: 3.17 KB (-0.01), min: 8.49 KB (-0.21)
 *** refactor
 - add cmd/k/key/sh aliases for event properties in keydown handler
