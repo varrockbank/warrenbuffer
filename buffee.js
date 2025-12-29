@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.11-alpha.1";
+  this.version = "12.7.12-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -741,34 +741,35 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
   const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
   $l.addEventListener('keydown', event => {
+    const cmd = event.metaKey || event.ctrlKey, k = event.key, key = k.toLowerCase(), sh = event.shiftKey;
     // Do nothing for Meta+V (on Mac) or Ctrl+V (on Windows/Linux) as to avoid conflict with the paste event.
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "v") {
+    if (cmd && key === "v") {
       // just return, no preventDefault, no custom handling
       return;
     }
 
     // On Ctrl/⌘+C or Ctrl/⌘+X, *don't* preventDefault. Just redirect selection briefly.
-    if ((event.metaKey || event.ctrlKey) && (event.key.toLowerCase() === 'c' || event.key.toLowerCase() === 'x')) {
+    if (cmd && (key === 'c' || key === 'x')) {
       $clipboardBridge.focus({ preventScroll: true }); // Prevent browser from scrolling to textarea
       $clipboardBridge.select();
       return;
     }
 
     // Undo: Ctrl/⌘+Z (requires BuffeeHistory extension)
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'z' && !event.shiftKey) {
+    if (cmd && key === 'z' && !sh) {
       event.preventDefault();
       if (self.History) self.History.undo();
       return;
     }
 
     // Redo: Ctrl/⌘+Shift+Z (requires BuffeeHistory extension)
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'z' && event.shiftKey) {
+    if (cmd && key === 'z' && sh) {
       event.preventDefault();
       if (self.History) self.History.redo();
       return;
     }
 
-    const arrowCode = arrowMap[event.key] || 0;
+    const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
       // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
       const direction = arrowCode >> 31 | 1;
@@ -776,16 +777,16 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (Mode.interactive < 0) return; // read-only mode: no navigation
 
       if(event.metaKey) {
-        if(!event.shiftKey && Selection.isSelection) Selection.makeCursor();
-        if(event.shiftKey && !Selection.isSelection) Selection.makeSelection();
+        if(!sh && Selection.isSelection) Selection.makeCursor();
+        if(sh && !Selection.isSelection) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveCursorEndOfLine' : 'moveCursorStartOfLine']();
       } else if (event.altKey) {
-        if(!event.shiftKey && Selection.isSelection) Selection.makeCursor();
-        if(event.shiftKey && !Selection.isSelection) Selection.makeSelection();
+        if(!sh && Selection.isSelection) Selection.makeCursor();
+        if(sh && !Selection.isSelection) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveWord' : 'moveBackWord']();
-      } else if (!event.shiftKey && Selection.isSelection) { // no meta key, no shift key, selection.
+      } else if (!sh && Selection.isSelection) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.ordered[direction > 0 | 0]);
           render();
@@ -807,25 +808,25 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           render();
         }
       } else { // no meta key.
-        if (event.shiftKey && !Selection.isSelection) Selection.makeSelection();
+        if (sh && !Selection.isSelection) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
-    } else if (Mode.interactive < 1 || event.key === "Escape") { // navigation-only or read-only mode: no editing
-    } else if (event.key === "Backspace") {
+    } else if (Mode.interactive < 1 || k === "Escape") { // navigation-only or read-only mode: no editing
+    } else if (k === "Backspace") {
       Selection.delete();
-    } else if (event.key === "Enter") {
+    } else if (k === "Enter") {
       Selection.newLine();
-    } else if (event.key === "Tab" ) {
+    } else if (k === "Tab" ) {
       // Capture Tab for indentation (standard code editor behavior).
       // Users needing keyboard navigation can use browser shortcuts or focus the editor container.
       event.preventDefault();
 
-      if(event.shiftKey) Selection.unindent();
+      if(sh) Selection.unindent();
       else if(Selection.isSelection) Selection.indent();
       else Selection.insert(" ".repeat(Mode.spaces));
-    } else if (event.key.length == 1) {
-      event.key === " " && event.preventDefault();
-      Selection.insert(event.key);
+    } else if (k.length == 1) {
+      k === " " && event.preventDefault();
+      Selection.insert(k);
     }
   });
 }

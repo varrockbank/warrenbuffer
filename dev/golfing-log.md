@@ -6,7 +6,7 @@ Tracking size reduction experiments for buffee.js
 
 | # | Variation | Size | Delta | Cumulative | Keep? |
 |---|-----------|------|-------|------------|-------|
-| 1 | cmd+key aliases in keydown | 3259 | -3 | -3 | ✓ |
+| 1 | cmd+key aliases in keydown | 3259 | -3 | -3 | ✓ committed |
 | 2 | Math.min alias (mn) | 3263 | +1 | - | ✗ |
 | 3 | 'cx'.includes(key) for c/x check | 3261 | +2 | - | ✗ |
 | 4 | /[cx]/.test(key) for c/x check | 3258 | -1 | -4 | ✓ |
@@ -21,8 +21,8 @@ Tracking size reduction experiments for buffee.js
 | 13 | function to arrow (3 functions) | 3241 | -7 | -21 | ✓ |
 | 14 | .at(-1) for last element | 3245 | +4 | - | ✗ |
 | 15 | frag() alias for createDocumentFragment | 3237 | -4 | -25 | ✓ committed |
-| 16 | k = event.key alias | 3232 | -5 | -30 | ✓ |
-| 17 | sh = event.shiftKey alias | 3231 | -1 | -31 | ✓ |
+| 16 | k = event.key alias | 3232 | -5 | -30 | ✓ committed |
+| 17 | sh = event.shiftKey alias | 3231 | -1 | -31 | ✓ committed |
 | 18 | pd() for event.preventDefault | 3232 | +1 | - | ✗ |
 | 19 | combined v/c/x handler | 3236 | +5 | - | ✗ |
 | 20 | fwd = direction > 0 | 3232 | +1 | - | ✗ |
