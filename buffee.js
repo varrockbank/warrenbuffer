@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.10-alpha.1";
+  this.version = "12.7.11-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -34,6 +34,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const isWord = ch => /[\p{L}\p{Nd}_]/u.test(ch);
   const prop = p => parseFloat(getComputedStyle($parent).getPropertyValue(p));
   const $ = q => $parent.querySelector(q);
+  const frag = () => frag();
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
   const sizeSelection = (i, left, width, {style} = viewportLayers[2][0][i]) => {
     style.left = left + 'ch';
@@ -56,9 +57,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [[], document.createDocumentFragment(), $textLayer, 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
-    [[], document.createDocumentFragment(), $gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
-    [[], document.createDocumentFragment(), $selectionLayer, 'div', (el) => el.style.width = 0]
+    [[], frag(), $textLayer, 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
+    [[], frag(), $gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
+    [[], frag(), $selectionLayer, 'div', (el) => el.style.width = 0]
   ];
 
   // Set container width if cols specified

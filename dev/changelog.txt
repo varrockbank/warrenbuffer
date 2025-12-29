@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.11-alpha.1 [2025-12-29]  gz+min: 3.18 KB (-0.00), min: 8.71 KB (-0.08)
+*** refactor
+- add frag() alias for document.createDocumentFragment()
+
 ** 12.7.10-alpha.1 [2025-12-29]  gz+min: 3.18 KB (-0.01), min: 8.77 KB (-0.02)
 *** refactor
 - simplify Mode.interactive comparisons (< instead of === or !==)
