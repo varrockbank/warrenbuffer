@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.15-alpha.1 [2025-12-29]  gz+min: 3.17 KB (-0.00), min: 8.48 KB (-0.03)
+*** refactor
+- use countdown loops for viewport rebuild
+
 ** 12.7.14-alpha.1 [2025-12-29]  gz+min: 3.17 KB (+0.01), min: 8.50 KB (+0.03)
 *** fix
 - frag() was calling itself instead of createDocumentFragment

@@ -26,8 +26,9 @@ Tracking size reduction experiments for buffee.js
 | 18 | pd() for event.preventDefault | 3232 | +1 | - | ✗ |
 | 19 | combined v/c/x handler | 3236 | +5 | - | ✗ |
 | 20 | fwd = direction > 0 | 3232 | +1 | - | ✗ |
+| 21 | countdown loops for viewport rebuild | 3245 | -5 | -17 | ✓ committed |
 
-## Final Result: 3231 bytes (-31 from baseline, -0.95%)
+## Final Result: 3245 bytes (-17 from baseline, -0.52%)
 
 ## Kept Optimizations (in order of application):
 1. cmd+key aliases in keydown handler
@@ -39,6 +40,7 @@ Tracking size reduction experiments for buffee.js
 7. frag() alias for document.createDocumentFragment()
 8. k = event.key alias
 9. sh = event.shiftKey alias
+10. countdown loops for viewport rebuild (for (; e > 0; e--))
 
 ## Key Insights
 - Gzip compresses repetition well, so aliasing short patterns often doesn't help
