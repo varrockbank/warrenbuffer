@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.9-alpha.1 [2025-12-28]  gz+min: 3.19 KB (-0.02), min: 8.79 KB (-0.11)
+*** refactor
+- golf horizontal scroll logic
+
 ** 12.7.8-alpha.1 [2025-12-28]  gz+min: 3.21 KB (-0.00), min: 8.91 KB (-0.01)
 *** refactor
 - remove final exports on _ by making buffee._insert, and buffee._delete available 

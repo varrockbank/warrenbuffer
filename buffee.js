@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.8-alpha.1";
+  this.version = "12.7.9-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -688,21 +688,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         $cursor.style.left = head.col + 'ch';
 
         // Horizontal scroll to keep cursor in view
-        const containerRect = $l.getBoundingClientRect();
-        const cursorRect = $cursor.getBoundingClientRect();
-        const charWidth = cursorRect.width || 14;
-
-        if (cursorRect.left < containerRect.left) {
-          const deficit = containerRect.left - cursorRect.left;
-          const charsToScroll = Math.ceil(deficit / charWidth);
-          $l.scrollLeft -= charsToScroll * charWidth;
-        } else if (cursorRect.right > containerRect.right) {
-          const deficit = cursorRect.right - containerRect.right;
-          const charsToScroll = Math.ceil(deficit / charWidth);
-          $l.scrollLeft += charsToScroll * charWidth;
-        }
-        // Snap to character boundary to prevent accumulated drift
-        $l.scrollLeft = Math.round($l.scrollLeft / charWidth) * charWidth;
+        const {left: cl, right: cr} = $l.getBoundingClientRect(), {left: rl, right: rr, width: w = 14} = $cursor.getBoundingClientRect();
+        $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / w) * w;
       }
     }
 
