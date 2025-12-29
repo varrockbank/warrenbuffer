@@ -25,13 +25,12 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.24-alpha.1";
+  this.version = "12.7.25-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
-  const isSpace = ch => /\s/.test(ch);
-  const isWord = ch => /[\p{L}\p{Nd}_]/u.test(ch);
+  const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const prop = p => parseFloat(getComputedStyle($parent).getPropertyValue(p));
   const $ = q => $parent.querySelector(q);
   const frag = () => document.createDocumentFragment();
@@ -298,8 +297,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       } else {
         const s = Model.lines[head.row];
         let j = head.col;
-        if (isSpace(s[j])) { while (j > 0 && isSpace(s[j])) j--; while (j > 0 && isWord(s[j])) j--; } // whitespace
-        else if (isWord(s[j])) while (j > 0 && isWord(s[j])) j--; // word
+        if (spaceRe.test(s[j])) { while (j > 0 && spaceRe.test(s[j])) j--; while (j > 0 && wordRe.test(s[j])) j--; } // whitespace
+        else if (wordRe.test(s[j])) while (j > 0 && wordRe.test(s[j])) j--; // word
         else { const c = s[j--]; while(j > 0 && s[j] === c) j--; } // punctuation
         head.col = j;
       }
@@ -322,8 +321,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // else: at end of file - do nothing
       } else {
         let j = head.col;
-        if (isSpace(s[j])) { while (j < n && isSpace(s[j])) j++; while (j < n && isWord(s[j])) j++; } // whitespace
-        else if (isWord(s[j])) while (j < n && isWord(s[j])) j++; // word
+        if (spaceRe.test(s[j])) { while (j < n && spaceRe.test(s[j])) j++; while (j < n && wordRe.test(s[j])) j++; } // whitespace
+        else if (wordRe.test(s[j])) while (j < n && wordRe.test(s[j])) j++; // word
         else { const c = s[j++]; while(j < n && s[j] === c) j++; } // punctuation
         head.col = j;
       }
