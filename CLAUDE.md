@@ -181,3 +181,14 @@ Templates: `extensions/_template.js`, `samples/_template.html`, `themes/_templat
 ## Generating Sample Pages
 
 Reference existing samples in `samples/`. Show actual JS values in code hints, not generic parameter names.
+
+## Code Golfing Process
+
+When golfing buffee.js to reduce minified+gzipped size:
+
+1. **Find a section** of code to golf
+2. **Try variations** - rewrite the code in different ways
+3. **Benchmark variations** with `./hooks/pre-commit` - report gzipped size to user
+4. **Repeat steps 2-3** until user says to stop
+5. **Update version** (increment smallest version number), update changelog
+6. **Wait for user confirmation** before committing

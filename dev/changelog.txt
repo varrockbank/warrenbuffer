@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.10-alpha.1 [2025-12-29]  gz+min: 3.18 KB (-0.01), min: 8.77 KB (-0.02)
+*** refactor
+- simplify Mode.interactive comparisons (< instead of === or !==)
+
 ** 12.7.9-alpha.1 [2025-12-28]  gz+min: 3.19 KB (-0.02), min: 8.79 KB (-0.11)
 *** refactor
 - golf horizontal scroll logic
