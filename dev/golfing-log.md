@@ -27,8 +27,10 @@ Tracking size reduction experiments for buffee.js
 | 19 | combined v/c/x handler | 3236 | +5 | - | ✗ |
 | 20 | fwd = direction > 0 | 3232 | +1 | - | ✗ |
 | 21 | countdown loops for viewport rebuild | 3245 | -5 | -17 | ✓ committed |
+| 22 | event -> e in keydown handler | 3230 | -14 | -32 | ✓ committed |
+| 23 | remove | 0 from boolean array index | 3228 | -2 | -34 | ✓ committed |
 
-## Final Result: 3245 bytes (-17 from baseline, -0.52%)
+## Final Result: 3228 bytes (-34 from baseline, -1.04%)
 
 ## Kept Optimizations (in order of application):
 1. cmd+key aliases in keydown handler
@@ -41,6 +43,8 @@ Tracking size reduction experiments for buffee.js
 8. k = event.key alias
 9. sh = event.shiftKey alias
 10. countdown loops for viewport rebuild (for (; e > 0; e--))
+11. event -> e in keydown handler
+12. remove | 0 from boolean array index (JS allows boolean as index)
 
 ## Key Insights
 - Gzip compresses repetition well, so aliasing short patterns often doesn't help
@@ -48,3 +52,4 @@ Tracking size reduction experiments for buffee.js
 - Combining similar handlers can save bytes when patterns align well
 - Shorter comparison operators (< vs !==, < vs ===) can save bytes
 - String coercion (+'' vs .toString()) is shorter
+- Boolean values work as array indices in JS: `arr[x > 0]` is equivalent to `arr[x > 0 | 0]`
