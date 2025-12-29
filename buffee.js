@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.16-alpha.1";
+  this.version = "12.7.17-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -733,6 +733,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
   $l.addEventListener('keydown', event => {
     const cmd = event.metaKey || event.ctrlKey, k = event.key, key = k.toLowerCase(), sh = event.shiftKey;
+    
     // Do nothing for Meta+V (on Mac) or Ctrl+V (on Windows/Linux) as to avoid conflict with the paste event.
     if (cmd && key === "v") {
       // just return, no preventDefault, no custom handling
@@ -755,12 +756,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
+      event.preventDefault(); // prevents page scroll
       // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
       const direction = arrowCode >> 31 | 1;
-      event.preventDefault(); // prevents page scroll
       if (Mode.interactive < 0) return; // read-only mode: no navigation
 
-      if(event.metaKey) {
+      if(cmd) {
         if(!sh && Selection.isSelection) Selection.makeCursor();
         if(sh && !Selection.isSelection) Selection.makeSelection();
 
