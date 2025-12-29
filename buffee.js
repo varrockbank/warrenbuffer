@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.17-alpha.1";
+  this.version = "12.7.18-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -734,11 +734,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   $l.addEventListener('keydown', event => {
     const cmd = event.metaKey || event.ctrlKey, k = event.key, key = k.toLowerCase(), sh = event.shiftKey;
     
-    // Do nothing for Meta+V (on Mac) or Ctrl+V (on Windows/Linux) as to avoid conflict with the paste event.
-    if (cmd && key === "v") {
-      // just return, no preventDefault, no custom handling
-      return;
-    }
+    // Do nothing for 1. Meta+V (on Mac) or Ctrl+V (on Windows/Linux) as to avoid conflict with the paste event.
+    // Also for Escape.
+    if (cmd && key === "v" || k === "Escape") return;
 
     // On Ctrl/⌘+C or Ctrl/⌘+X, *don't* preventDefault. Just redirect selection briefly.
     if (cmd && (key === 'c' || key === 'x')) {
@@ -796,7 +794,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if (sh && !Selection.isSelection) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
-    } else if (Mode.interactive < 1 || k === "Escape") { // navigation-only or read-only mode: no editing
+    } else if (Mode.interactive < 1) { // navigation-only or read-only mode: no editing
     } else if (k === "Backspace") {
       Selection.delete();
     } else if (k === "Enter") {
