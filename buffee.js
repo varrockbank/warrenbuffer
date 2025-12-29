@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.19-alpha.1";
+  this.version = "12.7.20-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -731,29 +731,29 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
   const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
-  $l.addEventListener('keydown', event => {
-    const cmd = event.metaKey || event.ctrlKey, k = event.key, sh = event.shiftKey;
+  $l.addEventListener('keydown', e => {
+    const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey;
 
     // Special key handlers: cmd+key (lowercase) and edit keys (capitalized)
     const metaKeys = {
       v: () => {},
       c:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       x:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
-      z: () => { event.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
+      z: () => { e.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
     };
     const special = {
       // Edit keys (use raw key for lookup, only when Mode.interactive >= 1)
       Backspace: () => { Selection.delete() },
       Enter: () => { Selection.newLine() } ,
       Tab: () => {
-        event.preventDefault();
+        e.preventDefault();
         sh ? Selection.unindent() : Selection.isSelection ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
       },
     };
 
     const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
-      event.preventDefault(); // prevents page scroll
+      e.preventDefault(); // prevents page scroll
       // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
       const direction = arrowCode >> 31 | 1;
       if (Mode.interactive < 0) return; // read-only mode: no navigation
@@ -763,7 +763,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if(sh && !Selection.isSelection) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveCursorEndOfLine' : 'moveCursorStartOfLine']();
-      } else if (event.altKey) {
+      } else if (e.altKey) {
         if(!sh && Selection.isSelection) Selection.makeCursor();
         if(sh && !Selection.isSelection) Selection.makeSelection();
 
@@ -796,7 +796,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     } else if (k.length === 1) {
       if (cmd) return metaKeys[k.toLowerCase()]?.();
       if (Mode.interactive < 1) return;
-      k === ' ' && event.preventDefault();
+      k === ' ' && e.preventDefault();
       Selection.insert(k);
     } else if (special[k]) {
       special[k]();
