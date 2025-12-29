@@ -29,8 +29,9 @@ Tracking size reduction experiments for buffee.js
 | 21 | countdown loops for viewport rebuild | 3245 | -5 | -17 | ✓ committed |
 | 22 | event -> e in keydown handler | 3230 | -14 | -32 | ✓ committed |
 | 23 | remove | 0 from boolean array index | 3228 | -2 | -34 | ✓ committed |
+| 24 | sel combines isSelection + isForwardSelection | 3220 | -8 | -42 | ✓ committed |
 
-## Final Result: 3228 bytes (-34 from baseline, -1.04%)
+## Final Result: 3220 bytes (-42 from baseline, -1.29%)
 
 ## Kept Optimizations (in order of application):
 1. cmd+key aliases in keydown handler
@@ -45,6 +46,7 @@ Tracking size reduction experiments for buffee.js
 10. countdown loops for viewport rebuild (for (; e > 0; e--))
 11. event -> e in keydown handler
 12. remove | 0 from boolean array index (JS allows boolean as index)
+13. sel: combine isSelection + isForwardSelection (1=fwd, -1=back, 0=cursor)
 
 ## Key Insights
 - Gzip compresses repetition well, so aliasing short patterns often doesn't help

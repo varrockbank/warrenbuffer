@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.21-alpha.1";
+  this.version = "12.7.22-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -86,7 +86,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Returns selection bounds in document order [start, end].
      * @returns {[Position, Position]} Array of [start, end] positions
      */
-    get ordered() { return this.isForwardSelection ? [tail, head] : [head, tail] },
+    get ordered() { return this.sel > 0 ? [tail, head] : [head, tail] },
     get unordered() { return [head, tail] },
 
     /**
@@ -140,18 +140,11 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     /**
      * Whether there is an active text selection (vs just a cursor).
-     * @returns {boolean} True if text is selected
+     * Selection direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
+     * @returns {-1|0|1}
      */
-    get isSelection() {
-      return head !== tail
-    },
-
-    /**
-     * Whether the selection direction is forward (tail before head).
-     * @returns {boolean} True if selection goes left-to-right/top-to-bottom
-     */
-    get isForwardSelection() {
-      return tail.row === head.row && tail.col < head.col || tail.row < head.row;
+    get sel() {
+      return head === tail ? 0 : (tail.row === head.row && tail.col < head.col || tail.row < head.row) ? 1 : -1;
     },
 
     /**
@@ -229,7 +222,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     insert(s, skipRender = false) {
       s = expandTabs(s);
-      if (this.isSelection) {
+      if (this.sel) {
         const [first] = this.ordered;
 
         // Get selected text before deleting
@@ -261,7 +254,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Deletes the character before cursor or the current selection.
      */
     delete() {
-      if (this.isSelection) return this.insert('');
+      if (this.sel) return this.insert('');
 
       if (tail.col > 0) {
         // Delete character before cursor
@@ -283,7 +276,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Inserts a new line at cursor position, splitting the current line.
      */
     newLine() {
-      if (this.isSelection) Selection.insert('', true); // skipRender - we render below
+      if (this.sel) Selection.insert('', true); // skipRender - we render below
 
       // Insert newline character
       self._insert(tail.row, tail.col, '\n');
@@ -345,7 +338,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * No-op if there is no selection.
      */
     indent() {
-      if(!this.isSelection) return;
+      if(!this.sel) return;
       const [first, second] = this.ordered;
 
       for(let i = first.row; i <= second.row; i++)
@@ -747,7 +740,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.newLine() } ,
       Tab: () => {
         e.preventDefault();
-        sh ? Selection.unindent() : Selection.isSelection ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
+        sh ? Selection.unindent() : Selection.sel ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
       },
     };
 
@@ -759,16 +752,16 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (Mode.interactive < 0) return; // read-only mode: no navigation
 
       if(cmd) {
-        if(!sh && Selection.isSelection) Selection.makeCursor();
-        if(sh && !Selection.isSelection) Selection.makeSelection();
+        if(!sh && Selection.sel) Selection.makeCursor();
+        if(sh && !Selection.sel) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveCursorEndOfLine' : 'moveCursorStartOfLine']();
       } else if (e.altKey) {
-        if(!sh && Selection.isSelection) Selection.makeCursor();
-        if(sh && !Selection.isSelection) Selection.makeSelection();
+        if(!sh && Selection.sel) Selection.makeCursor();
+        if(sh && !Selection.sel) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveWord' : 'moveBackWord']();
-      } else if (!sh && Selection.isSelection) { // no meta key, no shift key, selection.
+      } else if (!sh && Selection.sel) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.ordered[direction > 0]);
           render();
@@ -790,7 +783,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           render();
         }
       } else { // no meta key.
-        if (sh && !Selection.isSelection) Selection.makeSelection();
+        if (sh && !Selection.sel) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
     } else if (k.length === 1) {
