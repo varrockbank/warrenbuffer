@@ -20,7 +20,7 @@ Tracking size reduction experiments for buffee.js
 | 12 | .toString() to +'' | 3248 | -2 | -14 | ✓ |
 | 13 | function to arrow (3 functions) | 3241 | -7 | -21 | ✓ |
 | 14 | .at(-1) for last element | 3245 | +4 | - | ✗ |
-| 15 | frag() alias for createDocumentFragment | 3237 | -4 | -25 | ✓ |
+| 15 | frag() alias for createDocumentFragment | 3237 | -4 | -25 | ✓ committed |
 | 16 | k = event.key alias | 3232 | -5 | -30 | ✓ |
 | 17 | sh = event.shiftKey alias | 3231 | -1 | -31 | ✓ |
 | 18 | pd() for event.preventDefault | 3232 | +1 | - | ✗ |
