@@ -18,7 +18,7 @@ Tracking size reduction experiments for buffee.js
 | 10 | !== 1 to < 1 for Mode.interactive | 3254 | -1 | -8 | ✓ committed |
 | 11 | === -1 to < 0 for Mode.interactive | 3250 | -4 | -12 | ✓ committed |
 | 12 | .toString() to +'' | 3248 | -2 | -14 | ✓ |
-| 13 | function to arrow (3 functions) | 3241 | -7 | -21 | ✓ |
+| 13 | function to arrow (3 functions) | 3241 | -7 | -21 | ✓ committed |
 | 14 | .at(-1) for last element | 3245 | +4 | - | ✗ |
 | 15 | frag() alias for createDocumentFragment | 3237 | -4 | -25 | ✓ committed |
 | 16 | k = event.key alias | 3232 | -5 | -30 | ✓ committed |
