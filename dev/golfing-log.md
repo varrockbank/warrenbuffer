@@ -14,7 +14,7 @@ Tracking size reduction experiments for buffee.js
 | 6 | toggleSel helper function | 3266 | +8 | - | ✗ |
 | 7 | countdown loops (i--;) | 3260 | +2 | - | ✗ |
 | 8 | hoist edge variable | 3261 | +3 | - | ✗ |
-| 9 | combine undo/redo handlers | 3255 | -3 | -7 | ✓ |
+| 9 | combine undo/redo handlers | 3255 | -3 | -7 | ✓ committed |
 | 10 | !== 1 to < 1 for Mode.interactive | 3254 | -1 | -8 | ✓ committed |
 | 11 | === -1 to < 0 for Mode.interactive | 3250 | -4 | -12 | ✓ committed |
 | 12 | .toString() to +'' | 3248 | -2 | -14 | ✓ |

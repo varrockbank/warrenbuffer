@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.7.16-alpha.1 [2025-12-29]  gz+min: 3.17 KB (-0.00), min: 8.41 KB (-0.07)
+*** refactor
+- combine undo/redo handlers into one
+
 ** 12.7.15-alpha.1 [2025-12-29]  gz+min: 3.17 KB (-0.00), min: 8.48 KB (-0.03)
 *** refactor
 - use countdown loops for viewport rebuild

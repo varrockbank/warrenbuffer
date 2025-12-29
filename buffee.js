@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.15-alpha.1";
+  this.version = "12.7.16-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -746,17 +746,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       return;
     }
 
-    // Undo: Ctrl/⌘+Z (requires BuffeeHistory extension)
-    if (cmd && key === 'z' && !sh) {
+    // Undo/Redo: Ctrl/⌘+Z / Ctrl/⌘+Shift+Z (requires BuffeeHistory extension)
+    if (cmd && key === 'z') {
       event.preventDefault();
-      if (self.History) self.History.undo();
-      return;
-    }
-
-    // Redo: Ctrl/⌘+Shift+Z (requires BuffeeHistory extension)
-    if (cmd && key === 'z' && sh) {
-      event.preventDefault();
-      if (self.History) self.History.redo();
+      if (self.History) self.History[sh ? 'redo' : 'undo']();
       return;
     }
 
