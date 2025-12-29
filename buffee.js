@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.20-alpha.1";
+  this.version = "12.7.21-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -770,10 +770,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if (arrowCode % 2) Selection[direction > 0 ? 'moveWord' : 'moveBackWord']();
       } else if (!sh && Selection.isSelection) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Selection.setCursor(Selection.ordered[direction > 0 | 0]);
+          Selection.setCursor(Selection.ordered[direction > 0]);
           render();
         } else {
-          const edge = Selection.ordered[direction > 0 | 0];
+          const edge = Selection.ordered[direction > 0];
           // edge.row is already absolute
           const targetAbsRow = $clamp(
             edge.row + direction,
