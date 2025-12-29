@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.23-alpha.1";
+  this.version = "12.7.24-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -50,16 +50,14 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const $e = $('.buffee-elements');
   const $l = $('.buffee-lines');
   const $cursor = $('.buffee-cursor');
-  const $textLayer = $('.buffee-layer-text');
-  const $selectionLayer = $('.buffee-layer-selection');
   const $clipboardBridge = $('.buffee-clipboard-bridge');
   const $gutter = $('.buffee-gutter');
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [[], frag(), $textLayer, 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
+    [[], frag(), $('.buffee-layer-text'), 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
     [[], frag(), $gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
-    [[], frag(), $selectionLayer, 'div', (el) => el.style.width = 0]
+    [[], frag(), $('.buffee-layer-selection'), 'div', (el) => el.style.width = 0]
   ];
 
   // Set container width if cols specified
