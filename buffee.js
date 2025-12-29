@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.22-alpha.1";
+  this.version = "12.7.23-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -86,7 +86,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Returns selection bounds in document order [start, end].
      * @returns {[Position, Position]} Array of [start, end] positions
      */
-    get ordered() { return this.sel > 0 ? [tail, head] : [head, tail] },
+    get ordered() { return this.dir > 0 ? [tail, head] : [head, tail] },
     get unordered() { return [head, tail] },
 
     /**
@@ -143,7 +143,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Selection direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
      * @returns {-1|0|1}
      */
-    get sel() {
+    get dir() {
       return head === tail ? 0 : (tail.row === head.row && tail.col < head.col || tail.row < head.row) ? 1 : -1;
     },
 
@@ -222,7 +222,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     insert(s, skipRender = false) {
       s = expandTabs(s);
-      if (this.sel) {
+      if (this.dir) {
         const [first] = this.ordered;
 
         // Get selected text before deleting
@@ -254,7 +254,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Deletes the character before cursor or the current selection.
      */
     delete() {
-      if (this.sel) return this.insert('');
+      if (this.dir) return this.insert('');
 
       if (tail.col > 0) {
         // Delete character before cursor
@@ -276,7 +276,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Inserts a new line at cursor position, splitting the current line.
      */
     newLine() {
-      if (this.sel) Selection.insert('', true); // skipRender - we render below
+      if (this.dir) Selection.insert('', true); // skipRender - we render below
 
       // Insert newline character
       self._insert(tail.row, tail.col, '\n');
@@ -338,7 +338,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * No-op if there is no selection.
      */
     indent() {
-      if(!this.sel) return;
+      if(!this.dir) return;
       const [first, second] = this.ordered;
 
       for(let i = first.row; i <= second.row; i++)
@@ -730,8 +730,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     // Special key handlers: cmd+key (lowercase) and edit keys (capitalized)
     const metaKeys = {
       v: () => {},
-      c:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
-      x:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
+      c:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
+      x:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
       z: () => { e.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
     };
     const special = {
@@ -740,7 +740,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.newLine() } ,
       Tab: () => {
         e.preventDefault();
-        sh ? Selection.unindent() : Selection.sel ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
+        sh ? Selection.unindent() : Selection.dir ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
       },
     };
 
@@ -752,16 +752,16 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (Mode.interactive < 0) return; // read-only mode: no navigation
 
       if(cmd) {
-        if(!sh && Selection.sel) Selection.makeCursor();
-        if(sh && !Selection.sel) Selection.makeSelection();
+        if(!sh && Selection.dir) Selection.makeCursor();
+        if(sh && !Selection.dir) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveCursorEndOfLine' : 'moveCursorStartOfLine']();
       } else if (e.altKey) {
-        if(!sh && Selection.sel) Selection.makeCursor();
-        if(sh && !Selection.sel) Selection.makeSelection();
+        if(!sh && Selection.dir) Selection.makeCursor();
+        if(sh && !Selection.dir) Selection.makeSelection();
 
         if (arrowCode % 2) Selection[direction > 0 ? 'moveWord' : 'moveBackWord']();
-      } else if (!sh && Selection.sel) { // no meta key, no shift key, selection.
+      } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.ordered[direction > 0]);
           render();
@@ -783,7 +783,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           render();
         }
       } else { // no meta key.
-        if (sh && !Selection.sel) Selection.makeSelection();
+        if (sh && !Selection.dir) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
     } else if (k.length === 1) {
