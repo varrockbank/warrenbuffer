@@ -2,14 +2,14 @@
 # Pre-commit hook to generate minified dist file and check version bump
 
 # Get current versions
-BUFFEE_VERSION=$(grep 'this.version' buffee.js | sed 's/.*"\(.*\)".*/\1/')
+BUFFEE_VERSION=$(grep 'this.version' buffee.js | sed "s/.*'\(.*\)'.*/\1/")
 STYLE_VERSION=$(grep '@version' style.css | sed 's/.*@version \(.*\)/\1/' | tr -d ' ')
 TEMPLATE_VERSION=$(grep '@version' web/template.html | sed 's/.*@version \(.*\) -->.*/\1/' | tr -d ' ')
 
 # Check if buffee.js is staged and needs version bump
 if git diff --cached --name-only | grep -q "^buffee.js$"; then
-    OLD_BUFFEE_VERSION=$(git show HEAD:buffee.js 2>/dev/null | grep 'this.version' | sed 's/.*"\(.*\)".*/\1/')
-    NEW_BUFFEE_VERSION=$(git show :buffee.js | grep 'this.version' | sed 's/.*"\(.*\)".*/\1/')
+    OLD_BUFFEE_VERSION=$(git show HEAD:buffee.js 2>/dev/null | grep 'this.version' | sed "s/.*'\(.*\)'.*/\1/")
+    NEW_BUFFEE_VERSION=$(git show :buffee.js | grep 'this.version' | sed "s/.*'\(.*\)'.*/\1/")
 
     if [ "$OLD_BUFFEE_VERSION" = "$NEW_BUFFEE_VERSION" ] && [ -n "$OLD_BUFFEE_VERSION" ]; then
         echo "✗ Error: buffee.js changed but version was not bumped"

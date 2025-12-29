@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.8.0-alpha.1";
+  this.version = '12.8.1-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -318,7 +318,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const [first, second] = this.ordered;
 
       for(let i = first.row; i <= second.row; i++)
-        Model.lines[i] = " ".repeat(Mode.spaces) + Model.lines[i];
+        Model.lines[i] = ' '.repeat(Mode.spaces) + Model.lines[i];
 
       first.col += Mode.spaces;
       second.col += Mode.spaces;
@@ -400,7 +400,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     lines: [''],
 
     /** @type {string} Total byte count of the document */
-    byteCount: "",
+    byteCount: '',
     /** @type {number} Original line count when document was loaded */
     originalLineCount: 0,
 
@@ -417,7 +417,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     set text(text) {
       text = expandTabs(text);
-      this.lines = text.split("\n");
+      this.lines = text.split('\n');
       this.byteCount = new TextEncoder().encode(text).length
       this.originalLineCount = this.lines.length;
       render();
@@ -681,12 +681,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
     e.preventDefault(); // stop browser from inserting raw clipboard text
-    const text = e.clipboardData.getData("text/plain");
+    const text = e.clipboardData.getData('text/plain');
     if (text) Selection.insert(text);
   });
   const copy = e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Selection.lines.join("\n"));
+    e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
   }
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
@@ -716,7 +716,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.newLine() } ,
       Tab: () => {
         e.preventDefault();
-        sh ? Selection.unindent() : Selection.dir ? Selection.indent() : Selection.insert(" ".repeat(Mode.spaces));
+        sh ? Selection.unindent() : Selection.dir ? Selection.indent() : Selection.insert(' '.repeat(Mode.spaces));
       },
     };
 
