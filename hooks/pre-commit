@@ -91,28 +91,25 @@ if [ $? -eq 0 ]; then
     GZIPPED_KB=$(echo "$NEW_GZIPPED" | awk '{printf "%.2f", $1/1024}')
 
     echo "✓ Minification complete"
-    echo "  Minified:          ${MINIFIED_KB} KB"
-    echo "  Gzipped+Minified:  ${GZIPPED_KB} KB"
+    echo "  Minified:          ${NEW_SIZE} bytes (${MINIFIED_KB} KB)"
+    echo "  Gzipped+Minified:  ${NEW_GZIPPED} bytes (${GZIPPED_KB} KB)"
 
     if [ $OLD_SIZE -ne 0 ]; then
-        echo "DEBUG: OLD_GZIPPED=$OLD_GZIPPED NEW_GZIPPED=$NEW_GZIPPED"
         DIFF=$((NEW_SIZE - OLD_SIZE))
         DIFF_GZIPPED=$((NEW_GZIPPED - OLD_GZIPPED))
-        DIFF_KB=$(echo "$DIFF" | awk '{printf "%.2f", $1/1024}')
-        DIFF_GZIPPED_KB=$(echo "$DIFF_GZIPPED" | awk '{printf "%.2f", $1/1024}')
 
         if [ $DIFF -gt 0 ]; then
-            echo "  Minified change:   +${DIFF_KB} KB"
+            echo "  Minified change:   +${DIFF} bytes"
         elif [ $DIFF -lt 0 ]; then
-            echo "  Minified change:   ${DIFF_KB} KB"
+            echo "  Minified change:   ${DIFF} bytes"
         else
             echo "  Minified change:   (no change)"
         fi
 
         if [ $DIFF_GZIPPED -gt 0 ]; then
-            echo "  Gzipped change:    +${DIFF_GZIPPED_KB} KB"
+            echo "  Gzipped change:    +${DIFF_GZIPPED} bytes"
         elif [ $DIFF_GZIPPED -lt 0 ]; then
-            echo "  Gzipped change:    ${DIFF_GZIPPED_KB} KB"
+            echo "  Gzipped change:    ${DIFF_GZIPPED} bytes"
         else
             echo "  Gzipped change:    (no change)"
         fi
@@ -124,23 +121,16 @@ if [ $? -eq 0 ]; then
     if git diff --cached --name-only | grep -q "^dev/changelog.txt$"; then
         if [ $OLD_SIZE -ne 0 ]; then
             # Format the change values with sign
-            if [ $DIFF -gt 0 ]; then
-                DIFF_STR="+${DIFF_KB}"
-            elif [ $DIFF -lt 0 ]; then
-                DIFF_STR="${DIFF_KB}"
-            else
-                DIFF_STR="0"
-            fi
             if [ $DIFF_GZIPPED -gt 0 ]; then
-                DIFF_GZ_STR="+${DIFF_GZIPPED_KB}"
+                DIFF_GZ_STR="+${DIFF_GZIPPED}"
             elif [ $DIFF_GZIPPED -lt 0 ]; then
-                DIFF_GZ_STR="${DIFF_GZIPPED_KB}"
+                DIFF_GZ_STR="${DIFF_GZIPPED}"
             else
                 DIFF_GZ_STR="0"
             fi
-            SIZE_INFO="  gz+min: ${GZIPPED_KB} KB (${DIFF_GZ_STR}), min: ${MINIFIED_KB} KB (${DIFF_STR})"
+            SIZE_INFO="  gz+min: ${NEW_GZIPPED} bytes / ${GZIPPED_KB} KB (${DIFF_GZ_STR}), min: ${NEW_SIZE} bytes / ${MINIFIED_KB} KB"
         else
-            SIZE_INFO="  gz+min: ${GZIPPED_KB} KB, min: ${MINIFIED_KB} KB"
+            SIZE_INFO="  gz+min: ${NEW_GZIPPED} bytes / ${GZIPPED_KB} KB, min: ${NEW_SIZE} bytes / ${MINIFIED_KB} KB"
         fi
 
         # Append size info to the first version line (** X.X.X [date])
