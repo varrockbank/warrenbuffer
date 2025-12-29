@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.13-alpha.1";
+  this.version = "12.7.14-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -34,7 +34,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const isWord = ch => /[\p{L}\p{Nd}_]/u.test(ch);
   const prop = p => parseFloat(getComputedStyle($parent).getPropertyValue(p));
   const $ = q => $parent.querySelector(q);
-  const frag = () => frag();
+  const frag = () => document.createDocumentFragment();
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
   const sizeSelection = (i, left, width, {style} = viewportLayers[2][0][i]) => {
     style.left = left + 'ch';
