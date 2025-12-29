@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = "12.7.9-alpha.1";
+  this.version = "12.7.10-alpha.1";
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -772,7 +772,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
       const direction = arrowCode >> 31 | 1;
       event.preventDefault(); // prevents page scroll
-      if (Mode.interactive === -1) return; // read-only mode: no navigation
+      if (Mode.interactive < 0) return; // read-only mode: no navigation
 
       if(event.metaKey) {
         if(!event.shiftKey && Selection.isSelection) Selection.makeCursor();
@@ -809,7 +809,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if (event.shiftKey && !Selection.isSelection) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
-    } else if (Mode.interactive !== 1 || event.key === "Escape") { // navigation-only or read-only mode: no editing
+    } else if (Mode.interactive < 1 || event.key === "Escape") { // navigation-only or read-only mode: no editing
     } else if (event.key === "Backspace") {
       Selection.delete();
     } else if (event.key === "Enter") {
