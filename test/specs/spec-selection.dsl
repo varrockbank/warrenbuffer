@@ -51,11 +51,11 @@ EXPECT selection at 0,0-0,5
 TYPE "Hello World"
 left with meta
 right 5 times with shift
-expect(fixture.editor.Selection.isForwardSelection).toBe(true);
+expect(fixture.editor.Selection.dir).toBe(1);
 EXPECT selection at 0,0-0,5
 right with meta
 left 5 times with shift
-expect(fixture.editor.Selection.isForwardSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(-1);
 EXPECT selection at 0,6-0,11
 
 ## should show head position in status line during selection
@@ -361,20 +361,20 @@ expect(fixture).toHaveLines('Hello ');
 EXPECT cursor at 0,6
 
 
-# Regression: Selection.ordered and isForwardSelection
+# Regression: Selection.ordered and dir
 
-## should return true for isForwardSelection when tail is before head
-### isForwardSelection true when tail < head
+## should return 1 for dir when tail is before head (forward selection)
+### dir is 1 when tail < head
 TYPE "Hello"
 left with meta
 right 3 times with shift
-expect(fixture.editor.Selection.isForwardSelection).toBe(true);
+expect(fixture.editor.Selection.dir).toBe(1);
 
-## should return false for isForwardSelection when head is before tail
-### isForwardSelection false when head < tail
+## should return -1 for dir when head is before tail (backward selection)
+### dir is -1 when head < tail
 TYPE "Hello"
 left 3 times with shift
-expect(fixture.editor.Selection.isForwardSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(-1);
 
 ## should use head.row when clamping column after moving head
 ### Uses head.row when clamping column after moving head

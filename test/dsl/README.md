@@ -530,7 +530,7 @@ left with meta
 right 5 times with shift
 TYPE "X"
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('XWorld');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 1 });
@@ -544,7 +544,7 @@ left with meta
 right 5 times with shift
 TYPE "Goodbye"
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('GoodbyeWorld');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 7 });
@@ -558,7 +558,7 @@ left with meta
 right with meta, shift
 TYPE "New"
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('New');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 3 });
@@ -578,7 +578,7 @@ left with meta
 down 2 times with shift
 TYPE "X"
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('Xhird line');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 1 });
@@ -599,7 +599,7 @@ right 6 times
 down 2 times with shift
 TYPE "REPLACED"
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('First REPLACEDine');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 14 });
@@ -612,7 +612,7 @@ TYPE "Hello World"
 left 5 times with shift
 TYPE "Everyone"
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('Hello Everyone');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 14 });
@@ -627,7 +627,7 @@ right 5 times
 right 5 times with shift
 PRESS " "
 
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('Hello ');
 const [start, end] = fixture.editor.Selection.ordered;
 expect(start).toEqual({ row: 0, col: 6 });

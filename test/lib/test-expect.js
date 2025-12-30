@@ -18,9 +18,9 @@ function expect(actual) {
         const [firstEdge, secondEdge] = actual.editor.Selection.ordered;
         const isSelectionByReference = firstEdge !== secondEdge;
 
-        // Check consistency between reference check and isSelection property
-        if (isSelectionByReference !== actual.editor.Selection.isSelection) {
-          throw new Error(`REGRESSION: Selection.isSelection (${actual.editor.Selection.isSelection}) is inconsistent with reference check (${isSelectionByReference})`);
+        // Check consistency between reference check and dir property
+        if (isSelectionByReference !== (actual.editor.Selection.dir !== 0)) {
+          throw new Error(`REGRESSION: Selection.dir (${actual.editor.Selection.dir}) is inconsistent with reference check (${isSelectionByReference})`);
         }
 
         // Check it's a cursor (firstEdge === secondEdge by reference)
@@ -38,9 +38,9 @@ function expect(actual) {
         const [firstEdge, secondEdge] = actual.editor.Selection.ordered;
         const isSelectionByReference = firstEdge !== secondEdge;
 
-        // Check consistency between reference check and isSelection property
-        if (isSelectionByReference !== actual.editor.Selection.isSelection) {
-          throw new Error(`REGRESSION: Selection.isSelection (${actual.editor.Selection.isSelection}) is inconsistent with reference check (${isSelectionByReference})`);
+        // Check consistency between reference check and dir property
+        if (isSelectionByReference !== (actual.editor.Selection.dir !== 0)) {
+          throw new Error(`REGRESSION: Selection.dir (${actual.editor.Selection.dir}) is inconsistent with reference check (${isSelectionByReference})`);
         }
 
         // Check it's a selection (firstEdge !== secondEdge by reference)
