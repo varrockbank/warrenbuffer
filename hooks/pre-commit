@@ -86,7 +86,7 @@ terser buffee.js -c -m -o dist/buffee.min.js
 
 if [ $? -eq 0 ]; then
     NEW_SIZE=$(wc -c < dist/buffee.min.js | tr -d ' ')
-    NEW_GZIPPED=$(gzip -cn dist/buffee.min.js | wc -c)
+    NEW_GZIPPED=$(gzip -cn dist/buffee.min.js | wc -c | tr -d ' ')
     MINIFIED_KB=$(echo "$NEW_SIZE" | awk '{printf "%.2f", $1/1024}')
     GZIPPED_KB=$(echo "$NEW_GZIPPED" | awk '{printf "%.2f", $1/1024}')
 
