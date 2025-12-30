@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.14.0-alpha.1';
+  this.version = '12.14.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -214,7 +214,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {string} s - String to insert
      * @param {boolean} [skipRender=false] - Skip rendering (for batched operations)
      */
-    insert(s, skipRender = false) {
+    insert(s, skipRender) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = this.ordered;
