@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.9.0-alpha.1';
+  this.version = '12.10.0-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -218,11 +218,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     insert(s, skipRender = false) {
       s = expandTabs(s);
       if (this.dir) {
-        const [first] = this.ordered;
-
-        // Get selected text before deleting
-        const selectedText = this.lines.join('\n');
-        self._delete(first.row, first.col, selectedText);
+        const [first, second] = this.ordered;
+        self._delete(first.row, first.col, second.row, second.col + (this.dir > 0));
         const insertedLines = self._insert(first.row, first.col, s);
 
         head.row = first.row;
@@ -253,14 +250,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
       if (tail.col > 0) {
         // Delete character before cursor
-        const charToDelete = Model.lines[tail.row][tail.col - 1];
-        self._delete(tail.row, tail.col - 1, charToDelete);
+        self._delete(tail.row, tail.col - 1, tail.row, tail.col);
         head.col--;
       } else if (tail.row > 0) {
         // At start of line - delete newline (join with previous line)
-        const prevLineLen = Model.lines[tail.row - 1].length;
-        self._delete(tail.row - 1, prevLineLen, '\n');
-        head.col = prevLineLen;
+        head.col = Model.lines[tail.row - 1].length;
+        self._delete(tail.row - 1, head.col, tail.row, 0);
         if (--head.row < Viewport.start) Viewport.start = head.row;
       }
 
@@ -482,29 +477,18 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   }
 
   /**
-   * Primitive delete operation. Deletes text at position, handling newlines.
-   * @param {number} row - Row index (absolute, not viewport-relative)
-   * @param {number} col - Column index
-   * @param {string} text - Text to delete (must match what's at position, may contain newlines)
+   * Primitive delete operation. Deletes from (row,col) to (endRow,endCol).
+   * @param {number} row - Start row index
+   * @param {number} col - Start column index
+   * @param {number} endRow - End row index
+   * @param {number} endCol - End column index (exclusive)
    */
-  this._delete = (row, col, text) => {
-    if (text.length === 0) return;
-
-    const lines = text.split('\n');
-
-    if (lines.length === 1) {
-      // Single line delete
-      Model.lines[row] = Model.lines[row].slice(0, col) + Model.lines[row].slice(col + text.length);
+  this._delete = (row, col, endRow, endCol) => {
+    if (row === endRow) {
+      Model.lines[row] = Model.lines[row].slice(0, col) + Model.lines[row].slice(endCol);
     } else {
-      // Multi-line delete
-      const before = Model.lines[row].slice(0, col);
-      const afterRow = row + lines.length - 1;
-      const afterCol = lines[lines.length - 1].length;
-      const after = Model.lines[afterRow].slice(afterCol);
-
-      // Join first and last line portions, remove middle lines
-      Model.lines[row] = before + after;
-      Model.lines.splice(row + 1, lines.length - 1);
+      Model.lines[row] = Model.lines[row].slice(0, col) + Model.lines[endRow].slice(endCol);
+      Model.lines.splice(row + 1, endRow - row);
     }
   }
 
