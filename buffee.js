@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.8.2-alpha.1';
+  this.version = '12.8.3-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -602,10 +602,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       viewportLayers.forEach(([a]) => a.pop()?.remove());
     Viewport.delta = 0;
 
-    // Update contents of line containers
-    for(let i = 0; i < Viewport.displayLines; i++) {
+    // Update contents of line containers (reset to clean state)
+    for (let i = 0; i < Viewport.displayLines; i++)
       viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
-    }
 
     // In read-only mode (-1), hide cursor off screen and skip selection rendering
     if (Mode.interactive < 0) {
@@ -614,13 +613,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const [firstEdge, secondEdge] = Selection.ordered;
 
       // Render selection lines (loop viewport, check if in selection)
-      for (let v = 0; v < Viewport.size; v++) {
+      for (let v = 0; v < Viewport.displayLines; v++) {
         const r = Viewport.start + v;
         if (r < firstEdge.row || r > secondEdge.row) continue;
         const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length;
         sizeSelection(v, f ? firstEdge.col : 0, f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1);
       }
-      // * END render selection
 
       // Render cursor overlay (always shows head position)
       const headViewportRow = head.row - Viewport.start;
