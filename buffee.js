@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.10.0-alpha.1';
+  this.version = '12.11.0-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -216,27 +216,27 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {boolean} [skipRender=false] - Skip rendering (for batched operations)
      */
     insert(s, skipRender = false) {
-      s = expandTabs(s);
+      const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = this.ordered;
         self._delete(first.row, first.col, second.row, second.col + (this.dir > 0));
-        const insertedLines = self._insert(first.row, first.col, s);
+        self._insert(first.row, first.col, lines);
 
         head.row = first.row;
         // Update cursor to end of inserted text
-        if (insertedLines?.length > 1) {
-          head.row += insertedLines.length - 1;
-          head.col = insertedLines[insertedLines.length - 1].length;
+        if (lines.length > 1) {
+          head.row += lines.length - 1;
+          head.col = lines[lines.length - 1].length;
         } else head.col = first.col + s.length;
-        
+
         this.makeCursor();
       } else {
-        const insertedLines = self._insert(tail.row, tail.col, s);
+        self._insert(tail.row, tail.col, lines);
 
         // Update cursor
-        if (insertedLines?.length > 1) {
-          head.row += insertedLines.length - 1;
-          maxCol = head.col = insertedLines[insertedLines.length - 1].length;
+        if (lines.length > 1) {
+          head.row += lines.length - 1;
+          maxCol = head.col = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
       if (!skipRender) render();
@@ -268,8 +268,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     newLine() {
       if (this.dir) Selection.insert('', true); // skipRender - we render below
 
-      // Insert newline character
-      self._insert(tail.row, tail.col, '\n');
+      // Insert newline (split current line)
+      self._insert(tail.row, tail.col, ['', '']);
 
       head.col = 0, head.row++;
       if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
@@ -437,43 +437,19 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   }
 
   /**
-   * Primitive insert operation. Inserts text at position, handling newlines.
+   * Primitive insert operation. Inserts lines at position.
    * @param {number} row - Row index (absolute, not viewport-relative)
    * @param {number} col - Column index
-   * @param {string} text - Text to insert (may contain newlines)
+   * @param {string[]} lines - Array of lines to insert (already split)
    */
-  this._insert = (row, col, text) => {
-    if (text.length === 0) return null;
-
-    // Fast path: single character (no newline)
-    if (text.length === 1 && text !== '\n') {
-      Model.lines[row] = Model.lines[row].slice(0, col) + text + Model.lines[row].slice(col);
-      return null; // Caller knows it's single char
-    }
-
-    const lines = text.split('\n');
-
+  this._insert = (row, col, lines) => {
     if (lines.length === 1) {
-      // Single line insert
-      Model.lines[row] = Model.lines[row].slice(0, col) + text + Model.lines[row].slice(col);
+      Model.lines[row] = Model.lines[row].slice(0, col) + lines[0] + Model.lines[row].slice(col);
     } else {
-      // Multi-line insert
-      const before = Model.lines[row].slice(0, col);
       const after = Model.lines[row].slice(col);
-
-      // First line: before + first segment
-      Model.lines[row] = before + lines[0];
-
-      // Middle lines: insert as new lines
-      const middleLines = lines.slice(1, -1);
-
-      // Last line: last segment + after
-      const lastLine = lines[lines.length - 1] + after;
-
-      Model.lines.splice(row + 1, 0, ...middleLines, lastLine);
+      Model.lines[row] = Model.lines[row].slice(0, col) + lines[0];
+      Model.lines.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
     }
-
-    return lines; // Return split result for caller reuse
   }
 
   /**

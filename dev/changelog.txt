@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 12.11.0-alpha.1 [2025-12-30]  gz+min: 3110 bytes / 3.04 KB (-50), min: 7923 bytes / 7.74 KB
+*** refactor
+- _insert API changed from text-based to array-based: _insert(row, col, lines[])
+- caller splits string before calling, eliminates split inside _insert
+
 ** 12.10.0-alpha.1 [2025-12-30]  gz+min: 3160 bytes / 3.09 KB (-21), min: 8084 bytes / 7.89 KB
 *** refactor
 - _delete API changed from text-based to position-based: _delete(row, col, endRow, endCol)
