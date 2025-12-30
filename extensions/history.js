@@ -13,7 +13,9 @@
  * const editor = BuffeeHistory(Buffee(container, config));
  */
 function BuffeeHistory(editor) {
-  const { _insert, _delete } = editor;
+  const Model = editor.Model;
+  const _insert = Model._insert.bind(Model);
+  const _delete = Model._delete.bind(Model);
   const { render } = editor;
 
   // State
@@ -68,7 +70,7 @@ function BuffeeHistory(editor) {
   }
 
   // Wrap insert to record history (new API: row, col, lines[])
-  editor._insert = function(row, col, lines) {
+  Model._insert = function(row, col, lines) {
     if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
 
     const cursorBefore = captureCursor();
@@ -99,7 +101,7 @@ function BuffeeHistory(editor) {
   };
 
   // Wrap delete to record history (new API: row, col, endRow, endCol)
-  editor._delete = function(row, col, endRow, endCol) {
+  Model._delete = function(row, col, endRow, endCol) {
     if (row === endRow && col === endCol) return;
 
     const cursorBefore = captureCursor();
@@ -107,12 +109,12 @@ function BuffeeHistory(editor) {
     // Capture text before deleting (for undo - need to re-insert)
     let lines;
     if (row === endRow) {
-      lines = [editor.Model.lines[row].slice(col, endCol)];
+      lines = [Model.lines[row].slice(col, endCol)];
     } else {
       lines = [
-        editor.Model.lines[row].slice(col),
-        ...editor.Model.lines.slice(row + 1, endRow),
-        editor.Model.lines[endRow].slice(0, endCol)
+        Model.lines[row].slice(col),
+        ...Model.lines.slice(row + 1, endRow),
+        Model.lines[endRow].slice(0, endCol)
       ];
     }
 
