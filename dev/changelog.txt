@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.14.0-alpha.1 [2025-12-30]  gz+min: 3067 bytes / 3.00 KB (-24), min: 7760 bytes / 7.58 KB
+*** refactor
+- remove unused Model.splice and Model.delete methods
+
 ** 12.13.1-alpha.1 [2025-12-30]  gz+min: 3094 bytes / 3.02 KB (0), min: 7844 bytes / 7.66 KB (-65)
 *** refactor
 - simplify Model.del: unified single/multi-line branches into 2 lines

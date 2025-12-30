@@ -129,10 +129,6 @@ editor.Model.text = "Hello\nWorld";
 // Access lines
 editor.Model.lines;        // ["Hello", "World"]
 editor.Model.lastIndex;    // 1
-
-// Modify
-editor.Model.splice(1, ["inserted"], 0);
-editor.Model.delete(1);
 ```
 
 ---
