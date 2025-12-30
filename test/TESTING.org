@@ -131,8 +131,8 @@ const [firstEdge, SecondEdge] = fixture.editor.Selection.ordered;
 expect(firstEdge).toEqual({ row: 0, col: 5 });
 expect(SecondEdge).toEqual({ row: 0, col: 5 });
 
-// Check if selection exists
-expect(fixture.editor.Selection.isSelection).toBe(true);
+// Check if selection exists (dir !== 0 means selection, dir === 0 means cursor)
+expect(fixture.editor.Selection.dir !== 0).toBe(true);
 
 // Selection positions
 const [firstEdge, SecondEdge] = fixture.editor.Selection.ordered;

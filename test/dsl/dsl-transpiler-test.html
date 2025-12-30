@@ -204,16 +204,16 @@ expect(fixture).toHaveLines('First Line', 'Second');`
         input: `TYPE "Hello World"
 left with meta
 right 5 times with shift
-expect(fixture.editor.Selection.isSelection).toBe(true);
+expect(fixture.editor.Selection.dir !== 0).toBe(true);
 TYPE "X"
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('XWorld');`,
         expected: `fixture.type('Hello World');
 fixture.press(Key.ArrowLeft).withMetaKey().once();
 fixture.press(Key.ArrowRight).withShiftKey().times(5);
-expect(fixture.editor.Selection.isSelection).toBe(true);
+expect(fixture.editor.Selection.dir !== 0).toBe(true);
 fixture.type('X');
-expect(fixture.editor.Selection.isSelection).toBe(false);
+expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('XWorld');`
       },
       {
