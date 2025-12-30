@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.8.5-alpha.1';
+  this.version = '12.8.6-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -524,10 +524,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     delta: rows ? rows : 1,
     /** @type {number} Number of DOM line containers */
     get displayLines() { return this.size + this.autoFit; },
-    /** @type {number} Number of digits needed for line numbers */
-    get gutterDigits() { return Math.max(gutterDigitsMinimum, (this.start + this.displayLines).toString().length); },
     /** @type {number} Total gutter width in ch units */
-    get gutterCols() { return this.gutterDigits + gutterDigitsPadding; },
+    get gutterCols() { return Math.max(gutterDigitsMinimum, (this.start + this.displayLines).toString().length) + gutterDigitsPadding; },
 
     /**
      * Index of the last visible line.
