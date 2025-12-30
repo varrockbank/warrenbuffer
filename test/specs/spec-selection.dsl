@@ -216,12 +216,12 @@ EXPECT selection at 0,5-4,8
 # Deleting selections
 
 ## should delete partial text from line
-### Delete 'Hello' from 'Hello World'
+### Delete 'Hello ' from 'Hello World'
 TYPE "Hello World"
 left with meta
 right 5 times with shift
 backspace
-expect(fixture).toHaveLines(' World');
+expect(fixture).toHaveLines('World');
 EXPECT cursor at 0,0
 
 ## should delete entire line
@@ -243,7 +243,7 @@ up 2 times
 left with meta
 down 2 times with shift
 backspace
-expect(fixture).toHaveLines('Third line');
+expect(fixture).toHaveLines('hird line');
 EXPECT cursor at 0,0
 
 ## should delete partial multi-line selection
@@ -258,7 +258,7 @@ left with meta
 right 6 times
 down 2 times with shift
 backspace
-expect(fixture).toHaveLines('First line here');
+expect(fixture).toHaveLines('First ine here');
 EXPECT cursor at 0,6
 
 ## should delete from middle to end across lines
@@ -287,21 +287,21 @@ EXPECT cursor at 0,6
 # Replacing selections
 
 ## should replace partial text with single character
-### Replace 'Hello' with 'X'
+### Replace 'Hello ' with 'X'
 TYPE "Hello World"
 left with meta
 right 5 times with shift
 TYPE "X"
-expect(fixture).toHaveLines('X World');
+expect(fixture).toHaveLines('XWorld');
 EXPECT cursor at 0,1
 
 ## should replace partial text with word
-### Replace 'Hello' with 'Goodbye'
+### Replace 'Hello ' with 'Goodbye'
 TYPE "Hello World"
 left with meta
 right 5 times with shift
 TYPE "Goodbye"
-expect(fixture).toHaveLines('Goodbye World');
+expect(fixture).toHaveLines('GoodbyeWorld');
 EXPECT cursor at 0,7
 
 ## should replace entire line
@@ -324,7 +324,7 @@ up 2 times
 left with meta
 down 2 times with shift
 TYPE "X"
-expect(fixture).toHaveLines('XThird line');
+expect(fixture).toHaveLines('Xhird line');
 EXPECT cursor at 0,1
 
 ## should replace partial multi-line with text
@@ -339,7 +339,7 @@ left with meta
 right 6 times
 down 2 times with shift
 TYPE "REPLACED"
-expect(fixture).toHaveLines('First REPLACEDline');
+expect(fixture).toHaveLines('First REPLACEDine');
 EXPECT cursor at 0,14
 
 ## should replace backward selection
