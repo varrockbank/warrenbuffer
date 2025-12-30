@@ -14,8 +14,8 @@
  */
 function BuffeeHistory(editor) {
   const Model = editor.Model;
-  const _insert = Model._insert.bind(Model);
-  const _delete = Model._delete.bind(Model);
+  const add = Model.add.bind(Model);
+  const del = Model.del.bind(Model);
   const { render } = editor;
 
   // State
@@ -70,11 +70,11 @@ function BuffeeHistory(editor) {
   }
 
   // Wrap insert to record history (new API: row, col, lines[])
-  Model._insert = function(row, col, lines) {
+  Model.add = function(row, col, lines) {
     if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
 
     const cursorBefore = captureCursor();
-    _insert(row, col, lines);
+    add(row, col, lines);
 
     // Calculate end position for undo
     const endRow = row + lines.length - 1;
@@ -101,7 +101,7 @@ function BuffeeHistory(editor) {
   };
 
   // Wrap delete to record history (new API: row, col, endRow, endCol)
-  Model._delete = function(row, col, endRow, endCol) {
+  Model.del = function(row, col, endRow, endCol) {
     if (row === endRow && col === endCol) return;
 
     const cursorBefore = captureCursor();
@@ -118,7 +118,7 @@ function BuffeeHistory(editor) {
       ];
     }
 
-    _delete(row, col, endRow, endCol);
+    del(row, col, endRow, endCol);
 
     // Check if this might be the start of a combined operation
     const isSelectionDelete = lines.length > 1 || lines[0].length > 1;
@@ -145,12 +145,12 @@ function BuffeeHistory(editor) {
 
     if (op.combined) {
       // Combined operation: undo insert first, then restore deleted text
-      _delete(op.row, op.col, op.insertEndRow, op.insertEndCol);
-      _insert(op.row, op.col, op.lines);
+      del(op.row, op.col, op.insertEndRow, op.insertEndCol);
+      add(op.row, op.col, op.lines);
     } else if (op.type === 'insert') {
-      _delete(op.row, op.col, op.endRow, op.endCol);
+      del(op.row, op.col, op.endRow, op.endCol);
     } else {
-      _insert(op.row, op.col, op.lines);
+      add(op.row, op.col, op.lines);
     }
     return { ...op, cursorAfter: cursorBefore };
   }
@@ -160,12 +160,12 @@ function BuffeeHistory(editor) {
       // Combined operation: delete original text, then insert replacement
       const endRow = op.row + op.lines.length - 1;
       const endCol = op.lines.length === 1 ? op.col + op.lines[0].length : op.lines[op.lines.length - 1].length;
-      _delete(op.row, op.col, endRow, endCol);
-      _insert(op.row, op.col, op.insertLines);
+      del(op.row, op.col, endRow, endCol);
+      add(op.row, op.col, op.insertLines);
     } else if (op.type === 'insert') {
-      _insert(op.row, op.col, op.lines);
+      add(op.row, op.col, op.lines);
     } else {
-      _delete(op.row, op.col, op.endRow, op.endCol);
+      del(op.row, op.col, op.endRow, op.endCol);
     }
     undoStack.push(op);
   }
