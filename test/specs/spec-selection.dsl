@@ -539,19 +539,50 @@ expect($r1b.style.width).toBe("1ch");
 right with shift
 EXPECT selection at 0,1-2,0
 
-## should delete text and newline when selection includes phantom
-### Regression: Deleting selection that includes phantom newline joins lines
+## should delete text within line only
+### Deleting selection within a line only removes that text
 TYPE "a"
 enter
 TYPE "b"
 up
 left with meta
-// Select "a" + phantom newline (col 0 to col 1)
+// Select "a" only (col 0 to col 1)
 right with shift
 EXPECT selection at 0,0-0,1
-// Delete should remove "a" and the newline, leaving just "b" on line 0
+// Delete should remove "a" only, leaving empty first line and "b" on second
+backspace
+expect(fixture).toHaveLines("", "b");
+EXPECT cursor at 0,0
+
+## should delete text and newline when selection spans lines
+### Selecting from start of second line back to first line deletes newline
+TYPE "a"
+enter
+TYPE "b"
+// Move cursor to start of "b" (1,0)
+left with meta
+// Select backwards to start of line 0
+up with shift
+left with meta, shift
+EXPECT selection at 0,0-1,0
+// Delete should remove "a" and newline, leaving just "b"
 backspace
 expect(fixture).toHaveLines("b");
+EXPECT cursor at 0,0
+
+## should delete first line and newline leaving second line intact
+### Selecting from f in foo back to h in hello world deletes first line
+TYPE "hello world"
+enter
+TYPE "foo"
+// Move cursor to start of "foo" (1,0)
+left with meta
+// Select backwards 12 chars: newline + "hello world" (11 chars)
+left 12 times with shift
+EXPECT selection at 0,0-1,0
+// Delete should remove "hello world" and newline, leaving just "foo"
+backspace
+expect(fixture).toHaveLines("foo");
 EXPECT cursor at 0,0
 
 
