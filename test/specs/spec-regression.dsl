@@ -54,3 +54,13 @@ EXPECT selection at 0,2-0,5
 left
 EXPECT cursor at 0,2
 
+## should not throw on Cmd+C (regression c815ea2)
+### Clipboard bridge .select() method must exist, not .direct()
+TYPE "Hello"
+left 3 times with shift
+// Simulate Cmd+C keydown - should not throw
+const clipboardBridge = fixture.node.querySelector('.buffee-clipboard-bridge');
+expect(typeof clipboardBridge.select).toBe('function');
+fixture.node.querySelector('.buffee-lines').dispatchEvent(new KeyboardEvent('keydown', { key: 'c', metaKey: true }));
+expect(fixture).toHaveLines('Hello');
+
