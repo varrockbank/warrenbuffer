@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.13.0-alpha.1';
+  this.version = '12.13.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -458,12 +458,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {number} endCol - End column index (exclusive)
      */
     del(row, col, endRow, endCol) {
-      if (row === endRow) {
-        this.lines[row] = this.lines[row].slice(0, col) + this.lines[row].slice(endCol);
-      } else {
-        this.lines[row] = this.lines[row].slice(0, col) + this.lines[endRow].slice(endCol);
-        this.lines.splice(row + 1, endRow - row);
-      }
+      this.lines[row] = this.lines[row].slice(0, col) + this.lines[endRow].slice(endCol);
+      if (row !== endRow) this.lines.splice(row + 1, endRow - row);
     },
   }
 
