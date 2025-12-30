@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.8.3-alpha.1';
+  this.version = '12.8.4-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -40,12 +40,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     style.width = width + 'ch';
   };
 
-  let gutterDigits = -1; // as long as different from gutters digit minimum, we trigger setting gutter on first render
-
   const lineHeight = prop('--buffee-cell');
   const editorPaddingPX = prop('--buffee-padding');
   const gutterDigitsMinimum = prop('--buffee-gutter-digits-initial');
-  const gutterCols = () => gutterDigits + prop('--buffee-gutter-digits-padding');
+  const gutterDigitsPadding = prop('--buffee-gutter-digits-padding');
   const $e = $('.buffee-elements');
   const $l = $('.buffee-lines');
   const $cursor = $('.buffee-cursor');
@@ -526,6 +524,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     delta: rows ? rows : 1,
     /** @type {number} Number of DOM line containers */
     get displayLines() { return this.size + this.autoFit; },
+    /** @type {number} Number of digits needed for line numbers */
+    get gutterDigits() { return Math.max(gutterDigitsMinimum, (this.start + this.displayLines).toString().length); },
+    /** @type {number} Total gutter width in ch units */
+    get gutterCols() { return this.gutterDigits + gutterDigitsPadding; },
 
     /**
      * Index of the last visible line.
@@ -536,7 +538,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
     get contentOffset() {
       return {
-        ch: $gutter ? gutterCols() : 0,
+        ch: $gutter ? this.gutterCols : 0,
         px: $gutter ? (editorPaddingPX * 3) : editorPaddingPX,
         top: editorPaddingPX
       };
@@ -580,16 +582,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     Mode.frameCount++;
 
     // Adjust gutter width based on largest visible line number
-    // Minimum width from CSS variable to avoid jitter for small documents
     if ($gutter) {
-      // TODO: move into viewport
-      const digits = Math.max(gutterDigitsMinimum, (Viewport.start + Viewport.displayLines).toString().length);
-      if (digits !== gutterDigits) {
-        gutterDigits = digits;
-        $gutter.style.width = gutterCols() + 'ch';
-        // TODO: refactor into function
-        if (cols) $e.style.width = `calc(${gutterCols() + cols}ch + ${editorPaddingPX * 4}px)`;
-      }
+      $gutter.style.width = Viewport.gutterCols + 'ch';
+      if (cols) $e.style.width = `calc(${Viewport.gutterCols + cols}ch + ${editorPaddingPX * 4}px)`;
     }
 
     // Renders the containers for the viewport lines, as well as selections and highlights
