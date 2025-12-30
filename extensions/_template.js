@@ -13,7 +13,7 @@
  */
 function Buffee__NAME__(editor) {
   // === WRAPPABLE PRIMITIVES ===
-  // const { _insert, _delete } = editor;
+  // const add = Model.add.bind(Model), del = Model.del.bind(Model);
   const { renderHooks } = editor.Mode;
 
   // === EDITOR PROPERTIES ===

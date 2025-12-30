@@ -15,8 +15,8 @@
  */
 function BuffeeUndoTree(editor) {
   const { Selection, Model } = editor;
-  const _insert = Model._insert.bind(Model);
-  const _delete = Model._delete.bind(Model);
+  const add = Model.add.bind(Model);
+  const del = Model.del.bind(Model);
 
   // Node ID counter
   let nextId = 1;
@@ -136,11 +136,11 @@ function BuffeeUndoTree(editor) {
   }
 
   // Wrap insert to record history (new API: row, col, lines[])
-  Model._insert = function(row, col, lines) {
+  Model.add = function(row, col, lines) {
     if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
 
     const cursorBefore = captureCursor();
-    _insert(row, col, lines);
+    add(row, col, lines);
 
     const endRow = row + lines.length - 1;
     const endCol = lines.length === 1 ? col + lines[0].length : lines[lines.length - 1].length;
@@ -149,7 +149,7 @@ function BuffeeUndoTree(editor) {
   };
 
   // Wrap delete to record history (new API: row, col, endRow, endCol)
-  Model._delete = function(row, col, endRow, endCol) {
+  Model.del = function(row, col, endRow, endCol) {
     if (row === endRow && col === endCol) return;
 
     const cursorBefore = captureCursor();
@@ -166,7 +166,7 @@ function BuffeeUndoTree(editor) {
       ];
     }
 
-    _delete(row, col, endRow, endCol);
+    del(row, col, endRow, endCol);
     recordDelete(row, col, endRow, endCol, lines, cursorBefore);
   };
 
@@ -179,9 +179,9 @@ function BuffeeUndoTree(editor) {
 
     // Apply inverse operation
     if (op.type === 'insert') {
-      _delete(op.row, op.col, op.endRow, op.endCol);
+      del(op.row, op.col, op.endRow, op.endCol);
     } else {
-      _insert(op.row, op.col, op.lines);
+      add(op.row, op.col, op.lines);
     }
 
     restoreCursor(current.cursorBefore);
@@ -210,9 +210,9 @@ function BuffeeUndoTree(editor) {
 
     // Apply operation
     if (op.type === 'insert') {
-      _insert(op.row, op.col, op.lines);
+      add(op.row, op.col, op.lines);
     } else {
-      _delete(op.row, op.col, op.endRow, op.endCol);
+      del(op.row, op.col, op.endRow, op.endCol);
     }
 
     restoreCursor(child.cursorAfter);

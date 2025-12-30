@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.12.1-alpha.1';
+  this.version = '12.13.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -218,8 +218,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = this.ordered;
-        Model._delete(first.row, first.col, second.row, second.col + (this.dir > 0));
-        Model._insert(first.row, first.col, lines);
+        Model.del(first.row, first.col, second.row, second.col + (this.dir > 0));
+        Model.add(first.row, first.col, lines);
 
         head.row = first.row;
         // Update cursor to end of inserted text
@@ -230,7 +230,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
         this.makeCursor();
       } else {
-        Model._insert(tail.row, tail.col, lines);
+        Model.add(tail.row, tail.col, lines);
 
         // Update cursor
         if (lines.length > 1) {
@@ -249,12 +249,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
       if (tail.col > 0) {
         // Delete character before cursor
-        Model._delete(tail.row, tail.col - 1, tail.row, tail.col);
+        Model.del(tail.row, tail.col - 1, tail.row, tail.col);
         head.col--;
       } else if (tail.row > 0) {
         // At start of line - delete newline (join with previous line)
         head.col = Model.lines[tail.row - 1].length;
-        Model._delete(tail.row - 1, head.col, tail.row, 0);
+        Model.del(tail.row - 1, head.col, tail.row, 0);
         if (--head.row < Viewport.start) Viewport.start = head.row;
       }
 
@@ -268,7 +268,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (this.dir) Selection.insert('', true); // skipRender - we render below
 
       // Insert newline (split current line)
-      Model._insert(tail.row, tail.col, ['', '']);
+      Model.add(tail.row, tail.col, ['', '']);
 
       head.col = 0, head.row++;
       if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
@@ -440,7 +440,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {number} col - Column index
      * @param {string[]} lines - Array of lines to insert (already split)
      */
-    _insert(row, col, lines) {
+    add(row, col, lines) {
       if (lines.length === 1) {
         this.lines[row] = this.lines[row].slice(0, col) + lines[0] + this.lines[row].slice(col);
       } else {
@@ -457,7 +457,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {number} endRow - End row index
      * @param {number} endCol - End column index (exclusive)
      */
-    _delete(row, col, endRow, endCol) {
+    del(row, col, endRow, endCol) {
       if (row === endRow) {
         this.lines[row] = this.lines[row].slice(0, col) + this.lines[row].slice(endCol);
       } else {
@@ -544,14 +544,11 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (cols) $e.style.width = `calc(${Viewport.gutterCols + cols}ch + ${editorPaddingPX * 4}px)`;
     }
 
-    // Renders the containers for the viewport lines, as well as selections and highlights
-    // Only adds/removes the delta of elements when viewport size changes
+    // Add / remove lines, selections, gutters as row changes
     let rebuilt = Viewport.delta;
-    for (; rebuilt > 0; rebuilt--)
-      viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
+    for (; rebuilt > 0; rebuilt--) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
     if (Viewport.delta > 0) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
-    for (; rebuilt < 0; rebuilt++)
-      viewportLayers.forEach(([a]) => a.pop()?.remove());
+    for (; rebuilt < 0; rebuilt++) viewportLayers.forEach(([a]) => a.pop()?.remove());
 
     // Update contents of line containers (reset to clean state)
     for (let i = 0; i < Viewport.displayLines; i++)
@@ -583,10 +580,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       }
     }
 
-    // Call extension hooks
-    for (const hook of Mode.renderHooks) {
-      hook($l, Viewport, Viewport.delta);
-    }
+    Mode.renderHooks.forEach(hook => hook($l, Viewport, Viewport.delta));
     Viewport.delta = 0;
   }
   

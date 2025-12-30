@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 12.13.0-alpha.1 [2025-12-30]  gz+min: 3094 bytes / 3.02 KB (-5), min: 7909 bytes / 7.72 KB
+*** refactor
+- rename Model._insert to Model.add, Model._delete to Model.del
+- extensions updated: history.js, syntax.js, undotree.js, _template.js
+
 ** 12.12.1-alpha.1 [2025-12-30]  gz+min: 3099 bytes / 3.03 KB (+2), min: 7941 bytes / 7.75 KB
 *** fix
 - renderHooks now receive correct Viewport.delta (was always 0 after reset)
