@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.13.1-alpha.1';
+  this.version = '12.14.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -413,25 +413,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       this.byteCount = new TextEncoder().encode(text).length
       this.originalLineCount = this.lines.length;
       render();
-    },
-
-    /**
-     * Splices lines into the document at the given index.
-     * @param {number} i - Index to insert at
-     * @param {string[]} lines - Lines to insert
-     * @param {number} [n=0] - Number of lines to remove
-     */
-    splice(i, lines, n = 0) {
-      this.lines.splice(i , n, ...lines);
-      render();
-    },
-
-    /**
-     * Deletes a single line at the given index.
-     * @param {number} i - Index of line to delete
-     */
-    delete(i) {
-      this.lines.splice(i, 1);
     },
 
     /**
