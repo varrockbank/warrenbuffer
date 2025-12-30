@@ -1,6 +1,10 @@
 * Project Devlog
 
 
+** 12.8.3-alpha.1 [2025-12-30]  gz+min:     3171 bytes / 3.10 KB (+2), min: 8191 bytes / 8.00 KB
+*** fix
+- selection not rendering on partial last row (use displayLines instead of size)
+
 ** 12.8.2-alpha.1 [2025-12-30]  gz+min:     3169 bytes / 3.09 KB (-21), min: 8183 bytes / 7.99 KB
 *** fix
 - selection rendering was O(selection size) instead of O(viewport size)
