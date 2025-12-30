@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeHistory - Undo/redo extension for Buffee.
  * Enables history tracking with undo/redo support.
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 /**
@@ -27,7 +27,6 @@ function BuffeeHistory(editor) {
 
   /** Capture current cursor/selection state */
   function captureCursor() {
-    // Access via getters each time - head/tail references can change after makeSelection()
     const [head, tail] = editor.Selection.unordered;
     return {
       headRow: head.row, headCol: head.col,
@@ -39,14 +38,12 @@ function BuffeeHistory(editor) {
   function restoreCursor(cursor) {
     const isSelection = cursor.headRow !== cursor.tailRow || cursor.headCol !== cursor.tailCol;
 
-    // If restoring a selection but currently have cursor (head === tail), need to detach
     if (isSelection) {
       editor.Selection.makeSelection();
     } else {
       editor.Selection.makeCursor();
     }
 
-    // Access via getters AFTER makeSelection/makeCursor - references change
     const [head, tail] = editor.Selection.unordered;
     head.row = cursor.headRow;
     head.col = cursor.headCol;
@@ -55,67 +52,82 @@ function BuffeeHistory(editor) {
   }
 
   /** Check if we can coalesce with the last operation */
-  function canCoalesce(type, row, col, text) {
+  function canCoalesce(type, row, col, lines) {
     if (undoStack.length === 0) return false;
     if (Date.now() - _lastOpTime > coalesceTimeout) return false;
 
     const last = undoStack[undoStack.length - 1];
     if (last.type !== type) return false;
-    if (text.includes('\n') || last.text.includes('\n')) return false;
+    if (lines.length > 1 || last.lines.length > 1) return false;
 
     if (type === 'insert') {
-      return last.row === row && last.col + last.text.length === col;
+      return last.row === row && last.col + last.lines[0].length === col;
     } else {
-      return last.row === row && col + text.length === last.col;
+      return last.row === row && last.endRow === row && col + lines[0].length === last.col;
     }
   }
 
-  // Wrap insert to record history
-  editor._insert = function(row, col, text) {
-    if (text.length === 0) return null;
+  // Wrap insert to record history (new API: row, col, lines[])
+  editor._insert = function(row, col, lines) {
+    if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
 
     const cursorBefore = captureCursor();
-    const result = _insert(row, col, text);
+    _insert(row, col, lines);
+
+    // Calculate end position for undo
+    const endRow = row + lines.length - 1;
+    const endCol = lines.length === 1 ? col + lines[0].length : lines[lines.length - 1].length;
 
     // Check if this insert is part of a combined operation (selection replacement)
     if (_combinedPending && _combinedPending.row === row && _combinedPending.col === col) {
-      // Combine with pending delete - add insert info to existing entry
       const last = undoStack[undoStack.length - 1];
-      last.insertText = text;
+      last.insertLines = lines;
+      last.insertEndRow = endRow;
+      last.insertEndCol = endCol;
       last.combined = true;
       _combinedPending = null;
-    } else if (canCoalesce('insert', row, col, text)) {
+    } else if (canCoalesce('insert', row, col, lines)) {
       const last = undoStack[undoStack.length - 1];
-      last.text += text;
+      last.lines[0] += lines[0];
+      last.endCol = last.col + last.lines[0].length;
     } else {
-      _combinedPending = null; // Clear any stale pending
-      undoStack.push({ type: 'insert', row, col, text, cursorBefore });
+      _combinedPending = null;
+      undoStack.push({ type: 'insert', row, col, lines, endRow, endCol, cursorBefore });
     }
     _lastOpTime = Date.now();
     redoStack.length = 0;
-
-    return result;
   };
 
-  // Wrap delete to record history
-  editor._delete = function(row, col, text) {
-    if (text.length === 0) return;
+  // Wrap delete to record history (new API: row, col, endRow, endCol)
+  editor._delete = function(row, col, endRow, endCol) {
+    if (row === endRow && col === endCol) return;
 
     const cursorBefore = captureCursor();
-    _delete(row, col, text);
+
+    // Capture text before deleting (for undo - need to re-insert)
+    let lines;
+    if (row === endRow) {
+      lines = [editor.Model.lines[row].slice(col, endCol)];
+    } else {
+      lines = [
+        editor.Model.lines[row].slice(col),
+        ...editor.Model.lines.slice(row + 1, endRow),
+        editor.Model.lines[endRow].slice(0, endCol)
+      ];
+    }
+
+    _delete(row, col, endRow, endCol);
 
     // Check if this might be the start of a combined operation
-    // (selection delete followed by insert at same position)
-    const isSelectionDelete = text.includes('\n') || text.length > 1;
+    const isSelectionDelete = lines.length > 1 || lines[0].length > 1;
 
-    if (canCoalesce('delete', row, col, text)) {
+    if (canCoalesce('delete', row, col, lines)) {
       const last = undoStack[undoStack.length - 1];
-      last.text = text + last.text;
+      last.lines = [lines[0] + last.lines[0]];
       last.col = col;
       _combinedPending = null;
     } else {
-      undoStack.push({ type: 'delete', row, col, text, cursorBefore });
-      // Mark as potentially combined if it looks like a selection delete
+      undoStack.push({ type: 'delete', row, col, endRow, endCol, lines, cursorBefore });
       if (isSelectionDelete) {
         _combinedPending = { row, col };
       } else {
@@ -131,12 +143,12 @@ function BuffeeHistory(editor) {
 
     if (op.combined) {
       // Combined operation: undo insert first, then restore deleted text
-      _delete(op.row, op.col, op.insertText);
-      _insert(op.row, op.col, op.text);
+      _delete(op.row, op.col, op.insertEndRow, op.insertEndCol);
+      _insert(op.row, op.col, op.lines);
     } else if (op.type === 'insert') {
-      _delete(op.row, op.col, op.text);
+      _delete(op.row, op.col, op.endRow, op.endCol);
     } else {
-      _insert(op.row, op.col, op.text);
+      _insert(op.row, op.col, op.lines);
     }
     return { ...op, cursorAfter: cursorBefore };
   }
@@ -144,12 +156,14 @@ function BuffeeHistory(editor) {
   function redoOp(op) {
     if (op.combined) {
       // Combined operation: delete original text, then insert replacement
-      _delete(op.row, op.col, op.text);
-      _insert(op.row, op.col, op.insertText);
+      const endRow = op.row + op.lines.length - 1;
+      const endCol = op.lines.length === 1 ? op.col + op.lines[0].length : op.lines[op.lines.length - 1].length;
+      _delete(op.row, op.col, endRow, endCol);
+      _insert(op.row, op.col, op.insertLines);
     } else if (op.type === 'insert') {
-      _insert(op.row, op.col, op.text);
+      _insert(op.row, op.col, op.lines);
     } else {
-      _delete(op.row, op.col, op.text);
+      _delete(op.row, op.col, op.endRow, op.endCol);
     }
     undoStack.push(op);
   }

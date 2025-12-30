@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="themes/theme-hn.css">
 <link rel="stylesheet" href="themes/theme-kai.css">
 <script src="buffee.js"></script>
+<script src="extensions/history.js"></script>
 <script src="extensions/statusline.js"></script>
 <script src="extensions/highlights.js"></script>
 <script src="extensions/tui.js"></script>
@@ -196,7 +197,7 @@
 <script>
   window.addEventListener("DOMContentLoaded", () => {
     const mainElement = document.getElementById("playground");
-    const primary = BuffeeStatusLine(new Buffee(mainElement, { rows: 20 }));
+    const primary = BuffeeHistory(BuffeeStatusLine(new Buffee(mainElement, { rows: 20 })));
     mainElement.querySelector('.buffee-lines').focus();
     window.primary = primary;
 

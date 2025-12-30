@@ -37,7 +37,6 @@ function BuffeeUndoTree(editor) {
   const coalesceTimeout = 500;
 
   // Capture cursor position
-  // Access via getters each time - head/tail references can change
   function captureCursor() {
     const [head, tail] = editor.Selection.unordered;
     return {
@@ -47,20 +46,17 @@ function BuffeeUndoTree(editor) {
   }
 
   // Restore cursor position
-  // Access via getters each time - head/tail references can change
   function restoreCursor(pos) {
     if (!pos) return;
 
     const isSelection = pos.headRow !== pos.tailRow || pos.headCol !== pos.tailCol;
 
-    // If restoring a selection but currently have cursor (head === tail), need to detach
     if (isSelection) {
       Selection.makeSelection();
     } else {
       Selection.makeCursor();
     }
 
-    // Access via getters AFTER makeSelection/makeCursor - references change
     const [head, tail] = editor.Selection.unordered;
     head.row = pos.headRow;
     head.col = pos.headCol;
@@ -69,41 +65,33 @@ function BuffeeUndoTree(editor) {
   }
 
   // Check if operation can be coalesced with current node
-  function canCoalesce(type) {
+  function canCoalesce(type, lines) {
     if (!current.operation) return false;
     if (current.operation.type !== type) return false;
     if (current.children.length > 0) return false;
+    if (lines.length > 1 || current.operation.lines.length > 1) return false;
     const now = Date.now();
     return (now - _lastOpTime) < coalesceTimeout;
   }
 
-  // Record an operation
-  function recordOperation(type, row, col, text, cursorBefore) {
+  // Record an insert operation
+  function recordInsert(row, col, lines, endRow, endCol, cursorBefore) {
     const now = Date.now();
 
-    // Try to coalesce with current node
-    if (canCoalesce(type)) {
+    if (canCoalesce('insert', lines)) {
       const op = current.operation;
-      if (type === 'insert') {
-        // Append to existing insert
-        op.text += text;
-        current.cursorAfter = captureCursor();
-      } else {
-        // Prepend to existing delete (backspace accumulates backwards)
-        op.text = text + op.text;
-        op.col = col;
-        current.cursorAfter = captureCursor();
-      }
+      op.lines[0] += lines[0];
+      op.endCol = op.col + op.lines[0].length;
+      current.cursorAfter = captureCursor();
       _lastOpTime = now;
       return;
     }
 
-    // Create new node
     const node = {
       id: nextId++,
       parent: current,
       children: [],
-      operation: { type, row, col, text },
+      operation: { type: 'insert', row, col, lines, endRow, endCol },
       cursorBefore,
       cursorAfter: captureCursor(),
       timestamp: now,
@@ -116,20 +104,69 @@ function BuffeeUndoTree(editor) {
     _lastOpTime = now;
   }
 
-  // Wrap insert to record history
-  editor._insert = function(row, col, text) {
+  // Record a delete operation
+  function recordDelete(row, col, endRow, endCol, lines, cursorBefore) {
+    const now = Date.now();
+
+    if (canCoalesce('delete', lines)) {
+      const op = current.operation;
+      op.lines = [lines[0] + op.lines[0]];
+      op.col = col;
+      current.cursorAfter = captureCursor();
+      _lastOpTime = now;
+      return;
+    }
+
+    const node = {
+      id: nextId++,
+      parent: current,
+      children: [],
+      operation: { type: 'delete', row, col, endRow, endCol, lines },
+      cursorBefore,
+      cursorAfter: captureCursor(),
+      timestamp: now,
+      activeChild: null
+    };
+
+    current.children.push(node);
+    current.activeChild = current.children.length - 1;
+    current = node;
+    _lastOpTime = now;
+  }
+
+  // Wrap insert to record history (new API: row, col, lines[])
+  editor._insert = function(row, col, lines) {
+    if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
+
     const cursorBefore = captureCursor();
-    const result = _insert(row, col, text);
-    recordOperation('insert', row, col, text, cursorBefore);
-    return result;
+    _insert(row, col, lines);
+
+    const endRow = row + lines.length - 1;
+    const endCol = lines.length === 1 ? col + lines[0].length : lines[lines.length - 1].length;
+
+    recordInsert(row, col, lines, endRow, endCol, cursorBefore);
   };
 
-  // Wrap delete to record history
-  editor._delete = function(row, col, text) {
+  // Wrap delete to record history (new API: row, col, endRow, endCol)
+  editor._delete = function(row, col, endRow, endCol) {
+    if (row === endRow && col === endCol) return;
+
     const cursorBefore = captureCursor();
-    const result = _delete(row, col, text);
-    recordOperation('delete', row, col, text, cursorBefore);
-    return result;
+
+    // Capture lines before deleting (for undo)
+    let lines;
+    if (row === endRow) {
+      lines = [Model.lines[row].slice(col, endCol)];
+    } else {
+      lines = [
+        Model.lines[row].slice(col),
+        ...Model.lines.slice(row + 1, endRow),
+        Model.lines[endRow].slice(0, endCol)
+      ];
+    }
+
+    _delete(row, col, endRow, endCol);
+    recordDelete(row, col, endRow, endCol, lines, cursorBefore);
   };
 
   // Undo: apply inverse of current operation and move to parent
@@ -141,9 +178,9 @@ function BuffeeUndoTree(editor) {
 
     // Apply inverse operation
     if (op.type === 'insert') {
-      _delete(op.row, op.col, op.text);
+      _delete(op.row, op.col, op.endRow, op.endCol);
     } else {
-      _insert(op.row, op.col, op.text);
+      _insert(op.row, op.col, op.lines);
     }
 
     restoreCursor(current.cursorBefore);
@@ -172,9 +209,9 @@ function BuffeeUndoTree(editor) {
 
     // Apply operation
     if (op.type === 'insert') {
-      _insert(op.row, op.col, op.text);
+      _insert(op.row, op.col, op.lines);
     } else {
-      _delete(op.row, op.col, op.text);
+      _delete(op.row, op.col, op.endRow, op.endCol);
     }
 
     restoreCursor(child.cursorAfter);
@@ -263,14 +300,13 @@ function BuffeeUndoTree(editor) {
   // Get tree structure for visualization
   function getTree() {
     function nodeToObj(node) {
+      const text = node.operation ? node.operation.lines.join('\n') : '';
       return {
         id: node.id,
         isCurrent: node === current,
         operation: node.operation ? {
           type: node.operation.type,
-          text: node.operation.text.length > 20
-            ? node.operation.text.slice(0, 20) + '...'
-            : node.operation.text
+          text: text.length > 20 ? text.slice(0, 20) + '...' : text
         } : null,
         timestamp: node.timestamp,
         children: node.children.map(nodeToObj),
