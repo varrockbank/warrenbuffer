@@ -689,8 +689,8 @@ function defineExtensionTests() {
 
                 const branches = editor.UndoTree.branches();
                 assertEqual(branches.length, 2, 'Should have 2 branches');
-                assertEqual(branches[0].operation.text, 'A', 'First branch should be A');
-                assertEqual(branches[1].operation.text, 'B', 'Second branch should be B');
+                assertEqual(branches[0].operation.lines[0], 'A', 'First branch should be A');
+                assertEqual(branches[1].operation.lines[0], 'B', 'Second branch should be B');
             } finally {
                 cleanup();
             }
