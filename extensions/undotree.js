@@ -14,8 +14,9 @@
  * editor.UndoTree.branches();       // Get available branches at current node
  */
 function BuffeeUndoTree(editor) {
-  const { _insert, _delete } = editor;
   const { Selection, Model } = editor;
+  const _insert = Model._insert.bind(Model);
+  const _delete = Model._delete.bind(Model);
 
   // Node ID counter
   let nextId = 1;
@@ -135,7 +136,7 @@ function BuffeeUndoTree(editor) {
   }
 
   // Wrap insert to record history (new API: row, col, lines[])
-  editor._insert = function(row, col, lines) {
+  Model._insert = function(row, col, lines) {
     if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
 
     const cursorBefore = captureCursor();
@@ -148,7 +149,7 @@ function BuffeeUndoTree(editor) {
   };
 
   // Wrap delete to record history (new API: row, col, endRow, endCol)
-  editor._delete = function(row, col, endRow, endCol) {
+  Model._delete = function(row, col, endRow, endCol) {
     if (row === endRow && col === endCol) return;
 
     const cursorBefore = captureCursor();

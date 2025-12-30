@@ -25,8 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.11.0-alpha.1';
-  const self = this;
+  this.version = '12.12.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -219,8 +218,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = this.ordered;
-        self._delete(first.row, first.col, second.row, second.col + (this.dir > 0));
-        self._insert(first.row, first.col, lines);
+        Model._delete(first.row, first.col, second.row, second.col + (this.dir > 0));
+        Model._insert(first.row, first.col, lines);
 
         head.row = first.row;
         // Update cursor to end of inserted text
@@ -231,7 +230,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
         this.makeCursor();
       } else {
-        self._insert(tail.row, tail.col, lines);
+        Model._insert(tail.row, tail.col, lines);
 
         // Update cursor
         if (lines.length > 1) {
@@ -250,12 +249,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
       if (tail.col > 0) {
         // Delete character before cursor
-        self._delete(tail.row, tail.col - 1, tail.row, tail.col);
+        Model._delete(tail.row, tail.col - 1, tail.row, tail.col);
         head.col--;
       } else if (tail.row > 0) {
         // At start of line - delete newline (join with previous line)
         head.col = Model.lines[tail.row - 1].length;
-        self._delete(tail.row - 1, head.col, tail.row, 0);
+        Model._delete(tail.row - 1, head.col, tail.row, 0);
         if (--head.row < Viewport.start) Viewport.start = head.row;
       }
 
@@ -269,7 +268,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (this.dir) Selection.insert('', true); // skipRender - we render below
 
       // Insert newline (split current line)
-      self._insert(tail.row, tail.col, ['', '']);
+      Model._insert(tail.row, tail.col, ['', '']);
 
       head.col = 0, head.row++;
       if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
@@ -434,38 +433,38 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     delete(i) {
       this.lines.splice(i, 1);
     },
-  }
 
-  /**
-   * Primitive insert operation. Inserts lines at position.
-   * @param {number} row - Row index (absolute, not viewport-relative)
-   * @param {number} col - Column index
-   * @param {string[]} lines - Array of lines to insert (already split)
-   */
-  this._insert = (row, col, lines) => {
-    if (lines.length === 1) {
-      Model.lines[row] = Model.lines[row].slice(0, col) + lines[0] + Model.lines[row].slice(col);
-    } else {
-      const after = Model.lines[row].slice(col);
-      Model.lines[row] = Model.lines[row].slice(0, col) + lines[0];
-      Model.lines.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
-    }
-  }
+    /**
+     * Primitive insert operation. Inserts lines at position.
+     * @param {number} row - Row index (absolute, not viewport-relative)
+     * @param {number} col - Column index
+     * @param {string[]} lines - Array of lines to insert (already split)
+     */
+    _insert(row, col, lines) {
+      if (lines.length === 1) {
+        this.lines[row] = this.lines[row].slice(0, col) + lines[0] + this.lines[row].slice(col);
+      } else {
+        const after = this.lines[row].slice(col);
+        this.lines[row] = this.lines[row].slice(0, col) + lines[0];
+        this.lines.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
+      }
+    },
 
-  /**
-   * Primitive delete operation. Deletes from (row,col) to (endRow,endCol).
-   * @param {number} row - Start row index
-   * @param {number} col - Start column index
-   * @param {number} endRow - End row index
-   * @param {number} endCol - End column index (exclusive)
-   */
-  this._delete = (row, col, endRow, endCol) => {
-    if (row === endRow) {
-      Model.lines[row] = Model.lines[row].slice(0, col) + Model.lines[row].slice(endCol);
-    } else {
-      Model.lines[row] = Model.lines[row].slice(0, col) + Model.lines[endRow].slice(endCol);
-      Model.lines.splice(row + 1, endRow - row);
-    }
+    /**
+     * Primitive delete operation. Deletes from (row,col) to (endRow,endCol).
+     * @param {number} row - Start row index
+     * @param {number} col - Start column index
+     * @param {number} endRow - End row index
+     * @param {number} endCol - End column index (exclusive)
+     */
+    _delete(row, col, endRow, endCol) {
+      if (row === endRow) {
+        this.lines[row] = this.lines[row].slice(0, col) + this.lines[row].slice(endCol);
+      } else {
+        this.lines[row] = this.lines[row].slice(0, col) + this.lines[endRow].slice(endCol);
+        this.lines.splice(row + 1, endRow - row);
+      }
+    },
   }
 
   /**
@@ -639,7 +638,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       v: () => {},
       c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
-      z: () => { e.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
+      z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     };
     const special = {
       // Edit keys (use raw key for lookup, only when Mode.interactive >= 1)
