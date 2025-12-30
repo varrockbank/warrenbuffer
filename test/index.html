@@ -184,6 +184,15 @@
         .code-line.step-line.completed { background: #d4edda; border-left-color: #28a745; }
         .code-line.error-line { background: #f8d7da; border-left: 3px solid #dc3545; padding-left: 5px; }
         .code-line.success-line { background: #d4edda; border-left: 3px solid #28a745; padding-left: 5px; }
+        .code-line.expandable { cursor: pointer; }
+        .code-line.expandable .error-marker::after { content: ' ▶'; font-size: 0.7em; }
+        .code-line.expandable.expanded .error-marker::after { content: ' ▼'; }
+        .expect-details { display: none; padding: 8px 12px; margin: 4px 0 4px 20px; background: #fff5f5; border-radius: 4px; font-size: 12px; font-family: monospace; }
+        .code-line.expanded .expect-details { display: block; }
+        .expect-row { margin: 2px 0; }
+        .expect-label { color: #666; font-weight: bold; }
+        .expect-value.expected { color: #28a745; }
+        .expect-value.actual { color: #dc3545; }
         .error-marker, .success-marker, .step-marker { font-weight: bold; }
         .error-marker { color: #dc3545; }
         .success-marker { color: #28a745; }
