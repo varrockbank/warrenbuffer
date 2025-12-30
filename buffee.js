@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.12.0-alpha.1';
+  this.version = '12.12.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -552,7 +552,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     if (Viewport.delta > 0) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
     for (; rebuilt < 0; rebuilt++)
       viewportLayers.forEach(([a]) => a.pop()?.remove());
-    Viewport.delta = 0;
 
     // Update contents of line containers (reset to clean state)
     for (let i = 0; i < Viewport.displayLines; i++)
@@ -586,8 +585,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     // Call extension hooks
     for (const hook of Mode.renderHooks) {
-      hook($l, Viewport, rebuilt);
+      hook($l, Viewport, Viewport.delta);
     }
+    Viewport.delta = 0;
   }
   
   // Auto-fit viewport to container height
