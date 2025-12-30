@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.8.1-alpha.1';
+  this.version = '12.8.2-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -613,32 +613,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     } else {
       const [firstEdge, secondEdge] = Selection.ordered;
 
-      // Convert absolute rows to viewport-relative
-      const firstViewportRow = firstEdge.row - Viewport.start;
-      const secondViewportRow = secondEdge.row - Viewport.start;
-
-      // Render middle selection lines (only those within viewport)
-      for (let absRow = firstEdge.row + 1; absRow <= secondEdge.row - 1; absRow++) {
-        const viewportRow = absRow - Viewport.start;
-        if (viewportRow >= 0 && viewportRow < Viewport.size)
-          // +1 for phantom newline character (shows newline is part of selection)
-          sizeSelection(viewportRow, 0, Model.lines[absRow].length + 1);
-      }
-
-      // Render the first edge line (if within viewport)
-      if (firstViewportRow >= 0 && firstViewportRow < Viewport.size) {
-        // Single-line: width = secondEdge.col - firstEdge.col
-        // Multi-line: width = text.length - firstEdge.col + 1 (includes phantom newline)
-        const width = secondEdge.row === firstEdge.row
-          ? secondEdge.col - firstEdge.col
-          : Model.lines[firstEdge.row].length - firstEdge.col + 1;
-        sizeSelection(firstViewportRow, firstEdge.col, width);
-      }
-
-      // Render the second edge line (if within viewport and multi-line selection)
-      // Excludes cursor head position
-      if (secondEdge.row !== firstEdge.row && secondViewportRow >= 0 && secondViewportRow < Viewport.size) {
-        sizeSelection(secondViewportRow, 0, Math.min(secondEdge.col, Model.lines[secondEdge.row].length));
+      // Render selection lines (loop viewport, check if in selection)
+      for (let v = 0; v < Viewport.size; v++) {
+        const r = Viewport.start + v;
+        if (r < firstEdge.row || r > secondEdge.row) continue;
+        const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length;
+        sizeSelection(v, f ? firstEdge.col : 0, f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1);
       }
       // * END render selection
 
@@ -706,8 +686,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     // Special key handlers: cmd+key (lowercase) and edit keys (capitalized)
     const metaKeys = {
       v: () => {},
-      c:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
-      x:  () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
+      c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
+      x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
       z: () => { e.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
     };
     const special = {
