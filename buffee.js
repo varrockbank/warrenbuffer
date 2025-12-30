@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.8.6-alpha.1';
+  this.version = '12.8.7-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -677,8 +677,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     // Special key handlers: cmd+key (lowercase) and edit keys (capitalized)
     const metaKeys = {
       v: () => {},
-      c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
-      x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.direct(); },
+      c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
+      x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       z: () => { e.preventDefault(); if (self.History) self.History[sh ? 'redo' : 'undo'](); },
     };
     const special = {

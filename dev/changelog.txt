@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.8.7-alpha.1 [2025-12-30]  gz+min: 3177 bytes / 3.10 KB (0), min: 8215 bytes / 8.02 KB
+*** fix
+- clipboard copy/cut broken (.direct() should be .select(), regression from c815ea2)
+
 ** 12.8.6-alpha.1 [2025-12-30]  gz+min: 3177 bytes / 3.10 KB (-7), min: 8215 bytes / 8.02 KB
 *** refactor
 - inline gutterDigits into gutterCols (only used in one place)
