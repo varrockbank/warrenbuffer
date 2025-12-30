@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.8.7-alpha.1';
+  this.version = '12.9.0-alpha.1';
   const self = this;
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
@@ -160,7 +160,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const [left, right] = this.ordered;
       if(left.row === right.row) {
         const text = Model.lines[left.row];
-        const texts = [text.slice(left.col, right.col)];
+        const texts = [text.slice(left.col, right.col + (this.dir > 0))];
         
         // If selection extends to phantom newline position and there is a newline
         if (right.col >= text.length && left.row < Model.lastIndex) texts.push('');
@@ -168,7 +168,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         return texts;
       } else {
         const firstLine = Model.lines[left.row].slice(left.col);
-        const lastLine = Model.lines[right.row].slice(0, right.col);
+        const lastLine = Model.lines[right.row].slice(0, right.col + (this.dir > 0));
         const middle = Model.lines.slice(left.row + 1, right.row);
         return [firstLine, ...middle, lastLine]
       }

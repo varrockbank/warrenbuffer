@@ -55,12 +55,21 @@ left
 EXPECT cursor at 0,2
 
 ## should not throw on Cmd+C (regression c815ea2)
-### Clipboard bridge .select() method must exist, not .direct()
+### Cmd+C should copy selected text to clipboard
 TYPE "Hello"
 left 3 times with shift
-// Simulate Cmd+C keydown - should not throw
-const clipboardBridge = fixture.node.querySelector('.buffee-clipboard-bridge');
-expect(typeof clipboardBridge.select).toBe('function');
-fixture.node.querySelector('.buffee-lines').dispatchEvent(new KeyboardEvent('keydown', { key: 'c', metaKey: true }));
-expect(fixture).toHaveLines('Hello');
+const $cb = fixture.node.querySelector('.buffee-clipboard-bridge');
+const dt = new DataTransfer();
+$cb.dispatchEvent(new ClipboardEvent('copy', { clipboardData: dt, bubbles: true }));
+expect(dt.getData('text/plain')).toBe('llo');
+
+## should copy forward selection correctly
+### Forward selection should include correct characters
+TYPE "Hello"
+left 3 times
+right 2 times with shift
+const $cb = fixture.node.querySelector('.buffee-clipboard-bridge');
+const dt = new DataTransfer();
+$cb.dispatchEvent(new ClipboardEvent('copy', { clipboardData: dt, bubbles: true }));
+expect(dt.getData('text/plain')).toBe('llo');
 
