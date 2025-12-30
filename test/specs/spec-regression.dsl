@@ -38,3 +38,19 @@ PRESS ';' 3 times
 expect(fixture).toHaveLines(';;;');
 EXPECT cursor at 0,3
 
+## should collapse selection on arrow key (regression 74e0a9f)
+### Arrow key after selection should move cursor to edge, not throw TypeError
+TYPE "Hello"
+left 3 times with shift
+EXPECT selection at 0,2-0,5
+right
+EXPECT cursor at 0,5
+
+## should collapse selection on left arrow (regression 74e0a9f)
+### Left arrow after selection should move cursor to start edge
+TYPE "Hello"
+left 3 times with shift
+EXPECT selection at 0,2-0,5
+left
+EXPECT cursor at 0,2
+

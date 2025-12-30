@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 12.8.5-alpha.1 [2025-12-30]  gz+min: 3184 bytes / 3.11 KB (-1), min: 8260 bytes / 8.07 KB
+*** fix
+- arrow key after selection caused TypeError (boolean array index needs | 0)
+- reverts 74e0a9f which incorrectly assumed boolean coerces to number for array index
+
 ** 12.8.4-alpha.1 [2025-12-30]  gz+min: 3185 bytes / 3.11 KB (+14), min: 8256 bytes / 8.06 KB
 *** refactor
 - move gutterDigits and gutterCols to computed properties on Viewport
