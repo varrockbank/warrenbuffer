@@ -121,7 +121,14 @@ class TestRunner {
                 matchers[key](...args);
                 expectResults.push({ success: true, sequenceNum: seq });
               } catch (error) {
-                expectResults.push({ success: false, sequenceNum: seq });
+                expectResults.push({
+                  success: false,
+                  sequenceNum: seq,
+                  actual: actual,
+                  expected: args[0],
+                  matcher: key,
+                  message: error.message
+                });
                 if (!firstError) firstError = error;
               }
             };

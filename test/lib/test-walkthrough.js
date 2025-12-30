@@ -168,6 +168,7 @@ class Walkthrough {
     // Find successful and failed expect lines using sequence numbers
     const successLineIndices = new Set();
     const failureLineIndices = new Set();
+    const lineToExpectResult = new Map();
 
     const expectLines = [];
     sourceLines.forEach((line, idx) => {
@@ -181,6 +182,7 @@ class Walkthrough {
     expectResults.forEach((result, i) => {
       if (i < expectLines.length) {
         const lineIdx = expectLines[i];
+        lineToExpectResult.set(lineIdx, result);
         if (result.success) {
           successLineIndices.add(lineIdx);
         } else {
@@ -193,7 +195,8 @@ class Walkthrough {
     this.currentTest.expectData = {
       successLineIndices,
       failureLineIndices,
-      lineToStep
+      lineToStep,
+      lineToExpectResult
     };
 
     // Process DSL source for display
@@ -324,7 +327,7 @@ class Walkthrough {
     if (!this.currentTest) return;
 
     const test = this.currentTest;
-    const { successLineIndices, failureLineIndices, lineToStep } = test.expectData || {};
+    const { successLineIndices, failureLineIndices, lineToStep, lineToExpectResult } = test.expectData || {};
     if (!lineToStep) return;
 
     const codeView = document.getElementById('walkthrough-code-js');
@@ -362,15 +365,17 @@ class Walkthrough {
       const isStepLine = stepNum !== undefined;
       const isFailureLine = failureLineIndices?.has(lineIndex);
       const isSuccessLine = successLineIndices?.has(lineIndex);
+      const expectResult = lineToExpectResult?.get(lineIndex);
 
       const shouldRevealExpect = isComplete || lineIndex <= maxRevealedLine;
 
       let classes = 'code-line';
-      if (isFailureLine && shouldRevealExpect) classes += ' error-line';
+      if (isFailureLine && shouldRevealExpect) classes += ' error-line expandable';
       if (isSuccessLine && !isFailureLine && shouldRevealExpect) classes += ' success-line';
       if (isStepLine) classes += ' step-line';
 
       const onclick = isStepLine ? `onclick="walkthrough.jumpToStep(${stepNum})"` : '';
+      const toggleExpand = isFailureLine && shouldRevealExpect ? `onclick="this.classList.toggle('expanded')"` : '';
 
       let markers = '';
       if (isStepLine) {
@@ -382,8 +387,14 @@ class Walkthrough {
         markers += `<span class="success-marker">✓</span>`;
       }
 
+      let detailsHtml = '';
+      if (isFailureLine && shouldRevealExpect && expectResult && !expectResult.success) {
+        const message = expectResult.message || 'Assertion failed';
+        detailsHtml = `<div class="expect-details">${escapeHtml(message).replace(/\n/g, '<br>')}</div>`;
+      }
+
       const markersHtml = markers ? `<div class="code-line-markers">${markers}</div>` : '';
-      return `<div class="${classes}" data-step="${stepNum ?? ''}" ${onclick}><div class="code-line-content">${line}</div>${markersHtml}</div>`;
+      return `<div class="${classes}" data-step="${stepNum ?? ''}" ${onclick || toggleExpand}><div class="code-line-content">${line}</div>${markersHtml}${detailsHtml}</div>`;
     }).join('');
 
     codeView.innerHTML = codeHtml;
