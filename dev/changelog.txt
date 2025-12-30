@@ -1,6 +1,6 @@
 * Project Devlog
 
-** 12.8.4-alpha.1 [2025-12-30]  gz+min:     3185 bytes / 3.11 KB (+14), min: 8256 bytes / 8.06 KB
+** 12.8.4-alpha.1 [2025-12-30]  gz+min: 3185 bytes / 3.11 KB (+14), min: 8256 bytes / 8.06 KB
 *** refactor
 - move gutterDigits and gutterCols to computed properties on Viewport
 - remove lastGutterDigits cache (browsers optimize same-value style sets)
