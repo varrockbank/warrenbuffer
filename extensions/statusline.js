@@ -38,5 +38,8 @@ function BuffeeStatusLine(editor) {
     }
   });
 
+  // Trigger initial render to populate status line
+  editor.render();
+
   return editor;
 }
