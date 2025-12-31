@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.1.0-alpha.1';
+  this.version = '13.1.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -85,57 +85,27 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     /**
      * Moves the cursor/selection head vertically.
-     * head.row is an ABSOLUTE line number (Model index).
-     * @param {number} value - Direction to move: 1 for down, -1 for up
+     * @param {number} dir - Direction: positive for down, negative for up
+     * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
      */
-    moveRow(value) {
-      if (value > 0) {
-        // Move down
-        if (head.row < Model.lastIndex) {
-          // Adjust column to fit new line's length
-          head.col = Math.min(maxCol, Model.lines[++head.row].length);
-
-          // Scroll viewport if cursor went below visible area
-          if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
-
-          render();
-        }
-        // else: at last line of file, No-Op
-      } else if (head.row > 0) { // Move up
-        // Adjust column to fit new line's length
-        head.col = Math.min(maxCol, Model.lines[--head.row].length);
-        // Scroll viewport if cursor went above visible area
-        if (head.row < Viewport.start) Viewport.start = head.row;
+    moveRow(dir, toEdge) {
+      if (dir > 0 ? head.row < Model.lastIndex : head.row > 0) {
+        const len = Model.lines[dir > 0 ? ++head.row : --head.row].length;
+        head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
+        if (toEdge) maxCol = head.col;
+        if (head.row < Viewport.start || head.row > Viewport.end) Viewport.start = dir > 0 ? head.row - Viewport.size + 1 : head.row;
         render();
       }
     },
 
     /**
      * Moves the cursor/selection head horizontally.
-     * head.row is an ABSOLUTE line number (Model index).
-     * Handles line wrapping when moving past line boundaries.
-     * @param {number} value - Direction to move: 1 for right, -1 for left
+     * @param {number} dir - Direction: positive for right, negative for left
      */
-    moveCol(value) {
-      if (value === 1) {
-        if (head.col < Model.lines[head.row].length) {
-          maxCol = ++head.col; // Move right 1 character (including to newline position).
-          render();
-        } else if (head.row < Model.lastIndex) {                   // Move to beginning of next line.
-          maxCol = head.col = 0;
-          // Scroll viewport if cursor went below visible area
-          if (++head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
-          render();
-        } // else: at end of file, No-Op
-      } else if (head.col > 0) {
-        maxCol = --head.col;
-        render();
-      } else if (head.row > 0) {                                 // Move to end of previous line (phantom newline position)
-        maxCol = head.col = Model.lines[--head.row].length;
-        // Scroll viewport if cursor went above visible area
-        if (head.row < Viewport.start) Viewport.start = head.row;
-        render();
-      } // else: at start of file, No-Op
+    moveCol(dir) {
+      const right = dir > 0, len = Model.lines[head.row].length;
+      if (right ? head.col < len : head.col) { maxCol = right ? ++head.col : --head.col; render(); }
+      else if (right ? head.row < Model.lastIndex : head.row) this.moveRow(dir, 1);
     },
 
     /**
