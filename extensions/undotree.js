@@ -39,7 +39,7 @@ function BuffeeUndoTree(editor) {
 
   // Capture cursor position
   function captureCursor() {
-    const [head, tail] = editor.Selection.unordered;
+    const [head, tail] = editor.Selection.bounds();
     return {
       headRow: head.row, headCol: head.col,
       tailRow: tail.row, tailCol: tail.col
@@ -58,7 +58,7 @@ function BuffeeUndoTree(editor) {
       Selection.makeCursor();
     }
 
-    const [head, tail] = editor.Selection.unordered;
+    const [head, tail] = editor.Selection.bounds();
     head.row = pos.headRow;
     head.col = pos.headCol;
     tail.row = pos.tailRow;

@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 13.0.0-alpha.1 [2025-12-31]  gz+min: 3070 bytes / 3.00 KB (-6), min: 7759 bytes / 7.58 KB
+*** breaking
+- Selection.ordered/unordered replaced with Selection.bounds(ordered)
+  - bounds(1) = ordered [start, end], bounds() = unordered [head, tail]
+
 ** 12.14.3-alpha.1 [2025-12-30]  gz+min: 3076 bytes / 3.00 KB (+5), min: 7799 bytes / 7.62 KB
 *** fix
 - hide cursor when scrolled outside viewport (was showing at wrong row)

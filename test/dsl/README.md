@@ -495,7 +495,7 @@ See `test/dsl/transpiler.js` for implementation details.
 ```
 PRESS a
 expect(fixture).toHaveLines('a');
-const [firstEdge, SecondEdge] = fixture.editor.Selection.ordered;
+const [firstEdge, SecondEdge] = fixture.editor.Selection.bounds(1);
 expect(firstEdge).toEqual({ row: 0, col: 1 });
 expect(SecondEdge).toEqual({ row: 0, col: 1 });
 ```
@@ -504,7 +504,7 @@ expect(SecondEdge).toEqual({ row: 0, col: 1 });
 ```
 TYPE "Hello"
 expect(fixture).toHaveLines('Hello');
-const [firstEdge, SecondEdge] = fixture.editor.Selection.ordered;
+const [firstEdge, SecondEdge] = fixture.editor.Selection.bounds(1);
 expect(firstEdge).toEqual({ row: 0, col: 5 });
 expect(SecondEdge).toEqual({ row: 0, col: 5 });
 ```
@@ -532,7 +532,7 @@ TYPE "X"
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('XWorld');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 1 });
 expect(end).toEqual({ row: 0, col: 1 });
 ```
@@ -546,7 +546,7 @@ TYPE "Goodbye"
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('GoodbyeWorld');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 7 });
 expect(end).toEqual({ row: 0, col: 7 });
 ```
@@ -560,7 +560,7 @@ TYPE "New"
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('New');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 3 });
 expect(end).toEqual({ row: 0, col: 3 });
 ```
@@ -580,7 +580,7 @@ TYPE "X"
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('Xhird line');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 1 });
 expect(end).toEqual({ row: 0, col: 1 });
 ```
@@ -601,7 +601,7 @@ TYPE "REPLACED"
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('First REPLACEDine');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 14 });
 expect(end).toEqual({ row: 0, col: 14 });
 ```
@@ -614,7 +614,7 @@ TYPE "Everyone"
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('Hello Everyone');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 14 });
 expect(end).toEqual({ row: 0, col: 14 });
 ```
@@ -629,7 +629,7 @@ PRESS " "
 
 expect(fixture.editor.Selection.dir).toBe(0);
 expect(fixture).toHaveLines('Hello ');
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 6 });
 expect(end).toEqual({ row: 0, col: 6 });
 ```
@@ -697,7 +697,7 @@ expect lines ["Hello"]
 **Current (Imperative):**
 ```javascript
 fixture.press(Key.ArrowRight).withShiftKey().times(5);
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 0 });
 expect(end).toEqual({ row: 0, col: 5 });
 ```

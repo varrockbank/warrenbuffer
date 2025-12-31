@@ -154,12 +154,12 @@ expect(text).toBe('Test');`
         name: 'JavaScript interweaving: selection check',
         input: `TYPE "Hello"
 left 3 times with shift
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 2 });
 expect(end).toEqual({ row: 0, col: 5 });`,
         expected: `fixture.type('Hello');
 fixture.press(Key.ArrowLeft).withShiftKey().times(3);
-const [start, end] = fixture.editor.Selection.ordered;
+const [start, end] = fixture.editor.Selection.bounds(1);
 expect(start).toEqual({ row: 0, col: 2 });
 expect(end).toEqual({ row: 0, col: 5 });`
       },

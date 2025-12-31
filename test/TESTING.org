@@ -127,7 +127,7 @@ expect(fixture.editor.Model.lines).toHaveLength(2);
 
 #+begin_src javascript
 // Get cursor position (firstEdge and SecondEdge are same for cursor)
-const [firstEdge, SecondEdge] = fixture.editor.Selection.ordered;
+const [firstEdge, SecondEdge] = fixture.editor.Selection.bounds(1);
 expect(firstEdge).toEqual({ row: 0, col: 5 });
 expect(SecondEdge).toEqual({ row: 0, col: 5 });
 
@@ -135,7 +135,7 @@ expect(SecondEdge).toEqual({ row: 0, col: 5 });
 expect(fixture.editor.Selection.dir !== 0).toBe(true);
 
 // Selection positions
-const [firstEdge, SecondEdge] = fixture.editor.Selection.ordered;
+const [firstEdge, SecondEdge] = fixture.editor.Selection.bounds(1);
 expect(firstEdge).toEqual({ row: 0, col: 0 });  // Start of selection
 expect(SecondEdge).toEqual({ row: 0, col: 5 });  // End of selection
 #+end_src

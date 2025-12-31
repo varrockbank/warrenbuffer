@@ -17,7 +17,7 @@ function BuffeeStatusLine(editor) {
   let lastRow = -1, lastCol = -1, lastLineCount = -1, lastSpaces = -1;
 
   renderHooks.push(() => {
-    const [{ row, col }] = editor.Selection.unordered;
+    const [{ row, col }] = editor.Selection.bounds();
     const lineCount = Model.lastIndex + 1;
 
     if ($headRow && row !== lastRow) {
