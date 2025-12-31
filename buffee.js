@@ -25,12 +25,11 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.2.0-alpha.1';
+  this.version = '13.2.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
-  const prop = p => parseFloat(getComputedStyle($parent).getPropertyValue(p));
   const $ = q => $parent.querySelector(q);
   const frag = () => document.createDocumentFragment();
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
@@ -39,10 +38,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     style.width = width + 'ch';
   };
 
-  const lineHeight = prop('--buffee-cell');
-  const editorPaddingPX = prop('--buffee-padding');
-  const gutterDigitsMinimum = prop('--buffee-gutter-digits-initial');
-  const gutterDigitsPadding = prop('--buffee-gutter-digits-padding');
+  const [cssCell, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
+    ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
+      .map(p => parseFloat(getComputedStyle($parent).getPropertyValue(p)));
   const $e = $('.buffee-elements');
   const $l = $('.buffee-lines');
   const $cursor = $('.buffee-cursor');
@@ -58,9 +56,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
   // Set container width if cols specified
   // Width = gutter(ch) + lines(ch) + margins(px): gutter has margin*2, lines has margin*2
-  cols && !$gutter && ($e.style.width = `calc(${cols}ch + ${editorPaddingPX * 2}px)`);
+  cols && !$gutter && ($e.style.width = `calc(${cols}ch + ${cssPadding * 2}px)`);
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
-  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * lineHeight + 'px'));
+  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * cssCell + 'px'));
 
   const detachedHead = { row : 0, col : 0};
   // head.row and tail.row are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -354,7 +352,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     interactive: 1,
     frameCount: 0,
-    lineHeight,
+    cssCell,
     renderHooks: []
   };
 
@@ -436,7 +434,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     /** @type {number} Number of DOM line containers */
     get displayLines() { return this.size + this.autoFit; },
     /** @type {number} Total gutter width in ch units */
-    get gutterCols() { return Math.max(gutterDigitsMinimum, (this.start + this.displayLines).toString().length) + gutterDigitsPadding; },
+    get gutterCols() { return Math.max(cssGutterDigitsInitial, (this.start + this.displayLines).toString().length) + cssGutterDigitsPadding; },
 
     /**
      * Index of the last visible line.
@@ -448,8 +446,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     get contentOffset() {
       return {
         ch: $gutter ? this.gutterCols : 0,
-        px: $gutter ? (editorPaddingPX * 3) : editorPaddingPX,
-        top: editorPaddingPX
+        px: $gutter ? (cssPadding * 3) : cssPadding,
+        top: cssPadding
       };
     },
 
@@ -493,7 +491,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     // Adjust gutter width based on largest visible line number
     if ($gutter) {
       $gutter.style.width = Viewport.gutterCols + 'ch';
-      if (cols) $e.style.width = `calc(${Viewport.gutterCols + cols}ch + ${editorPaddingPX * 4}px)`;
+      if (cols) $e.style.width = `calc(${Viewport.gutterCols + cols}ch + ${cssPadding * 4}px)`;
     }
 
     // Add / remove lines, selections, gutters as row changes
@@ -523,7 +521,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       // Render cursor overlay (always shows head position)
       const headViewportRow = head.row - Viewport.start;
       if (headViewportRow >= 0 && headViewportRow < Viewport.size) {
-        $cursor.style.top = headViewportRow * lineHeight + 'px';
+        $cursor.style.top = headViewportRow * cssCell + 'px';
         $cursor.style.left = head.col + 'ch';
 
         // Horizontal scroll to keep cursor in view
@@ -542,7 +540,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   if (Viewport.autoFit) {
     const fitViewport = () => {
       // .buffee-elements is flex: 1, so it fills remaining space after status line
-      const newSize = Math.floor($e.clientHeight / lineHeight);
+      const newSize = Math.floor($e.clientHeight / cssCell);
       if (newSize > 0 && newSize !== Viewport.size) {
         Viewport.delta += newSize - Viewport.size;
         Viewport.size = newSize;

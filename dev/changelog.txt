@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.2.1-alpha.1 [2025-12-31]  gz+min: 3097 bytes / 3.02 KB (+5), min: 7661 bytes / 7.48 KB
+*** refactor 
+- 1-liner to get css paramaters
+
 ** 13.2.0-alpha.1 [2025-12-31]  gz+min: 3091 bytes / 3.02 KB (+16), min: 7675 bytes / 7.50 KB
 *** perf 
 - render only if NoOp delete 
