@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.14.2-alpha.1';
+  this.version = '12.14.3-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -554,6 +554,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // Horizontal scroll to keep cursor in view
         const {left: cl, right: cr} = $l.getBoundingClientRect(), {left: rl, right: rr, width: w = 14} = $cursor.getBoundingClientRect();
         $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / w) * w;
+      } else {
+        $cursor.style.left = '-1ch';
       }
     }
 

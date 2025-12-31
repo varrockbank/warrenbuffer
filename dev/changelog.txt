@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.14.3-alpha.1 [2025-12-30]  gz+min: 3076 bytes / 3.00 KB (+5), min: 7799 bytes / 7.62 KB
+*** fix
+- hide cursor when scrolled outside viewport (was showing at wrong row)
+
 ** 12.14.2-alpha.1 [2025-12-30]  gz+min: 3071 bytes / 3.00 KB (+6), min: 7775 bytes / 7.59 KB
 *** fix
 - Backspace/Enter/Tab now respect Mode.interactive (was bypassing read-only check)
