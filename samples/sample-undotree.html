@@ -188,7 +188,7 @@
 
     function renderNode(node, isRoot = false) {
       const opText = node.operation
-        ? `${node.operation.type === 'insert' ? '+' : '-'}"${node.operation.text}"`
+        ? `${node.operation.type === 'insert' ? '+' : '-'}"${node.operation.lines.join('\\n')}"`
         : 'start';
 
       const classes = ['node-content'];
@@ -236,7 +236,7 @@
       branches.forEach((branch, i) => {
         const btn = document.createElement('button');
         const label = branch.operation
-          ? `${branch.operation.type === 'insert' ? '+' : '-'}"${branch.operation.text.slice(0, 10)}"`
+          ? `${branch.operation.type === 'insert' ? '+' : '-'}"${branch.operation.lines[0].slice(0, 10)}"`
           : `Branch ${i}`;
         btn.textContent = label + (branch.isActive ? ' *' : '');
         btn.onclick = () => {
@@ -288,19 +288,17 @@
     });
 
     // Update tree on any edit
-    const originalInsert = editor._insert;
-    const originalDelete = editor._delete;
+    const originalAdd = editor.Model.add;
+    const originalDel = editor.Model.del;
 
-    editor._insert = function(...args) {
-      const result = originalInsert.apply(this, args);
+    editor.Model.add = function(...args) {
+      originalAdd.apply(this, args);
       setTimeout(updateTree, 0);
-      return result;
     };
 
-    editor._delete = function(...args) {
-      const result = originalDelete.apply(this, args);
+    editor.Model.del = function(...args) {
+      originalDel.apply(this, args);
       setTimeout(updateTree, 0);
-      return result;
     };
 
     // Initial render
