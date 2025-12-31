@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.1.1-alpha.1';
+  this.version = '13.2.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -221,20 +221,19 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Deletes the character before cursor or the current selection.
      */
     delete() {
-      if (this.dir) return this.insert('');
-
-      if (tail.col > 0) {
+      if (this.dir) this.insert('');
+      else if (tail.col > 0) {
         // Delete character before cursor
         Model.del(tail.row, tail.col - 1, tail.row, tail.col);
         head.col--;
+        render();
       } else if (tail.row > 0) {
         // At start of line - delete newline (join with previous line)
         head.col = Model.lines[tail.row - 1].length;
         Model.del(tail.row - 1, head.col, tail.row, 0);
         if (--head.row < Viewport.start) Viewport.start = head.row;
+        render();
       }
-
-      render();
     },
 
     /**
