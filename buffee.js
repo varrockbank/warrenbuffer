@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.14.1-alpha.1';
+  this.version = '12.14.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -668,7 +668,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       if (Mode.interactive < 1) return;
       k === ' ' && e.preventDefault();
       Selection.insert(k);
-    } else if (special[k]) {
+    } else if (special[k] && Mode.interactive >= 1) {
       special[k]();
     }
   });

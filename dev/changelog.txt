@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 12.14.2-alpha.1 [2025-12-30]  gz+min: 3071 bytes / 3.00 KB (+6), min: 7775 bytes / 7.59 KB
+*** fix
+- Backspace/Enter/Tab now respect Mode.interactive (was bypassing read-only check)
+
 ** 12.14.1-alpha.1 [2025-12-30]  gz+min: 3065 bytes / 2.99 KB (-2), min: 7757 bytes / 7.58 KB
 *** refactor
 - remove unnecessary default value from insert(s, skipRender = false)
