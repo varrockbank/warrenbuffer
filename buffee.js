@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.0.0-alpha.1';
+  this.version = '13.1.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -97,6 +97,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
           // Scroll viewport if cursor went below visible area
           if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
+
+          render();
         }
         // else: at last line of file, No-Op
       } else if (head.row > 0) { // Move up
@@ -104,9 +106,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         head.col = Math.min(maxCol, Model.lines[--head.row].length);
         // Scroll viewport if cursor went above visible area
         if (head.row < Viewport.start) Viewport.start = head.row;
+        render();
       }
-      // else: at first line of file, No-Op
-      render();
     },
 
     /**
@@ -117,19 +118,24 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     moveCol(value) {
       if (value === 1) {
-        if (head.col < Model.lines[head.row].length) maxCol = ++head.col; // Move right 1 character (including to newline position).
-        else if (head.row < Model.lastIndex) {                   // Move to beginning of next line.
+        if (head.col < Model.lines[head.row].length) {
+          maxCol = ++head.col; // Move right 1 character (including to newline position).
+          render();
+        } else if (head.row < Model.lastIndex) {                   // Move to beginning of next line.
           maxCol = head.col = 0;
           // Scroll viewport if cursor went below visible area
           if (++head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
+          render();
         } // else: at end of file, No-Op
-      } else if (head.col > 0) maxCol = --head.col;
-      else if (head.row > 0) {                                 // Move to end of previous line (phantom newline position)
-          maxCol = head.col = Model.lines[--head.row].length;
-          // Scroll viewport if cursor went above visible area
-          if (head.row < Viewport.start) Viewport.start = head.row;
+      } else if (head.col > 0) {
+        maxCol = --head.col;
+        render();
+      } else if (head.row > 0) {                                 // Move to end of previous line (phantom newline position)
+        maxCol = head.col = Model.lines[--head.row].length;
+        // Scroll viewport if cursor went above visible area
+        if (head.row < Viewport.start) Viewport.start = head.row;
+        render();
       } // else: at start of file, No-Op
-      render();
     },
 
     /**
