@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '12.14.3-alpha.1';
+  this.version = '13.0.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -77,11 +77,11 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
    */
   const Selection = this.Selection = {
     /**
-     * Returns selection bounds in document order [start, end].
-     * @returns {[Position, Position]} Array of [start, end] positions
+     * Returns selection bounds. Pass truthy for document order, falsy for [head, tail].
+     * @param {boolean} [ordered] - If true, returns [start, end] in document order
+     * @returns {[Position, Position]} Array of positions
      */
-    get ordered() { return this.dir > 0 ? [tail, head] : [head, tail] },
-    get unordered() { return [head, tail] },
+    bounds: ordered => ordered && Selection.dir > 0 ? [tail, head] : [head, tail],
 
     /**
      * Moves the cursor/selection head vertically.
@@ -156,7 +156,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @returns {string[]} Array of selected line contents
      */
     get lines() {
-      const [left, right] = this.ordered;
+      const [left, right] = Selection.bounds(1);
       if(left.row === right.row) {
         const text = Model.lines[left.row];
         const texts = [text.slice(left.col, right.col + (this.dir > 0))];
@@ -217,7 +217,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     insert(s, skipRender) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
-        const [first, second] = this.ordered;
+        const [first, second] = Selection.bounds(1);
         Model.del(first.row, first.col, second.row, second.col + (this.dir > 0));
         Model.add(first.row, first.col, lines);
 
@@ -307,7 +307,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     indent() {
       if(!this.dir) return;
-      const [first, second] = this.ordered;
+      const [first, second] = Selection.bounds(1);
 
       for(let i = first.row; i <= second.row; i++)
         Model.lines[i] = ' '.repeat(Mode.spaces) + Model.lines[i];
@@ -329,7 +329,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       // vim: removes the selection, although it does keep a hidden memory of the most recent indentation operation which you can repeat.
       // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
       // Currently we follow intellij implementation but perhaps VSCode's is the best.
-      const [first, second] = this.ordered;
+      const [first, second] = Selection.bounds(1);
 
       for(let i = first.row; i <= second.row; i++) {
         if( i  === first.row || i === second.row) {
@@ -535,7 +535,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     if (Mode.interactive < 0) {
       $cursor.style.left = '-1ch';
     } else {
-      const [firstEdge, secondEdge] = Selection.ordered;
+      const [firstEdge, secondEdge] = Selection.bounds(1);
 
       // Render selection lines (loop viewport, check if in selection)
       for (let v = 0; v < Viewport.displayLines; v++) {
@@ -642,10 +642,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if (arrowCode % 2) Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Selection.setCursor(Selection.ordered[direction > 0 | 0]);
+          Selection.setCursor(Selection.bounds(1)[direction > 0 | 0]);
           render();
         } else {
-          const edge = Selection.ordered[direction > 0 | 0];
+          const edge = Selection.bounds(1)[direction > 0 | 0];
           // edge.row is already absolute
           const targetAbsRow = $clamp(
             edge.row + direction,

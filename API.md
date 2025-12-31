@@ -156,8 +156,8 @@ editor.Viewport.set(100, 25); // Go to line 100, show 25 lines
 // Cursor position
 editor.Selection.setCursor({ row: 0, col: 5 });
 editor.Selection.isSelection;  // false if cursor, true if range
-editor.Selection.ordered;      // [start, end] in document order
-editor.Selection.unordered;    // [head, tail] - mutable position objects
+editor.Selection.bounds(1);    // [start, end] in document order
+editor.Selection.bounds();     // [head, tail] - mutable position objects
 
 // Selected text
 editor.Selection.lines;  // Array of selected lines
@@ -448,8 +448,8 @@ const { _insert, _delete } = editor;
 // Render hooks via Mode.renderHooks
 const { renderHooks } = editor.Mode;
 
-// Cursor positions via Selection.unordered
-const [head, tail] = editor.Selection.unordered;
+// Cursor positions via Selection.bounds()
+const [head, tail] = editor.Selection.bounds();
 
 // Content offset via Viewport.contentOffset
 const { ch, px, top } = editor.Viewport.contentOffset;

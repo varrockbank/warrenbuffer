@@ -47,7 +47,7 @@ right 5 times with shift
 EXPECT selection at 0,0-0,5
 
 ## should return correct order for forward and backward selections
-### Regression: Selection.ordered returns correct order for forward/backward selections
+### Regression: Selection.bounds(1) returns correct order for forward/backward selections
 TYPE "Hello World"
 left with meta
 right 5 times with shift
@@ -361,7 +361,7 @@ expect(fixture).toHaveLines('Hello ');
 EXPECT cursor at 0,6
 
 
-# Regression: Selection.ordered and dir
+# Regression: Selection.bounds(1) and dir
 
 ## should return 1 for dir when tail is before head (forward selection)
 ### dir is 1 when tail < head

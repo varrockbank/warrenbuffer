@@ -29,7 +29,7 @@ function BuffeeHistory(editor) {
 
   /** Capture current cursor/selection state */
   function captureCursor() {
-    const [head, tail] = editor.Selection.unordered;
+    const [head, tail] = editor.Selection.bounds();
     return {
       headRow: head.row, headCol: head.col,
       tailRow: tail.row, tailCol: tail.col
@@ -46,7 +46,7 @@ function BuffeeHistory(editor) {
       editor.Selection.makeCursor();
     }
 
-    const [head, tail] = editor.Selection.unordered;
+    const [head, tail] = editor.Selection.bounds();
     head.row = cursor.headRow;
     head.col = cursor.headCol;
     tail.row = cursor.tailRow;
