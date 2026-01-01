@@ -25,13 +25,12 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.2.1-alpha.1';
+  this.version = '13.2.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const $ = q => $parent.querySelector(q);
-  const frag = () => document.createDocumentFragment();
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
   const sizeSelection = (i, left, width, {style} = viewportLayers[2][0][i]) => {
     style.left = left + 'ch';
@@ -49,10 +48,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [[], frag(), $('.buffee-layer-text'), 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
-    [[], frag(), $gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
-    [[], frag(), $('.buffee-layer-selection'), 'div', (el) => el.style.width = 0]
-  ];
+    [$('.buffee-layer-text'), 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
+    [$gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
+    [$('.buffee-layer-selection'), 'div', (el) => el.style.width = 0]
+  ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
   // Set container width if cols specified
   // Width = gutter(ch) + lines(ch) + margins(px): gutter has margin*2, lines has margin*2
