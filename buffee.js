@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.2.2-alpha.1';
+  this.version = '13.2.3-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -507,12 +507,11 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     if (Mode.interactive < 0) {
       $cursor.style.left = '-1ch';
     } else {
-      const [firstEdge, secondEdge] = Selection.bounds(1);
-
       // Render selection lines (loop viewport, check if in selection)
-      for (let v = 0; v < Viewport.displayLines; v++) {
+      const [firstEdge, secondEdge] = Selection.bounds(1);
+      const end = Math.min(Viewport.displayLines, secondEdge.row - Viewport.start + 1);
+      for (let v = Math.max(0, firstEdge.row - Viewport.start); v < end; v++) {
         const r = Viewport.start + v;
-        if (r < firstEdge.row || r > secondEdge.row) continue;
         const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length;
         sizeSelection(v, f ? firstEdge.col : 0, f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1);
       }
