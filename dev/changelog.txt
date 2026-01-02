@@ -1,6 +1,10 @@
 * Project Devlog
 
-** 13.2.2-alpha.1 [2025-12-31]  gz+min: 3097 bytes / 3.02 KB (0), min: 7659 bytes / 7.48 KB
+** 13.2.3-alpha.1 [2026-1-2]  gz+min: 3103 bytes / 3.03 KB (+6), min: 7678 bytes / 7.50 KB
+*** perf
+- compute selection loop bounds instead of continue
+
+** 13.2.2-alpha.1 [2026-1-1]  gz+min: 3097 bytes / 3.02 KB (0), min: 7659 bytes / 7.48 KB
 *** refactor 
 - homogenously initialize elements of viewportLayers
 
