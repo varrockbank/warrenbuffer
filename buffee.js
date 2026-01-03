@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.2.3-alpha.1';
+  this.version = '13.2.4-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -503,10 +503,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     for (let i = 0; i < Viewport.displayLines; i++)
       viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
 
-    // In read-only mode (-1), hide cursor off screen and skip selection rendering
-    if (Mode.interactive < 0) {
-      $cursor.style.left = '-1ch';
-    } else {
+    let cursorLeft = -1;
+    if(Mode.interactive >= 0) {
       // Render selection lines (loop viewport, check if in selection)
       const [firstEdge, secondEdge] = Selection.bounds(1);
       const end = Math.min(Viewport.displayLines, secondEdge.row - Viewport.start + 1);
@@ -520,15 +518,14 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const headViewportRow = head.row - Viewport.start;
       if (headViewportRow >= 0 && headViewportRow < Viewport.size) {
         $cursor.style.top = headViewportRow * cssCell + 'px';
-        $cursor.style.left = head.col + 'ch';
+        cursorLeft = head.col;
 
         // Horizontal scroll to keep cursor in view
         const {left: cl, right: cr} = $l.getBoundingClientRect(), {left: rl, right: rr, width: w = 14} = $cursor.getBoundingClientRect();
         $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / w) * w;
-      } else {
-        $cursor.style.left = '-1ch';
       }
     }
+    $cursor.style.left = cursorLeft + 'ch';
 
     Mode.renderHooks.forEach(hook => hook($l, Viewport, Viewport.delta));
     Viewport.delta = 0;
