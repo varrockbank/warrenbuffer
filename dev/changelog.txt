@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.2.4-alpha.1 [2026-1-3]  gz+min: 3096 bytes / 3.02 KB (-7), min: 7644 bytes / 7.46 KB
+*** refactor
+- consolidate setting cursor left to one place
+
 ** 13.2.3-alpha.1 [2026-1-2]  gz+min: 3103 bytes / 3.03 KB (+6), min: 7678 bytes / 7.50 KB
 *** perf
 - compute selection loop bounds instead of continue
