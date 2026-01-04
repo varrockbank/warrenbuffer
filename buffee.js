@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.0-alpha.1';
+  this.version = '13.14.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -319,8 +319,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {string} text - The full document text
      */
     set text(text) {
-      text = expandTabs(text);
-      this.lines = text.split('\n');
+      this.lines = expandTabs(text).split('\n');
       render();
     },
 
