@@ -433,7 +433,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 // Public properties
 const { Viewport, Selection, Model, Mode, render, $parent } = editor;
 // Mode.frameCount - Number of render calls
-// Mode.lineHeight - Line height in pixels
+// Mode.cssCell - Line height in pixels (from CSS --buffee-cell)
 
 // Query DOM elements from $parent as needed:
 const $e = $parent.querySelector('.buffee-elements');
