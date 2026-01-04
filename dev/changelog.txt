@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.8-alpha.1 [2026-1-5]  gz+min: 2792 bytes / 2.73 KB (-7), min: 6740 bytes / 6.58 KB (-51)
+*** refactor
+- consolidate DOM queries into single map pattern
+
 ** 13.14.7-alpha.1 [2026-1-5]  gz+min: 2798 bytes / 2.73 KB (0), min: 6791 bytes / 6.63 KB (-7)
 *** refactor
 - refactor key handling guard pattern
