@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.0-alpha.1 [2026-1-4]  gz+min: 2802 bytes / 2.74 KB (-42), min: 6818 bytes / 6.66 KB (-116)
+*** breaking
+- remove Viewport.contentOffset, have highlights.js compute it directly
+
 ** 13.13.1-alpha.1 [2026-1-4]  gz+min: 2845 bytes / 2.78 KB (-8), min: 6934 bytes / 6.77 KB (+61)
 *** refactor
 - inline copy function into clipboard event listeners

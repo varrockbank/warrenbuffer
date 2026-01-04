@@ -18,7 +18,7 @@ function Buffee__NAME__(editor) {
 
   // === EDITOR PROPERTIES ===
   // Available: Model, Selection, Viewport, Mode, render, $parent
-  // Selection.bounds() returns [head, tail], Selection.bounds(1) returns ordered, Viewport.contentOffset returns { ch, px, top }
+  // Selection.bounds() returns [head, tail], Selection.bounds(1) returns ordered
   const { Model, Viewport, Mode, render, $parent } = editor;
   const lineHeight = Mode.lineHeight;
   const $e = $parent.querySelector('.buffee-elements');

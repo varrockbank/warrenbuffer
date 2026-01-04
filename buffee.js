@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.13.1-alpha.1';
+  this.version = '13.14.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -368,14 +368,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @returns {number} Index of the last line in the viewport
      */
     get end() { return Math.min(this.start + this.size - 1, Model.lastIndex); },
-    // TODO: revisit if contentOffset is needed
-    get contentOffset() {
-      return {
-        ch: $gutter ? Math.max(cssGutterDigitsInitial, (this.start + this.displayLines).toString().length) + cssGutterDigitsPadding : 0,
-        px: $gutter ? (cssPadding * 3) : cssPadding,
-        top: cssPadding
-      };
-    },
 
     /**
      * Sets the viewport position and optionally size.

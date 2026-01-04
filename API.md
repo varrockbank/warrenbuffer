@@ -447,9 +447,6 @@ const { renderHooks } = editor.Mode;
 
 // Cursor positions via Selection.bounds()
 const [head, tail] = editor.Selection.bounds();
-
-// Content offset via Viewport.contentOffset
-const { ch, px, top } = editor.Viewport.contentOffset;
 ```
 
 ### Render Hooks

@@ -11,17 +11,22 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeHighlights(editor) {
-  const { $parent, Mode, Viewport } = editor;
-  const { contentOffset } = Viewport;
+  const { $parent, Mode } = editor;
   const lineHeight = Mode.lineHeight;
+
+  // Compute content offset from CSS and gutter
+  const cssPadding = parseFloat(getComputedStyle($parent).getPropertyValue('--buffee-padding'));
+  const $gutter = $parent.querySelector('.buffee-gutter');
+  const gutterCh = $gutter ? parseFloat($gutter.style.width) || 0 : 0;
+  const offsetPx = $gutter ? cssPadding * 3 : cssPadding;
 
   // Create fixed layer for highlights (doesn't scroll with content)
   const $layer = document.createElement('div');
   $layer.className = 'buffee-layer-highlights';
   Object.assign($layer.style, {
     position: 'absolute',
-    top: contentOffset.top + 'px',
-    left: `calc(${contentOffset.ch}ch + ${contentOffset.px}px)`,
+    top: cssPadding + 'px',
+    left: `calc(${gutterCh}ch + ${offsetPx}px)`,
     width: '100%',
     height: '100%',
     zIndex: 150,  // Above selection (100), below text (200)
