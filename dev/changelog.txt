@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.2-alpha.1 [2026-1-4]  gz+min: 2800 bytes / 2.73 KB (+2), min: 6805 bytes / 6.65 KB (-9)
+*** refactor
+- extract resize function for initial sizing and ResizeObserver
+
 ** 13.14.1-alpha.1 [2026-1-4]  gz+min: 2798 bytes / 2.73 KB (-5), min: 6814 bytes / 6.65 KB (-4)
 *** refactor
 - inline expandTabs in Model.text setter
