@@ -17,28 +17,23 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.7-alpha.1';
+  this.version = '13.14.8-alpha.1';
   this.$parent = $parent;
-  /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
-  const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
+  const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
-  const $ = q => $parent.querySelector(q);
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
   const [cssCell, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
       .map(p => parseFloat(getComputedStyle($parent).getPropertyValue(p)));
-  const $e               = $('.buffee-elements');
-  const $l               = $('.buffee-lines');
-  const $cursor          = $('.buffee-cursor');
-  const $clipboardBridge = $('.buffee-clipboard-bridge');
-  const $gutter          = $('.buffee-gutter');
+  const [$e, $l, $cursor, $clipboardBridge, $gutter, $layerText, $layerSelection] =
+    ['elements', 'lines', 'cursor', 'clipboard-bridge', 'gutter', 'layer-text', 'layer-selection'].map(q => $parent.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [$('.buffee-layer-text'), 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
+    [$layerText, 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
     [$gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
-    [$('.buffee-layer-selection'), 'div', (el) => el.style.width = 0]
+    [$layerSelection, 'div', (el) => el.style.width = 0]
   ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
   // Set container width if cols specified
