@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.3.1-alpha.1 [2026-1-4]  gz+min: 3078 bytes / 3.00 KB (+13), min: 7564 bytes / 7.39 KB
+*** perf
+- precompute step function in moveWord
+
 ** 13.3.0-alpha.1 [2026-1-4]  gz+min: 3065 bytes / 2.99 KB (-31), min: 7560 bytes / 7.38 KB
 *** refactor
 - remove Selection.newLine, now handled entirely by Selection.insert
