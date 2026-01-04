@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.1-alpha.1 [2026-1-4]  gz+min: 2798 bytes / 2.73 KB (-5), min: 6814 bytes / 6.65 KB (-4)
+*** refactor
+- inline expandTabs in Model.text setter
+
 ** 13.14.0-alpha.1 [2026-1-4]  gz+min: 2802 bytes / 2.74 KB (-42), min: 6818 bytes / 6.66 KB (-116)
 *** breaking
 - remove Viewport.contentOffset, have highlights.js compute it directly
