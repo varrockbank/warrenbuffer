@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.9.2-alpha.1 [2026-1-4]  gz+min: 2877 bytes / 2.81 KB (-5), min: 6966 bytes / 6.80 KB (+5)
+*** perf
+- scrollTo() calls render(), avoid double-render at call sites
+
 ** 13.9.1-alpha.1 [2026-1-4]  gz+min: 2882 bytes / 2.81 KB (-13), min: 6961 bytes / 6.80 KB
 *** refactor
 - inline sizeSelection() at single usage site

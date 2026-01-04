@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.9.1-alpha.1';
+  this.version = '13.9.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -87,7 +87,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
         if (head.row < Viewport.start || head.row > Viewport.end) Viewport.scrollTo(dir > 0 ? head.row - Viewport.size + 1 : head.row);
-        render();
+        else render();
       }
     },
 
@@ -196,7 +196,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         } else maxCol = head.col += s.length;
       }
       if (head.row > Viewport.end) Viewport.scrollTo(head.row - Viewport.size + 1);
-      render();
+      else render();
     },
 
     /**
@@ -214,7 +214,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         head.col = Model.lines[tail.row - 1].length;
         Model.del(tail.row - 1, head.col, tail.row, 0);
         if (--head.row < Viewport.start) Viewport.scrollTo(head.row);
-        render();
+        else render();
       }
     },
 
@@ -230,6 +230,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           head.col = fwd ? 0 : Model.lines[--head.row].length;
           if (fwd && ++head.row > Viewport.end) Viewport.scrollTo(head.row - Viewport.size + 1);
           else if (!fwd && head.row < Viewport.start) Viewport.scrollTo(head.row);
+          else render();
         }
       } else {
         let j = head.col;
@@ -239,8 +240,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.col = j;
+        render();
       }
-      render();
     },
 
     /**
@@ -378,11 +379,13 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     /**
      * Scrolls the viewport to an absolute position.
+     * TODO: audit what happens if we scroll and cursor is out of view
      * @param {number} pos - Line index to scroll to (0-indexed)
      */
     scrollTo(pos) {
       this.start = $clamp(pos, 0, Model.lastIndex);
       $gutter && renderGutter();
+      render();
     },
 
     /**
@@ -495,8 +498,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
-    };
-    const special = {
+    },     special = {
       // Edit keys (use raw key for lookup, only when Mode.interactive >= 1)
       Backspace: () => { Selection.delete() },
       Enter: () => { Selection.insert('\n') } ,
@@ -520,19 +522,20 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.bounds(1)[direction > 0 | 0]);
+          render();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
           // edge.row is already absolute
           const targetAbsRow = $clamp(edge.row + direction, 0, Model.lastIndex);
 
+          maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
+          Selection.setCursor({ row: targetAbsRow, col: maxCol});
+
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < Viewport.start) Viewport.scrollTo(targetAbsRow);
           else if (targetAbsRow > Viewport.end) Viewport.scrollTo(targetAbsRow - Viewport.size + 1);
-
-          maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
-          Selection.setCursor({ row: targetAbsRow, col: maxCol});
+          else render();
         }
-        render();
       } else { // no meta key.
         if (sh && !Selection.dir) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
