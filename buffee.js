@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.1-alpha.1';
+  this.version = '13.14.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -346,8 +346,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     del(row, col, endRow, endCol) {
       this.lines[row] = this.lines[row].slice(0, col) + this.lines[endRow].slice(endCol);
       if (row !== endRow) this.lines.splice(row + 1, endRow - row);
-    },
-  }
+    }
+  };
 
   /**
    * Viewport management for virtual scrolling.
@@ -385,7 +385,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Gets the lines currently visible in the viewport.
      * @returns {string[]} Array of visible line contents
      */
-    get lines() { return Model.lines.slice(this.start, this.end + 1); },
+    get lines() { return Model.lines.slice(this.start, this.end + 1); }
   };
 
   const renderAll = this.renderAll = d => {
@@ -439,13 +439,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     Mode.renderHooks.forEach(hook => hook($l, Viewport, delta));
   }
   
-  // Adjust container width and row cout if container resized.
-  const resize = newSize => {
-    const d = newSize - Viewport.size;
-    Viewport.size = newSize;
-    renderAll(d);
-  };
-  rows ? resize(rows) : new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e);
+  // Adjust row count if container resized.
+  const resize = delta => {Viewport.size += delta, renderAll(delta)};
+  rows ? resize(rows) : new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell) - Viewport.size)).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
