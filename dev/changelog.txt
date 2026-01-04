@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 13.4.0-alpha.1 [2026-1-4]  gz+min: 3024 bytes / 2.95 KB (-19), min: 7441 bytes / 7.27 KB
+*** refactor
+- consolidate moveCursorStartOfLine/moveCursorEndOfLine into moveLineEdge(toEnd)
+*** fix
+- smart-home now uses head.col instead of tail.col for position check
+
 ** 13.3.2-alpha.1 [2026-1-4]  gz+min: 3043 bytes / 2.97 KB (-21), min: 7520 bytes / 7.34 KB
 *** refactor
 - simplify autoFit ResizeObserver, fix potential missed initial render

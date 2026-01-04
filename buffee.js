@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.3.2-alpha.1';
+  this.version = '13.4.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -166,19 +166,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
 
     /**
-     * Moves cursor to start of current line (first non-space character).
-     * If already at first non-space, moves to column 0.
+     * Moves cursor to line edge.
+     * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
      */
-    moveCursorStartOfLine() {
-      maxCol = head.col = (c => c > 0 && c < tail.col ? c : 0)(Model.lines[head.row].search(/[^ ]/));
-      render();
-    },
-
-    /**
-     * Moves cursor to end of current line.
-     */
-    moveCursorEndOfLine() {
-      maxCol = head.col = Model.lines[head.row].length;
+    moveLineEdge(toEnd) {
+      const line = Model.lines[head.row];
+      maxCol = head.col = toEnd ? line.length : (c => c > 0 && c < head.col ? c : 0)(line.search(/[^ ]/));
       render();
     },
 
@@ -583,7 +576,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if(!sh && Selection.dir) Selection.makeCursor();
         if(sh && !Selection.dir) Selection.makeSelection();
 
-        if (arrowCode % 2) Selection[direction > 0 ? 'moveCursorEndOfLine' : 'moveCursorStartOfLine']();
+        if (arrowCode % 2) Selection.moveLineEdge(direction > 0);
       } else if (e.altKey) {
         if(!sh && Selection.dir) Selection.makeCursor();
         if(sh && !Selection.dir) Selection.makeSelection();

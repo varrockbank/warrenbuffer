@@ -73,3 +73,13 @@ const dt = new DataTransfer();
 $cb.dispatchEvent(new ClipboardEvent('copy', { clipboardData: dt, bubbles: true }));
 expect(dt.getData('text/plain')).toBe('llo');
 
+
+## should use head.col not tail.col for smart-home extend (regression 13.3.3)
+### Cmd+Shift+Left with backward selection should check cursor, not anchor
+TYPE "    Hello"
+left 7 times with shift
+// Now: head at col 2, tail at col 9, first non-space at col 4
+// Bug: used tail.col (9 > 4), would jump to col 4
+// Fix: uses head.col (2 < 4), should jump to col 0
+left with meta, shift
+EXPECT selection at 0,0-0,9
