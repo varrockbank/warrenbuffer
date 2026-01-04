@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.3.2-alpha.1 [2026-1-4]  gz+min: 3043 bytes / 2.97 KB (-21), min: 7520 bytes / 7.34 KB
+*** refactor
+- simplify autoFit ResizeObserver, fix potential missed initial render
+
 ** 13.3.1-alpha.1 [2026-1-4]  gz+min: 3078 bytes / 3.00 KB (+13), min: 7564 bytes / 7.39 KB
 *** perf
 - precompute step function in moveWord
