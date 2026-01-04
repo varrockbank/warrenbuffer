@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.7.2-alpha.1 [2026-1-4]  gz+min: 2924 bytes / 2.86 KB (-3), min: 7055 bytes / 6.89 KB
+*** refactor
+- hoist common code in Model.add()
+
 ** 13.7.1-alpha.1 [2026-1-4]  gz+min: 2927 bytes / 2.86 KB (-8), min: 7114 bytes / 6.95 KB
 *** perf
 - simplify resize() by removing size check guard
