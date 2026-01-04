@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.3.1-alpha.1';
+  this.version = '13.3.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -518,18 +518,14 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   
   // Auto-fit viewport to container height
   if (Viewport.autoFit) {
-    const fitViewport = () => {
-      // .buffee-elements is flex: 1, so it fills remaining space after status line
+    new ResizeObserver(() => {
       const newSize = Math.floor($e.clientHeight / cssCell);
       if (newSize > 0 && newSize !== Viewport.size) {
         Viewport.delta += newSize - Viewport.size;
         Viewport.size = newSize;
-        render();
       }
-    };
-    // Use requestAnimationFrame to ensure layout is complete before measuring
-    requestAnimationFrame(fitViewport);
-    new ResizeObserver(fitViewport).observe($e);
+      render();
+    }).observe($e);
   } else {
     render();
   }
