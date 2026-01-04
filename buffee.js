@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.8.0-alpha.1';
+  this.version = '13.9.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -380,12 +380,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         top: cssPadding
       };
     },
-
-    /**
-     * Scrolls the viewport by a relative amount.
-     * @param {number} i - Number of lines to scroll (positive = down, negative = up)
-     */
-    scroll(i) { this.scrollTo(this.start + i); },
 
     /**
      * Scrolls the viewport to an absolute position.

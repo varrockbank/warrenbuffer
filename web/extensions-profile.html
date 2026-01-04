@@ -395,7 +395,7 @@
       editor.TUI.enabled = true;
       start = performance.now();
       for (let i = 0; i < iterations; i++) {
-        editor.Viewport.scroll(0);
+        editor.render();
       }
       setMetric('tui-render', (performance.now() - start) / iterations, { fast: 1, medium: 5 });
 

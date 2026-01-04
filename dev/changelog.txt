@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.9.0-alpha.1 [2026-1-4]  gz+min: 2895 bytes / 2.83 KB (-16), min: 6979 bytes / 6.82 KB
+*** refactor
+- remove Viewport.scroll(), use scrollTo() instead
+
 ** 13.8.0-alpha.1 [2026-1-4]  gz+min: 2911 bytes / 2.84 KB (-14), min: 7018 bytes / 6.85 KB
 *** refactor
 - remove Viewport.autoFit, inline !rows at usage
