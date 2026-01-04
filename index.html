@@ -172,28 +172,6 @@
     </div>
     </section>
   </div> <!-- End container -->
-
-  <script type="module">
-    import { Parser, Language, Query } from "https://cdn.jsdelivr.net/npm/web-tree-sitter@0.25.10/tree-sitter.js";
-
-    await Parser.init(); // loads tree-sitter.wasm from the same CDN path
-    const treesitterParser = new Parser();
-    const javascriptParser = await Language.load(
-      "https://cdn.jsdelivr.net/npm/tree-sitter-wasms@0.1.12/out/tree-sitter-javascript.wasm"
-    );
-    treesitterParser.setLanguage(javascriptParser);
-    const highlightQuery = `
-      (function_declaration name: (identifier) @function)
-      (string) @string
-    `;
-    const query = new Query(javascriptParser, highlightQuery);
-    
-    window.treesitterInstance = {
-       query,
-       parser: treesitterParser 
-    };
-
-</script>
 <script>
   window.addEventListener("DOMContentLoaded", () => {
     const mainElement = document.getElementById("playground");
