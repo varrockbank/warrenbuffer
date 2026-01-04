@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 13.7.0-alpha.1 [2026-1-4]  gz+min: 2935 bytes / 2.87 KB (+23), min: 7133 bytes / 6.97 KB
+*** perf
+- partition renderGutter() from render()
+- add scrollTo() for absolute viewport positioning, scroll() for relative
+- inline gutterCols at point of usage
+
 ** 13.6.0-alpha.1 [2026-1-4]  gz+min: 2912 bytes / 2.84 KB (-5), min: 7061 bytes / 6.90 KB
 *** perf
 - partition renderDelta() from render(), remove Viewport.delta property

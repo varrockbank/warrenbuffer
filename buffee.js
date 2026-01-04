@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.6.0-alpha.1';
+  this.version = '13.7.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -91,7 +91,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         const len = Model.lines[dir > 0 ? ++head.row : --head.row].length;
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
-        if (head.row < Viewport.start || head.row > Viewport.end) Viewport.start = dir > 0 ? head.row - Viewport.size + 1 : head.row;
+        if (head.row < Viewport.start || head.row > Viewport.end) Viewport.scrollTo(dir > 0 ? head.row - Viewport.size + 1 : head.row);
         render();
       }
     },
@@ -204,7 +204,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
                maxCol = head.col  = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
-      if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
+      if (head.row > Viewport.end) Viewport.scrollTo(head.row - Viewport.size + 1);
       render();
     },
 
@@ -222,7 +222,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // At start of line - delete newline (join with previous line)
         head.col = Model.lines[tail.row - 1].length;
         Model.del(tail.row - 1, head.col, tail.row, 0);
-        if (--head.row < Viewport.start) Viewport.start = head.row;
+        if (--head.row < Viewport.start) Viewport.scrollTo(head.row);
         render();
       }
     },
@@ -237,8 +237,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // At edge - move to adjacent line
         if (fwd ? head.row < Model.lastIndex : head.row > 0) {
           head.col = fwd ? 0 : Model.lines[--head.row].length;
-          if (fwd && ++head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
-          else if (!fwd && head.row < Viewport.start) Viewport.start = head.row;
+          if (fwd && ++head.row > Viewport.end) Viewport.scrollTo(head.row - Viewport.size + 1);
+          else if (!fwd && head.row < Viewport.start) Viewport.scrollTo(head.row);
         }
       } else {
         let j = head.col;
@@ -371,20 +371,19 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     /** @type {0|1} Whether viewport auto-fits to container height */
     autoFit: rows ?    0 : 1,
     /** @type {number} Number of visible lines */
-    size:    rows ? rows : 0,
+    size: 0,
     /** @type {number} Number of DOM line containers */
     get displayLines() { return this.size + this.autoFit; },
-    /** @type {number} Total gutter width in ch units */
-    get gutterCols() { return Math.max(cssGutterDigitsInitial, (this.start + this.displayLines).toString().length) + cssGutterDigitsPadding; },
 
     /**
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
     get end() { return Math.min(this.start + this.size - 1, Model.lastIndex); },
+    // TODO: revisit if contentOffset is needed
     get contentOffset() {
       return {
-        ch: $gutter ? this.gutterCols : 0,
+        ch: $gutter ? Math.max(cssGutterDigitsInitial, (this.start + this.displayLines).toString().length) + cssGutterDigitsPadding : 0,
         px: $gutter ? (cssPadding * 3) : cssPadding,
         top: cssPadding
       };
@@ -394,9 +393,15 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * Scrolls the viewport by a relative amount.
      * @param {number} i - Number of lines to scroll (positive = down, negative = up)
      */
-    scroll(i) {
-      this.start = $clamp(this.start + i, 0, Model.lastIndex);
-      render();
+    scroll(i) { this.scrollTo(this.start + i); },
+
+    /**
+     * Scrolls the viewport to an absolute position.
+     * @param {number} pos - Line index to scroll to (0-indexed)
+     */
+    scrollTo(pos) {
+      this.start = $clamp(pos, 0, Model.lastIndex);
+      $gutter && renderGutter();
     },
 
     /**
@@ -426,18 +431,18 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
   };
 
+  const renderGutter = this.renderGutter = () => {
+    const gutterCols = Math.max(cssGutterDigitsInitial, (Viewport.start + Viewport.displayLines).toString().length) + cssGutterDigitsPadding;
+    $gutter.style.width = gutterCols + 'ch';
+    if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
+  };
+
   /**
    * Renders the editor viewport, selection, and calls extension hooks.
    * @private
    */
   const render = this.render = () => {
     Mode.frameCount++;
-
-    // Adjust gutter width based on largest visible line number
-    if ($gutter) {
-      $gutter.style.width = Viewport.gutterCols + 'ch';
-      if (cols) $e.style.width = `calc(${Viewport.gutterCols + cols}ch + ${cssPadding * 4}px)`;
-    }
 
     // Update contents of line containers (reset to clean state)
     for (let i = 0; i < Viewport.displayLines; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
@@ -468,17 +473,16 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     Mode.renderHooks.forEach(hook => hook($l, Viewport, delta));
   }
   
-  // Auto-fit viewport to container height
-  if (Viewport.autoFit) {
-    new ResizeObserver(() => {
-      const newSize = Math.floor($e.clientHeight / cssCell);
-      if (newSize > 0 && newSize !== Viewport.size) {
-        renderDelta(newSize - Viewport.size);
-        Viewport.size = newSize;
-      }
-      render();
-    }).observe($e);
-  } else { renderDelta(rows); render(); }
+  // Adjust container width and row cout if container resized.
+  const resize = newSize => {
+    if (newSize > 0 && newSize !== Viewport.size) {
+      renderDelta(newSize - Viewport.size);
+      Viewport.size = newSize;
+    }
+    $gutter && renderGutter();
+    render(); // always attempt renderGutter without checking lastWidth
+  };
+  Viewport.autoFit ? new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e) : resize(rows);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
@@ -542,8 +546,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           const targetAbsRow = $clamp(edge.row + direction, 0, Model.lastIndex);
 
           // Scroll viewport if target is outside visible area
-          if (targetAbsRow < Viewport.start) Viewport.start = targetAbsRow;
-          else if (targetAbsRow > Viewport.end) Viewport.start = targetAbsRow - Viewport.size + 1;
+          if (targetAbsRow < Viewport.start) Viewport.scrollTo(targetAbsRow);
+          else if (targetAbsRow > Viewport.end) Viewport.scrollTo(targetAbsRow - Viewport.size + 1);
 
           maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
           Selection.setCursor({ row: targetAbsRow, col: maxCol});
