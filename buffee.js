@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.5-alpha.1';
+  this.version = '13.14.6-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -122,12 +122,11 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         const text  = Model.lines[left.row];
         const slice = text.slice(left.col, right.col + (this.dir > 0));
         return right.col >= text.length && left.row < Model.lastIndex ? [slice, ''] : [slice];
-      } else {
-        const firstLine = Model.lines[left.row ].slice(left.col);
-        const lastLine  = Model.lines[right.row].slice(0, right.col + (this.dir > 0));
-        const middle    = Model.lines.slice(left.row + 1, right.row);
-        return [firstLine, ...middle, lastLine]
       }
+      const firstLine = Model.lines[left.row ].slice(left.col);
+      const lastLine  = Model.lines[right.row].slice(0, right.col + (this.dir > 0));
+      const middle    = Model.lines.slice(left.row + 1, right.row);
+      return [firstLine, ...middle, lastLine];
     },
 
     /**
