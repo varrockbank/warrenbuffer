@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.7.4-alpha.1';
+  this.version = '13.8.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -362,12 +362,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const Viewport = this.Viewport = {
     /** @type {number} Index of the first visible line (0-indexed) */
     start: 0,
-    /** @type {0|1} Whether viewport auto-fits to container height */
-    autoFit: rows ?    0 : 1,
     /** @type {number} Number of visible lines */
     size: 0,
-    /** @type {number} Number of DOM line containers */
-    get displayLines() { return this.size + this.autoFit; },
+    /** @type {number} Number of DOM line containers. +1 if auto-fit (no rows specified) */
+    get displayLines() { return this.size + !rows; },
 
     /**
      * Index of the last visible line.
@@ -474,7 +472,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     $gutter && renderGutter();
     render();
   };
-  Viewport.autoFit ? new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e) : resize(rows);
+  rows ? resize(rows) : new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
