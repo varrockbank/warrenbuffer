@@ -1,6 +1,10 @@
 * Project Devlog
 
-** 13.10.0-alpha.1 [2026-1-4]  gz+min: TBD, min: TBD
+** 13.11.0-alpha.1 [2026-1-4]  gz+min: 2869 bytes / 2.80 KB (-4), min: 6910 bytes / 6.75 KB (-55)
+*** breaking
+- remove Viewport.scrollTo(), merge into Viewport.set(start, size?)
+
+** 13.10.0-alpha.1 [2026-1-4]  gz+min: 2873 bytes / 2.81 KB (-4), min: 6965 bytes / 6.80 KB (-1)
 *** breaking
 - Viewport.set() now takes 0-indexed start (was 1-indexed)
 
