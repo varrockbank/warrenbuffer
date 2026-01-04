@@ -14,16 +14,23 @@ function BuffeeStatusLine(editor) {
   const $lineCounter = $parent.querySelector('.buffee-linecount');
   const $spaces = $parent.querySelector('.buffee-spaces');
 
-  let lastRow = -1, lastCol = -1, lastLineCount = -1, lastSpaces = -1;
+  let lastRow = -1, lastCol = -1, lastLineCount = -1, lastSpaces = -1, lastOriginalLineCount = -1;
   let byteCount = 0, originalLineCount = 0;
+
+  // Capture initial state if text was already set before this extension
+  if (Model.lines.length > 1 || Model.lines[0] !== '') {
+    const text = Model.lines.join('\n');
+    byteCount = new TextEncoder().encode(text).length;
+    originalLineCount = Model.lines.length;
+  }
 
   // Wrap Model.text setter to calculate byteCount and originalLineCount
   const originalTextDescriptor = Object.getOwnPropertyDescriptor(Model, 'text');
   Object.defineProperty(Model, 'text', {
     set(text) {
       byteCount = new TextEncoder().encode(text).length;
+      originalLineCount = text.split('\n').length;
       originalTextDescriptor.set.call(this, text);
-      originalLineCount = Model.lines.length;
     },
     configurable: true
   });
@@ -40,9 +47,10 @@ function BuffeeStatusLine(editor) {
       $headCol.textContent = col + 1;
       lastCol = col;
     }
-    if ($lineCounter && lineCount !== lastLineCount) {
+    if ($lineCounter && (lineCount !== lastLineCount || originalLineCount !== lastOriginalLineCount)) {
       $lineCounter.textContent = `${lineCount.toLocaleString()}L, originally: ${originalLineCount}L ${byteCount} bytes`;
       lastLineCount = lineCount;
+      lastOriginalLineCount = originalLineCount;
     }
     if ($spaces && Mode.spaces !== lastSpaces) {
       $spaces.textContent = `Spaces: ${Mode.spaces}`;
