@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.5.4-alpha.1';
+  this.version = '13.6.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -372,8 +372,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     autoFit: rows ?    0 : 1,
     /** @type {number} Number of visible lines */
     size:    rows ? rows : 0,
-    /** @type {number} Pending container delta (0 = up to date) */
-    delta:   rows ? rows : 1,
     /** @type {number} Number of DOM line containers */
     get displayLines() { return this.size + this.autoFit; },
     /** @type {number} Total gutter width in ch units */
@@ -408,7 +406,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     set(start, size) {
       this.start  = $clamp(start-1, 0, Model.lastIndex);
-      this.delta += size - this.size;
+      renderDelta(size - this.size);
       this.size   = size;
       render();
     },
@@ -418,6 +416,14 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @returns {string[]} Array of visible line contents
      */
     get lines() { return Model.lines.slice(this.start, this.end + 1); },
+  };
+
+  const renderDelta = this.renderDelta = d => {
+    // Add / remove lines, selections, gutters as row changes
+    delta = d;
+    for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
+    if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
+    for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
   };
 
   /**
@@ -431,14 +437,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     if ($gutter) {
       $gutter.style.width = Viewport.gutterCols + 'ch';
       if (cols) $e.style.width = `calc(${Viewport.gutterCols + cols}ch + ${cssPadding * 4}px)`;
-    }
-
-    // Add / remove lines, selections, gutters as row changes
-    if (Viewport.delta) {
-      let d = delta = Viewport.delta; Viewport.delta = 0;
-      for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
-      if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
-      for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
 
     // Update contents of line containers (reset to clean state)
@@ -475,12 +473,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     new ResizeObserver(() => {
       const newSize = Math.floor($e.clientHeight / cssCell);
       if (newSize > 0 && newSize !== Viewport.size) {
-        Viewport.delta += newSize - Viewport.size;
-        Viewport.size   = newSize;
+        renderDelta(newSize - Viewport.size);
+        Viewport.size = newSize;
       }
       render();
     }).observe($e);
-  } else { render(); }
+  } else { renderDelta(rows); render(); }
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
