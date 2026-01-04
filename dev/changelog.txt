@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.9.1-alpha.1 [2026-1-4]  gz+min: 2882 bytes / 2.81 KB (-13), min: 6961 bytes / 6.80 KB
+*** refactor
+- inline sizeSelection() at single usage site
+
 ** 13.9.0-alpha.1 [2026-1-4]  gz+min: 2895 bytes / 2.83 KB (-16), min: 6979 bytes / 6.82 KB
 *** refactor
 - remove Viewport.scroll(), use scrollTo() instead
