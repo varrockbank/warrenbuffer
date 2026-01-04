@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.3.0-alpha.1 [2026-1-4]  gz+min: 3065 bytes / 2.99 KB (-31), min: 7560 bytes / 7.38 KB
+*** refactor
+- remove Selection.newLine, now handled entirely by Selection.insert
+
 ** 13.2.4-alpha.1 [2026-1-3]  gz+min: 3096 bytes / 3.02 KB (-7), min: 7644 bytes / 7.46 KB
 *** refactor
 - consolidate setting cursor left to one place

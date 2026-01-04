@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.2.4-alpha.1';
+  this.version = '13.3.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -185,9 +185,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     /**
      * Inserts a string at cursor position, replacing any selection.
      * @param {string} s - String to insert
-     * @param {boolean} [skipRender=false] - Skip rendering (for batched operations)
      */
-    insert(s, skipRender) {
+    insert(s) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = Selection.bounds(1);
@@ -211,7 +210,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           maxCol = head.col = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
-      if (!skipRender) render();
+      if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
+      render();
     },
 
     /**
@@ -231,21 +231,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         if (--head.row < Viewport.start) Viewport.start = head.row;
         render();
       }
-    },
-
-    /**
-     * Inserts a new line at cursor position, splitting the current line.
-     */
-    newLine() {
-      if (this.dir) Selection.insert('', true); // skipRender - we render below
-
-      // Insert newline (split current line)
-      Model.add(tail.row, tail.col, ['', '']);
-
-      head.col = 0, head.row++;
-      if (head.row > Viewport.end) Viewport.start = head.row - Viewport.size + 1;
-
-      render();
     },
 
     /**
@@ -584,7 +569,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     const special = {
       // Edit keys (use raw key for lookup, only when Mode.interactive >= 1)
       Backspace: () => { Selection.delete() },
-      Enter: () => { Selection.newLine() } ,
+      Enter: () => { Selection.insert('\n') } ,
       Tab: () => {
         e.preventDefault();
         sh ? Selection.unindent() : Selection.dir ? Selection.indent() : Selection.insert(' '.repeat(Mode.spaces));
