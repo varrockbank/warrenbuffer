@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.3.0-alpha.1';
+  this.version = '13.3.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -249,7 +249,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       } else {
         let j = head.col;
         const ok = fwd ? () => j < n : () => j > 0;
-        const step = () => fwd ? j++ : j--;
+        const step = fwd ? () => j++ : () => j--;
         if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
         else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
