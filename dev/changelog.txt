@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.5.2-alpha.1 [2026-1-4]  gz+min: 2900 bytes / 2.83 KB (+1), min: 7095 bytes / 6.93 KB
+*** refactor
+- combine indent() and unindent() into single indent(add) function
+
 ** 13.5.1-alpha.1 [2026-1-4]  gz+min: 2899 bytes / 2.83 KB (-16), min: 7141 bytes / 6.97 KB
 *** refactor
 - move originalLineCount from Model to StatusLine extension

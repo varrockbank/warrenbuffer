@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.5.1-alpha.1';
+  this.version = '13.5.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -253,46 +253,32 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
 
     /**
-     * Indents all lines in the current selection by the configured indentation.
-     * No-op if there is no selection.
+     * Indents or unindents all lines in the current selection.
+     * @param {boolean} [add] - If true, indent; otherwise unindent
      */
-    indent() {
-      if(this.dir) {
-        const [first, second] = Selection.bounds(1);
-
-        for(let i = first.row; i <= second.row; i++)
-          Model.lines[i] = ' '.repeat(Mode.spaces) + Model.lines[i];
-
-        first.col += Mode.spaces;
-        second.col += Mode.spaces;
-
-        render();
-      }
-    },
-
-    /**
-     * Removes indentation from all lines in the current selection.
-     * Follows IntelliJ-style behavior: removes up to `indentation` spaces from line start.
-     */
-    unindent() {
-      // Note: Vim, VSCode, Intellij all has slightly different unindent behavior.
-      // VSCode: for lines not aligned at a multiple of indentation number of spaces, align them to the
-      // first such position.
-      // vim: removes the selection, although it does keep a hidden memory of the most recent indentation operation which you can repeat.
-      // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
-      // Currently we follow intellij implementation but perhaps VSCode's is the best.
+    // Note: Vim, VSCode, Intellij all has slightly different unindent behavior.
+    // VSCode: for lines not aligned at a multiple of indentation number of spaces, align them to the first such position.
+    // vim: removes the selection, although it does keep a hidden memory of the most recent indentation operation which you can repeat.
+    // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
+    // Currently we follow intellij implementation but perhaps VSCode's is the best.
+    indent(add) {
+      if (add && !this.dir) return;
       const [first, second] = Selection.bounds(1);
       for (let i = first.row; i <= second.row; i++) {
         const line = Model.lines[i];
-        const cursor = i === first.row ? first : i === second.row ? second : null;
-        if (cursor) {
-          const right = line.slice(cursor.col).search(/[^ ]|$/);
-          const left = line.slice(0, cursor.col).search(/[^ ]|$/);
-          const toRemove = Math.min(Mode.spaces, left + right);
-          Model.lines[i] = line.slice(toRemove);
-          if (right < toRemove) cursor.col -= toRemove - right;
-        } else Model.lines[i] = line.slice(Math.min(Mode.spaces, line.search(/[^ ]|$/)));
+        if (add) Model.lines[i] = ' '.repeat(Mode.spaces) + line;
+        else {
+          const cursor = i === first.row ? first : i === second.row ? second : null;
+          if (cursor) {
+            const right = line.slice(cursor.col).search(/[^ ]|$/);
+            const left = line.slice(0, cursor.col).search(/[^ ]|$/);
+            const toRemove = Math.min(Mode.spaces, left + right);
+            Model.lines[i] = line.slice(toRemove);
+            if (right < toRemove) cursor.col -= toRemove - right;
+          } else Model.lines[i] = line.slice(Math.min(Mode.spaces, line.search(/[^ ]|$/)));
+        }
       }
+      if (add) { first.col += Mode.spaces; second.col += Mode.spaces; }
       render();
     },
   };
@@ -537,7 +523,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.insert('\n') } ,
       Tab: () => {
         e.preventDefault();
-        sh ? Selection.unindent() : Selection.dir ? Selection.indent() : Selection.insert(' '.repeat(Mode.spaces));
+        sh ? Selection.indent() : Selection.dir ? Selection.indent(1) : Selection.insert(' '.repeat(Mode.spaces));
       },
     };
 
