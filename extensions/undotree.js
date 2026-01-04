@@ -1,9 +1,15 @@
 /**
+ * @fileoverview BuffeeUndoTree - Tree-based undo/redo extension for Buffee.
+ * Unlike linear history where new edits discard the redo stack,
+ * undo tree preserves all branches.
+ * @version 1.0.0
+ */
+
+/**
  * Decorator: adds tree-based undo/redo to a Buffee instance.
  *
- * Unlike linear history where new edits discard the redo stack,
- * undo tree preserves all branches. When you undo and make a new edit,
- * you create a new branch instead of losing the previous future.
+ * When you undo and make a new edit, you create a new branch instead
+ * of losing the previous future.
  *
  * @param {Buffee} editor - The Buffee instance to extend
  * @returns {Buffee} The extended editor instance
