@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.7.1-alpha.1';
+  this.version = '13.7.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -338,13 +338,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {string[]} lines - Array of lines to insert (already split)
      */
     add(row, col, lines) {
-      if (lines.length === 1) {
-        this.lines[row] = this.lines[row].slice(0, col) + lines[0] + this.lines[row].slice(col);
-      } else {
-        const after = this.lines[row].slice(col);
-        this.lines[row] = this.lines[row].slice(0, col) + lines[0];
-        this.lines.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
-      }
+      const after = this.lines[row].slice(col);
+      this.lines[row] = this.lines[row].slice(0, col) + lines[0];
+      if (lines.length === 1) this.lines[row] += after;
+      else this.lines.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
     },
 
     /**
