@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.4.1-alpha.1';
+  this.version = '13.4.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -574,20 +574,15 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
       if(cmd || e.altKey) {
         if(!sh && Selection.dir) Selection.makeCursor();
-        if(sh && !Selection.dir) Selection.makeSelection();
+        else if(sh && !Selection.dir) Selection.makeSelection();
         if (arrowCode % 2) cmd ? Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.bounds(1)[direction > 0 | 0]);
-          render();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
           // edge.row is already absolute
-          const targetAbsRow = $clamp(
-            edge.row + direction,
-            0,
-            Model.lastIndex
-          );
+          const targetAbsRow = $clamp(edge.row + direction, 0, Model.lastIndex);
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < Viewport.start) Viewport.start = targetAbsRow;
@@ -595,8 +590,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
           maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
           Selection.setCursor({ row: targetAbsRow, col: maxCol});
-          render();
         }
+        render();
       } else { // no meta key.
         if (sh && !Selection.dir) Selection.makeSelection();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
