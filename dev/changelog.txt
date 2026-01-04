@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.9-alpha.1 [2026-1-5]  gz: 2792 / 2.73 KB (0), br: 2550 / 2.49 KB (0), min: 6740 / 6.58 KB (0)
+*** refactor
+- shorten JSDoc comments, 512 → 494 lines
+
 ** 13.14.8-alpha.1 [2026-1-5]  gz: 2792 / 2.73 KB (-7), br: 2550 / 2.49 KB (-10), min: 6740 / 6.58 KB (-51)
 *** refactor
 - consolidate DOM queries into single map pattern
