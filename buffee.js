@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.7.0-alpha.1';
+  this.version = '13.7.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -475,12 +475,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   
   // Adjust container width and row cout if container resized.
   const resize = newSize => {
-    if (newSize > 0 && newSize !== Viewport.size) {
-      renderDelta(newSize - Viewport.size);
-      Viewport.size = newSize;
-    }
+    renderDelta(newSize - Viewport.size);
+    Viewport.size = newSize;
     $gutter && renderGutter();
-    render(); // always attempt renderGutter without checking lastWidth
+    render();
   };
   Viewport.autoFit ? new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e) : resize(rows);
 

@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.7.1-alpha.1 [2026-1-4]  gz+min: 2927 bytes / 2.86 KB (-8), min: 7114 bytes / 6.95 KB
+*** perf
+- simplify resize() by removing size check guard
+
 ** 13.7.0-alpha.1 [2026-1-4]  gz+min: 2935 bytes / 2.87 KB (+23), min: 7133 bytes / 6.97 KB
 *** perf
 - partition renderGutter() from render()
