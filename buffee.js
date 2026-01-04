@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.8-alpha.1';
+  this.version = '13.14.9-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -26,8 +26,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const [cssCell, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
       .map(p => parseFloat(getComputedStyle($parent).getPropertyValue(p)));
-  const [$e, $l, $cursor, $clipboardBridge, $gutter, $layerText, $layerSelection] =
-    ['elements', 'lines', 'cursor', 'clipboard-bridge', 'gutter', 'layer-text', 'layer-selection'].map(q => $parent.querySelector('.buffee-' + q));
+  const [$e        ,$l     ,$cursor ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
+        ['elements','lines','cursor','clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $parent.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
@@ -124,19 +124,14 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       return [firstLine, ...middle, lastLine];
     },
 
-    /**
-     * Collapses selection to a cursor (head === tail).
-     */
+    /** Collapses selection to a cursor (head === tail). */
     makeCursor() {
       tail.row = head.row;
       tail.col = head.col;
       head     = tail;
     },
 
-    /**
-     * Begins a new selection from current cursor position.
-     * Detaches head from tail to allow independent movement.
-     */
+    /** Begins a new selection by detaching head from tail allowing independent movement. */
     makeSelection() {
       head     = detachedHead;
       head.row = tail.row;
@@ -185,9 +180,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       else render();
     },
 
-    /**
-     * Deletes the character before cursor or the current selection.
-     */
+    /** Deletes the character before cursor or the current selection. */
     delete() {
       if (this.dir) this.insert('');
       else if (tail.col > 0) {
@@ -205,8 +198,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
 
     /**
-     * Moves cursor by word in direction. dir: +1 forward, -1 backward.
-     * Future: other values for multi-word jumps.
+     * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
      */
     moveWord(dir) {
       const s = Model.lines[head.row], n = s.length, fwd = dir > 0;
@@ -261,10 +253,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
   };
 
-  // ============================================================================
-  // Extension hooks - allows extensions to hook into editor without Buffee knowing about them
-  // ============================================================================
-
   /**
    * Editor mode settings (shared between internal and external code).
    * @namespace Mode
@@ -299,8 +287,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     get lastIndex() { return this.lines.length - 1 },
 
     /**
-     * Sets the document content from a string.
-     * Splits on newlines.
+     * Sets the document content from a string. Splits on newlines.
      * @param {string} text - The full document text
      */
     set text(text) {
@@ -335,8 +322,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   };
 
   /**
-   * Viewport management for virtual scrolling.
-   * Controls which portion of the document is currently visible.
+   * Virtual viewport dictacting which portion of document is seen and rendered.
    * @namespace Viewport
    */
   const Viewport = this.Viewport = {
@@ -355,7 +341,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     /**
      * Sets the viewport position and optionally size.
-     * TODO: audit what happens if we scroll and cursor is out of view
      * @param {number} start - Line index to start at (0-indexed)
      * @param {number} [size] - Number of lines to display (optional)
      */
@@ -373,8 +358,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     get lines() { return Model.lines.slice(this.start, this.end + 1); }
   };
 
+  // Add / remove lines, selections, gutters as row changes
   const renderAll = this.renderAll = d => {
-    // Add / remove lines, selections, gutters as row changes
     delta = d;
     for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
     if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
@@ -388,8 +373,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   };
 
   /**
-   * Renders the editor viewport, selection, and calls extension hooks.
-   * @private
+   * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
   const render = this.render = () => {
     Mode.frameCount++;
@@ -399,7 +383,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     let cursorLeft = -1;
     if(Mode.interactive >= 0) {
-      // Render selection lines (loop viewport, check if in selection)
+      // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
       const rEnd = Math.min(Viewport.start + Viewport.displayLines, secondEdge.row + 1);
       for (let r = Math.max(Viewport.start, firstEdge.row); r < rEnd; r++) {
@@ -408,7 +392,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         style.width = (f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1) + 'ch';
       }
 
-      // Render cursor overlay (always shows head position)
+      // Cursor
       const headViewportRow = head.row - Viewport.start;
       if (headViewportRow >= 0 && headViewportRow < Viewport.size) {
         $cursor.style.top = headViewportRow * cssCell + 'px';
@@ -424,7 +408,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     Mode.renderHooks.forEach(hook => hook($l, Viewport, delta));
   }
   
-  // Adjust row count if container resized.
+  // Initial sizing render
   const resize = delta => {Viewport.size += delta, renderAll(delta)};
   rows ? resize(rows) : new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell) - Viewport.size)).observe($e);
 
@@ -453,14 +437,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   $l.addEventListener('keydown', e => {
     const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey;
 
-    // Special key handlers: cmd+key (lowercase) and edit keys (capitalized)
     const metaKeys = {
       v: () => {},
       c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
-      // Edit keys (use raw key for lookup, only when Mode.interactive >= 1)
       Backspace: () => { Selection.delete() },
       Enter: () => { Selection.insert('\n') } ,
       Tab: () => {
@@ -502,8 +484,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
     } else if (k.length === 1) {
-      if (cmd) return metaKeys[k.toLowerCase()]?.();
-      if (Mode.interactive > 0) {
+      if (cmd) metaKeys[k.toLowerCase()]?.();
+      else if (Mode.interactive > 0) {
         k === ' ' && e.preventDefault();
         Selection.insert(k);
       }
