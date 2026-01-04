@@ -1,6 +1,11 @@
 /**
- * Decorator: adds status line updates to a Buffee instance.
+ * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
+ * @version 1.0.0
+ */
+
+/**
+ * Decorator: adds status line updates to a Buffee instance.
  *
  * @param {Buffee} editor - The Buffee instance to extend
  * @returns {Buffee} The extended editor instance
