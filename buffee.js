@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.5.2-alpha.1';
+  this.version = '13.5.3-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -254,31 +254,31 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     /**
      * Indents or unindents all lines in the current selection.
-     * @param {boolean} [add] - If true, indent; otherwise unindent
+     * @param {number} n - Number of spaces to indent (positive) or unindent (negative)
      */
     // Note: Vim, VSCode, Intellij all has slightly different unindent behavior.
     // VSCode: for lines not aligned at a multiple of indentation number of spaces, align them to the first such position.
     // vim: removes the selection, although it does keep a hidden memory of the most recent indentation operation which you can repeat.
     // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
     // Currently we follow intellij implementation but perhaps VSCode's is the best.
-    indent(add) {
-      if (add && !this.dir) return;
+    indent(n) {
+      if (n > 0 && !this.dir) return;
       const [first, second] = Selection.bounds(1);
       for (let i = first.row; i <= second.row; i++) {
         const line = Model.lines[i];
-        if (add) Model.lines[i] = ' '.repeat(Mode.spaces) + line;
+        if (n > 0) Model.lines[i] = ' '.repeat(n) + line;
         else {
           const cursor = i === first.row ? first : i === second.row ? second : null;
           if (cursor) {
             const right = line.slice(cursor.col).search(/[^ ]|$/);
             const left = line.slice(0, cursor.col).search(/[^ ]|$/);
-            const toRemove = Math.min(Mode.spaces, left + right);
+            const toRemove = Math.min(-n, left + right);
             Model.lines[i] = line.slice(toRemove);
             if (right < toRemove) cursor.col -= toRemove - right;
-          } else Model.lines[i] = line.slice(Math.min(Mode.spaces, line.search(/[^ ]|$/)));
+          } else Model.lines[i] = line.slice(Math.min(-n, line.search(/[^ ]|$/)));
         }
       }
-      if (add) { first.col += Mode.spaces; second.col += Mode.spaces; }
+      if (n > 0) { first.col += n; second.col += n; }
       render();
     },
   };
@@ -523,7 +523,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.insert('\n') } ,
       Tab: () => {
         e.preventDefault();
-        sh ? Selection.indent() : Selection.dir ? Selection.indent(1) : Selection.insert(' '.repeat(Mode.spaces));
+        Selection.dir ? Selection.indent(sh ? -Mode.spaces : Mode.spaces) : Selection.insert(' '.repeat(Mode.spaces));
       },
     };
 
