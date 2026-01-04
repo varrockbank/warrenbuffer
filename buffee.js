@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.4.0-alpha.1';
+  this.version = '13.4.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -572,16 +572,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
       if (Mode.interactive < 0) return; // read-only mode: no navigation
 
-      if(cmd) {
+      if(cmd || e.altKey) {
         if(!sh && Selection.dir) Selection.makeCursor();
         if(sh && !Selection.dir) Selection.makeSelection();
-
-        if (arrowCode % 2) Selection.moveLineEdge(direction > 0);
-      } else if (e.altKey) {
-        if(!sh && Selection.dir) Selection.makeCursor();
-        if(sh && !Selection.dir) Selection.makeSelection();
-
-        if (arrowCode % 2) Selection.moveWord(direction);
+        if (arrowCode % 2) cmd ? Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.setCursor(Selection.bounds(1)[direction > 0 | 0]);

@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.4.1-alpha.1 [2026-1-4]  gz+min: 3025 bytes / 2.95 KB (+1), min: 7378 bytes / 7.21 KB
+*** refactor
+- consolidate cmd/alt arrow key handlers
+
 ** 13.4.0-alpha.1 [2026-1-4]  gz+min: 3024 bytes / 2.95 KB (-19), min: 7441 bytes / 7.27 KB
 *** refactor
 - consolidate moveCursorStartOfLine/moveCursorEndOfLine into moveLineEdge(toEnd)
