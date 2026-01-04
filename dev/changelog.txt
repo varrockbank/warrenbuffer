@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.5.3-alpha.1 [2026-1-4]  gz+min: 2907 bytes / 2.84 KB (+7), min: 7074 bytes / 6.91 KB
+*** refactor
+- indent(n) takes spaces count, negative for unindent
+
 ** 13.5.2-alpha.1 [2026-1-4]  gz+min: 2900 bytes / 2.83 KB (+1), min: 7095 bytes / 6.93 KB
 *** refactor
 - combine indent() and unindent() into single indent(add) function
