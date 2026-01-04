@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.7.2-alpha.1';
+  this.version = '13.7.3-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -133,12 +133,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const [left, right] = Selection.bounds(1);
       if(left.row === right.row) {
         const text  = Model.lines[left.row];
-        const texts = [text.slice(left.col, right.col + (this.dir > 0))];
-        
-        // If selection extends to phantom newline position and there is a newline
-        if (right.col >= text.length && left.row < Model.lastIndex) texts.push('');
-
-        return texts;
+        const slice = text.slice(left.col, right.col + (this.dir > 0));
+        return right.col >= text.length && left.row < Model.lastIndex ? [slice, ''] : [slice];
       } else {
         const firstLine = Model.lines[left.row ].slice(left.col);
         const lastLine  = Model.lines[right.row].slice(0, right.col + (this.dir > 0));
@@ -262,6 +258,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
     // Currently we follow intellij implementation but perhaps VSCode's is the best.
     indent(n) {
+      // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
       const [first, second] = Selection.bounds(1);
       for (let i = first.row; i <= second.row; i++) {
