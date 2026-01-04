@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.7.3-alpha.1';
+  this.version = '13.7.4-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -521,9 +521,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
       e.preventDefault(); // prevents page scroll
+      if (Mode.interactive < 0) return; // read-only mode: no navigation
       // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
       const direction = arrowCode >> 31 | 1;
-      if (Mode.interactive < 0) return; // read-only mode: no navigation
 
       if(cmd || e.altKey) {
         if(!sh && Selection.dir)      Selection.makeCursor();
