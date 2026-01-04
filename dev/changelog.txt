@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.7.4-alpha.1 [2026-1-4]  gz+min: 2925 bytes / 2.86 KB (+3), min: 7050 bytes / 6.88 KB
+*** refactor
+- early return for read-only mode before computing direction
+
 ** 13.7.3-alpha.1 [2026-1-4]  gz+min: 2922 bytes / 2.85 KB (-2), min: 7050 bytes / 6.88 KB
 *** refactor
 - simplify Selection.lines single-row case with ternary
