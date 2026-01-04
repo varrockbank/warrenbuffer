@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.5.4-alpha.1 [2026-1-4]  gz+min: 2917 bytes / 2.85 KB (+10), min: 7090 bytes / 6.92 KB
+*** perf
+- optimize for hotpath not including Viewport.delta changes
+
 ** 13.5.3-alpha.1 [2026-1-4]  gz+min: 2907 bytes / 2.84 KB (+7), min: 7074 bytes / 6.91 KB
 *** refactor
 - indent(n) takes spaces count, negative for unindent
