@@ -15,6 +15,17 @@ function BuffeeStatusLine(editor) {
   const $spaces = $parent.querySelector('.buffee-spaces');
 
   let lastRow = -1, lastCol = -1, lastLineCount = -1, lastSpaces = -1;
+  let byteCount = 0;
+
+  // Wrap Model.text setter to calculate byteCount
+  const originalTextDescriptor = Object.getOwnPropertyDescriptor(Model, 'text');
+  Object.defineProperty(Model, 'text', {
+    set(text) {
+      byteCount = new TextEncoder().encode(text).length;
+      originalTextDescriptor.set.call(this, text);
+    },
+    configurable: true
+  });
 
   renderHooks.push(() => {
     const [{ row, col }] = editor.Selection.bounds();
@@ -29,7 +40,7 @@ function BuffeeStatusLine(editor) {
       lastCol = col;
     }
     if ($lineCounter && lineCount !== lastLineCount) {
-      $lineCounter.textContent = `${lineCount.toLocaleString()}L, originally: ${Model.originalLineCount}L ${Model.byteCount} bytes`;
+      $lineCounter.textContent = `${lineCount.toLocaleString()}L, originally: ${Model.originalLineCount}L ${byteCount} bytes`;
       lastLineCount = lineCount;
     }
     if ($spaces && Mode.spaces !== lastSpaces) {
