@@ -161,7 +161,7 @@
 
     // Viewport controls
     document.getElementById('viewport-update').addEventListener('click', () => {
-      const viewportStart = parseInt(document.getElementById('viewport-start').value);
+      const viewportStart = parseInt(document.getElementById('viewport-start').value) - 1;
       const viewportSize = parseInt(document.getElementById('viewport-size').value);
       editor.Viewport.set(viewportStart, viewportSize);
     });

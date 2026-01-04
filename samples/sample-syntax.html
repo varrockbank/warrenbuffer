@@ -412,7 +412,7 @@ if __name__ == "__main__":
         perfStats.innerHTML = `Loaded ${totalLines.toLocaleString()} lines in ${((t1-t0)/1000).toFixed(1)}s`;
 
         const t2 = performance.now();
-        editor.Viewport.set(1, editor.Viewport.size);
+        editor.Viewport.set(0, editor.Viewport.size);
         const t3 = performance.now();
 
         perfStats.innerHTML += ` | Render: ${(t3-t2).toFixed(0)}ms`;
