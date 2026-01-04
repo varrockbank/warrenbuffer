@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.6-alpha.1';
+  this.version = '13.14.7-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -508,11 +508,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       }
     } else if (k.length === 1) {
       if (cmd) return metaKeys[k.toLowerCase()]?.();
-      if (Mode.interactive < 1) return;
-      k === ' ' && e.preventDefault();
-      Selection.insert(k);
-    } else if (special[k] && Mode.interactive >= 1) {
-      special[k]();
-    }
+      if (Mode.interactive > 0) {
+        k === ' ' && e.preventDefault();
+        Selection.insert(k);
+      }
+    } else if (special[k] && Mode.interactive >= 1) { special[k](); }
   });
 }
