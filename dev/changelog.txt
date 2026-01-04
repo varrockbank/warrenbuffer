@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.12.0-alpha.1 [2026-1-4]  gz+min: 2861 bytes / 2.79 KB (-8), min: 6892 bytes / 6.73 KB (-18)
+*** breaking
+- remove public this.renderGutter, keep as internal const
+
 ** 13.11.0-alpha.1 [2026-1-4]  gz+min: 2869 bytes / 2.80 KB (-4), min: 6910 bytes / 6.75 KB (-55)
 *** breaking
 - remove Viewport.scrollTo(), merge into Viewport.set(start, size?)
