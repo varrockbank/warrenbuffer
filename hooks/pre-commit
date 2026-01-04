@@ -73,13 +73,16 @@ if git rev-parse --verify HEAD >/dev/null 2>&1; then
     if git cat-file -e HEAD:dist/buffee.min.js 2>/dev/null; then
         OLD_SIZE=$(git show HEAD:dist/buffee.min.js | wc -c | tr -d ' ')
         OLD_GZIPPED=$(git show HEAD:dist/buffee.min.js | gzip -cn | wc -c)
+        OLD_BROTLI=$(git show HEAD:dist/buffee.min.js | brotli -c | wc -c | tr -d ' ')
     else
         OLD_SIZE=0
         OLD_GZIPPED=0
+        OLD_BROTLI=0
     fi
 else
     OLD_SIZE=0
     OLD_GZIPPED=0
+    OLD_BROTLI=0
 fi
 
 terser buffee.js -c -m -o dist/buffee.min.js
@@ -87,16 +90,20 @@ terser buffee.js -c -m -o dist/buffee.min.js
 if [ $? -eq 0 ]; then
     NEW_SIZE=$(wc -c < dist/buffee.min.js | tr -d ' ')
     NEW_GZIPPED=$(gzip -cn dist/buffee.min.js | wc -c | tr -d ' ')
+    NEW_BROTLI=$(brotli -c dist/buffee.min.js | wc -c | tr -d ' ')
     MINIFIED_KB=$(echo "$NEW_SIZE" | awk '{printf "%.2f", $1/1024}')
     GZIPPED_KB=$(echo "$NEW_GZIPPED" | awk '{printf "%.2f", $1/1024}')
+    BROTLI_KB=$(echo "$NEW_BROTLI" | awk '{printf "%.2f", $1/1024}')
 
     echo "✓ Minification complete"
     echo "  Minified:          ${NEW_SIZE} bytes (${MINIFIED_KB} KB)"
     echo "  Gzipped+Minified:  ${NEW_GZIPPED} bytes (${GZIPPED_KB} KB)"
+    echo "  Brotli+Minified:   ${NEW_BROTLI} bytes (${BROTLI_KB} KB)"
 
     if [ $OLD_SIZE -ne 0 ]; then
         DIFF=$((NEW_SIZE - OLD_SIZE))
         DIFF_GZIPPED=$((NEW_GZIPPED - OLD_GZIPPED))
+        DIFF_BROTLI=$((NEW_BROTLI - OLD_BROTLI))
 
         if [ $DIFF -gt 0 ]; then
             echo "  Minified change:   +${DIFF} bytes"
@@ -112,6 +119,14 @@ if [ $? -eq 0 ]; then
             echo "  Gzipped change:    ${DIFF_GZIPPED} bytes"
         else
             echo "  Gzipped change:    (no change)"
+        fi
+
+        if [ $DIFF_BROTLI -gt 0 ]; then
+            echo "  Brotli change:     +${DIFF_BROTLI} bytes"
+        elif [ $DIFF_BROTLI -lt 0 ]; then
+            echo "  Brotli change:     ${DIFF_BROTLI} bytes"
+        else
+            echo "  Brotli change:     (no change)"
         fi
     fi
 
