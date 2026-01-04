@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.4.3-alpha.1';
+  this.version = '13.4.4-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -473,10 +473,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     }
 
     // Add / remove lines, selections, gutters as row changes
-    let rebuilt = Viewport.delta;
-    for (; rebuilt > 0; rebuilt--) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
-    if (Viewport.delta > 0) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
-    for (; rebuilt < 0; rebuilt++) viewportLayers.forEach(([a]) => a.pop()?.remove());
+    const delta = Viewport.delta; Viewport.delta = 0;
+    for (let d = delta; d > 0; d--) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
+    if (delta > 0) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
+    for (let d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
 
     // Update contents of line containers (reset to clean state)
     for (let i = 0; i < Viewport.displayLines; i++)
@@ -505,8 +505,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     }
     $cursor.style.left = cursorLeft + 'ch';
 
-    Mode.renderHooks.forEach(hook => hook($l, Viewport, Viewport.delta));
-    Viewport.delta = 0;
+    Mode.renderHooks.forEach(hook => hook($l, Viewport, delta));
   }
   
   // Auto-fit viewport to container height

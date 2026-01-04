@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.4.4-alpha.1 [2026-1-4]  gz+min: 3007 bytes / 2.94 KB (-11), min: 7373 bytes / 7.20 KB
+*** refactor
+- capture and reset Viewport.delta upfront in render
+
 ** 13.4.3-alpha.1 [2026-1-4]  gz+min: 3018 bytes / 2.95 KB (-5), min: 7368 bytes / 7.20 KB
 *** refactor
 - selection loop now iterates absolute row, sizeSelection computes viewport index
