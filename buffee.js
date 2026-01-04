@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.5.0-alpha.1';
+  this.version = '13.5.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -328,9 +328,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     /** @type {string[]} Array of text lines */
     lines: [''],
 
-    /** @type {number} Original line count when document was loaded */
-    originalLineCount: 0,
-
     /**
      * Index of the last line in the document.
      * @returns {number} Zero-based index of the last line
@@ -345,7 +342,6 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     set text(text) {
       text = expandTabs(text);
       this.lines = text.split('\n');
-      this.originalLineCount = this.lines.length;
       render();
     },
 
