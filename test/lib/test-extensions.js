@@ -806,6 +806,26 @@ function defineExtensionTests() {
             }
         });
     });
+
+    // ===== STATUSLINE TESTS =====
+    extRunner.describe('StatusLine', () => {
+        extRunner.it('updates originalLineCount immediately when Model.text is set', () => {
+            const { editor, container, cleanup } = createTestEditor();
+            try {
+                BuffeeStatusLine(editor);
+                const $lineCounter = container.querySelector('.buffee-linecount');
+
+                // Set text with 5 lines
+                editor.Model.text = 'line1\nline2\nline3\nline4\nline5';
+
+                // Should immediately show correct originalLineCount (not 0L)
+                assertTrue($lineCounter.textContent.includes('originally: 5L'),
+                    'Should show originally: 5L, got: ' + $lineCounter.textContent);
+            } finally {
+                cleanup();
+            }
+        });
+    });
 }
 
 // ===========================================
