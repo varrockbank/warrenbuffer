@@ -1,6 +1,6 @@
 * Project Devlog
 
-** 13.14.8-alpha.1 [2026-1-5]  gz+min: 2792 bytes / 2.73 KB (-7), min: 6740 bytes / 6.58 KB (-51)
+** 13.14.8-alpha.1 [2026-1-5]  gz: 2792 / 2.73 KB (-7), br: 2550 / 2.49 KB (-10), min: 6740 / 6.58 KB (-51)
 *** refactor
 - consolidate DOM queries into single map pattern
 

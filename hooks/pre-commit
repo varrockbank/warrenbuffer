@@ -136,16 +136,11 @@ if [ $? -eq 0 ]; then
     if git diff --cached --name-only | grep -q "^dev/changelog.txt$"; then
         if [ $OLD_SIZE -ne 0 ]; then
             # Format the change values with sign
-            if [ $DIFF_GZIPPED -gt 0 ]; then
-                DIFF_GZ_STR="+${DIFF_GZIPPED}"
-            elif [ $DIFF_GZIPPED -lt 0 ]; then
-                DIFF_GZ_STR="${DIFF_GZIPPED}"
-            else
-                DIFF_GZ_STR="0"
-            fi
-            SIZE_INFO="  gz+min: ${NEW_GZIPPED} bytes / ${GZIPPED_KB} KB (${DIFF_GZ_STR}), min: ${NEW_SIZE} bytes / ${MINIFIED_KB} KB"
+            if [ $DIFF_GZIPPED -gt 0 ]; then DIFF_GZ_STR="+${DIFF_GZIPPED}"; elif [ $DIFF_GZIPPED -lt 0 ]; then DIFF_GZ_STR="${DIFF_GZIPPED}"; else DIFF_GZ_STR="0"; fi
+            if [ $DIFF_BROTLI -gt 0 ]; then DIFF_BR_STR="+${DIFF_BROTLI}"; elif [ $DIFF_BROTLI -lt 0 ]; then DIFF_BR_STR="${DIFF_BROTLI}"; else DIFF_BR_STR="0"; fi
+            SIZE_INFO="  gz: ${NEW_GZIPPED} / ${GZIPPED_KB} KB (${DIFF_GZ_STR}), br: ${NEW_BROTLI} / ${BROTLI_KB} KB (${DIFF_BR_STR}), min: ${NEW_SIZE} / ${MINIFIED_KB} KB (${DIFF})"
         else
-            SIZE_INFO="  gz+min: ${NEW_GZIPPED} bytes / ${GZIPPED_KB} KB, min: ${NEW_SIZE} bytes / ${MINIFIED_KB} KB"
+            SIZE_INFO="  gz: ${NEW_GZIPPED} / ${GZIPPED_KB} KB, br: ${NEW_BROTLI} / ${BROTLI_KB} KB, min: ${NEW_SIZE} / ${MINIFIED_KB} KB"
         fi
 
         # Append size info to the first version line (** X.X.X [date])
