@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.9-alpha.1';
+  this.version = '13.14.10-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -240,9 +240,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         else {
           const cursor = i === first.row ? first : i === second.row ? second : null;
           if (cursor) {
-            const right         = line.slice(cursor.col).search(/[^ ]|$/);
-            const left          = line.slice(0, cursor.col).search(/[^ ]|$/);
-            const toRemove      = Math.min(-n, left + right);
+            const right    = line.slice(cursor.col).search(/[^ ]|$/);
+            const toRemove = Math.min(-n, line.slice(0, cursor.col).search(/[^ ]|$/) + right);
             Model.lines[i]      = line.slice(toRemove);
             if (right < toRemove) cursor.col -= toRemove - right;
           } else Model.lines[i] = line.slice(Math.min(-n, line.search(/[^ ]|$/)));

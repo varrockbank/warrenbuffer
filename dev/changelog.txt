@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 13.14.10-alpha.1 [2026-01-05]  gz: 2782 / 2.72 KB (-3), br: 2544 / 2.48 KB (-2), min: 6718 / 6.56 KB (-3)
+- inline left variable in indent()
+
 ** 13.14.9-alpha.1 [2026-1-5]  gz: 2792 / 2.73 KB (0), br: 2550 / 2.49 KB (0), min: 6740 / 6.58 KB (0)
 *** refactor
 - shorten JSDoc comments, 512 → 494 lines
