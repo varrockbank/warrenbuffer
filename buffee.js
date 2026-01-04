@@ -1,8 +1,4 @@
 /**
- * @fileoverview Buffee, the text slayer
- */
-
-/**
  * @typedef {Object} Position
  * @property {number} row - Row index (viewport-relative, 0-indexed)
  * @property {number} col - Column index (0-indexed)
@@ -21,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.4-alpha.1';
+  this.version = '13.14.5-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -220,15 +216,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      */
     moveWord(dir) {
       const s = Model.lines[head.row], n = s.length, fwd = dir > 0;
-      if (head.col === (fwd ? n : 0)) {
-        // At edge - move to adjacent line
-        if (fwd ? head.row < Model.lastIndex : head.row > 0) {
-          head.col = fwd ? 0 : Model.lines[--head.row].length;
-          if (fwd && ++head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
-          else if (!fwd && head.row < Viewport.start) Viewport.set(head.row);
-          else render();
-        }
-      } else {
+      if (head.col !== (fwd ? n : 0)) {
+        // Move within line
         let j = head.col;
         const ok   = fwd ? () => j<n : () => j>0 ;
         const step = fwd ? () => j++ : () => j-- ;
@@ -237,6 +226,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.col = j;
         render();
+      } else if (fwd ? head.row < Model.lastIndex : head.row > 0) {
+        // At edge - move to adjacent line
+        head.col = fwd ? 0 : Model.lines[--head.row].length;
+        if (fwd && ++head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
+        else if (!fwd && head.row < Viewport.start) Viewport.set(head.row);
+        else render();
       }
     },
 
