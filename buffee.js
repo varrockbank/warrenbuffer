@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.9.2-alpha.1';
+  this.version = '13.10.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -390,11 +390,11 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
     /**
      * Sets the viewport position and size.
-     * @param {number} start - Line number to start at (1-indexed for user display)
+     * @param {number} start - Line index to start at (0-indexed)
      * @param {number} size - Number of lines to display
      */
     set(start, size) {
-      this.start  = $clamp(start-1, 0, Model.lastIndex);
+      this.start  = $clamp(start, 0, Model.lastIndex);
       renderDelta(size - this.size);
       this.size   = size;
       render();
