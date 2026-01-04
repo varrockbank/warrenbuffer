@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.2-alpha.1';
+  this.version = '13.14.3-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -96,8 +96,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {number} dir - Direction: positive for right, negative for left
      */
     moveCol(dir) {
-      const right = dir > 0, len = Model.lines[head.row].length;
-      if (right ? head.col < len : head.col) { maxCol = right ? ++head.col : --head.col; render(); }
+      const right = dir > 0;
+      if (right ? head.col < Model.lines[head.row].length : head.col) { maxCol = right ? ++head.col : --head.col; render(); }
       else if (right ? head.row < Model.lastIndex : head.row) this.moveRow(dir, 1);
     },
 
