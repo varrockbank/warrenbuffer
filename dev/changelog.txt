@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.13.1-alpha.1 [2026-1-4]  gz+min: 2845 bytes / 2.78 KB (-8), min: 6934 bytes / 6.77 KB (+61)
+*** refactor
+- inline copy function into clipboard event listeners
+
 ** 13.13.0-alpha.1 [2026-1-4]  gz+min: 2854 bytes / 2.79 KB (0), min: 6873 bytes / 6.71 KB (+2)
 *** breaking
 - merge renderDelta + renderGutter + render into renderAll

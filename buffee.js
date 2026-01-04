@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.13.0-alpha.1';
+  this.version = '13.13.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -462,16 +462,16 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     const text = e.clipboardData.getData('text/plain');
     if (text) Selection.insert(text);
   });
-  const copy = e => {
-    e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
-  }
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
   // Listen on $clipboardBridge since that's where focus moves on Ctrl+C/X.
-  $clipboardBridge.addEventListener('copy', copy);
+  $clipboardBridge.addEventListener('copy', e => {
+    e.preventDefault(); // take over the clipboard contents                   
+    e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
+  });
   $clipboardBridge.addEventListener('cut', e => {
-    copy(e);
+    e.preventDefault(); // take over the clipboard contents                   
+    e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
     Selection.delete();
     $l.focus({ preventScroll: true });     // Return focus to editor
   });
