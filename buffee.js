@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.12.0-alpha.1';
+  this.version = '13.12.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -389,8 +389,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         this.size = size;
       }
       this.start = $clamp(start, 0, Model.lastIndex);
-      $gutter && renderGutter();
-      render();
+      renderWithGutter();
     },
 
     /**
@@ -408,10 +407,13 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
   };
 
-  const renderGutter = () => {
-    const gutterCols = Math.max(cssGutterDigitsInitial, (Viewport.start + Viewport.displayLines).toString().length) + cssGutterDigitsPadding;
-    $gutter.style.width = gutterCols + 'ch';
-    if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
+  const renderWithGutter = () => {
+    if ($gutter) {
+      const gutterCols = Math.max(cssGutterDigitsInitial, (Viewport.start + Viewport.displayLines).toString().length) + cssGutterDigitsPadding;
+      $gutter.style.width = gutterCols + 'ch';
+      if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
+    }
+    render();
   };
 
   /**
@@ -455,8 +457,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   const resize = newSize => {
     renderDelta(newSize - Viewport.size);
     Viewport.size = newSize;
-    $gutter && renderGutter();
-    render();
+    renderWithGutter();
   };
   rows ? resize(rows) : new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e);
 

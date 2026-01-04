@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.12.1-alpha.1 [2026-1-4]  gz+min: 2863 bytes / 2.80 KB (+2), min: 6888 bytes / 6.73 KB (-4)
+*** refactor
+- combine renderGutter + render into renderWithGutter
+
 ** 13.12.0-alpha.1 [2026-1-4]  gz+min: 2861 bytes / 2.79 KB (-8), min: 6892 bytes / 6.73 KB (-18)
 *** breaking
 - remove public this.renderGutter, keep as internal const
