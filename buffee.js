@@ -25,18 +25,13 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.9.0-alpha.1';
+  this.version = '13.9.1-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const $ = q => $parent.querySelector(q);
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
-  /** r = absolute row, converted to viewport-relative index for DOM access */
-  const sizeSelection = (r, left, width, {style} = viewportLayers[2][0][r - Viewport.start]) => {
-    style.left = left + 'ch';
-    style.width = width + 'ch';
-  };
 
   const [cssCell, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
@@ -439,8 +434,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       const [firstEdge, secondEdge] = Selection.bounds(1);
       const rEnd = Math.min(Viewport.start + Viewport.displayLines, secondEdge.row + 1);
       for (let r = Math.max(Viewport.start, firstEdge.row); r < rEnd; r++) {
-        const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length;
-        sizeSelection(r, f ? firstEdge.col : 0, f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1);
+        const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length, {style} = viewportLayers[2][0][r - Viewport.start];
+        style.left = (f ? firstEdge.col : 0) + 'ch';
+        style.width = (f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1) + 'ch';
       }
 
       // Render cursor overlay (always shows head position)
