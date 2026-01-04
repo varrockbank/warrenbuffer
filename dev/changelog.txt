@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.5.0-alpha.1 [2026-1-4]  gz+min: 2915 bytes / 2.85 KB (-35), min: 7202 bytes / 7.03 KB
+*** refactor
+- move byteCount from Model to StatusLine extension
+
 ** 13.4.6-alpha.1 [2026-1-4]  gz+min: 2950 bytes / 2.88 KB (-7), min: 7265 bytes / 7.09 KB
 *** refactor
 - indent() use if block instead of early return
