@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.12.2-alpha.1 [2026-1-4]  gz+min: 2854 bytes / 2.79 KB (-9), min: 6871 bytes / 6.71 KB (-17)
+*** refactor
+- remove size guard in Viewport.set, renderDelta(0) is no-op
+
 ** 13.12.1-alpha.1 [2026-1-4]  gz+min: 2863 bytes / 2.80 KB (+2), min: 6888 bytes / 6.73 KB (-4)
 *** refactor
 - combine renderGutter + render into renderWithGutter

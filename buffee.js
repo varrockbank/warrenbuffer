@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.12.1-alpha.1';
+  this.version = '13.12.2-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -384,10 +384,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {number} [size] - Number of lines to display (optional)
      */
     set(start, size = this.size) {
-      if (size !== this.size) {
-        renderDelta(size - this.size);
-        this.size = size;
-      }
+      renderDelta(size - this.size);
+      this.size = size;
       this.start = $clamp(start, 0, Model.lastIndex);
       renderWithGutter();
     },
