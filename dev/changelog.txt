@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.7-alpha.1 [2026-1-5]  gz+min: 2798 bytes / 2.73 KB (0), min: 6791 bytes / 6.63 KB (-7)
+*** refactor
+- refactor key handling guard pattern
+
 ** 13.14.6-alpha.1 [2026-1-5]  gz+min: 2798 bytes / 2.73 KB (-1), min: 6798 bytes / 6.64 KB (-2)
 *** refactor
 - remove unnecessary else in Selection.lines getter
