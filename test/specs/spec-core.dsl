@@ -107,6 +107,13 @@ enter 5 times
 expect(fixture).toHaveLines('', '', '', '', '', '');
 EXPECT cursor at 5,0
 
+## should reset maxCol after newline
+### Enter resets maxCol: type at col 5, enter, up should stay at col 0
+TYPE "Hello"
+enter
+up
+EXPECT cursor at 0,0
+
 
 # Complex Sequences
 
