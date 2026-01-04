@@ -9,7 +9,7 @@ BuffeeStatusLine(new Buffee(el, { rows: 20, cols: 80, spaces: 4 }));
 
 editor.Model.text = "content";     // Set content
 editor.Model.lines;                // ["line1", "line2"]
-editor.Viewport.scrollTo(5);       // Scroll to line 5
+editor.Viewport.set(5);            // Scroll to line index 5
 editor.Selection.insert("text");   // Insert at cursor
 editor.editMode = 'navigate';      // 'write' | 'navigate' | 'read'
 ```

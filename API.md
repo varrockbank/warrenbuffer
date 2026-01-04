@@ -143,8 +143,8 @@ editor.Viewport.size;   // Number of visible lines
 editor.Viewport.lines;  // Array of visible line strings
 
 // Navigate
-editor.Viewport.scrollTo(5);  // Scroll to line 5
-editor.Viewport.set(99, 25);  // Go to line index 99 (line 100), show 25 lines
+editor.Viewport.set(5);       // Scroll to line index 5
+editor.Viewport.set(99, 25);  // Scroll to line index 99, show 25 lines
 ```
 
 ---

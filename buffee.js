@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.10.0-alpha.1';
+  this.version = '13.11.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -86,7 +86,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         const len = Model.lines[dir > 0 ? ++head.row : --head.row].length;
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
-        if (head.row < Viewport.start || head.row > Viewport.end) Viewport.scrollTo(dir > 0 ? head.row - Viewport.size + 1 : head.row);
+        if (head.row < Viewport.start || head.row > Viewport.end) Viewport.set(dir > 0 ? head.row - Viewport.size + 1 : head.row);
         else render();
       }
     },
@@ -195,7 +195,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
                maxCol = head.col  = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
-      if (head.row > Viewport.end) Viewport.scrollTo(head.row - Viewport.size + 1);
+      if (head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
       else render();
     },
 
@@ -213,7 +213,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // At start of line - delete newline (join with previous line)
         head.col = Model.lines[tail.row - 1].length;
         Model.del(tail.row - 1, head.col, tail.row, 0);
-        if (--head.row < Viewport.start) Viewport.scrollTo(head.row);
+        if (--head.row < Viewport.start) Viewport.set(head.row);
         else render();
       }
     },
@@ -228,8 +228,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
         // At edge - move to adjacent line
         if (fwd ? head.row < Model.lastIndex : head.row > 0) {
           head.col = fwd ? 0 : Model.lines[--head.row].length;
-          if (fwd && ++head.row > Viewport.end) Viewport.scrollTo(head.row - Viewport.size + 1);
-          else if (!fwd && head.row < Viewport.start) Viewport.scrollTo(head.row);
+          if (fwd && ++head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
+          else if (!fwd && head.row < Viewport.start) Viewport.set(head.row);
           else render();
         }
       } else {
@@ -378,25 +378,18 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     },
 
     /**
-     * Scrolls the viewport to an absolute position.
+     * Sets the viewport position and optionally size.
      * TODO: audit what happens if we scroll and cursor is out of view
-     * @param {number} pos - Line index to scroll to (0-indexed)
-     */
-    scrollTo(pos) {
-      this.start = $clamp(pos, 0, Model.lastIndex);
-      $gutter && renderGutter();
-      render();
-    },
-
-    /**
-     * Sets the viewport position and size.
      * @param {number} start - Line index to start at (0-indexed)
-     * @param {number} size - Number of lines to display
+     * @param {number} [size] - Number of lines to display (optional)
      */
-    set(start, size) {
-      this.start  = $clamp(start, 0, Model.lastIndex);
-      renderDelta(size - this.size);
-      this.size   = size;
+    set(start, size = this.size) {
+      if (size !== this.size) {
+        renderDelta(size - this.size);
+        this.size = size;
+      }
+      this.start = $clamp(start, 0, Model.lastIndex);
+      $gutter && renderGutter();
       render();
     },
 
@@ -532,8 +525,8 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
           Selection.setCursor({ row: targetAbsRow, col: maxCol});
 
           // Scroll viewport if target is outside visible area
-          if (targetAbsRow < Viewport.start) Viewport.scrollTo(targetAbsRow);
-          else if (targetAbsRow > Viewport.end) Viewport.scrollTo(targetAbsRow - Viewport.size + 1);
+          if (targetAbsRow < Viewport.start) Viewport.set(targetAbsRow);
+          else if (targetAbsRow > Viewport.end) Viewport.set(targetAbsRow - Viewport.size + 1);
           else render();
         }
       } else { // no meta key.
