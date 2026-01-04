@@ -3,29 +3,25 @@
  */
 
 /**
- * @typedef {Object} BuffeeConfig
- * @property {number} [rows] - Fixed number of visible lines (if omitted, auto-fits to container height)
- * @property {number} [cols] - Fixed number of text columns (auto-calculates container width including gutter)
- * @property {number} [spaces=4] - Number of spaces per tab/indentation level
- */
-
-/**
  * @typedef {Object} Position
  * @property {number} row - Row index (viewport-relative, 0-indexed)
  * @property {number} col - Column index (0-indexed)
  */
 
 /**
- * Creates a new Buffee virtual buffer editor instance.
+ * Creates a new Buffee editor instance bound to $parent. 
  * @constructor
  * @param {HTMLElement} $parent - Container element
- * @param {BuffeeConfig} [config={}] - Configuration options
+ * @param {Object} [config={}] - Configuration options
+ * @param {number} [config.rows] - Fixed visible lines (omit to auto-fit)
+ * @param {number} [config.cols] - Fixed text columns (omit to fill parent)
+ * @param {number} [config.spaces=4] - Spaces per tab/indentation
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { rows: 25 });
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.3-alpha.1';
+  this.version = '13.14.4-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;

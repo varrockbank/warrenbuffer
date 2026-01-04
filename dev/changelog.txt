@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.14.4-alpha.1 [2026-1-5]  gz+min: 2800 bytes / 2.73 KB (0), min: 6801 bytes / 6.64 KB (0)
+*** refactor
+- inline BuffeeConfig typedef into constructor JSDoc
+
 ** 13.14.3-alpha.1 [2026-1-5]  gz+min: 2800 bytes / 2.73 KB (0), min: 6801 bytes / 6.64 KB (-4)
 *** refactor
 - inline len variable in moveCol
