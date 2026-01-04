@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.4.6-alpha.1 [2026-1-4]  gz+min: 2950 bytes / 2.88 KB (-7), min: 7265 bytes / 7.09 KB
+*** refactor
+- indent() use if block instead of early return
+
 ** 13.4.5-alpha.1 [2026-1-4]  gz+min: 2957 bytes / 2.89 KB (-50), min: 7271 bytes / 7.10 KB
 *** refactor
 - simplify unindent() using regex to count leading spaces
