@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 13.13.0-alpha.1 [2026-1-4]  gz+min: 2854 bytes / 2.79 KB (0), min: 6873 bytes / 6.71 KB (+2)
+*** breaking
+- merge renderDelta + renderGutter + render into renderAll
+- replace public this.renderDelta with this.renderAll
+
 ** 13.12.2-alpha.1 [2026-1-4]  gz+min: 2854 bytes / 2.79 KB (-9), min: 6871 bytes / 6.71 KB (-17)
 *** refactor
 - remove size guard in Viewport.set, renderDelta(0) is no-op
