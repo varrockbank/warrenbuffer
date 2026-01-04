@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.4.4-alpha.1';
+  this.version = '13.4.5-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -281,32 +281,17 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
       // Currently we follow intellij implementation but perhaps VSCode's is the best.
       const [first, second] = Selection.bounds(1);
-
-      for(let i = first.row; i <= second.row; i++) {
-        if( i  === first.row || i === second.row) {
-          const cursor = i === first.row ? first : second;
-          // Cursor movement of first and second depends on spaces left and right of it .
-          let indentableSpacesLeftOfCursor = 0;
-          let indentableSpacesFromCursor = 0 ;
-          const s = Model.lines[cursor.row];
-          let j = cursor.col;
-          while (j < s.length && s.charAt(j) === ' ') j++;
-          indentableSpacesFromCursor = j - cursor.col ;
-          j = 0; while (j < cursor.col && s.charAt(j) === ' ') j++;
-          indentableSpacesLeftOfCursor = j;
-          const unindentationsFirstLine = Math.min(Mode.spaces,
-            indentableSpacesLeftOfCursor + indentableSpacesFromCursor);
-          Model.lines[cursor.row] = Model.lines[cursor.row].slice(unindentationsFirstLine);
-          if(indentableSpacesFromCursor < unindentationsFirstLine)
-            cursor.col -= unindentationsFirstLine - indentableSpacesFromCursor;
-        } else {
-          const line = Model.lines[i];
-          let k = 0;
-          while (k < Mode.spaces && line[k] === ' ') k++;
-          Model.lines[i] = line.slice(k);
-        }
+      for (let i = first.row; i <= second.row; i++) {
+        const line = Model.lines[i];
+        const cursor = i === first.row ? first : i === second.row ? second : null;
+        if (cursor) {
+          const right = line.slice(cursor.col).search(/[^ ]|$/);
+          const left = line.slice(0, cursor.col).search(/[^ ]|$/);
+          const toRemove = Math.min(Mode.spaces, left + right);
+          Model.lines[i] = line.slice(toRemove);
+          if (right < toRemove) cursor.col -= toRemove - right;
+        } else Model.lines[i] = line.slice(Math.min(Mode.spaces, line.search(/[^ ]|$/)));
       }
-
       render();
     },
   };
@@ -518,9 +503,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       }
       render();
     }).observe($e);
-  } else {
-    render();
-  }
+  } else { render(); }
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
