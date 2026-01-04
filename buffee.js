@@ -25,7 +25,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.12.2-alpha.1';
+  this.version = '13.13.0-alpha.1';
   this.$parent = $parent;
   /** Replaces tabs with spaces (spaces = number of spaces, 0 = keep tabs) */
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s;
@@ -384,10 +384,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
      * @param {number} [size] - Number of lines to display (optional)
      */
     set(start, size = this.size) {
-      renderDelta(size - this.size);
+      const d = size - this.size;
       this.size = size;
       this.start = $clamp(start, 0, Model.lastIndex);
-      renderWithGutter();
+      renderAll(d);
     },
 
     /**
@@ -397,15 +397,12 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     get lines() { return Model.lines.slice(this.start, this.end + 1); },
   };
 
-  const renderDelta = this.renderDelta = d => {
+  const renderAll = this.renderAll = d => {
     // Add / remove lines, selections, gutters as row changes
     delta = d;
     for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
     if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
     for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
-  };
-
-  const renderWithGutter = () => {
     if ($gutter) {
       const gutterCols = Math.max(cssGutterDigitsInitial, (Viewport.start + Viewport.displayLines).toString().length) + cssGutterDigitsPadding;
       $gutter.style.width = gutterCols + 'ch';
@@ -453,9 +450,9 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
   
   // Adjust container width and row cout if container resized.
   const resize = newSize => {
-    renderDelta(newSize - Viewport.size);
+    const d = newSize - Viewport.size;
     Viewport.size = newSize;
-    renderWithGutter();
+    renderAll(d);
   };
   rows ? resize(rows) : new ResizeObserver(() => resize(Math.floor($e.clientHeight / cssCell))).observe($e);
 
