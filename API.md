@@ -143,8 +143,7 @@ editor.Viewport.size;   // Number of visible lines
 editor.Viewport.lines;  // Array of visible line strings
 
 // Navigate
-editor.Viewport.scroll(5);    // Scroll down 5 lines
-editor.Viewport.scroll(-3);   // Scroll up 3 lines
+editor.Viewport.scrollTo(5);  // Scroll to line 5
 editor.Viewport.set(100, 25); // Go to line 100, show 25 lines
 ```
 
@@ -174,11 +173,9 @@ editor.Selection.moveCursorEndOfLine();
 
 // Editing
 editor.Selection.insert("text");
-editor.Selection.insertLines(["a", "b"]);
 editor.Selection.delete();
-editor.Selection.newLine();
-editor.Selection.indent();
-editor.Selection.unindent();
+editor.Selection.indent(4);   // Indent by 4 spaces
+editor.Selection.indent(-4);  // Unindent by 4 spaces
 ```
 
 ---

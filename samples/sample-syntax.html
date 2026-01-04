@@ -343,7 +343,7 @@ if __name__ == "__main__":
     const syntaxCheckbox = document.getElementById('syntax-checkbox');
     syntaxCheckbox.addEventListener('change', () => {
       editor.Syntax.enabled = syntaxCheckbox.checked;
-      editor.Viewport.scroll(0);
+      editor.render();
     });
 
     // File loader

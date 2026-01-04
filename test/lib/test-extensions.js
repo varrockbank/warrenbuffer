@@ -470,7 +470,7 @@ function defineExtensionTests() {
                 BuffeeHistory(editor);
                 editor.Selection.insert('Hello');
                 editor.History._lastOpTime = 0;
-                editor.Selection.newLine();
+                editor.Selection.insert('\n');
                 editor.History._lastOpTime = 0;
                 editor.Selection.insert('World');
                 assertEqual(editor.Model.lines.length, 2, 'Should have 2 lines');
