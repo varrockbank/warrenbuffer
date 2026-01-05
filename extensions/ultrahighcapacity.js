@@ -301,7 +301,7 @@ function BuffeeUltraHighCapacity(editor) {
       Model._ = createLinesProxy();
 
       // Set navigation-only mode (can move cursor, no editing)
-      editor.Mode.interactive = 0;
+      editor.Mode.i = 0;
 
       // Override Model.end
       Object.defineProperty(Model, 'end', {
@@ -328,7 +328,7 @@ function BuffeeUltraHighCapacity(editor) {
       Model._ = [];
 
       // Restore normal mode (full editing)
-      editor.Mode.interactive = 1;
+      editor.Mode.i = 1;
 
       // Clear chunk data
       chunks = [];

@@ -479,8 +479,8 @@ function MyExtension(editor) {
 
   // Expose API on editor instance
   editor.MyExtension = {
-    enable() { editor.Mode.interactive = 0; render(true); },
-    disable() { editor.Mode.interactive = 1; render(true); }
+    enable() { editor.Mode.i = 0; render(true); },
+    disable() { editor.Mode.i = 1; render(true); }
   };
 
   return editor; // Decorator pattern: return the editor
