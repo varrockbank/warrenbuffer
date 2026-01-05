@@ -11,13 +11,13 @@
  * @param {Object} [config={}] - Configuration options
  * @param {number} [config.rows] - Fixed visible lines (omit to auto-fit)
  * @param {number} [config.cols] - Fixed text columns (omit to fill parent)
- * @param {number} [config.spaces=4] - Spaces per tab/indentation
+ * @param {number} [config.s=4] - Spaces per tab/indentation
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { rows: 25 });
  * editor.Model.s = 'Hello, World!';
  */
-function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.21.0-alpha.1';
+function Buffee($, { rows, cols, s = 4 } = {}) {
+  this.v = '14.22.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -249,7 +249,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
    * @namespace Mode
    */
   const Mode = this.Mode = {
-    s: spaces,                                   /** spaces */
+    s,                                           /** spaces */
     /**
      * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
      * - 1: Full editing (default)
