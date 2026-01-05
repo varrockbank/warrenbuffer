@@ -162,14 +162,14 @@ editor.Select.bounds();     // [head, tail] - mutable position objects
 editor.Select._;  // Array of selected lines
 
 // Movement
-editor.Select.y(1);   // Down
-editor.Select.y(-1);  // Up
-editor.Select.x(1);   // Right
-editor.Select.x(-1);  // Left
-editor.Select.moveWord();
-editor.Select.moveBackWord();
-editor.Select.moveCursorStartOfLine();
-editor.Select.moveCursorEndOfLine();
+editor.Select.mvY(1);   // Down
+editor.Select.mvY(-1);  // Up
+editor.Select.mvX(1);   // Right
+editor.Select.mvX(-1);  // Left
+editor.Select.mvW(1);   // Forward word
+editor.Select.mvW(-1);  // Backward word
+editor.Select.mvE(true);  // End of line
+editor.Select.mvE(false); // Start of line (smart home)
 
 // Editing
 editor.Select.add("text");

@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.29.0-alpha.1';
+  this.v = '14.30.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -69,7 +69,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @param {number} dir - Direction: positive for down, negative for up
      * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
      */
-    y(dir, toEdge) {
+    mvY(dir, toEdge) {
       if (dir > 0 ? head.y < Model.end : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : $min(maxCol, len);
@@ -83,10 +83,10 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Moves the cursor/selection head horizontally.
      * @param {number} dir - Direction: positive for right, negative for left
      */
-    x(dir) {
+    mvX(dir) {
       const right = dir > 0;
       if (right ? head.x < Model._[head.y].length : head.x) { maxCol = right ? ++head.x : --head.x; r(); }
-      else if (right ? head.y < Model.end : head.y) this.y(dir, 1);
+      else if (right ? head.y < Model.end : head.y) this.mvY(dir, 1);
     },
 
     /**
@@ -134,7 +134,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Moves cursor to line edge.
      * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
      */
-    moveLineEdge(toEnd) {
+    mvE(toEnd) {
       const line = Model._[head.y];
       maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
       r();
@@ -192,7 +192,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     /**
      * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
      */
-    moveWord(dir) {
+    mvW(dir) {
       const s = Model._[head.y], n = s.length, fwd = dir > 0;
       if (head.x !== (fwd ? n : 0)) {
         // Move within line
@@ -455,7 +455,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       if(cmd || e.altKey) {
         if(!sh && Select.dir)      Select.ct();
         else if(sh && !Select.dir) Select.make();
-        if (arrowCode % 2) cmd ?      Select.moveLineEdge(direction > 0) : Select.moveWord(direction);
+        if (arrowCode % 2) cmd ?      Select.mvE(direction > 0) : Select.mvW(direction);
       } else if (!sh && Select.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Select.ct(Select.bounds(1)[direction > 0 | 0]);
@@ -475,7 +475,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         }
       } else { // no meta key.
         if (sh && !Select.dir) Select.make();
-        Select[arrowCode % 2 ? 'x' : 'y'](direction);
+        Select[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
       }
     } else if (k.length === 1) {
       if (cmd) metaKeys[k.toLowerCase()]?.();
