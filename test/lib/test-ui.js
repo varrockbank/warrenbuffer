@@ -203,7 +203,7 @@
                           
                 rows: 20
             });
-            jsOutputEditor.editMode = 'navigate';
+            jsOutputEditor.Mode.i = 0; // navigate mode
 
             // Enable syntax highlighting for JavaScript
             BuffeeSyntax(jsOutputEditor);
