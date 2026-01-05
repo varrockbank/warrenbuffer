@@ -20,7 +20,7 @@
  * editor.UndoTree.branches();       // Get available branches at current node
  */
 function BuffeeUndoTree(editor) {
-  const { Selection, Model } = editor;
+  const { Select, Model } = editor;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
 
@@ -45,7 +45,7 @@ function BuffeeUndoTree(editor) {
 
   // Capture cursor position
   function captureCursor() {
-    const [head, tail] = editor.Selection.bounds();
+    const [head, tail] = editor.Select.bounds();
     return {
       headRow: head.y, headCol: head.x,
       tailRow: tail.y, tailCol: tail.x
@@ -56,15 +56,15 @@ function BuffeeUndoTree(editor) {
   function restoreCursor(pos) {
     if (!pos) return;
 
-    const isSelection = pos.headRow !== pos.tailRow || pos.headCol !== pos.tailCol;
+    const isSelect = pos.headRow !== pos.tailRow || pos.headCol !== pos.tailCol;
 
-    if (isSelection) {
-      Selection.select();
+    if (isSelect) {
+      Select.make();
     } else {
-      Selection.ct();
+      Select.ct();
     }
 
-    const [head, tail] = editor.Selection.bounds();
+    const [head, tail] = editor.Select.bounds();
     head.y = pos.headRow;
     head.x = pos.headCol;
     tail.y = pos.tailRow;
