@@ -127,7 +127,7 @@ Read-only. Returns the line height in pixels, derived from CSS variable `--buffe
 editor.Model.text = "Hello\nWorld";
 
 // Access lines
-editor.Model.lines;        // ["Hello", "World"]
+editor.Model._;        // ["Hello", "World"]
 editor.Model.end;    // 1
 ```
 

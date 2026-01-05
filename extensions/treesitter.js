@@ -45,7 +45,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
     if (dirty && enabled) {
       dirty = false;
       // Re-parse the document
-      const text = Model.lines.join("\n");
+      const text = Model._.join("\n");
       tree = parser.parse(text);
       captures = query.captures(tree.rootNode);
       render(false);
@@ -155,7 +155,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
      * Forces an immediate re-parse of the document.
      */
     reparse() {
-      const text = Model.lines.join("\n");
+      const text = Model._.join("\n");
       tree = parser.parse(text);
       captures = query.captures(tree.rootNode);
       render(false);

@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.9.0-alpha.1 [2026-01-05]  gz: 2757 / 2.69 KB (-7), br: 2527 / 2.47 KB (-15), min: 6511 / 6.36 KB (-120)
+- refactor: rename Model.lines to Model._
+
 ** 14.8.1-alpha.1 [2026-01-05]  gz: 2764 / 2.70 KB (+2), br: 2542 / 2.48 KB (+4), min: 6631 / 6.48 KB (6)
 - refactor: rename Mode.cellHeight/cellWidth to Mode.ch/cw
 

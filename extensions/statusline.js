@@ -23,10 +23,10 @@ function BuffeeStatusLine(editor) {
   let byteCount = 0, originalLineCount = 0;
 
   // Capture initial state if text was already set before this extension
-  if (Model.lines.length > 1 || Model.lines[0] !== '') {
-    const text = Model.lines.join('\n');
+  if (Model._.length > 1 || Model._[0] !== '') {
+    const text = Model._.join('\n');
     byteCount = new TextEncoder().encode(text).length;
-    originalLineCount = Model.lines.length;
+    originalLineCount = Model._.length;
   }
 
   // Wrap Model.text setter to calculate byteCount and originalLineCount

@@ -19,7 +19,7 @@ function BuffeeFileLoader(editor) {
   function appendLines(newLines, skipRender = false) {
     const spaces = Mode.spaces;
     const expandTabs = s => spaces ? s.replace(/\t/g, ' '.repeat(spaces)) : s;
-    Model.lines.push(...newLines.map(expandTabs));
+    Model._.push(...newLines.map(expandTabs));
     if (!skipRender) render();
   }
 
@@ -81,7 +81,7 @@ function BuffeeFileLoader(editor) {
       Model.text = text;
       const t1 = performance.now();
       return {
-        lines: Model.lines.length,
+        lines: Model._.length,
         timeMs: t1 - t0
       };
     },
@@ -100,7 +100,7 @@ function BuffeeFileLoader(editor) {
       const onProgress = options.onProgress;
       const t0 = performance.now();
 
-      Model.lines = [];
+      Model._ = [];
       let offset = 0;
       let remainder = '';
       let totalLines = 0;
@@ -150,7 +150,7 @@ function BuffeeFileLoader(editor) {
       const onProgress = options.onProgress;
       const t0 = performance.now();
 
-      Model.lines = [];
+      Model._ = [];
       let offset = 0;
       let remainder = '';
       let totalLines = 0;
@@ -209,7 +209,7 @@ function BuffeeFileLoader(editor) {
       const onProgress = options.onProgress;
       const t0 = performance.now();
 
-      Model.lines = [];
+      Model._ = [];
       let remainder = '';
       let totalLines = 0;
       let bytesRead = 0;
@@ -274,7 +274,7 @@ function BuffeeFileLoader(editor) {
       const onProgress = options.onProgress;
       const t0 = performance.now();
 
-      Model.lines = [];
+      Model._ = [];
       const decoder = new TextDecoder('utf-8');
       const reader = file.stream().getReader();
       let chunkCount = 0;
@@ -318,7 +318,7 @@ function BuffeeFileLoader(editor) {
 
       const t1 = performance.now();
       return {
-        lines: Model.lines.length,
+        lines: Model._.length,
         timeMs: t1 - t0
       };
     },
@@ -340,7 +340,7 @@ function BuffeeFileLoader(editor) {
       const onProgress = options.onProgress;
       const t0 = performance.now();
 
-      Model.lines = [];
+      Model._ = [];
       const decoder = new TextDecoder('utf-8');
       const reader = file.stream().getReader();
       let chunkCount = 0;
@@ -386,7 +386,7 @@ function BuffeeFileLoader(editor) {
 
       const t1 = performance.now();
       return {
-        lines: Model.lines.length,
+        lines: Model._.length,
         timeMs: t1 - t0
       };
     }
