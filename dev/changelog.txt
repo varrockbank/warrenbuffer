@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.35.0-alpha.1 [2026-01-05]  gz: 2649 / 2.59 KB (+2), br: 2448 / 2.39 KB (+2), min: 5820 / 5.68 KB (-3)
+- refactor: rename View.n1 to View.N
+
 ** 14.34.0-alpha.1 [2026-01-05]  gz: 2647 / 2.58 KB (-4), br: 2446 / 2.39 KB (+3), min: 5823 / 5.69 KB (-17)
 - refactor: rename layer-text/layer-selection to ztxt/zsel
 
