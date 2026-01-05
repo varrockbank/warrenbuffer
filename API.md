@@ -172,8 +172,8 @@ editor.Selection.moveCursorStartOfLine();
 editor.Selection.moveCursorEndOfLine();
 
 // Editing
-editor.Selection.insert("text");
-editor.Selection.delete();
+editor.Selection.add("text");
+editor.Selection.del();
 editor.Selection.indent(4);   // Indent by 4 spaces
 editor.Selection.indent(-4);  // Unindent by 4 spaces
 ```

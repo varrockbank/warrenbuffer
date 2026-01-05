@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.17.0-alpha.1';
+  this.v = '14.18.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -144,7 +144,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Inserts a string at cursor position, replacing any selection.
      * @param {string} s - String to insert
      */
-    insert(s) {
+    add(s) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = Selection.bounds(1);
@@ -173,8 +173,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     },
 
     /** Deletes the character before cursor or the current selection. */
-    delete() {
-      if (this.dir) this.insert('');
+    del() {
+      if (this.dir) this.add('');
       else if (tail.col > 0) {
         // Delete character before cursor
         Model.del(tail.row, tail.col - 1, tail.row, tail.col);
@@ -410,7 +410,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   $l.addEventListener('paste', e => {
     e.preventDefault(); // stop browser from inserting raw clipboard text
     const text = e.clipboardData.getData('text/plain');
-    if (text) Selection.insert(text);
+    if (text) Selection.add(text);
   });
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
@@ -422,7 +422,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   $clipboardBridge.addEventListener('cut', e => {
     e.preventDefault(); // take over the clipboard contents                   
     e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
-    Selection.delete();
+    Selection.del();
     $l.focus({ preventScroll: true });     // Return focus to editor
   });
 
@@ -437,11 +437,11 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
-      Backspace: () => { Selection.delete() },
-      Enter: () => { Selection.insert('\n') } ,
+      Backspace: () => { Selection.del() },
+      Enter: () => { Selection.add('\n') } ,
       Tab: () => {
         e.preventDefault();
-        (Selection.dir || sh) ? Selection.indent(sh ? -Mode.s : Mode.s) : Selection.insert(' '.repeat(Mode.s));
+        (Selection.dir || sh) ? Selection.indent(sh ? -Mode.s : Mode.s) : Selection.add(' '.repeat(Mode.s));
       },
     };
 
@@ -481,7 +481,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       if (cmd) metaKeys[k.toLowerCase()]?.();
       else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
-        Selection.insert(k);
+        Selection.add(k);
       }
     } else if (special[k] && Mode.i >= 1) { special[k](); }
   });
