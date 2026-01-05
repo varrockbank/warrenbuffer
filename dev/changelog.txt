@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.26.0-alpha.1 [2026-01-05]  gz: 2653 / 2.59 KB (-7), br: 2449 / 2.39 KB (-2), min: 5882 / 5.74 KB (-24)
+- refactor: rename cursor to ct (CSS class, DOM element, Selection method)
+
 ** 14.25.0-alpha.1 [2026-01-05]  gz: 2660 / 2.60 KB (-7), br: 2451 / 2.39 KB (-6), min: 5906 / 5.77 KB (-21)
 - refactor: rename gutter-digits-initial/padding to gutter-init/pad
 
