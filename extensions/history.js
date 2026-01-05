@@ -43,7 +43,7 @@ function BuffeeHistory(editor) {
     if (isSelection) {
       editor.Selection.select();
     } else {
-      editor.Selection.cursor();
+      editor.Selection.ct();
     }
 
     const [head, tail] = editor.Selection.bounds();

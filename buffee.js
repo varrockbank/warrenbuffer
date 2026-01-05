@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.25.0-alpha.1';
+  this.v = '14.26.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -26,8 +26,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const [h, cssPadding, gutterInit, gutterPad] =
     ['cell', 'padding', 'gutter-init', 'gutter-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$e        ,$l     ,$cursor ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
-        ['elements','lines','cursor','clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
+  const [$e        ,$l     ,$ct     ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
+        ['elements','lines','ct',    'clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
@@ -116,7 +116,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     },
 
     /** Collapses selection to a cursor. Optionally sets position first. */
-    cursor(p) {
+    ct(p) {
       if (p) { head.y = p.y; head.x = p.x; }
       tail.y = head.y;
       tail.x = head.x;
@@ -158,7 +158,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           head.x      = lines[lines.length - 1].length;
         } else head.x = first.x + s.length;
 
-        this.cursor();
+        this.ct();
       } else {
         Model.add(tail.y, tail.x, lines);
 
@@ -260,7 +260,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     i: 1,                                      
     frame: 0,                                  /** framecount */
     ch: h,                                     /** line and character height */
-    cw: $cursor.getBoundingClientRect().width, /** computed character width  */
+    cw: $ct.getBoundingClientRect().width, /** computed character width  */
     renderHooks: []
   };
 
@@ -389,7 +389,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       // Cursor
       const headViewRow = head.y - View.start;
       if (headViewRow >= 0 && headViewRow < View.n) {
-        $cursor.style.top = headViewRow * h + 'px';
+        $ct.style.top = headViewRow * h + 'px';
         cursorLeft = head.x;
 
         // Horizontal scroll to keep cursor in view
@@ -397,7 +397,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cw) * Mode.cw;
       }
     }
-    $cursor.style.left = cursorLeft + 'ch';
+    $ct.style.left = cursorLeft + 'ch';
 
     Mode.renderHooks.forEach(hook => hook($l, View, delta));
   }
@@ -453,12 +453,12 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
 
       if(cmd || e.altKey) {
-        if(!sh && Selection.dir)      Selection.cursor();
+        if(!sh && Selection.dir)      Selection.ct();
         else if(sh && !Selection.dir) Selection.select();
         if (arrowCode % 2) cmd ?      Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Selection.cursor(Selection.bounds(1)[direction > 0 | 0]);
+          Selection.ct(Selection.bounds(1)[direction > 0 | 0]);
           r();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
@@ -466,7 +466,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           const targetAbsRow = $max(0, $min(edge.y + direction, Model.end));
 
           maxCol = $min(edge.x, Model._[targetAbsRow].length);
-          Selection.cursor({ y: targetAbsRow, x: maxCol});
+          Selection.ct({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);

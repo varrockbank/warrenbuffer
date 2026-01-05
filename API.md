@@ -153,7 +153,7 @@ editor.View.set(99, 25);  // Scroll to line index 99, show 25 lines
 
 ```javascript
 // Cursor position
-editor.Selection.cursor({ y: 0, x: 5 });
+editor.Selection.ct({ y: 0, x: 5 });
 editor.Selection.isSelection;  // false if cursor, true if range
 editor.Selection.bounds(1);    // [start, end] in document order
 editor.Selection.bounds();     // [head, tail] - mutable position objects
