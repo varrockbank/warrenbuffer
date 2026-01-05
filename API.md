@@ -77,7 +77,7 @@ To disable auto-fit, specify `rows`.
 const editor = new Buffee(document.getElementById('editor'), {
   // rows: 20,  // Omit to auto-fit, or specify for fixed height
   // cols: 80,  // Omit to fill parent, or specify for fixed width
-  spaces: 4
+  s: 4
 });
 ```
 
@@ -87,7 +87,7 @@ const editor = new Buffee(document.getElementById('editor'), {
 |--------|------|---------|-------------|
 | `rows` | number | (auto) | Fixed visible lines (omit to auto-fit) |
 | `cols` | number | (auto) | Fixed text columns (omit to fill parent) |
-| `spaces` | number | `4` | Tab width and indentation (0 = hard tabs) |
+| `s` | number | `4` | Tab width and indentation (0 = hard tabs) |
 | `logger` | function | `console.log` | Custom logger |
 
 ---
@@ -153,13 +153,13 @@ editor.View.set(99, 25);  // Scroll to line index 99, show 25 lines
 
 ```javascript
 // Cursor position
-editor.Selection.cursor({ row: 0, col: 5 });
+editor.Selection.cursor({ y: 0, x: 5 });
 editor.Selection.isSelection;  // false if cursor, true if range
 editor.Selection.bounds(1);    // [start, end] in document order
 editor.Selection.bounds();     // [head, tail] - mutable position objects
 
 // Selected text
-editor.Selection.lines;  // Array of selected lines
+editor.Selection._;  // Array of selected lines
 
 // Movement
 editor.Selection.y(1);   // Down
