@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**
@@ -62,9 +62,6 @@ function BuffeeStatusLine(editor) {
       lastSpaces = Mode.spaces;
     }
   });
-
-  // Trigger initial render to populate status line
-  editor.render();
 
   return editor;
 }
