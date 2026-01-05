@@ -15,7 +15,7 @@
  * await editor.UltraHighCapacity.appendLines(largeArrayOfLines);
  */
 function BuffeeUltraHighCapacity(editor) {
-  const { renderHooks } = editor.Mode;
+  const { sub } = editor.Mode;
   const { View, Model, Mode, render, $ } = editor;
   const $e = $.querySelector('.buffee-elements');
 

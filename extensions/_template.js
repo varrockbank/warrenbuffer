@@ -14,7 +14,7 @@
 function Buffee__NAME__(editor) {
   // === WRAPPABLE PRIMITIVES ===
   // const add = Model.add.bind(Model), del = Model.del.bind(Model);
-  const { renderHooks } = editor.Mode;
+  const { sub } = editor.Mode;
 
   // === EDITOR PROPERTIES ===
   // Available: Model, Select, View, Mode, render, $
@@ -28,7 +28,7 @@ function Buffee__NAME__(editor) {
 
   // === RENDER HOOK (optional) ===
   // Called after each render cycle. Args: ($container, viewport, rebuilt)
-  renderHooks.push(($container, viewport, rebuilt) => {
+  sub.push(($container, viewport, rebuilt) => {
     if (!enabled) return;
     // Update DOM based on new viewport state
     // rebuilt is non-zero when container was rebuilt (viewport size changed)

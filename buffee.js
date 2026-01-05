@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.35.1-alpha.1';
+  this.v = '14.36.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -26,14 +26,14 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const [h, cssPadding, railInit, railPad] =
     ['cell', 'padding', 'rail-init', 'rail-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$e        ,$l     ,$ct     ,$clip  ,$rail , $layerText ,$layerSel] =
-        ['elements','lines','ct',    'clip','rail','ztxt','zsel'].map(q => $.querySelector('.buffee-' + q));
+  const [$e        ,$l     ,$ct , $clip ,$rail ,$ztxt ,$zsel] =
+        ['elements','lines','ct', 'clip','rail','ztxt','zsel'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [$layerText, 'pre', (el, i) => el.textContent = Model._[View.start + i] ?? null],
+    [$ztxt, 'pre', (el, i) => el.textContent = Model._[View.start + i] ?? null],
     [$rail, 'div', (el, i) => el.textContent = View.start + i + 1],
-    [$layerSel, 'div', (el) => el.style.width = 0]
+    [$zsel, 'div', (el) => el.style.width = 0]
   ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
   // Set container width if cols specified
@@ -154,7 +154,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       if (p) { head.y = p.y; head.x = p.x; }
       tail.y = head.y;
       tail.x = head.x;
-      head     = tail;
+      head   = tail;
     },
 
     /** Begins a new selection by detaching head from tail allowing independent movement. */
@@ -261,7 +261,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     frame: 0,                                  /** framecount */
     ch: h,                                     /** line and character height */
     cw: $ct.getBoundingClientRect().width, /** computed character width  */
-    renderHooks: []
+    sub: []
   };
 
   /**
@@ -399,7 +399,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     }
     $ct.style.left = cursorLeft + 'ch';
 
-    Mode.renderHooks.forEach(hook => hook($l, View, delta));
+    Mode.sub.forEach(hook => hook($l, View, delta));
   }
   
   // Initial sizing render

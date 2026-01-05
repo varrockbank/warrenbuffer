@@ -14,7 +14,7 @@
  * const editor = BuffeeElementals(Buffee(container, config));
  */
 function BuffeeElementals(editor) {
-  const { renderHooks, h: lineHeight } = editor.Mode;
+  const { re, h: lineHeight } = editor.Mode;
   const { View, render, $ } = editor;
   const $elementLayer = $.querySelector('.buffee-layer-elements');
 
@@ -76,7 +76,7 @@ function BuffeeElementals(editor) {
   }
 
   // Register render hook to update positions when viewport changes
-  renderHooks.push(() => {
+  sub.push(() => {
     if (enabled) {
       updatePositions();
     }

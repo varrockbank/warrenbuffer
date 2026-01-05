@@ -19,7 +19,7 @@ function BuffeeTUI(editor) {
   }
   const Highlights = editor.Highlights;
 
-  const { renderHooks } = editor.Mode;
+  const { sub } = editor.Mode;
   const { View, Model, render, $ } = editor;
   const $textLayer = $.querySelector('.buffee-ztxt');
 
@@ -280,7 +280,7 @@ function BuffeeTUI(editor) {
   // Render Hook
   // ============================================================================
 
-  renderHooks.push(($container, viewport) => {
+  sub.push(($container, viewport) => {
     // Render element text content into the text layer
     if (enabled && elements.length > 0) {
       for (const el of elements) {

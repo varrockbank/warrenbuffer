@@ -41,7 +41,7 @@ function BuffeeHighlights(editor) {
 
   // Keep layer position in sync with gutter width
   let lastGutterCh = gutterCh();
-  Mode.renderHooks.push(() => {
+  Mode.sub.push(() => {
     const current = gutterCh();
     if (current !== lastGutterCh) {
       $layer.style.left = `calc(${current}ch + ${offsetPx}px)`;

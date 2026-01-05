@@ -13,7 +13,7 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeStatusLine(editor, { showSelection = false } = {}) {
-  const { renderHooks } = editor.Mode;
+  const { sub } = editor.Mode;
   const { Model, Mode, $ } = editor;
 
   const $headRow = $.querySelector('.buffee-head-row');
@@ -98,7 +98,7 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     }
   }
 
-  renderHooks.push(updateStatusLine);
+  sub.push(updateStatusLine);
   updateStatusLine(); // Initial population
 
   return editor;

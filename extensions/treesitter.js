@@ -17,7 +17,7 @@
  * editor.TreeSitter.enabled = true;
  */
 function BuffeeTreeSitter(editor, { parser, query }) {
-  const { renderHooks } = editor.Mode;
+  const { sub } = editor.Mode;
   const { View, Model, render, $ } = editor;
   const $e = $.querySelector('.buffee-elements');
 
@@ -99,7 +99,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
   }
 
   // Register render hook for syntax highlighting
-  renderHooks.push(($container, viewport) => {
+  sub.push(($container, viewport) => {
     if (!enabled || !tree || captures.length === 0) return;
 
     let minJ = 0;
