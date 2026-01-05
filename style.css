@@ -1,6 +1,6 @@
 /**
  * Buffee Editor - Required Styles
- * @version 12.6.0-alpha.1
+ * @version 14.25.0-alpha.1
  *
  * This stylesheet contains the essential structural CSS for Buffee.
  * Colors are intentionally omitted - define them at point of usage.
@@ -20,8 +20,8 @@
   flex-direction: column;
   --buffee-cell: 24px;
   --buffee-padding: 4px;
-  --buffee-gutter-digits-padding: 1ch;
-  --buffee-gutter-digits-initial: 2ch;
+  --buffee-gutter-pad: 1ch;
+  --buffee-gutter-init: 2ch;
   --buffee-z-selection: 100;
   --buffee-z-text: 200;
   --buffee-z-cursor: 300;
@@ -102,7 +102,7 @@
 .buffee .buffee-gutter {
   text-align: right; /* config */
   padding: var(--buffee-padding); 
-  width: calc(var(--buffee-gutter-digits-initial) + var(--buffee-gutter-digits-padding));
+  width: calc(var(--buffee-gutter-init) + var(--buffee-gutter-pad));
 }
 
 .buffee .buffee-layer-text {
