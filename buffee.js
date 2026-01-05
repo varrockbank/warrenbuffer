@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.15.0-alpha.1';
+  this.version = '13.15.1-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -450,7 +450,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.insert('\n') } ,
       Tab: () => {
         e.preventDefault();
-        Selection.dir ? Selection.indent(sh ? -Mode.spaces : Mode.spaces) : Selection.insert(' '.repeat(Mode.spaces));
+        (Selection.dir || sh) ? Selection.indent(sh ? -Mode.spaces : Mode.spaces) : Selection.insert(' '.repeat(Mode.spaces));
       },
     };
 
