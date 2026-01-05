@@ -15,8 +15,8 @@
  */
 function BuffeeElementals(editor) {
   const { renderHooks, cellHeight: lineHeight } = editor.Mode;
-  const { Viewport, render, $parent } = editor;
-  const $elementLayer = $parent.querySelector('.buffee-layer-elements');
+  const { Viewport, render, $ } = editor;
+  const $elementLayer = $.querySelector('.buffee-layer-elements');
 
   let enabled = false;
   let clickable = false;

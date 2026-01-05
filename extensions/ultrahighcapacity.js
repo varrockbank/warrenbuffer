@@ -16,8 +16,8 @@
  */
 function BuffeeUltraHighCapacity(editor) {
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, Mode, render, $parent } = editor;
-  const $e = $parent.querySelector('.buffee-elements');
+  const { Viewport, Model, Mode, render, $ } = editor;
+  const $e = $.querySelector('.buffee-elements');
 
   // Store original methods/getters
   const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'lastIndex').get;

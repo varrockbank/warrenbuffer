@@ -431,14 +431,14 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 
 ```javascript
 // Public properties
-const { Viewport, Selection, Model, Mode, render, $parent } = editor;
+const { Viewport, Selection, Model, Mode, render, $ } = editor;
 // Mode.frameCount - Number of render calls
 // Mode.cellHeight - Line height in pixels (from CSS --buffee-cell)
 // Mode.cellWidth - Character width in pixels (measured from cursor element)
 
-// Query DOM elements from $parent as needed:
-const $e = $parent.querySelector('.buffee-elements');
-const $textLayer = $parent.querySelector('.buffee-layer-text');
+// Query DOM elements from $ as needed:
+const $e = $.querySelector('.buffee-elements');
+const $textLayer = $.querySelector('.buffee-layer-text');
 
 // Wrappable primitives (for extensions like History, Syntax)
 const { _insert, _delete } = editor;

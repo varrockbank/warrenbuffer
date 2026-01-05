@@ -14,10 +14,10 @@
  */
 function BuffeeSyntax(editor) {
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, $parent } = editor;
+  const { Viewport, Model, $ } = editor;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
-  const $textLayer = $parent.querySelector('.buffee-layer-text');
+  const $textLayer = $.querySelector('.buffee-layer-text');
 
   // State cache: stateCache[lineIndex] = startState for that line
   // State 0 = NORMAL, other states defined by language

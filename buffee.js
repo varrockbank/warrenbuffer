@@ -5,9 +5,9 @@
  */
 
 /**
- * Creates a new Buffee editor instance bound to $parent. 
+ * Creates a new Buffee editor instance bound to $.
  * @constructor
- * @param {HTMLElement} $parent - Container element
+ * @param {HTMLElement} $ - Container element
  * @param {Object} [config={}] - Configuration options
  * @param {number} [config.rows] - Fixed visible lines (omit to auto-fit)
  * @param {number} [config.cols] - Fixed text columns (omit to fill parent)
@@ -16,18 +16,18 @@
  * const editor = new Buffee(document.getElementById('editor'), { rows: 25 });
  * editor.Model.text = 'Hello, World!';
  */
-function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.0.0-alpha.1';
-  this.$parent = $parent;
+function Buffee($, { rows, cols, spaces = 4 } = {}) {
+  this.v = '14.1.0-alpha.1';
+  this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
   const [cellHeight, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
-      .map(p => parseFloat(getComputedStyle($parent).getPropertyValue(p)));
+      .map(p => parseFloat(getComputedStyle($).getPropertyValue(p)));
   const [$e        ,$l     ,$cursor ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
-        ['elements','lines','cursor','clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $parent.querySelector('.buffee-' + q));
+        ['elements','lines','cursor','clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
