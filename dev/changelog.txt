@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.36.3-alpha.1 [2026-01-05]  gz: 2642 / 2.58 KB (0), br: 2438 / 2.38 KB (0), min: 5819 / 5.68 KB (0)
+- refactor: use .buffee-ztxt > pre instead of .buffee-lines pre in CSS
+
 ** 14.36.2-alpha.1 [2026-01-05]  gz: 2642 / 2.58 KB (+4), br: 2438 / 2.38 KB (-1), min: 5819 / 5.68 KB (15)
 - refactor: rename internal variables for clarity
   - $ct → $caret, Sel.ct() → Sel.caret(), .buffee-ct → .buffee-caret
