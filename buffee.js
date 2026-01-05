@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.5-alpha.1';
+  this.v = '14.36.6-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -41,7 +41,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   cols && !$rail && ($pane.style.width = `calc(${cols}ch + ${padding * 2}px)`);
   let lRect = $lines.getBoundingClientRect();
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
-  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * h + 'px'));
+  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = y * h + 'px'));
 
   const detachedHead = { y: 0, x: 0};
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -129,7 +129,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @returns {-1|0|1}
      */
     get dir() {
-      return head === tail ? 0 : (tail.y === head.y && tail.x < head.x || tail.y < head.y) ? 1 : -1;
+      return head === tail ? 0 : (tail.y === head.rows && tail.x < head.x || tail.y < head.y) ? 1 : -1;
     },
 
     /**
