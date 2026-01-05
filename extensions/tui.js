@@ -20,7 +20,7 @@ function BuffeeTUI(editor) {
   const Highlights = editor.Highlights;
 
   const { renderHooks } = editor.Mode;
-  const { View, Model, r, $ } = editor;
+  const { View, Model, render, $ } = editor;
   const $textLayer = $.querySelector('.buffee-ztxt');
 
   let enabled = false;
@@ -91,7 +91,7 @@ function BuffeeTUI(editor) {
   function addElement(el) {
     elements.push(el);
     sortElements();
-    if (enabled) r(true);
+    if (enabled) render(true);
     return el.id;
   }
 
@@ -111,7 +111,7 @@ function BuffeeTUI(editor) {
       if (enabled && !wasEnabled && elements.length > 0) {
         currentIndex = 0;
       }
-      r(true);
+      render(true);
     },
 
     get elements() { return elements; },
@@ -167,7 +167,7 @@ function BuffeeTUI(editor) {
         } else if (currentIndex >= elements.length) {
           currentIndex = Math.max(0, elements.length - 1);
         }
-        r(true);
+        render(true);
         return true;
       }
       return false;
@@ -176,7 +176,7 @@ function BuffeeTUI(editor) {
     clear() {
       elements.length = 0;
       currentIndex = 0;
-      r(true);
+      render(true);
     },
 
     currentElement() {
@@ -195,19 +195,19 @@ function BuffeeTUI(editor) {
       } else {
         currentIndex = 0;
       }
-      r(true);
+      render(true);
     },
 
     nextElement() {
       if (elements.length === 0) return;
       currentIndex = (currentIndex + 1) % elements.length;
-      r(true);
+      render(true);
     },
 
     prevElement() {
       if (elements.length === 0) return;
       currentIndex = (currentIndex - 1 + elements.length) % elements.length;
-      r(true);
+      render(true);
     },
 
     activateElement() {
@@ -221,7 +221,7 @@ function BuffeeTUI(editor) {
 
     setHighlight(v) {
       showHighlights = !!v;
-      r(true);
+      render(true);
     },
 
     handleKeyDown(key) {
@@ -241,13 +241,13 @@ function BuffeeTUI(editor) {
           if (el.input.length > 0) {
             el.input = el.input.slice(0, -1);
             el.contents = buildPromptContents(el.width, el.title, el.input);
-            r(true);
+            render(true);
           }
           return true;
         } else if (key.length === 1 && key >= ' ' && key <= '~') {
           el.input += key;
           el.contents = buildPromptContents(el.width, el.title, el.input);
-          r(true);
+          render(true);
           return true;
         }
       } else if (el.type === 'scrollbox') {
@@ -256,14 +256,14 @@ function BuffeeTUI(editor) {
           if (el.scrollOffset < maxOffset) {
             el.scrollOffset++;
             el.contents = buildScrollBoxContents(el.width, el.height, el.title, el.lines, el.scrollOffset);
-            r(true);
+            render(true);
           }
           return true;
         } else if (key === 'ArrowUp' || key === 'k') {
           if (el.scrollOffset > 0) {
             el.scrollOffset--;
             el.contents = buildScrollBoxContents(el.width, el.height, el.title, el.lines, el.scrollOffset);
-            r(true);
+            render(true);
           }
           return true;
         } else if (key === 'Enter') {
