@@ -149,33 +149,33 @@ editor.View.set(99, 25);  // Scroll to line index 99, show 25 lines
 
 ---
 
-## Select (`editor.Select`)
+## Sel (`editor.Sel`)
 
 ```javascript
 // Cursor position
-editor.Select.ct({ y: 0, x: 5 });
-editor.Select.isSelect;  // false if cursor, true if range
-editor.Select.bounds(1);    // [start, end] in document order
-editor.Select.bounds();     // [head, tail] - mutable position objects
+editor.Sel.ct({ y: 0, x: 5 });
+editor.Sel.isSelect;  // false if cursor, true if range
+editor.Sel.bounds(1);    // [start, end] in document order
+editor.Sel.bounds();     // [head, tail] - mutable position objects
 
 // Selected text
-editor.Select._;  // Array of selected lines
+editor.Sel._;  // Array of selected lines
 
 // Movement
-editor.Select.mvY(1);   // Down
-editor.Select.mvY(-1);  // Up
-editor.Select.mvX(1);   // Right
-editor.Select.mvX(-1);  // Left
-editor.Select.mvW(1);   // Forward word
-editor.Select.mvW(-1);  // Backward word
-editor.Select.mvE(true);  // End of line
-editor.Select.mvE(false); // Start of line (smart home)
+editor.Sel.mvY(1);   // Down
+editor.Sel.mvY(-1);  // Up
+editor.Sel.mvX(1);   // Right
+editor.Sel.mvX(-1);  // Left
+editor.Sel.mvW(1);   // Forward word
+editor.Sel.mvW(-1);  // Backward word
+editor.Sel.mvE(true);  // End of line
+editor.Sel.mvE(false); // Start of line (smart home)
 
 // Editing
-editor.Select.add("text");
-editor.Select.del();
-editor.Select.dent(4);   // Indent by 4 spaces
-editor.Select.dent(-4);  // Unindent by 4 spaces
+editor.Sel.add("text");
+editor.Sel.del();
+editor.Sel.dent(4);   // Indent by 4 spaces
+editor.Sel.dent(-4);  // Unindent by 4 spaces
 ```
 
 ---
@@ -431,7 +431,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 
 ```javascript
 // Public properties
-const { View, Select, Model, Mode, render, $ } = editor;
+const { View, Sel, Model, Mode, render, $ } = editor;
 // Mode.frame - Number of render calls
 // Mode.ch - Line height in pixels (from CSS --buffee-cell)
 // Mode.cw - Character width in pixels (measured from cursor element)
@@ -446,8 +446,8 @@ const { _insert, _delete } = editor;
 // Render hooks via Mode.renderHooks
 const { renderHooks } = editor.Mode;
 
-// Cursor positions via Select.bounds()
-const [head, tail] = editor.Select.bounds();
+// Cursor positions via Sel.bounds()
+const [head, tail] = editor.Sel.bounds();
 ```
 
 ### Render Hooks
