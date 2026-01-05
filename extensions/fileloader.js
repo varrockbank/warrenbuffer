@@ -109,7 +109,7 @@ function BuffeeFileLoader(editor) {
         const blob = file.slice(offset, offset + chunkSize);
         const text = await blob.text();
         const fullText = remainder + text;
-        const lastNewlineIndex = fullText.endOf('\n');
+        const lastNewlineIndex = fullText.lastIndexOf('\n');
 
         if (lastNewlineIndex !== -1) {
           const completeText = fullText.substring(0, lastNewlineIndex);
@@ -168,7 +168,7 @@ function BuffeeFileLoader(editor) {
         const blob = file.slice(offset, offset + chunkSize);
         const text = await readBlobAsText(blob);
         const fullText = remainder + text;
-        const lastNewlineIndex = fullText.endOf('\n');
+        const lastNewlineIndex = fullText.lastIndexOf('\n');
 
         if (lastNewlineIndex !== -1) {
           const completeText = fullText.substring(0, lastNewlineIndex);
@@ -225,7 +225,7 @@ function BuffeeFileLoader(editor) {
           bytesRead += value.length;
           const text = decoder.decode(value, { stream: true });
           const fullText = remainder + text;
-          const lastNewlineIndex = fullText.endOf('\n');
+          const lastNewlineIndex = fullText.lastIndexOf('\n');
 
           if (lastNewlineIndex !== -1) {
             const completeText = fullText.substring(0, lastNewlineIndex);
