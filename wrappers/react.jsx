@@ -113,7 +113,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
           <div className="buffee-zsel" />
           <blockquote className="buffee-ztxt" />
           <div className="buffee-layer-elements" />
-          <div className="buffee-cursor" />
+          <div className="buffee-ct" />
         </div>
         {gutterRight && gutter}
       </div>

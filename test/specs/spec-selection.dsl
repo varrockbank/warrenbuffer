@@ -405,15 +405,15 @@ EXPECT selection at 0,0-1,1
 # Selection rendering
 
 ## should show cursor on empty line
-### Regression: Cursor visible on empty line via .buffee-cursor
-// Empty editor, cursor at 0,0 should render via .buffee-cursor (selection width=0)
-const $cursor = fixture.node.querySelector(".buffee-cursor");
+### Regression: Cursor visible on empty line via .buffee-ct
+// Empty editor, cursor at 0,0 should render via .buffee-ct (selection width=0)
+const $cursor = fixture.node.querySelector(".buffee-ct");
 expect($cursor.style.left).toBe("0ch");
 
 ## should show cursor after typing
-### Regression: Cursor visible after typing text via .buffee-cursor
+### Regression: Cursor visible after typing text via .buffee-ct
 TYPE "Hello"
-const $cursor = fixture.node.querySelector(".buffee-cursor");
+const $cursor = fixture.node.querySelector(".buffee-ct");
 expect($cursor.style.left).toBe("5ch");
 
 ## should not show phantom newline when no newline exists

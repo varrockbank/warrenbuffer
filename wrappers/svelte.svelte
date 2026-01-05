@@ -137,7 +137,7 @@
       <div class="buffee-zsel"></div>
       <blockquote class="buffee-ztxt"></blockquote>
       <div class="buffee-layer-elements"></div>
-      <div class="buffee-cursor"></div>
+      <div class="buffee-ct"></div>
     </div>
     {#if showGutter && gutterRight}
       <div class="buffee-gutter"></div>
