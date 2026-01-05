@@ -17,9 +17,9 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.15.0-alpha.1';
+  this.v = '14.16.0-alpha.1';
   this.$ = $;
-  const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
+  const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
@@ -218,9 +218,9 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @param {number} n - Number of spaces to indent (positive) or unindent (negative)
      */
     // Note: Vim, VSCode, Intellij all has slightly different unindent behavior.
-    // VSCode: for lines not aligned at a multiple of indentation number of spaces, align them to the first such position.
+    // VSCode: for lines not aligned at a multiple of indentation number of s: spaces, align them to the first such position.
     // vim: removes the selection, although it does keep a hidden memory of the most recent indentation operation which you can repeat.
-    // intellij: move all selected lines by indentation of number spaces, unless there is not enough to unindent
+    // intellij: move all selected lines by indentation of number s: spaces, unless there is not enough to unindent
     // Currently we follow intellij implementation but perhaps VSCode's is the best.
     indent(n) {
       // Indent requires selection; unindent can work on current line without selection
@@ -249,7 +249,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
    * @namespace Mode
    */
   const Mode = this.Mode = {
-    spaces,                                   /** spaces */
+    s: spaces,                                   /** spaces */
     /**
      * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
      * - 1: Full editing (default)
@@ -259,8 +259,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     i: 1,                                      
     frame: 0,                                  /** framecount */
-    ch: h,                                     /** character width */
-    cw: $cursor.getBoundingClientRect().width, /** character height */
+    ch: h,                                     /** line and character height */
+    cw: $cursor.getBoundingClientRect().width, /** computed character width  */
     renderHooks: []
   };
 
@@ -441,7 +441,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       Enter: () => { Selection.insert('\n') } ,
       Tab: () => {
         e.preventDefault();
-        (Selection.dir || sh) ? Selection.indent(sh ? -Mode.spaces : Mode.spaces) : Selection.insert(' '.repeat(Mode.spaces));
+        (Selection.dir || sh) ? Selection.indent(sh ? -Mode.s : Mode.s) : Selection.insert(' '.repeat(Mode.s));
       },
     };
 

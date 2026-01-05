@@ -92,14 +92,14 @@ const editor = new Buffee(document.getElementById('editor'), {
 
 ---
 
-## Spaces (`editor.Mode.spaces`)
+## Spaces (`editor.Mode.s`)
 
 Controls tab width and indentation. Soft tabs are enabled by default - tab characters are replaced with spaces.
 
 ```javascript
-editor.Mode.spaces = 4;  // Tab key inserts 4 spaces, \t chars become 4 spaces (default)
-editor.Mode.spaces = 2;  // Use 2 spaces instead
-editor.Mode.spaces = 0;  // Hard tabs (not recommended - cursor positioning may break)
+editor.Mode.s = 4;  // Tab key inserts 4 spaces, \t chars become 4 spaces (default)
+editor.Mode.s = 2;  // Use 2 spaces instead
+editor.Mode.s = 0;  // Hard tabs (not recommended - cursor positioning may break)
 ```
 
 ---
