@@ -91,7 +91,7 @@ const customNode = document.createElement("div");
 customNode.className = "buffee no-select";
 customNode.innerHTML = fixture.node.innerHTML;
 document.body.appendChild(customNode);
-const customEditor = new Buffee(customNode, { spaces: 7 });
+const customEditor = new Buffee(customNode, { s: 7 });
 expect(customEditor.Mode.s).toBe(7);
 customNode.remove();
 

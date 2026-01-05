@@ -15,7 +15,7 @@ function expect(actual) {
         });
       },
       toHaveCursorAt(row, col) {
-        const [firstEdge, secondEdge] = actual.editor.Selection.bounds(1);
+        const [firstEdge, secondEdge] = actual.editor.Sel.bounds(1);
         const isSelectionByReference = firstEdge !== secondEdge;
 
         // Check consistency between reference check and dir property
@@ -35,7 +35,7 @@ function expect(actual) {
         }
       },
       toHaveSelectionAt(startRow, startCol, endRow, endCol) {
-        const [firstEdge, secondEdge] = actual.editor.Selection.bounds(1);
+        const [firstEdge, secondEdge] = actual.editor.Sel.bounds(1);
         const isSelectionByReference = firstEdge !== secondEdge;
 
         // Check consistency between reference check and dir property
