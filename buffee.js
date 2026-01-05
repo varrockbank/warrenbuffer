@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.6.0-alpha.1';
+  this.v = '14.7.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -258,7 +258,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @type {-1|0|1}
      */
     interactive: 1,
-    frameCount: 0,
+    frame: 0,
     cellHeight,
     cellWidth: $cursor.getBoundingClientRect().width,
     renderHooks: []
@@ -370,7 +370,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
    * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
   const render = this.render = (delta = 0) => {
-    Mode.frameCount++;
+    Mode.frame++;
 
     // Update contents of line containers (reset to clean state)
     for (let i = 0; i < View.displayLines; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
