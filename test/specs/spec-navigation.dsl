@@ -301,6 +301,16 @@ EXPECT cursor at 0,9
 right with alt
 EXPECT cursor at 0,9
 
+## should reset maxCol after Enter
+### Up after Enter goes to column 0, not previous column
+TYPE "Hello"
+EXPECT cursor at 0,5
+enter
+EXPECT cursor at 1,0
+up
+// maxCol was reset to 0 by Enter, so cursor goes to col 0
+EXPECT cursor at 0,0
+
 ## should not scroll viewport negative when pressing up at first line
 ### Regression: Up at first line of file does not scroll viewport negative
 // Empty editor, cursor at 0,0
