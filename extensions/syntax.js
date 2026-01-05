@@ -132,7 +132,7 @@ function BuffeeSyntax(editor) {
       for (const rule of stateRules.rules) {
         // Create regex that matches at current position
         const regex = new RegExp(rule.pattern.source, 'y');
-        regex.end = pos;
+        regex.lastIndex = pos;
         const match = regex.exec(text);
 
         if (match) {
