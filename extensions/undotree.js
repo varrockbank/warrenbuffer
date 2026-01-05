@@ -20,7 +20,7 @@
  * editor.UndoTree.branches();       // Get available branches at current node
  */
 function BuffeeUndoTree(editor) {
-  const { Select, Model } = editor;
+  const { Sel, Model } = editor;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
 
@@ -59,9 +59,9 @@ function BuffeeUndoTree(editor) {
     const isSelect = pos.headRow !== pos.tailRow || pos.headCol !== pos.tailCol;
 
     if (isSelect) {
-      Select.make();
+      Sel.make();
     } else {
-      Select.ct();
+      Sel.ct();
     }
 
     const [head, tail] = editor.Sel.bounds();
