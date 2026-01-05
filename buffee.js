@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.4.0-alpha.1';
+  this.v = '14.5.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -124,7 +124,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     },
 
     /** Begins a new selection by detaching head from tail allowing independent movement. */
-    makeSelection() {
+    select() {
       head     = detachedHead;
       head.row = tail.row;
       head.col = tail.col;
@@ -454,7 +454,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
 
       if(cmd || e.altKey) {
         if(!sh && Selection.dir)      Selection.cursor();
-        else if(sh && !Selection.dir) Selection.makeSelection();
+        else if(sh && !Selection.dir) Selection.select();
         if (arrowCode % 2) cmd ?      Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
@@ -474,7 +474,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           else render();
         }
       } else { // no meta key.
-        if (sh && !Selection.dir) Selection.makeSelection();
+        if (sh && !Selection.dir) Selection.select();
         Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
       }
     } else if (k.length === 1) {
