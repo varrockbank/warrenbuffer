@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.12.0-alpha.1 [2026-01-05]  gz: 2744 / 2.68 KB (-9), br: 2517 / 2.46 KB (-8), min: 6445 / 6.29 KB (-50)
+- refactor: rename Mode.interactive to Mode.i
+
 ** 14.11.0-alpha.1 [2026-01-05]  gz: 2753 / 2.69 KB (-3), br: 2525 / 2.47 KB (-1), min: 6495 / 6.34 KB (-13)
 - refactor: rename render/renderAll to r/R
 

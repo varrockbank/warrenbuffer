@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.11.0-alpha.1';
+  this.v = '14.12.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -257,7 +257,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * - -1: Read-only (no cursor/selection rendering, no navigation) - used by TUI
      * @type {-1|0|1}
      */
-    interactive: 1,
+    i: 1,
     frame: 0,
     ch: h,
     cw: $cursor.getBoundingClientRect().width,
@@ -376,7 +376,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     for (let i = 0; i < View.displayLines; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
 
     let cursorLeft = -1;
-    if(Mode.interactive >= 0) {
+    if(Mode.i >= 0) {
       // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
       const rEnd = Math.min(View.start + View.size, secondEdge.row + 1);
@@ -448,7 +448,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
       e.preventDefault(); // prevents page scroll
-      if (Mode.interactive < 0) return; // read-only mode: no navigation
+      if (Mode.i < 0) return; // read-only mode: no navigation
       // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
       const direction = arrowCode >> 31 | 1;
 
@@ -479,10 +479,10 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       }
     } else if (k.length === 1) {
       if (cmd) metaKeys[k.toLowerCase()]?.();
-      else if (Mode.interactive > 0) {
+      else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
         Selection.insert(k);
       }
-    } else if (special[k] && Mode.interactive >= 1) { special[k](); }
+    } else if (special[k] && Mode.i >= 1) { special[k](); }
   });
 }
