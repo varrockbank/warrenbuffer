@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.25.0-alpha.1 [2026-01-05]  gz: 2660 / 2.60 KB (-7), br: 2451 / 2.39 KB (-6), min: 5906 / 5.77 KB (-21)
+- refactor: rename gutter-digits-initial/padding to gutter-init/pad
+
 ** 14.24.0-alpha.1 [2026-01-05]  gz: 2667 / 2.60 KB (-7), br: 2458 / 2.40 KB (-1), min: 5927 / 5.79 KB (-30)
 - refactor: rename View.displayLines to View.n1
 

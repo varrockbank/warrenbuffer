@@ -17,14 +17,14 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.24.0-alpha.1';
+  this.v = '14.25.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const { min: $min, max: $max } = Math;
 
-  const [h, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
-    ['cell', 'padding', 'gutter-digits-initial', 'gutter-digits-padding']
+  const [h, cssPadding, gutterInit, gutterPad] =
+    ['cell', 'padding', 'gutter-init', 'gutter-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
   const [$e        ,$l     ,$cursor ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
         ['elements','lines','cursor','clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
@@ -359,7 +359,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
     if ($gutter) {
-      const gutterCols = $max(cssGutterDigitsInitial, (View.start + View.n1).toString().length) + cssGutterDigitsPadding;
+      const gutterCols = $max(gutterInit, (View.start + View.n1).toString().length) + gutterPad;
       $gutter.style.width = gutterCols + 'ch';
       if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
     }
