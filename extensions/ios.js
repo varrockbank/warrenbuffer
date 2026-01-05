@@ -99,7 +99,7 @@ function BuffeeIOS(editor) {
     const absRow = View.start + row;
     // Bounds check col to line length
     const lineLength = Model._[absRow].length;
-    Select.ct({ y: absRow, x: Math.min(col, lineLength) });
+    Select.caret({ y: absRow, x: Math.min(col, lineLength) });
     editor.render();
   }
 

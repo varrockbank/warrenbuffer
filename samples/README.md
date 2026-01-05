@@ -9,7 +9,7 @@ Copy-paste patterns for common use cases. See `_template.html` for full boilerpl
   <textarea class="buffee-clip"></textarea>
   <div class="no-select buffee-elements">
     <div class="buffee-rail"></div>
-    <div class="buffee-lines" tabindex="0"><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
+    <div class="buffee-lines" tabindex="0"><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
   </div>
   <div class="buffee-status">
     <div class="buffee-status-left"><span class="buffee-linecount"></span></div>

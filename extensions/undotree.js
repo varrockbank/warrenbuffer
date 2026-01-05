@@ -61,7 +61,7 @@ function BuffeeUndoTree(editor) {
     if (isSelect) {
       Sel.make();
     } else {
-      Sel.ct();
+      Sel.caret();
     }
 
     const [head, tail] = editor.Sel.bounds();

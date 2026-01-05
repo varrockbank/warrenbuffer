@@ -43,7 +43,7 @@ function BuffeeHistory(editor) {
     if (isSelect) {
       editor.Sel.make();
     } else {
-      editor.Sel.ct();
+      editor.Sel.caret();
     }
 
     const [head, tail] = editor.Sel.bounds();
