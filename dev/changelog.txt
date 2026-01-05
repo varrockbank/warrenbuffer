@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.6.0-alpha.1 [2026-01-05]  gz: 2778 / 2.71 KB (-13), br: 2553 / 2.49 KB (-8), min: 6684 / 6.53 KB (-48)
+- refactor: rename Model.lastIndex to Model.end
+
 ** 14.5.0-alpha.1 [2026-01-05]  gz: 2791 / 2.73 KB (-4), br: 2562 / 2.50 KB (+1), min: 6732 / 6.57 KB (-21)
 - refactor: rename Selection.makeSelection to Selection.select
 
