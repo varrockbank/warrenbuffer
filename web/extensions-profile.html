@@ -19,7 +19,7 @@
       font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
     }
     .no-select { user-select: none; }
-    .buffee-clipboard-bridge {
+    .buffee-clip {
       position: fixed; left: 0; top: 1px;
       width: 0; height: 1px; opacity: 0; pointer-events: none;
     }
@@ -204,9 +204,9 @@
     <!-- Hidden test editor -->
     <div id="test-container" style="position: absolute; left: -9999px; visibility: hidden;">
       <div class="buffee no-select" id="test-editor">
-        <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+        <textarea class="buffee-clip" aria-hidden="true"></textarea>
         <div class="no-select buffee-elements" style="display: flex">
-          <div class="buffee-gutter"></div>
+          <div class="buffee-rail"></div>
           <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
         </div>
         <div class="buffee-status" style="display: flex; justify-content: space-between;">
@@ -252,9 +252,9 @@
       const container = document.getElementById('test-container');
       container.innerHTML = `
         <div class="buffee no-select" id="test-editor">
-          <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+          <textarea class="buffee-clip" aria-hidden="true"></textarea>
           <div class="no-select buffee-elements" style="display: flex">
-            <div class="buffee-gutter"></div>
+            <div class="buffee-rail"></div>
             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
           </div>
           <div class="buffee-status" style="display: flex; justify-content: space-between;">

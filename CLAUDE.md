@@ -153,14 +153,14 @@ Templates: `extensions/_template.js`, `samples/_template.html`, `themes/_templat
 |-------|---------|---------|
 | `.buffee` | Container | Root editor element, add theme class here |
 | `.buffee-elements` | Inner wrapper | Contains gutter + lines |
-| `.buffee-gutter` | Gutter | Line numbers |
+| `.buffee-rail` | Gutter | Line numbers |
 | `.buffee-lines` | Text area | Focus target (tabindex=0) |
 | `.buffee-zsel` | Selection layer | Contains selection `<div>`s |
 | `.buffee-ztxt` | `<blockquote>` | Text content layer |
 | `.buffee-layer-elements` | Overlay | TUI/Elementals overlay |
 | `.buffee-ct` | Cursor | Blinking cursor |
 | `.buffee-status` | Status bar | Bottom bar container |
-| `.buffee-clipboard-bridge` | `<textarea>` | Hidden, for clipboard |
+| `.buffee-clip` | `<textarea>` | Hidden, for clipboard |
 
 ## Keybindings Reference
 

@@ -58,7 +58,7 @@ EXPECT cursor at 0,2
 ### Cmd+C should copy selected text to clipboard
 TYPE "Hello"
 left 3 times with shift
-const $cb = fixture.node.querySelector('.buffee-clipboard-bridge');
+const $cb = fixture.node.querySelector('.buffee-clip');
 const dt = new DataTransfer();
 $cb.dispatchEvent(new ClipboardEvent('copy', { clipboardData: dt, bubbles: true }));
 expect(dt.getData('text/plain')).toBe('llo');
@@ -68,7 +68,7 @@ expect(dt.getData('text/plain')).toBe('llo');
 TYPE "Hello"
 left 3 times
 right 2 times with shift
-const $cb = fixture.node.querySelector('.buffee-clipboard-bridge');
+const $cb = fixture.node.querySelector('.buffee-clip');
 const dt = new DataTransfer();
 $cb.dispatchEvent(new ClipboardEvent('copy', { clipboardData: dt, bubbles: true }));
 expect(dt.getData('text/plain')).toBe('llo');

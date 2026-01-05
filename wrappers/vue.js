@@ -107,13 +107,13 @@ const BuffeeEditor = defineComponent({
       ])
     ]) : null;
 
-    const gutter = this.showGutter ? h('div', { class: 'buffee-gutter' }) : null;
+    const gutter = this.showGutter ? h('div', { class: 'buffee-rail' }) : null;
 
     return h('div', {
       ref: 'container',
       class: `buffee ${themeClass}`.trim()
     }, [
-      h('textarea', { class: 'buffee-clipboard-bridge', 'aria-hidden': 'true' }),
+      h('textarea', { class: 'buffee-clip', 'aria-hidden': 'true' }),
       this.statusTop ? statusBar : null,
       h('div', { class: 'no-select buffee-elements' }, [
         !this.gutterRight ? gutter : null,

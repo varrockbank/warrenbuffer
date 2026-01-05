@@ -98,14 +98,14 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     </div>
   );
 
-  const gutter = showGutter && <div className="buffee-gutter" />;
+  const gutter = showGutter && <div className="buffee-rail" />;
 
   return (
     <div
       ref={containerRef}
       className={`buffee ${themeClass} ${className}`.trim()}
     >
-      <textarea className="buffee-clipboard-bridge" aria-hidden="true" />
+      <textarea className="buffee-clip" aria-hidden="true" />
       {statusTop && statusBar}
       <div className="no-select buffee-elements">
         {!gutterRight && gutter}
