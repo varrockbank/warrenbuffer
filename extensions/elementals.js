@@ -2,7 +2,7 @@
  * @fileoverview BuffeeElementals - Layer-based UI elements for Buffee.
  * Unlike tui-legacy which manipulates textContent, Elementals creates
  * actual DOM elements in a dedicated layer above the text.
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**
@@ -14,7 +14,7 @@
  * const editor = BuffeeElementals(Buffee(container, config));
  */
 function BuffeeElementals(editor) {
-  const { renderHooks, lineHeight } = editor.Mode;
+  const { renderHooks, cellHeight: lineHeight } = editor.Mode;
   const { Viewport, render, $parent } = editor;
   const $elementLayer = $parent.querySelector('.buffee-layer-elements');
 
