@@ -180,11 +180,11 @@
 
         // Helper functions for Buffee editor
         function getEditorContent() {
-            return dslEditor ? dslEditor.Model.lines.join('\n') : '';
+            return dslEditor ? dslEditor.Model._.join('\n') : '';
         }
 
         function setEditorContent(text) {
-            if (dslEditor) dslEditor.Model.text = text;
+            if (dslEditor) dslEditor.Model.s = text;
         }
 
         let jsOutputEditor = null;
@@ -258,7 +258,7 @@
 
                 // Display generated JavaScript
                 if (jsOutputEditor) {
-                    jsOutputEditor.Model.text = jsOutput;
+                    jsOutputEditor.Model.s = jsOutput;
                 }
                 const outputEl = document.getElementById('js-output');
                 outputEl.dataset.plainJs = jsOutput; // Store plain JavaScript for eval
@@ -344,7 +344,7 @@
                 lastCompileHadErrors = false;
                 lastCompileErrors = [];
                 if (jsOutputEditor) {
-                    jsOutputEditor.Model.text = `Error: ${error.message}`;
+                    jsOutputEditor.Model.s = `Error: ${error.message}`;
                 }
                 delete outputEl.dataset.plainJs;
                 outputEl.classList.remove('has-errors');
@@ -528,7 +528,7 @@
         async function runAllTests() {
             // Load tests from generated JavaScript
             const outputEl = document.getElementById('js-output');
-            let generatedJS = outputEl.dataset.plainJs || (jsOutputEditor ? jsOutputEditor.Model.lines.join('\n') : '');
+            let generatedJS = outputEl.dataset.plainJs || (jsOutputEditor ? jsOutputEditor.Model._.join('\n') : '');
 
             if (!generatedJS || generatedJS.startsWith('Error:')) {
                 const resultsContainer = document.getElementById('test-results');

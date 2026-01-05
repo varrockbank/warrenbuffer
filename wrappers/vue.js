@@ -8,7 +8,7 @@
  * const editorRef = ref(null);
  *
  * function handleReady(editor) {
- *   editor.Model.text = 'Hello, World!';
+ *   editor.Model.s = 'Hello, World!';
  * }
  * </script>
  *
@@ -74,7 +74,7 @@ const BuffeeEditor = defineComponent({
       editor.value = ed;
 
       if (props.initialText) {
-        editor.value.Model.text = props.initialText;
+        editor.value.Model.s = props.initialText;
       }
 
       emit('ready', editor.value);

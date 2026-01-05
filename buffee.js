@@ -159,7 +159,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
     /** Begins a new selection by detaching head from tail allowing independent movement. */
     make() {
-      head     = detachedHead;
+      head   = detachedHead;
       head.y = tail.y;
       head.x = tail.x;
     },

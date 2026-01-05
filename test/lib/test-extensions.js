@@ -131,7 +131,7 @@ function defineExtensionTests() {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
-                editor.Model.text = 'const x = 42;';
+                editor.Model.s = 'const x = 42;';
 
                 const { tokens } = editor.Syntax.tokenizeLine('const x = 42;', 0);
                 assertTrue(tokens.length > 0, 'Should have tokens');
@@ -160,7 +160,7 @@ function defineExtensionTests() {
             try {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
-                editor.Model.text = '/* start\nmiddle\nend */';
+                editor.Model.s = '/* start\nmiddle\nend */';
 
                 // First line starts comment
                 const result1 = editor.Syntax.tokenizeLine('/* start', 0);
@@ -184,14 +184,14 @@ function defineExtensionTests() {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
-                editor.Model.text = 'line1\nline2\nline3';
+                editor.Model.s = 'line1\nline2\nline3';
 
                 // Force state cache population
                 editor.Syntax.ensureStateCache(2);
                 assertTrue(editor.Syntax.stateCache.length >= 3, 'State cache should be populated');
 
                 // Simulate edit by setting text
-                editor.Model.text = 'changed';
+                editor.Model.s = 'changed';
                 assertEqual(editor.Syntax.stateCache.length, 1, 'State cache should be reset');
             } finally {
                 cleanup();
@@ -229,7 +229,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 const id = editor.Elementals.addButton({
                     row: 1, col: 5, label: 'Test'
                 });
@@ -245,7 +245,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 editor.Elementals.addLabel({ row: 1, col: 5, text: 'Label' });
                 assertEqual(editor.Elementals.elements.length, 1, 'Should have 1 element');
                 assertEqual(editor.Elementals.elements[0].type, 'label', 'Should be label type');
@@ -258,7 +258,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 editor.Elementals.addInput({
                     row: 1, col: 5, width: 20, placeholder: 'Type here'
                 });
@@ -273,7 +273,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.text = '\n\n\n\n\n';
+                editor.Model.s = '\n\n\n\n\n';
                 editor.Elementals.addButton({ row: 1, col: 2, label: 'A' });
                 editor.Elementals.addButton({ row: 2, col: 2, label: 'B' });
                 editor.Elementals.addButton({ row: 3, col: 2, label: 'C' });
@@ -290,7 +290,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 const id = editor.Elementals.addButton({ row: 1, col: 2, label: 'Test' });
                 assertEqual(editor.Elementals.elements.length, 1, 'Should have 1 element');
                 editor.Elementals.removeElement(id);
@@ -304,7 +304,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 editor.Elementals.addButton({ row: 1, col: 2, label: 'A' });
                 editor.Elementals.addButton({ row: 2, col: 2, label: 'B' });
                 assertEqual(editor.Elementals.elements.length, 2, 'Should have 2 elements');
@@ -333,7 +333,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 const id = editor.TUI.addButton({
                     row: 1, col: 2, label: ' OK '
                 });
@@ -348,7 +348,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.text = '\n\n\n\n';
+                editor.Model.s = '\n\n\n\n';
                 const id = editor.TUI.addButton({
                     row: 1, col: 2, label: 'OK', border: true
                 });
@@ -364,7 +364,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.text = '\n\n\n\n';
+                editor.Model.s = '\n\n\n\n';
                 editor.TUI.addButton({ row: 1, col: 2, label: 'A' });
                 editor.TUI.addButton({ row: 2, col: 2, label: 'B' });
                 editor.TUI.enabled = true;
@@ -380,7 +380,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.text = '\n\n\n';
+                editor.Model.s = '\n\n\n';
                 editor.TUI.addButton({ row: 1, col: 2, label: 'Test' });
                 editor.TUI.clear();
                 assertEqual(editor.TUI.elements.length, 0, 'Should have 0 elements after clear');
@@ -411,9 +411,9 @@ function defineExtensionTests() {
             try {
                 BuffeeHistory(editor);
                 editor.Selection.insert('A');
-                assertEqual(editor.Model.lines[0], 'A', 'Should have "A"');
+                assertEqual(editor.Model._[0], 'A', 'Should have "A"');
                 editor.History.undo();
-                assertEqual(editor.Model.lines[0], '', 'Should be empty after undo');
+                assertEqual(editor.Model._[0], '', 'Should be empty after undo');
             } finally {
                 cleanup();
             }
@@ -425,9 +425,9 @@ function defineExtensionTests() {
                 BuffeeHistory(editor);
                 editor.Selection.insert('A');
                 editor.History.undo();
-                assertEqual(editor.Model.lines[0], '', 'Should be empty after undo');
+                assertEqual(editor.Model._[0], '', 'Should be empty after undo');
                 editor.History.redo();
-                assertEqual(editor.Model.lines[0], 'A', 'Should have "A" after redo');
+                assertEqual(editor.Model._[0], 'A', 'Should have "A" after redo');
             } finally {
                 cleanup();
             }
@@ -440,9 +440,9 @@ function defineExtensionTests() {
                 editor.Selection.insert('A');
                 editor.Selection.insert('B');
                 editor.Selection.insert('C');
-                assertEqual(editor.Model.lines[0], 'ABC', 'Should have "ABC"');
+                assertEqual(editor.Model._[0], 'ABC', 'Should have "ABC"');
                 editor.History.undo();
-                assertEqual(editor.Model.lines[0], '', 'Should be empty after single undo (coalesced)');
+                assertEqual(editor.Model._[0], '', 'Should be empty after single undo (coalesced)');
             } finally {
                 cleanup();
             }
@@ -456,9 +456,9 @@ function defineExtensionTests() {
                 // Wait to break coalescing
                 editor.History._lastOpTime = 0;
                 editor.Selection.delete();
-                assertEqual(editor.Model.lines[0], 'A', 'Should have "A" after backspace');
+                assertEqual(editor.Model._[0], 'A', 'Should have "A" after backspace');
                 editor.History.undo();
-                assertEqual(editor.Model.lines[0], 'AB', 'Should have "AB" after undo');
+                assertEqual(editor.Model._[0], 'AB', 'Should have "AB" after undo');
             } finally {
                 cleanup();
             }
@@ -473,11 +473,11 @@ function defineExtensionTests() {
                 editor.Selection.insert('\n');
                 editor.History._lastOpTime = 0;
                 editor.Selection.insert('World');
-                assertEqual(editor.Model.lines.length, 2, 'Should have 2 lines');
+                assertEqual(editor.Model._.length, 2, 'Should have 2 lines');
                 editor.History.undo();
-                assertEqual(editor.Model.lines[1], '', 'Second line should be empty after undo');
+                assertEqual(editor.Model._[1], '', 'Second line should be empty after undo');
                 editor.History.undo();
-                assertEqual(editor.Model.lines.length, 1, 'Should have 1 line after undo newline');
+                assertEqual(editor.Model._.length, 1, 'Should have 1 line after undo newline');
             } finally {
                 cleanup();
             }
@@ -556,11 +556,11 @@ function defineExtensionTests() {
 
                 // Replace selection with "Hi"
                 editor.Selection.insert('Hi');
-                assertEqual(editor.Model.lines[0], 'Hi World', 'Should have replaced "Hello" with "Hi"');
+                assertEqual(editor.Model._[0], 'Hi World', 'Should have replaced "Hello" with "Hi"');
 
                 // Single undo should restore "Hello World"
                 editor.History.undo();
-                assertEqual(editor.Model.lines[0], 'Hello World', 'Single undo should restore original text');
+                assertEqual(editor.Model._[0], 'Hello World', 'Single undo should restore original text');
             } finally {
                 cleanup();
             }
@@ -582,11 +582,11 @@ function defineExtensionTests() {
 
                 // Delete the selection - this should capture correct cursor state
                 editor.Selection.delete();
-                assertEqual(editor.Model.lines[0], 'Hello', 'Should have deleted " World"');
+                assertEqual(editor.Model._[0], 'Hello', 'Should have deleted " World"');
 
                 // Undo should restore both the text AND correct cursor position
                 editor.History.undo();
-                assertEqual(editor.Model.lines[0], 'Hello World', 'Text should be restored');
+                assertEqual(editor.Model._[0], 'Hello World', 'Text should be restored');
                 // Verify cursor is at correct position (start of selection, col 5)
                 assertEqual(editor.Selection.bounds()[0].col, 5, 'Cursor should be restored to selection start');
             } finally {
@@ -617,11 +617,11 @@ function defineExtensionTests() {
             try {
                 BuffeeUndoTree(editor);
                 editor.Selection.insert('A');
-                assertEqual(editor.Model.lines[0], 'A', 'Should have "A"');
+                assertEqual(editor.Model._[0], 'A', 'Should have "A"');
                 editor.UndoTree.undo();
-                assertEqual(editor.Model.lines[0], '', 'Should be empty after undo');
+                assertEqual(editor.Model._[0], '', 'Should be empty after undo');
                 editor.UndoTree.redo();
-                assertEqual(editor.Model.lines[0], 'A', 'Should have "A" after redo');
+                assertEqual(editor.Model._[0], 'A', 'Should have "A" after redo');
             } finally {
                 cleanup();
             }
@@ -659,17 +659,17 @@ function defineExtensionTests() {
                 // Create second branch
                 editor.Selection.insert('B');
                 editor.UndoTree._lastOpTime = 0;
-                assertEqual(editor.Model.lines[0], 'B', 'Should be on B branch');
+                assertEqual(editor.Model._[0], 'B', 'Should be on B branch');
 
                 // Go back and take first branch
                 editor.UndoTree.undo();
                 editor.UndoTree.redo(0); // First branch (A)
-                assertEqual(editor.Model.lines[0], 'A', 'Should be on A branch');
+                assertEqual(editor.Model._[0], 'A', 'Should be on A branch');
 
                 // Go back and take second branch
                 editor.UndoTree.undo();
                 editor.UndoTree.redo(1); // Second branch (B)
-                assertEqual(editor.Model.lines[0], 'B', 'Should be on B branch again');
+                assertEqual(editor.Model._[0], 'B', 'Should be on B branch again');
             } finally {
                 cleanup();
             }
@@ -710,11 +710,11 @@ function defineExtensionTests() {
                 editor.Selection.insert('C');
                 editor.UndoTree._lastOpTime = 0;
 
-                assertEqual(editor.Model.lines[0], 'ABC', 'Should have ABC');
+                assertEqual(editor.Model._[0], 'ABC', 'Should have ABC');
 
                 // Jump directly to node A
                 editor.UndoTree.goToNode(nodeAId);
-                assertEqual(editor.Model.lines[0], 'A', 'Should have just A after jump');
+                assertEqual(editor.Model._[0], 'A', 'Should have just A after jump');
             } finally {
                 cleanup();
             }
@@ -776,7 +776,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHighlights(editor);
-                editor.Model.text = 'Hello World';
+                editor.Model.s = 'Hello World';
 
                 const hl = editor.Highlights.create(0, 6, 5);
                 assertTrue(!!hl, 'Should return highlight element');
@@ -872,14 +872,14 @@ function defineExtensionTests() {
 
     // ===== STATUSLINE TESTS =====
     extRunner.describe('StatusLine', () => {
-        extRunner.it('updates originalLineCount immediately when Model.text is set', () => {
+        extRunner.it('updates originalLineCount immediately when Model.s is set', () => {
             const { editor, container, cleanup } = createTestEditor();
             try {
                 BuffeeStatusLine(editor);
                 const $lineCounter = container.querySelector('.buffee-linecount');
 
                 // Set text with 5 lines
-                editor.Model.text = 'line1\nline2\nline3\nline4\nline5';
+                editor.Model.s = 'line1\nline2\nline3\nline4\nline5';
 
                 // Should immediately show correct originalLineCount (not 0L)
                 assertTrue($lineCounter.textContent.includes('originally: 5L'),

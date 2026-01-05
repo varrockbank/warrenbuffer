@@ -5,12 +5,12 @@ function expect(actual) {
   if (typeof EditorTestHarness !== 'undefined' && actual instanceof EditorTestHarness) {
     return {
       toHaveLines(...expectedLines) {
-        if (actual.editor.Model.lines.length !== expectedLines.length) {
-          throw new Error(`Expected ${expectedLines.length} lines, got ${actual.editor.Model.lines.length}`);
+        if (actual.editor.Model._.length !== expectedLines.length) {
+          throw new Error(`Expected ${expectedLines.length} lines, got ${actual.editor.Model._.length}`);
         }
         expectedLines.forEach((expected, i) => {
-          if (actual.editor.Model.lines[i] !== expected) {
-            throw new Error(`Expected line ${i} to be "${expected}", got "${actual.editor.Model.lines[i]}"`);
+          if (actual.editor.Model._[i] !== expected) {
+            throw new Error(`Expected line ${i} to be "${expected}", got "${actual.editor.Model._[i]}"`);
           }
         });
       },

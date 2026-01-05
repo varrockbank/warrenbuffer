@@ -73,14 +73,14 @@
     // Editor WITHOUT history - undo/redo will be no-ops
     const el1 = document.getElementById('editor-no-history');
     const editorNoHistory = BuffeeStatusLine(new Buffee(el1, { rows: 10 }));
-    editorNoHistory.Model.text = `// No history - Cmd+Z won't work
+    editorNoHistory.Model.s = `// No history - Cmd+Z won't work
 // Try typing and undoing...`;
 
     // Editor WITH history - full undo/redo support
     const el2 = document.getElementById('editor-with-history');
     const editorWithHistory = BuffeeStatusLine(new Buffee(el2, { rows: 10 }));
     BuffeeHistory(editorWithHistory);  // Enable history extension
-    editorWithHistory.Model.text = `// With history - Cmd+Z works!
+    editorWithHistory.Model.s = `// With history - Cmd+Z works!
 // Try typing and undoing...`;
   </script>
 </body>

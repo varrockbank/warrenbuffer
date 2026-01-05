@@ -144,10 +144,10 @@ expect(fixture).toHaveLines('Hello');`
       {
         name: 'JavaScript interweaving: variable declaration',
         input: `TYPE "Test"
-const text = fixture.editor.Model.lines[0];
+const text = fixture.editor.Model._[0];
 expect(text).toBe('Test');`,
         expected: `fixture.type('Test');
-const text = fixture.editor.Model.lines[0];
+const text = fixture.editor.Model._[0];
 expect(text).toBe('Test');`
       },
       {
@@ -167,7 +167,7 @@ expect(end).toEqual({ row: 0, col: 5 });`
         name: 'JavaScript interweaving: with empty lines',
         input: `TYPE "Hello"
 
-const text = fixture.editor.Model.lines[0];
+const text = fixture.editor.Model._[0];
 expect(text).toBe('Hello');
 
 backspace 5 times
@@ -175,7 +175,7 @@ backspace 5 times
 expect(fixture).toHaveLines('');`,
         expected: `fixture.type('Hello');
 
-const text = fixture.editor.Model.lines[0];
+const text = fixture.editor.Model._[0];
 expect(text).toBe('Hello');
 
 fixture.press(Key.Backspace).times(5);
