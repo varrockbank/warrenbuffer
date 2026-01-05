@@ -13,7 +13,7 @@
  * const editor = BuffeeSyntax(Buffee(container, config));
  */
 function BuffeeSyntax(editor) {
-  const { renderHooks } = editor.Mode;
+  const { sub } = editor.Mode;
   const { View, Model, $ } = editor;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
@@ -280,7 +280,7 @@ function BuffeeSyntax(editor) {
   }
 
   // Register render hook
-  renderHooks.push(highlightView);
+  sub.push(highlightView);
 
   // ============================================================================
   // Built-in language definitions

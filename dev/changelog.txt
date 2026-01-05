@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.36.0-alpha.1 [2026-01-05]  gz: 2643 / 2.58 KB (-6), br: 2444 / 2.39 KB (-3), min: 5804 / 5.67 KB (-16)
+- refactor: rename Mode.renderHooks to Mode.sub
+
 ** 14.35.1-alpha.1 [2026-01-05]  gz: 2649 / 2.59 KB (0), br: 2447 / 2.39 KB (-1), min: 5820 / 5.68 KB (0)
 - fix: rename missed R() call to RENDER() in View.set
 - Extensions:
