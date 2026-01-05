@@ -15,11 +15,11 @@ function BuffeeHighlights(editor) {
   const lineHeight = Mode.ch;
 
   // Compute content offset from CSS and gutter
-  const [cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
-    ['--buffee-padding', '--buffee-rail-digits-initial', '--buffee-rail-digits-padding']
+  const [cssPadding, cssRailInit, cssRailPad] =
+    ['--buffee-padding', '--buffee-rail-init', '--buffee-rail-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue(p)));
   const $gutter = $.querySelector('.buffee-rail');
-  const gutterCh = () => $gutter ? parseFloat($gutter.style.width) || cssGutterDigitsInitial + cssGutterDigitsPadding : 0;
+  const gutterCh = () => $gutter ? parseFloat($gutter.style.width) || cssRailInit + cssRailPad : 0;
   const offsetPx = $gutter ? cssPadding * 3 : cssPadding;
 
   // Create fixed layer for highlights (doesn't scroll with content)
