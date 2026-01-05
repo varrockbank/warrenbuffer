@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.0-alpha.1';
+  this.v = '14.36.1-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -184,7 +184,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
         this.ct();
       } else {
-        Model.add(tail.y, tail.x, lines);
+        Model.add(head.y, head.x, lines);
 
         // Update cursor
         if (lines.length > 1) {
@@ -199,15 +199,15 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     /** Deletes the character before cursor or the current selection. */
     del() {
       if (this.dir) this.add('');
-      else if (tail.x > 0) {
+      else if (head.x > 0) {
         // Delete character before cursor
-        Model.del(tail.y, tail.x - 1, tail.y, tail.x);
+        Model.del(head.y, head.x - 1, head.y, head.x);
         head.x--;
         render();
-      } else if (tail.y > 0) {
+      } else if (head.y > 0) {
         // At start of line - delete newline (join with previous line)
-        head.x = Model._[tail.y - 1].length;
-        Model.del(tail.y - 1, head.x, tail.y, 0);
+        head.x = Model._[head.y - 1].length;
+        Model.del(head.y - 1, head.x, head.y, 0);
         if (--head.y < View.start) View.set(head.y);
         else render();
       }
