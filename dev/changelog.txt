@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.20.0-alpha.1 [2026-01-05]  gz: 2700 / 2.64 KB (-15), br: 2483 / 2.42 KB (-21), min: 6226 / 6.08 KB (-19)
+- refactor: inline $clamp as $max(0, $min(...))
+
 ** 14.19.0-alpha.1 [2026-01-05]  gz: 2715 / 2.65 KB (0), br: 2504 / 2.45 KB (+14), min: 6245 / 6.10 KB (-44)
 - refactor: alias Math.min/max to $min/$max
 

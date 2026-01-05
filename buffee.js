@@ -17,12 +17,11 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.19.0-alpha.1';
+  this.v = '14.20.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const { min: $min, max: $max } = Math;
-  const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
   const [h, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['cell', 'padding', 'gutter-digits-initial', 'gutter-digits-padding']
@@ -340,7 +339,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     set(start, size = this.n) {
       const d = size - this.n;
       this.n = size;
-      this.start = $clamp(start, 0, Model.end);
+      this.start = $max(0, $min(start, Model.end));
       R(d);
     },
 
@@ -464,7 +463,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
           // edge.row is already absolute
-          const targetAbsRow = $clamp(edge.row + direction, 0, Model.end);
+          const targetAbsRow = $max(0, $min(edge.row + direction, Model.end));
 
           maxCol = $min(edge.col, Model._[targetAbsRow].length);
           Selection.cursor({ row: targetAbsRow, col: maxCol});
