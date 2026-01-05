@@ -10,7 +10,7 @@
 .buffee-themepack1-[name] .buffee-ct {
   background-color: [cursor];
 }
-.buffee-themepack1-[name] .buffee-gutter,
+.buffee-themepack1-[name] .buffee-rail,
 .buffee-themepack1-[name] .buffee-status {
   background-color: [gutter-bg];
   color: [text];

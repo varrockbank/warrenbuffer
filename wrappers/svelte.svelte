@@ -127,11 +127,11 @@
   bind:this={container}
   class="buffee {themeClass} {className}"
 >
-  <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+  <textarea class="buffee-clip" aria-hidden="true"></textarea>
   {#if showStatus && statusTop}{@render statusBar()}{/if}
   <div class="no-select buffee-elements">
     {#if showGutter && !gutterRight}
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
     {/if}
     <div class="buffee-lines" tabindex="0">
       <div class="buffee-zsel"></div>
@@ -140,7 +140,7 @@
       <div class="buffee-ct"></div>
     </div>
     {#if showGutter && gutterRight}
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
     {/if}
   </div>
   {#if showStatus && !statusTop}{@render statusBar()}{/if}

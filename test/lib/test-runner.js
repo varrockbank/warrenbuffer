@@ -178,9 +178,9 @@ function createEditorNode() {
   const node = document.createElement('div');
   node.className = 'buffee';
   node.innerHTML = `
-    <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+    <textarea class="buffee-clip" aria-hidden="true"></textarea>
     <div class="no-select buffee-elements">
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
     </div>
     <div class="buffee-status">

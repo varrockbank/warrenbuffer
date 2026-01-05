@@ -3,7 +3,7 @@
 ## should not resize gutter when typing from line 9 to line 10
 ### Regression: Gutter stays stable when crossing single to double digit line count
 // Start with empty editor
-const $gutter = fixture.node.querySelector(".buffee-gutter");
+const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
 const initialWidth = gutterWidthPx();
@@ -39,7 +39,7 @@ expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 ### Gutter based on viewport position, not total lines
 // Add 15 lines (more than viewport of 10)
 fixture.editor.Model.text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15";
-const $gutter = fixture.node.querySelector(".buffee-gutter");
+const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
 const initialWidth = gutterWidthPx();
@@ -56,7 +56,7 @@ expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 ### Gutter grows from 2 to 3 digits when line 100 is visible
 // Create 100 lines
 fixture.editor.Model.text = Array(100).fill("x").join("\n");
-const $gutter = fixture.node.querySelector(".buffee-gutter");
+const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
 // View at top shows lines 1-10, gutter = 3ch (2 digits + 1 padding) ~43px

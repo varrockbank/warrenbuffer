@@ -126,7 +126,7 @@
         .buffee { background-color: #282C34; color: #B2B2B2; position: relative; outline: none; font-family: monospace; display: flex; flex-direction: column; }
         .buffee-content { display: flex; flex: 1;  }
         .no-select { user-select: none; }
-        .buffee-clipboard-bridge { position: fixed; left: 0; top: 1px; width: 0; height: 1px; opacity: 0; pointer-events: none; }
+        .buffee-clip { position: fixed; left: 0; top: 1px; width: 0; height: 1px; opacity: 0; pointer-events: none; }
         .buffee .buffee-lines pre::before { content: "\200B"; }
         .buffee .buffee-lines pre { margin: 0;  }
         .buffee .buffee-zsel > div { background-color: #EDAD10; mix-blend-mode: difference; }
@@ -135,7 +135,7 @@
 
         /* DSL editor specific */
         #dsl-editor { border: 1px solid #ccc; background: white; color: #333; width: 100%; }
-        #dsl-editor .buffee-gutter { background: #f4f4f4; color: #666; }
+        #dsl-editor .buffee-rail { background: #f4f4f4; color: #666; }
         #dsl-editor .buffee-lines { flex: 1;  }
 
         /* Walkthrough panel */
@@ -261,9 +261,9 @@
             <!-- Hidden editor container for tests -->
             <div class="editor-container">
                 <div class="buffee no-select">
-                    <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+                    <textarea class="buffee-clip" aria-hidden="true"></textarea>
                     <div class="no-select buffee-elements">
-                        <div class="buffee-gutter"></div>
+                        <div class="buffee-rail"></div>
                         <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
                     </div>
                     <div class="buffee-status" style="display: flex; justify-content: space-between;">
@@ -312,9 +312,9 @@
                 </div>
                 <div class="pane-content">
                     <div class="buffee no-select" id="dsl-editor">
-                        <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+                        <textarea class="buffee-clip" aria-hidden="true"></textarea>
                         <div class="no-select buffee-elements">
-                            <div class="buffee-gutter"></div>
+                            <div class="buffee-rail"></div>
                             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
                         </div>
                         <div class="buffee-status" style="display: none;">
@@ -334,9 +334,9 @@
                 </div>
                 <div class="pane-content">
                     <div class="buffee no-select" id="js-output">
-                        <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+                        <textarea class="buffee-clip" aria-hidden="true"></textarea>
                         <div class="no-select buffee-elements">
-                            <div class="buffee-gutter"></div>
+                            <div class="buffee-rail"></div>
                             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
                         </div>
                     </div>
@@ -433,9 +433,9 @@ expect(3+5).toBe(8);               <span class="g-arr">→</span>  expect(3+5).t
                 </div>
                 <div class="editor-view-container">
                     <div class="buffee" id="walkthrough-editor">
-                        <textarea class="buffee-clipboard-bridge" aria-hidden="true"></textarea>
+                        <textarea class="buffee-clip" aria-hidden="true"></textarea>
                         <div class="no-select buffee-elements">
-                            <div class="buffee-gutter"></div>
+                            <div class="buffee-rail"></div>
                             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
                         </div>
                         <div class="buffee-status" style="display: none;">

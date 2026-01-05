@@ -19,14 +19,14 @@
   <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Gutter and Status Bar</p>
 
   <h1>Gutter and Status Bar</h1>
-  <p>Gutter visibility: include/omit <code>.buffee-gutter</code> element. Status bar: include/omit <code>.buffee-status</code> element.</p>
+  <p>Gutter visibility: include/omit <code>.buffee-rail</code> element. Status bar: include/omit <code>.buffee-status</code> element.</p>
 
   <h2>1. Default (gutter + status bar)</h2>
   <p><code>new Buffee(el)</code></p>
   <div class="buffee buffee-themepack1-boring" id="editor-default">
-    <textarea class="buffee-clipboard-bridge"></textarea>
+    <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-elements">
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
     </div>
     <div class="buffee-status">
@@ -40,20 +40,20 @@
   </div>
 
   <h2>2. No gutter</h2>
-  <p>Omit the <code>.buffee-gutter</code> element from the template:</p>
+  <p>Omit the <code>.buffee-rail</code> element from the template:</p>
   <details>
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
-  &lt;textarea class="buffee-clipboard-bridge"&gt;&lt;/textarea&gt;
+  &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
   &lt;div class="no-select buffee-elements"&gt;
-    <span style="color: #c00; text-decoration: line-through;">&lt;div class="buffee-gutter"&gt;&lt;/div&gt;</span>
+    <span style="color: #c00; text-decoration: line-through;">&lt;div class="buffee-rail"&gt;&lt;/div&gt;</span>
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
   &lt;/div&gt;
   &lt;div class="buffee-status"&gt;...&lt;/div&gt;
 &lt;/div&gt;</pre>
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-no-gutter">
-    <textarea class="buffee-clipboard-bridge"></textarea>
+    <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-elements">
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
     </div>
@@ -72,18 +72,18 @@
   <details>
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
-  &lt;textarea class="buffee-clipboard-bridge"&gt;&lt;/textarea&gt;
+  &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
   &lt;div class="no-select buffee-elements"&gt;
-    &lt;div class="buffee-gutter"&gt;&lt;/div&gt;
+    &lt;div class="buffee-rail"&gt;&lt;/div&gt;
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
   &lt;/div&gt;
   <span style="color: #c00; text-decoration: line-through;">&lt;div class="buffee-status"&gt;...&lt;/div&gt;</span>
 &lt;/div&gt;</pre>
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-no-status">
-    <textarea class="buffee-clipboard-bridge"></textarea>
+    <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-elements">
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
     </div>
   </div>
@@ -93,16 +93,16 @@
   <details>
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
-  &lt;textarea class="buffee-clipboard-bridge"&gt;&lt;/textarea&gt;
+  &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
   <span style="color: #0a0;">&lt;div class="buffee-status"&gt;...&lt;/div&gt;</span>
   &lt;div class="no-select buffee-elements"&gt;
-    &lt;div class="buffee-gutter"&gt;&lt;/div&gt;
+    &lt;div class="buffee-rail"&gt;&lt;/div&gt;
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-status-top">
-    <textarea class="buffee-clipboard-bridge"></textarea>
+    <textarea class="buffee-clip"></textarea>
     <div class="buffee-status">
       <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
       <div class="buffee-status-right">
@@ -112,29 +112,29 @@
       </div>
     </div>
     <div class="no-select buffee-elements">
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
     </div>
   </div>
 
   <h2>6. Gutter on right</h2>
-  <p>Place <code>.buffee-gutter</code> after <code>.buffee-lines</code> in the template:</p>
+  <p>Place <code>.buffee-rail</code> after <code>.buffee-lines</code> in the template:</p>
   <details>
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
-  &lt;textarea class="buffee-clipboard-bridge"&gt;&lt;/textarea&gt;
+  &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
   &lt;div class="no-select buffee-elements"&gt;
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
-    <span style="color: #0a0;">&lt;div class="buffee-gutter"&gt;&lt;/div&gt;</span>
+    <span style="color: #0a0;">&lt;div class="buffee-rail"&gt;&lt;/div&gt;</span>
   &lt;/div&gt;
   &lt;div class="buffee-status"&gt;...&lt;/div&gt;
 &lt;/div&gt;</pre>
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-gutter-right">
-    <textarea class="buffee-clipboard-bridge"></textarea>
+    <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-elements">
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
-      <div class="buffee-gutter"></div>
+      <div class="buffee-rail"></div>
     </div>
     <div class="buffee-status">
       <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
