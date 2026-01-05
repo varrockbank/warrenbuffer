@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 13.15.0-alpha.1 [2026-01-05]  gz: 2813 / 2.75 KB (+27), br: 2572 / 2.51 KB (+22), min: 6823 / 6.66 KB (104)
+- perf: cache getBoundingClientRect, compute cursor position mathematically
+- rename cssCell to cellHeight, add Mode.cellWidth
+
 ** 13.14.11-alpha.1 [2026-01-05]  gz: 2786 / 2.72 KB (+4), br: 2551 / 2.49 KB (+7), min: 6719 / 6.56 KB (1)
 - pass delta as param to render() instead of closure
 
