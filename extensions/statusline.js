@@ -30,8 +30,8 @@ function BuffeeStatusLine(editor) {
   }
 
   // Wrap Model.s setter to calculate byteCount and originalLineCount
-  const originalTextDescriptor = Object.getOwnPropertyDescriptor(Model, 'text');
-  Object.defineProperty(Model, 'text', {
+  const originalTextDescriptor = Object.getOwnPropertyDescriptor(Model, 's');
+  Object.defineProperty(Model, 's', {
     set(text) {
       byteCount = new TextEncoder().encode(text).length;
       originalLineCount = text.split('\n').length;
@@ -41,16 +41,16 @@ function BuffeeStatusLine(editor) {
   });
 
   function updateStatusLine() {
-    const [{ row, col }] = editor.Sel.bounds();
+    const [{ y, x }] = editor.Sel.bounds();
     const lineCount = Model.end + 1;
 
-    if ($headRow && row !== lastRow) {
-      $headRow.textContent = row + 1;
-      lastRow = row;
+    if ($headRow && y !== lastRow) {
+      $headRow.textContent = y + 1;
+      lastRow = y;
     }
-    if ($headCol && col !== lastCol) {
-      $headCol.textContent = col + 1;
-      lastCol = col;
+    if ($headCol && x !== lastCol) {
+      $headCol.textContent = x + 1;
+      lastCol = x;
     }
     if ($lineCounter && (lineCount !== lastLineCount || originalLineCount !== lastOriginalLineCount)) {
       $lineCounter.textContent = `${lineCount.toLocaleString()}L, originally: ${originalLineCount}L ${byteCount} bytes`;
