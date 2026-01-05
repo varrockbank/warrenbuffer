@@ -29,7 +29,7 @@ function BuffeeStatusLine(editor) {
     originalLineCount = Model._.length;
   }
 
-  // Wrap Model.text setter to calculate byteCount and originalLineCount
+  // Wrap Model.s setter to calculate byteCount and originalLineCount
   const originalTextDescriptor = Object.getOwnPropertyDescriptor(Model, 'text');
   Object.defineProperty(Model, 'text', {
     set(text) {

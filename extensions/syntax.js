@@ -47,7 +47,7 @@ function BuffeeSyntax(editor) {
     }
   };
 
-  // Hook Model.text setter for bulk content changes
+  // Hook Model.s setter for bulk content changes
   const textDescriptor = Object.getOwnPropertyDescriptor(Model, 'text') ||
     { set: function(v) { this._text = v; }, get: function() { return this._text; } };
   const originalTextSetter = textDescriptor.set;

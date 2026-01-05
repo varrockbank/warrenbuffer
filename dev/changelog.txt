@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.13.0-alpha.1 [2026-01-05]  gz: 2743 / 2.68 KB (-1), br: 2516 / 2.46 KB (0), min: 6442 / 6.29 KB (-3)
+- refactor: rename Model.text to Model.s
+
 ** 14.12.0-alpha.1 [2026-01-05]  gz: 2744 / 2.68 KB (-9), br: 2517 / 2.46 KB (-8), min: 6445 / 6.29 KB (-50)
 - refactor: rename Mode.interactive to Mode.i
 

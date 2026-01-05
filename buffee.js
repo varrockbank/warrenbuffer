@@ -14,10 +14,10 @@
  * @param {number} [config.spaces=4] - Spaces per tab/indentation
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { rows: 25 });
- * editor.Model.text = 'Hello, World!';
+ * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.12.0-alpha.1';
+  this.v = '14.13.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -282,7 +282,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Sets the document content from a string. Splits on newlines.
      * @param {string} text - The full document text
      */
-    set text(text) {
+    set s(text) {
       this._ = expandTabs(text).split('\n');
       r();
     },

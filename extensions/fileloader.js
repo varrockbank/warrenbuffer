@@ -78,7 +78,7 @@ function BuffeeFileLoader(editor) {
     async naiveLoad(file) {
       const t0 = performance.now();
       const text = await file.text();
-      Model.text = text;
+      Model.s = text;
       const t1 = performance.now();
       return {
         lines: Model._.length,
