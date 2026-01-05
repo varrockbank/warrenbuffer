@@ -83,3 +83,22 @@ left 7 times with shift
 // Fix: uses head.col (2 < 4), should jump to col 0
 left with meta, shift
 EXPECT selection at 0,0-0,9
+
+## should unindent current line with Shift+Tab without selection (regression 13.15.0)
+### Shift+Tab without selection should unindent, not insert spaces
+fixture.editor.Mode.spaces = 4;
+TYPE "    Hello"
+// Cursor at end, no selection
+tab with shift
+// Bug: inserted 4 spaces because Selection.dir was checked before shift key
+// Fix: (Selection.dir || sh) checks shift key too
+expect(fixture.editor.Model.lines[0]).toBe("Hello");
+EXPECT cursor at 0,5
+
+## should partially unindent with Shift+Tab without selection (regression 13.15.0)
+### Shift+Tab with 5 leading spaces should leave 1 space
+fixture.editor.Mode.spaces = 4;
+TYPE "     Hello"
+tab with shift
+expect(fixture.editor.Model.lines[0]).toBe(" Hello");
+EXPECT cursor at 0,6
