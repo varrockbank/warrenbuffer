@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.34.0-alpha.1';
+  this.v = '14.35.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -323,7 +323,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     /** @type {number} Number of visible lines */
     n: 0,
     /** @type {number} Number of DOM line containers. +1 if auto-fit (no rows specified) */
-    get n1() { return this.n + !rows; },
+    get N() { return this.n + !rows; },
 
     /**
      * Index of the last visible line.
@@ -359,7 +359,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
     if ($rail) {
-      const railCols = $max(railInit, (View.start + View.n1).toString().length) + railPad;
+      const railCols = $max(railInit, (View.start + View.N).toString().length) + railPad;
       $rail.style.width = railCols + 'ch';
       if (cols) $e.style.width = `calc(${railCols + cols}ch + ${cssPadding * 4}px)`;
     }
@@ -373,7 +373,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     Mode.frame++;
 
     // Update contents of line containers (reset to clean state)
-    for (let i = 0; i < View.n1; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
+    for (let i = 0; i < View.N; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
