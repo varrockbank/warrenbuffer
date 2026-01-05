@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeSyntax - Regex-based syntax highlighting for Buffee.
  * Uses incremental tokenization with state caching for efficient updates.
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**

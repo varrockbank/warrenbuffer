@@ -2,6 +2,13 @@
 
 ** 14.35.1-alpha.1 [2026-01-05]  gz: 2649 / 2.59 KB (0), br: 2447 / 2.39 KB (-1), min: 5820 / 5.68 KB (0)
 - fix: rename missed R() call to RENDER() in View.set
+- Extensions:
+  - feat: StatusLine 1.2.0 - add showSelection option with .buffee-sel-sep separator
+  - fix: UndoTree - use Sel instead of Select, store y/x instead of row/col
+  - fix: History - store y/x instead of row/col in operations
+  - fix: Highlights - use rail-init/rail-pad CSS vars instead of old names
+  - fix: Syntax - use Model.s instead of Model.text, fix regex.lastIndex
+  - fix: FileLoader - use lastIndexOf instead of endOf
 
 ** 14.35.0-alpha.1 [2026-01-05]  gz: 2649 / 2.59 KB (+2), br: 2448 / 2.39 KB (+2), min: 5820 / 5.68 KB (-3)
 - refactor: rename View.n1 to View.N

@@ -2,8 +2,8 @@
 ==============================
 
 Starting point (13.x): 6818 min / 2820 gz / 2577 br
-Final (14.31):         5833 min / 2643 gz / 2437 br
-Total saved:           -985 min / -177 gz / -140 br
+Final (14.35.1):       5820 min / 2649 gz / 2447 br
+Total saved:           -998 min / -171 gz / -130 br
 
 Version | Change                                      | Min Δ | GZ Δ | BR Δ
 --------|---------------------------------------------|------:|-----:|-----:
@@ -39,3 +39,8 @@ Version | Change                                      | Min Δ | GZ Δ | BR Δ
 14.29.0 | gutter → rail                               |    -6 |   -2 |   -1
 14.30.0 | x/y/moveWord/moveLineEdge → mvX/mvY/mvW/mvE |   -18 |   -1 |   -5
 14.31.0 | indent → dent                               |    -4 |   -3 |   +3
+14.32.0 | r/R → render/RENDER                         |   +10 |   +7 |    0
+14.33.0 | Select → Sel                                |    -3 |    0 |    0
+14.34.0 | layer-text/layer-selection → ztxt/zsel      |   -17 |   -4 |   +3
+14.35.0 | View.n1 → View.N                            |    -3 |   +2 |   +2
+14.35.1 | fix: R() → RENDER() in View.set             |    0 |    0 |   -1

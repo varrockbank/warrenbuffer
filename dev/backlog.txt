@@ -1,7 +1,2 @@
 Website
 16. everywhere in web page should use buffee 
-
-Status Line
-22. show selection coordinates, not just cursor 
-
-Show a loading indicator 
