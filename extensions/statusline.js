@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 /**
@@ -40,7 +40,7 @@ function BuffeeStatusLine(editor) {
     configurable: true
   });
 
-  renderHooks.push(() => {
+  function updateStatusLine() {
     const [{ row, col }] = editor.Selection.bounds();
     const lineCount = Model.lastIndex + 1;
 
@@ -61,7 +61,10 @@ function BuffeeStatusLine(editor) {
       $spaces.textContent = `Spaces: ${Mode.spaces}`;
       lastSpaces = Mode.spaces;
     }
-  });
+  }
+
+  renderHooks.push(updateStatusLine);
+  updateStatusLine(); // Initial population
 
   return editor;
 }
