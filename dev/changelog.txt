@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.36.7-alpha.1 [2026-01-05]  gz: 2623 / 2.56 KB (-2), br: 2418 / 2.36 KB (+2), min: 5853 / 5.72 KB (5)
+- refactor: rename h to ch, reorder declarations
+
 ** 14.36.6-alpha.1 [2026-01-05]  gz: 2625 / 2.56 KB (-8), br: 2416 / 2.36 KB (-8), min: 5848 / 5.71 KB (-6)
 - refactor: rename config.rows/cols to config.y/x
 
