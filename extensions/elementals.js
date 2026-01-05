@@ -51,7 +51,7 @@ function BuffeeElementals(editor) {
    */
   function updatePositions() {
     for (const el of elements) {
-      const viewportRow = el.row - View.start;
+      const viewportRow = el.y - View.start;
       if (viewportRow >= 0 && viewportRow < View.n) {
         el.$container.style.top = viewportRow * lineHeight + 'px';
         el.$container.style.display = '';
@@ -109,8 +109,8 @@ function BuffeeElementals(editor) {
     /**
      * Adds a button element.
      * @param {Object} opts - Button options
-     * @param {number} opts.row - Absolute row position
-     * @param {number} opts.col - Column position
+     * @param {number} opts.y - Absolute row position
+     * @param {number} opts.x - Column position
      * @param {string} opts.label - Button text
      * @param {function} [opts.onActivate] - Callback when activated
      * @returns {number} Element ID
@@ -152,8 +152,8 @@ function BuffeeElementals(editor) {
     /**
      * Adds a label element (non-interactive text).
      * @param {Object} opts - Label options
-     * @param {number} opts.row - Absolute row position
-     * @param {number} opts.col - Column position
+     * @param {number} opts.y - Absolute row position
+     * @param {number} opts.x - Column position
      * @param {string} opts.text - Label text
      * @returns {number} Element ID
      */
@@ -187,8 +187,8 @@ function BuffeeElementals(editor) {
     /**
      * Adds an input field element.
      * @param {Object} opts - Input options
-     * @param {number} opts.row - Absolute row position
-     * @param {number} opts.col - Column position
+     * @param {number} opts.y - Absolute row position
+     * @param {number} opts.x - Column position
      * @param {number} opts.width - Width in characters
      * @param {string} [opts.placeholder] - Placeholder text
      * @param {function} [opts.onSubmit] - Callback when Enter is pressed
@@ -271,7 +271,7 @@ function BuffeeElementals(editor) {
     getFocusableElements() {
       return elements
         .filter(el => el.focusable !== false && el.type !== 'label')
-        .sort((a, b) => a.row - b.row || a.col - b.col);
+        .sort((a, b) => a.y - b.y || a.x - b.x);
     },
 
     /**

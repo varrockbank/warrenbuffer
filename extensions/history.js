@@ -31,8 +31,8 @@ function BuffeeHistory(editor) {
   function captureCursor() {
     const [head, tail] = editor.Selection.bounds();
     return {
-      headRow: head.row, headCol: head.col,
-      tailRow: tail.row, tailCol: tail.col
+      headRow: head.y, headCol: head.x,
+      tailRow: tail.y, tailCol: tail.x
     };
   }
 
@@ -47,10 +47,10 @@ function BuffeeHistory(editor) {
     }
 
     const [head, tail] = editor.Selection.bounds();
-    head.row = cursor.headRow;
-    head.col = cursor.headCol;
-    tail.row = cursor.tailRow;
-    tail.col = cursor.tailCol;
+    head.y = cursor.headRow;
+    head.x = cursor.headCol;
+    tail.y = cursor.tailRow;
+    tail.x = cursor.tailCol;
   }
 
   /** Check if we can coalesce with the last operation */
@@ -63,9 +63,9 @@ function BuffeeHistory(editor) {
     if (lines.length > 1 || last.lines.length > 1) return false;
 
     if (type === 'insert') {
-      return last.row === row && last.col + last.lines[0].length === col;
+      return last.y === row && last.x + last.lines[0].length === col;
     } else {
-      return last.row === row && last.endRow === row && col + lines[0].length === last.col;
+      return last.y === row && last.endRow === row && col + lines[0].length === last.x;
     }
   }
 
@@ -81,7 +81,7 @@ function BuffeeHistory(editor) {
     const endCol = lines.length === 1 ? col + lines[0].length : lines[lines.length - 1].length;
 
     // Check if this insert is part of a combined operation (selection replacement)
-    if (_combinedPending && _combinedPending.row === row && _combinedPending.col === col) {
+    if (_combinedPending && _combinedPending.y === row && _combinedPending.x === col) {
       const last = undoStack[undoStack.length - 1];
       last.insertLines = lines;
       last.insertEndRow = endRow;
@@ -91,7 +91,7 @@ function BuffeeHistory(editor) {
     } else if (canCoalesce('insert', row, col, lines)) {
       const last = undoStack[undoStack.length - 1];
       last.lines[0] += lines[0];
-      last.endCol = last.col + last.lines[0].length;
+      last.endCol = last.x + last.lines[0].length;
     } else {
       _combinedPending = null;
       undoStack.push({ type: 'insert', row, col, lines, endRow, endCol, cursorBefore });
@@ -126,7 +126,7 @@ function BuffeeHistory(editor) {
     if (canCoalesce('delete', row, col, lines)) {
       const last = undoStack[undoStack.length - 1];
       last.lines = [lines[0] + last.lines[0]];
-      last.col = col;
+      last.x = col;
       _combinedPending = null;
     } else {
       undoStack.push({ type: 'delete', row, col, endRow, endCol, lines, cursorBefore });
@@ -145,12 +145,12 @@ function BuffeeHistory(editor) {
 
     if (op.combined) {
       // Combined operation: undo insert first, then restore deleted text
-      del(op.row, op.col, op.insertEndRow, op.insertEndCol);
-      add(op.row, op.col, op.lines);
+      del(op.y, op.x, op.insertEndRow, op.insertEndCol);
+      add(op.y, op.x, op.lines);
     } else if (op.type === 'insert') {
-      del(op.row, op.col, op.endRow, op.endCol);
+      del(op.y, op.x, op.endRow, op.endCol);
     } else {
-      add(op.row, op.col, op.lines);
+      add(op.y, op.x, op.lines);
     }
     return { ...op, cursorAfter: cursorBefore };
   }
@@ -158,14 +158,14 @@ function BuffeeHistory(editor) {
   function redoOp(op) {
     if (op.combined) {
       // Combined operation: delete original text, then insert replacement
-      const endRow = op.row + op.lines.length - 1;
-      const endCol = op.lines.length === 1 ? op.col + op.lines[0].length : op.lines[op.lines.length - 1].length;
-      del(op.row, op.col, endRow, endCol);
-      add(op.row, op.col, op.insertLines);
+      const endRow = op.y + op.lines.length - 1;
+      const endCol = op.lines.length === 1 ? op.x + op.lines[0].length : op.lines[op.lines.length - 1].length;
+      del(op.y, op.x, endRow, endCol);
+      add(op.y, op.x, op.insertLines);
     } else if (op.type === 'insert') {
-      add(op.row, op.col, op.lines);
+      add(op.y, op.x, op.lines);
     } else {
-      del(op.row, op.col, op.endRow, op.endCol);
+      del(op.y, op.x, op.endRow, op.endCol);
     }
     undoStack.push(op);
   }

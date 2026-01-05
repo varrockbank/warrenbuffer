@@ -47,8 +47,8 @@ function BuffeeUndoTree(editor) {
   function captureCursor() {
     const [head, tail] = editor.Selection.bounds();
     return {
-      headRow: head.row, headCol: head.col,
-      tailRow: tail.row, tailCol: tail.col
+      headRow: head.y, headCol: head.x,
+      tailRow: tail.y, tailCol: tail.x
     };
   }
 
@@ -65,10 +65,10 @@ function BuffeeUndoTree(editor) {
     }
 
     const [head, tail] = editor.Selection.bounds();
-    head.row = pos.headRow;
-    head.col = pos.headCol;
-    tail.row = pos.tailRow;
-    tail.col = pos.tailCol;
+    head.y = pos.headRow;
+    head.x = pos.headCol;
+    tail.y = pos.tailRow;
+    tail.x = pos.tailCol;
   }
 
   // Check if operation can be coalesced with current node
@@ -88,7 +88,7 @@ function BuffeeUndoTree(editor) {
     if (canCoalesce('insert', lines)) {
       const op = current.operation;
       op.lines[0] += lines[0];
-      op.endCol = op.col + op.lines[0].length;
+      op.endCol = op.x + op.lines[0].length;
       current.cursorAfter = captureCursor();
       _lastOpTime = now;
       return;
@@ -118,7 +118,7 @@ function BuffeeUndoTree(editor) {
     if (canCoalesce('delete', lines)) {
       const op = current.operation;
       op.lines = [lines[0] + op.lines[0]];
-      op.col = col;
+      op.x = col;
       current.cursorAfter = captureCursor();
       _lastOpTime = now;
       return;
@@ -185,9 +185,9 @@ function BuffeeUndoTree(editor) {
 
     // Apply inverse operation
     if (op.type === 'insert') {
-      del(op.row, op.col, op.endRow, op.endCol);
+      del(op.y, op.x, op.endRow, op.endCol);
     } else {
-      add(op.row, op.col, op.lines);
+      add(op.y, op.x, op.lines);
     }
 
     restoreCursor(current.cursorBefore);
@@ -216,9 +216,9 @@ function BuffeeUndoTree(editor) {
 
     // Apply operation
     if (op.type === 'insert') {
-      add(op.row, op.col, op.lines);
+      add(op.y, op.x, op.lines);
     } else {
-      del(op.row, op.col, op.endRow, op.endCol);
+      del(op.y, op.x, op.endRow, op.endCol);
     }
 
     restoreCursor(child.cursorAfter);

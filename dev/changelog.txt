@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.21.0-alpha.1 [2026-01-05]  gz: 2678 / 2.62 KB (-22), br: 2461 / 2.40 KB (-22), min: 5974 / 5.83 KB (-252)
+- refactor: rename Position.row/col to y/x
+
 ** 14.20.0-alpha.1 [2026-01-05]  gz: 2700 / 2.64 KB (-15), br: 2483 / 2.42 KB (-21), min: 6226 / 6.08 KB (-19)
 - refactor: inline $clamp as $max(0, $min(...))
 
