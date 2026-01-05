@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.22.0-alpha.1 [2026-01-05]  gz: 2675 / 2.61 KB (-3), br: 2459 / 2.40 KB (-2), min: 5969 / 5.83 KB (-5)
+- refactor: rename config.spaces to config.s
+
 ** 14.21.0-alpha.1 [2026-01-05]  gz: 2678 / 2.62 KB (-22), br: 2461 / 2.40 KB (-22), min: 5974 / 5.83 KB (-252)
 - refactor: rename Position.row/col to y/x
 
