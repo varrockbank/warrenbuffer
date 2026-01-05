@@ -1,16 +1,18 @@
 /**
  * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
- * @version 1.0.2
+ * @version 1.1.0
  */
 
 /**
  * Decorator: adds status line updates to a Buffee instance.
  *
  * @param {Buffee} editor - The Buffee instance to extend
+ * @param {Object} [options] - Configuration options
+ * @param {boolean} [options.showSelection=false] - Show selection range instead of just cursor
  * @returns {Buffee} The extended editor instance
  */
-function BuffeeStatusLine(editor) {
+function BuffeeStatusLine(editor, { showSelection = false } = {}) {
   const { renderHooks } = editor.Mode;
   const { Model, Mode, $ } = editor;
 
@@ -19,7 +21,8 @@ function BuffeeStatusLine(editor) {
   const $lineCounter = $.querySelector('.buffee-linecount');
   const $spaces = $.querySelector('.buffee-spaces');
 
-  let lastRow = -1, lastCol = -1, lastLineCount = -1, lastSpaces = -1, lastOriginalLineCount = -1;
+  let lastRow = -1, lastCol = -1, lastEndRow = -1, lastEndCol = -1;
+  let lastLineCount = -1, lastSpaces = -1, lastOriginalLineCount = -1;
   let byteCount = 0, originalLineCount = 0;
 
   // Capture initial state if text was already set before this extension
@@ -41,17 +44,38 @@ function BuffeeStatusLine(editor) {
   });
 
   function updateStatusLine() {
-    const [{ y, x }] = editor.Sel.bounds();
+    const [start, end] = editor.Sel.bounds(1);
+    const hasSelection = editor.Sel.dir !== 0;
     const lineCount = Model.end + 1;
 
-    if ($headRow && y !== lastRow) {
-      $headRow.textContent = y + 1;
-      lastRow = y;
+    if (showSelection && hasSelection) {
+      // Show selection range: "1:5 - 3:10"
+      const changed = start.y !== lastRow || start.x !== lastCol ||
+                      end.y !== lastEndRow || end.x !== lastEndCol;
+      if ($headRow && changed) {
+        $headRow.textContent = `${start.y + 1}:${start.x + 1}`;
+        lastRow = start.y;
+        lastCol = start.x;
+      }
+      if ($headCol && changed) {
+        $headCol.textContent = `${end.y + 1}:${end.x + 1}`;
+        lastEndRow = end.y;
+        lastEndCol = end.x;
+      }
+    } else {
+      // Show cursor position
+      if ($headRow && start.y !== lastRow) {
+        $headRow.textContent = start.y + 1;
+        lastRow = start.y;
+      }
+      if ($headCol && start.x !== lastCol) {
+        $headCol.textContent = start.x + 1;
+        lastCol = start.x;
+      }
+      lastEndRow = -1;
+      lastEndCol = -1;
     }
-    if ($headCol && x !== lastCol) {
-      $headCol.textContent = x + 1;
-      lastCol = x;
-    }
+
     if ($lineCounter && (lineCount !== lastLineCount || originalLineCount !== lastOriginalLineCount)) {
       $lineCounter.textContent = `${lineCount.toLocaleString()}L, originally: ${originalLineCount}L ${byteCount} bytes`;
       lastLineCount = lineCount;
