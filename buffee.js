@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.9.0-alpha.1';
+  this.v = '14.10.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -347,7 +347,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Gets the lines currently visible in the viewport.
      * @returns {string[]} Array of visible line contents
      */
-    get lines() { return Model._.slice(this.start, this.end + 1); }
+    get _() { return Model._.slice(this.start, this.end + 1); }
   };
 
   // Add / remove lines, selections, gutters as row changes
