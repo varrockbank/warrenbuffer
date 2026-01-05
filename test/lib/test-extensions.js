@@ -455,7 +455,7 @@ function defineExtensionTests() {
                 editor.Sel.add('AB');
                 // Wait to break coalescing
                 editor.History._lastOpTime = 0;
-                editor.Selection.delete();
+                editor.Sel.del();
                 assertEqual(editor.Model._[0], 'A', 'Should have "A" after backspace');
                 editor.History.undo();
                 assertEqual(editor.Model._[0], 'AB', 'Should have "AB" after undo');
@@ -502,9 +502,9 @@ function defineExtensionTests() {
             try {
                 BuffeeHistory(editor);
                 editor.Sel.add('Hello');
-                assertEqual(editor.Selection.bounds()[0].col, 5, 'Cursor should be at col 5');
+                assertEqual(editor.Sel.bounds()[0].col, 5, 'Cursor should be at col 5');
                 editor.History.undo();
-                assertEqual(editor.Selection.bounds()[0].col, 0, 'Cursor should be at col 0 after undo');
+                assertEqual(editor.Sel.bounds()[0].col, 0, 'Cursor should be at col 0 after undo');
             } finally {
                 cleanup();
             }
@@ -516,9 +516,9 @@ function defineExtensionTests() {
                 BuffeeHistory(editor);
                 editor.Sel.add('AB');
                 editor.History.undo();
-                assertEqual(editor.Selection.bounds()[0].col, 0, 'Cursor should be at col 0 after undo');
+                assertEqual(editor.Sel.bounds()[0].col, 0, 'Cursor should be at col 0 after undo');
                 editor.History.redo();
-                assertEqual(editor.Selection.bounds()[0].col, 2, 'Cursor should be at col 2 after redo');
+                assertEqual(editor.Sel.bounds()[0].col, 2, 'Cursor should be at col 2 after redo');
             } finally {
                 cleanup();
             }
@@ -549,8 +549,8 @@ function defineExtensionTests() {
                 editor.History._lastOpTime = 0;
 
                 // Select "Hello" (first 5 chars)
-                editor.Selection.makeSelection();
-                const [head1, tail1] = editor.Selection.bounds();
+                editor.Sel.make();
+                const [head1, tail1] = editor.Sel.bounds();
                 head1.col = 0;
                 tail1.col = 5;
 
@@ -576,19 +576,19 @@ function defineExtensionTests() {
                 editor.History._lastOpTime = 0;
 
                 // Make a selection (this changes head to detachedHead internally)
-                editor.Selection.makeSelection();
+                editor.Sel.make();
                 // Move cursor to create selection
-                editor.Selection.bounds()[0].col = 5;
+                editor.Sel.bounds()[0].col = 5;
 
                 // Delete the selection - this should capture correct cursor state
-                editor.Selection.delete();
+                editor.Sel.del();
                 assertEqual(editor.Model._[0], 'Hello', 'Should have deleted " World"');
 
                 // Undo should restore both the text AND correct cursor position
                 editor.History.undo();
                 assertEqual(editor.Model._[0], 'Hello World', 'Text should be restored');
                 // Verify cursor is at correct position (start of selection, col 5)
-                assertEqual(editor.Selection.bounds()[0].col, 5, 'Cursor should be restored to selection start');
+                assertEqual(editor.Sel.bounds()[0].col, 5, 'Cursor should be restored to selection start');
             } finally {
                 cleanup();
             }
