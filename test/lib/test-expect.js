@@ -28,10 +28,10 @@ function expect(actual) {
           throw new Error(`Expected cursor but found selection`);
         }
 
-        // firstEdge.row is already absolute (Model index)
+        // firstEdge.y is already absolute (Model index)
         // Check coordinates (absolute row, 0-indexed)
-        if (firstEdge.row !== row || firstEdge.col !== col) {
-          throw new Error(`Expected cursor at {row: ${row}, col: ${col}}, got {row: ${firstEdge.row}, col: ${firstEdge.col}}`);
+        if (firstEdge.y !== row || firstEdge.x !== col) {
+          throw new Error(`Expected cursor at {row: ${row}, col: ${col}}, got {row: ${firstEdge.y}, col: ${firstEdge.x}}`);
         }
       },
       toHaveSelectionAt(startRow, startCol, endRow, endCol) {
@@ -48,11 +48,11 @@ function expect(actual) {
           throw new Error(`Expected selection but found cursor`);
         }
 
-        // firstEdge.row and secondEdge.row are already absolute (Model indices)
+        // firstEdge.y and secondEdge.y are already absolute (Model indices)
         // Check coordinates (absolute rows, 0-indexed)
-        if (firstEdge.row !== startRow || firstEdge.col !== startCol ||
-            secondEdge.row !== endRow || secondEdge.col !== endCol) {
-          throw new Error(`Expected selection at {row: ${startRow}, col: ${startCol}} to {row: ${endRow}, col: ${endCol}}, got {row: ${firstEdge.row}, col: ${firstEdge.col}} to {row: ${secondEdge.row}, col: ${secondEdge.col}}`);
+        if (firstEdge.y !== startRow || firstEdge.x !== startCol ||
+            secondEdge.y !== endRow || secondEdge.x !== endCol) {
+          throw new Error(`Expected selection at {row: ${startRow}, col: ${startCol}} to {row: ${endRow}, col: ${endCol}}, got {row: ${firstEdge.y}, col: ${firstEdge.x}} to {row: ${secondEdge.y}, col: ${secondEdge.x}}`);
         }
       }
     };
