@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.19.0-alpha.1 [2026-01-05]  gz: 2715 / 2.65 KB (0), br: 2504 / 2.45 KB (+14), min: 6245 / 6.10 KB (-44)
+- refactor: alias Math.min/max to $min/$max
+
 ** 14.18.0-alpha.1 [2026-01-05]  gz: 2715 / 2.65 KB (-9), br: 2490 / 2.43 KB (-5), min: 6289 / 6.14 KB (-27)
 - refactor: rename Selection.insert/delete to add/del
 
