@@ -15,7 +15,7 @@
 function BuffeeIOS(editor) {
   const { Select, Model, View, Mode, $ } = editor;
   const lineHeight = Mode.ch;
-  const $e = $.querySelector('.buffee-elements');
+  const $e = $.querySelector('.buffee-pane');
 
   const editingArea = $.querySelector('.buffee-lines');
   const editorElement = $e;

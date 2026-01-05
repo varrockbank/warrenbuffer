@@ -1,9 +1,9 @@
 /* Neo Theme */
-.buffee-themepack1-neo > .buffee-elements {
+.buffee-themepack1-neo > .buffee-pane {
   background-color: #0d0d0d;
   color: #00ff41;
 }
-.buffee-themepack1-neo .buffee-zsel > div {
+.buffee-themepack1-neo .buffee-zsel > pre {
   background-color: #003b00;
   mix-blend-mode: normal;
 }

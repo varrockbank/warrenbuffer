@@ -1,9 +1,9 @@
 /* Nord Theme */
-.buffee-themepack1-nord > .buffee-elements {
+.buffee-themepack1-nord > .buffee-pane {
   background-color: #2e3440;
   color: #d8dee9;
 }
-.buffee-themepack1-nord .buffee-zsel > div {
+.buffee-themepack1-nord .buffee-zsel > pre {
   background-color: #5e81ac;
   mix-blend-mode: normal;
 }

@@ -1,9 +1,9 @@
 /* Darkly Theme */
-.buffee-themepack1-darkly > .buffee-elements {
+.buffee-themepack1-darkly > .buffee-pane {
   background-color: #002b36;
   color: #839496;
 }
-.buffee-themepack1-darkly .buffee-zsel > div {
+.buffee-themepack1-darkly .buffee-zsel > pre {
   background-color: #268bd2;
   mix-blend-mode: normal;
 }

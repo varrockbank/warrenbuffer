@@ -1,9 +1,9 @@
 /* Chelsey Theme */
-.buffee-themepack1-chelsey > .buffee-elements {
+.buffee-themepack1-chelsey > .buffee-pane {
   background-color: #ffffff;
   color: #000000;
 }
-.buffee-themepack1-chelsey .buffee-zsel > div {
+.buffee-themepack1-chelsey .buffee-zsel > pre {
   background-color: #cccccc;
   mix-blend-mode: normal;
 }

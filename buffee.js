@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.3-alpha.1';
+  this.v = '14.36.4-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -26,16 +26,16 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const [h     , padding  ,  railInit  , railPad] =
         ['cell', 'padding', 'rail-init','rail-pad']
         .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$pane     ,$lines ,$caret , $clip ,$rail ,$ztxt ,$zsel] =
-        ['elements','lines','caret', 'clip','rail','ztxt','zsel']
+  const [$pane  ,$lines ,$caret , $clip ,$rail ,$ztxt ,$zsel] =
+        ['pane','lines','caret', 'clip','rail','ztxt','zsel']
         .map(q => $.querySelector('.buffee-' + q));
 
-  // [array, fragment, parent, tagName, updateFn]
+  // [array, fragment, parent, updateFn]
   const viewportLayers = [
-    [$ztxt, 'pre', (el, i) => el.textContent = Model._[View.start + i] ?? null],
-    [$rail, 'div', (el, i) => el.textContent = View.start + i + 1],
-    [$zsel, 'div', (el) => el.style.width = 0]
-  ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
+    [$ztxt, (el, i) => el.textContent = Model._[View.start + i] ?? null],
+    [$rail, (el, i) => el.textContent = View.start + i + 1],
+    [$zsel, (el) => el.style.width = 0]
+  ].map(([p, fn]) => [[], document.createDocumentFragment(), p, fn]);
 
   // Set container width if cols specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
@@ -144,14 +144,15 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         const slice = text.slice(left.x, right.x + (this.dir > 0));
         return right.x >= text.length && left.y < Model.end ? [slice, ''] : [slice];
       }
-      const firstLine = Model._[left.y ].slice(left.x);
-      const lastLine  = Model._[right.y].slice(0, right.x + (this.dir > 0));
-      const middle    = Model._.slice(left.y + 1, right.y);
-      return [firstLine, ...middle, lastLine];
+      return [
+        Model._[left.y].slice(left.x),
+        ...Model._.slice(left.y + 1, right.y),
+        Model._[right.y].slice(0, right.x + (this.dir > 0))
+      ];
     },
 
     /** Collapses selection to a cursor. Optionally sets position first. */
-    ct(p) {
+    caret(p) {
       if (p) { head.y = p.y; head.x = p.x; }
       tail.y = head.y;
       tail.x = head.x;
@@ -355,7 +356,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const RENDER = this.RENDER = d => {
     const delta = d;
     if (d) {
-      for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
+      for (; d > 0; d--         ) viewportLayers.forEach(([a, f]) => a.push(f.appendChild(document.createElement('pre'))));
       if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
@@ -374,7 +375,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     Mode.frame++;
 
     // Update contents of line containers (reset to clean state)
-    for (let i = 0; i < View.N; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
+    for (let i = 0; i < View.N; i++) viewportLayers.forEach(([arr, , , update]) => arr[i] && update(arr[i], i));
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {

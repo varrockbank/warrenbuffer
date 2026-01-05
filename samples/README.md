@@ -7,7 +7,7 @@ Copy-paste patterns for common use cases. See `_template.html` for full boilerpl
 ```html
 <div class="buffee buffee-themepack1-boring" id="editor">
   <textarea class="buffee-clip"></textarea>
-  <div class="no-select buffee-elements">
+  <div class="no-select buffee-pane">
     <div class="buffee-rail"></div>
     <div class="buffee-lines" tabindex="0"><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
   </div>

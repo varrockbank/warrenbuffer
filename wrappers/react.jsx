@@ -107,7 +107,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     >
       <textarea className="buffee-clip" aria-hidden="true" />
       {statusTop && statusBar}
-      <div className="no-select buffee-elements">
+      <div className="no-select buffee-pane">
         {!gutterRight && gutter}
         <div className="buffee-lines" tabIndex={0}>
           <div className="buffee-zsel" />

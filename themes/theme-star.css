@@ -1,9 +1,9 @@
 /* Star Theme */
-.buffee-themepack1-star > .buffee-elements {
+.buffee-themepack1-star > .buffee-pane {
   background-color: #000000;
   color: #FFD700;
 }
-.buffee-themepack1-star .buffee-zsel > div {
+.buffee-themepack1-star .buffee-zsel > pre {
   background-color: #333333;
   mix-blend-mode: normal;
 }

@@ -1,13 +1,13 @@
 /**
  * Buffee Editor - Required Styles
- * @version 14.36.3-alpha.1
+ * @version 14.36.4-alpha.1
  *
  * This stylesheet contains the essential structural CSS for Buffee.
  * Colors are intentionally omitted - define them at point of usage.
  *
  * Required color properties to define:
  *   .buffee { background-color, color }
- *   .buffee .buffee-zsel > div { background-color }
+ *   .buffee .buffee-zsel > pre { background-color }
  *   .buffee .buffee-caret { background-color }
  *   .buffee .buffee-status { background-color, color } (optional)
  */
@@ -30,7 +30,7 @@
 }
 
 /* Content area (rail + lines) */
-.buffee > .buffee-elements {
+.buffee > .buffee-pane {
   display: flex;
   flex: 1;
   overflow: hidden;
@@ -75,9 +75,10 @@
 }
 
 /* Selection overlay */
-.buffee .buffee-zsel > div {
+.buffee .buffee-zsel > pre {
   position: relative;
   display: block;
+  margin: 0;
 }
 
 /* Cursor overlay */
@@ -101,8 +102,11 @@
 
 .buffee .buffee-rail {
   text-align: right; /* config */
-  padding: var(--buffee-padding); 
+  padding: var(--buffee-padding);
   width: calc(var(--buffee-rail-init) + var(--buffee-rail-pad));
+}
+.buffee .buffee-rail > pre {
+  margin: 0;
 }
 
 .buffee .buffee-ztxt {
@@ -134,7 +138,7 @@
   z-index: var(--buffee-z-elements);
 }
 
-.buffee .buffee-caret, .buffee .buffee-zsel > div { height: var(--buffee-cell); }
-.buffee .buffee-caret, .buffee .buffee-rail, .buffee .buffee-lines, .buffee .buffee-zsel > div {
+.buffee .buffee-caret, .buffee .buffee-zsel > pre { height: var(--buffee-cell); }
+.buffee .buffee-caret, .buffee .buffee-rail, .buffee .buffee-lines, .buffee .buffee-zsel > pre {
   font-size: var(--buffee-cell); line-height: var(--buffee-cell);
 }

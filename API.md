@@ -437,7 +437,7 @@ const { View, Sel, Model, Mode, render, $ } = editor;
 // Mode.cw - Character width in pixels (measured from cursor element)
 
 // Query DOM elements from $ as needed:
-const $e = $.querySelector('.buffee-elements');
+const $e = $.querySelector('.buffee-pane');
 const $textLayer = $.querySelector('.buffee-ztxt');
 
 // Wrappable primitives (for extensions like History, Syntax)

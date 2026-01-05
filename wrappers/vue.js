@@ -115,7 +115,7 @@ const BuffeeEditor = defineComponent({
     }, [
       h('textarea', { class: 'buffee-clip', 'aria-hidden': 'true' }),
       this.statusTop ? statusBar : null,
-      h('div', { class: 'no-select buffee-elements' }, [
+      h('div', { class: 'no-select buffee-pane' }, [
         !this.gutterRight ? gutter : null,
         h('div', { class: 'buffee-lines', tabindex: 0 }, [
           h('div', { class: 'buffee-zsel' }),

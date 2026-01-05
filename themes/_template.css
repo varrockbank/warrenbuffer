@@ -1,9 +1,9 @@
 /* [Name] Theme */
-.buffee-themepack1-[name] > .buffee-elements {
+.buffee-themepack1-[name] > .buffee-pane {
   background-color: [bg];
   color: [text];
 }
-.buffee-themepack1-[name] .buffee-zsel > div {
+.buffee-themepack1-[name] .buffee-zsel > pre {
   background-color: [selection-bg];
   mix-blend-mode: normal;
 }

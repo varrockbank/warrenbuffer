@@ -1,9 +1,9 @@
 /* HN Theme */
-.buffee-themepack1-hn > .buffee-elements {
+.buffee-themepack1-hn > .buffee-pane {
   background-color: #F6F6EF;
   color: black;
 }
-.buffee-themepack1-hn .buffee-zsel > div {
+.buffee-themepack1-hn .buffee-zsel > pre {
   background-color: #DCDCDA;
   mix-blend-mode: normal;
 }

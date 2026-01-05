@@ -1,16 +1,16 @@
 <!-- @version 14.36.2-alpha.1 -->
 <!--
-  Required: buffee, buffee-clip, buffee-elements, buffee-lines, buffee-ztxt, buffee-caret
+  Required: buffee, buffee-clip, buffee-pane, buffee-lines, buffee-ztxt, buffee-caret
   Optional: buffee-rail, buffee-layer-elements, buffee-status (and children)
 
   Positioning:
   - buffee-rail: can be left or right of buffee-lines
-  - buffee-status: can be above or below buffee-elements
+  - buffee-status: can be above or below buffee-pane
   - buffee-status-left/right: content is customizable
 -->
 <div class="buffee" id="editor">
   <textarea class="buffee-clip" aria-hidden="true"></textarea>
-  <div class="no-select buffee-elements">
+  <div class="no-select buffee-pane">
     <div class="buffee-rail"></div>
     <div class="buffee-lines" tabindex="0">
       <div class="buffee-zsel"></div>
