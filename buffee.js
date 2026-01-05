@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.7-alpha.1';
+  this.v = '14.36.8-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -44,12 +44,6 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     [$rail, (el, i) => el.textContent = View.start + i + 1],
     [$zsel, (el) => el.style.width = 0]
   ].map(([p, fn]) => [[], document.createDocumentFragment(), p, fn]);
-
-  // Set container width if cols specified
-  // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
-  cols && !$rail && ($pane.style.width = `calc(${cols}ch + ${padding * 2}px)`);
-  // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
-  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * ch + 'px'));
 
   /**
    * Sel management for cursor and text selection operations.
@@ -403,6 +397,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     Mode.sub.forEach(hook => hook($lines, View, delta));
   }
   
+  // Set container width if cols specified
+  // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
+  cols && !$rail && ($pane.style.width = `calc(${cols}ch + ${padding * 2}px)`);
+  // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
+  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * ch + 'px'));
   // Initial sizing render
   const resize = delta => {View.n += delta, RENDER(delta)};
   rows ? resize(rows) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / ch) - View.n)}).observe($pane);
