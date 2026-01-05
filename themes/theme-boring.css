@@ -1,9 +1,9 @@
 /* Boring Theme */
-.buffee-themepack1-boring > .buffee-elements {
+.buffee-themepack1-boring > .buffee-pane {
   background-color: #282c34;
   color: #B2B2B2;
 }
-.buffee-themepack1-boring .buffee-zsel > div {
+.buffee-themepack1-boring .buffee-zsel > pre {
   background-color: #3e4451;
   mix-blend-mode: normal;
 }

@@ -1,9 +1,9 @@
 /* Gruv Theme */
-.buffee-themepack1-gruv > .buffee-elements {
+.buffee-themepack1-gruv > .buffee-pane {
   background-color: #282828;
   color: #ebdbb2;
 }
-.buffee-themepack1-gruv .buffee-zsel > div {
+.buffee-themepack1-gruv .buffee-zsel > pre {
   background-color: #83a598;
   mix-blend-mode: normal;
 }

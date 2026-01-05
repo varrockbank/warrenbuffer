@@ -21,7 +21,7 @@ function Buffee__NAME__(editor) {
   // Select.bounds() returns [head, tail], Select.bounds(1) returns ordered
   const { Model, View, Mode, render, $ } = editor;
   const lineHeight = Mode.ch;
-  const $e = $.querySelector('.buffee-elements');
+  const $e = $.querySelector('.buffee-pane');
 
   // === STATE ===
   let enabled = false;

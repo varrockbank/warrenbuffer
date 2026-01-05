@@ -1,9 +1,9 @@
 /* Drak Theme */
-.buffee-themepack1-drak > .buffee-elements {
+.buffee-themepack1-drak > .buffee-pane {
   background-color: #282a36;
   color: #f8f8f2;
 }
-.buffee-themepack1-drak .buffee-zsel > div {
+.buffee-themepack1-drak .buffee-zsel > pre {
   background-color: #6272a4;
   mix-blend-mode: normal;
 }

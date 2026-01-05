@@ -152,7 +152,7 @@ Templates: `extensions/_template.js`, `samples/_template.html`, `themes/_templat
 | Class | Element | Purpose |
 |-------|---------|---------|
 | `.buffee` | Container | Root editor element, add theme class here |
-| `.buffee-elements` | Inner wrapper | Contains gutter + lines |
+| `.buffee-pane` | Inner wrapper | Contains gutter + lines |
 | `.buffee-rail` | Gutter | Line numbers |
 | `.buffee-lines` | Text area | Focus target (tabindex=0) |
 | `.buffee-zsel` | Selection layer | Contains selection `<div>`s |

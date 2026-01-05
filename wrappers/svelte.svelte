@@ -129,7 +129,7 @@
 >
   <textarea class="buffee-clip" aria-hidden="true"></textarea>
   {#if showStatus && statusTop}{@render statusBar()}{/if}
-  <div class="no-select buffee-elements">
+  <div class="no-select buffee-pane">
     {#if showGutter && !gutterRight}
       <div class="buffee-rail"></div>
     {/if}

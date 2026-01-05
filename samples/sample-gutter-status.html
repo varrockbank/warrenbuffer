@@ -25,7 +25,7 @@
   <p><code>new Buffee(el)</code></p>
   <div class="buffee buffee-themepack1-boring" id="editor-default">
     <textarea class="buffee-clip"></textarea>
-    <div class="no-select buffee-elements">
+    <div class="no-select buffee-pane">
       <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
     </div>
@@ -45,7 +45,7 @@
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
   &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
-  &lt;div class="no-select buffee-elements"&gt;
+  &lt;div class="no-select buffee-pane"&gt;
     <span style="color: #c00; text-decoration: line-through;">&lt;div class="buffee-rail"&gt;&lt;/div&gt;</span>
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
   &lt;/div&gt;
@@ -54,7 +54,7 @@
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-no-gutter">
     <textarea class="buffee-clip"></textarea>
-    <div class="no-select buffee-elements">
+    <div class="no-select buffee-pane">
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
     </div>
     <div class="buffee-status">
@@ -73,7 +73,7 @@
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
   &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
-  &lt;div class="no-select buffee-elements"&gt;
+  &lt;div class="no-select buffee-pane"&gt;
     &lt;div class="buffee-rail"&gt;&lt;/div&gt;
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
   &lt;/div&gt;
@@ -82,20 +82,20 @@
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-no-status">
     <textarea class="buffee-clip"></textarea>
-    <div class="no-select buffee-elements">
+    <div class="no-select buffee-pane">
       <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
     </div>
   </div>
 
   <h2>4. Status line on top</h2>
-  <p>Place <code>.buffee-status</code> before <code>.buffee-elements</code> in the template:</p>
+  <p>Place <code>.buffee-status</code> before <code>.buffee-pane</code> in the template:</p>
   <details>
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
   &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
   <span style="color: #0a0;">&lt;div class="buffee-status"&gt;...&lt;/div&gt;</span>
-  &lt;div class="no-select buffee-elements"&gt;
+  &lt;div class="no-select buffee-pane"&gt;
     &lt;div class="buffee-rail"&gt;&lt;/div&gt;
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
   &lt;/div&gt;
@@ -111,7 +111,7 @@
         <span class="buffee-spaces"></span>
       </div>
     </div>
-    <div class="no-select buffee-elements">
+    <div class="no-select buffee-pane">
       <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
     </div>
@@ -121,7 +121,7 @@
   <p>Use <code>BuffeeStatusLine(editor, { showSelection: true })</code> to show selection range instead of just cursor position. Try selecting text below:</p>
   <div class="buffee buffee-themepack1-boring" id="editor-selection">
     <textarea class="buffee-clip"></textarea>
-    <div class="no-select buffee-elements">
+    <div class="no-select buffee-pane">
       <div class="buffee-rail"></div>
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
     </div>
@@ -141,7 +141,7 @@
     <summary>View template</summary>
     <pre style="padding: 10px; overflow-x: auto; font-size: 12px;">&lt;div class="buffee"&gt;
   &lt;textarea class="buffee-clip"&gt;&lt;/textarea&gt;
-  &lt;div class="no-select buffee-elements"&gt;
+  &lt;div class="no-select buffee-pane"&gt;
     &lt;div class="buffee-lines" tabindex="0"&gt;...&lt;/div&gt;
     <span style="color: #0a0;">&lt;div class="buffee-rail"&gt;&lt;/div&gt;</span>
   &lt;/div&gt;
@@ -150,7 +150,7 @@
   </details>
   <div class="buffee buffee-themepack1-boring" id="editor-gutter-right">
     <textarea class="buffee-clip"></textarea>
-    <div class="no-select buffee-elements">
+    <div class="no-select buffee-pane">
       <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
       <div class="buffee-rail"></div>
     </div>

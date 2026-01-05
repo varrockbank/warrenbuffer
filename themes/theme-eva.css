@@ -1,9 +1,9 @@
 /* Eva Theme - Inspired by Evangelion */
-.buffee-themepack1-eva > .buffee-elements {
+.buffee-themepack1-eva > .buffee-pane {
   background-color: #1e1e28;
   color: #d4d4d4;
 }
-.buffee-themepack1-eva .buffee-zsel > div {
+.buffee-themepack1-eva .buffee-zsel > pre {
   background-color: #9c6bce;
   mix-blend-mode: normal;
 }

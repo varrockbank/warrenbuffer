@@ -14,7 +14,7 @@
  * const editor = BuffeeElementals(Buffee(container, config));
  */
 function BuffeeElementals(editor) {
-  const { re, h: lineHeight } = editor.Mode;
+  const { sub, ch: lineHeight } = editor.Mode;
   const { View, render, $ } = editor;
   const $elementLayer = $.querySelector('.buffee-layer-elements');
 

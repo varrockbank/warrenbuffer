@@ -1,9 +1,9 @@
 /* Kai Theme */
-.buffee-themepack1-kai > .buffee-elements {
+.buffee-themepack1-kai > .buffee-pane {
   background-color: #272822;
   color: #f8f8f2;
 }
-.buffee-themepack1-kai .buffee-zsel > div {
+.buffee-themepack1-kai .buffee-zsel > pre {
   background-color: #75715e;
   mix-blend-mode: normal;
 }

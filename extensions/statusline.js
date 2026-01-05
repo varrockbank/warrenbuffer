@@ -45,7 +45,8 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
   });
 
   function updateStatusLine() {
-    const [start, end] = editor.Sel.bounds(1);
+    const [head, tail] = editor.Sel.bounds();  // head first, unordered
+    const [start, end] = editor.Sel.bounds(1); // ordered by position
     const hasSelection = editor.Sel.dir !== 0;
     const lineCount = Model.end + 1;
 
@@ -69,14 +70,14 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
         lastHasSelection = true;
       }
     } else {
-      // Show cursor position
-      if ($headRow && start.y !== lastRow) {
-        $headRow.textContent = `${start.y + 1}:${start.x + 1}`;
-        lastRow = start.y;
+      // Show head (cursor) position
+      if ($headRow && head.y !== lastRow) {
+        $headRow.textContent = head.y + 1;
+        lastRow = head.y;
       }
-      if (start.x !== lastCol) {
-        if ($headRow) $headRow.textContent = `${start.y + 1}:${start.x + 1}`;
-        lastCol = start.x;
+      if ($headCol && head.x !== lastCol) {
+        $headCol.textContent = head.x + 1;
+        lastCol = head.x;
       }
       if ($selSep && lastHasSelection) {
         $selSep.style.display = 'none';

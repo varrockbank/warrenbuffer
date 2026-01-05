@@ -19,7 +19,7 @@
 function BuffeeTreeSitter(editor, { parser, query }) {
   const { sub } = editor.Mode;
   const { View, Model, render, $ } = editor;
-  const $e = $.querySelector('.buffee-elements');
+  const $e = $.querySelector('.buffee-pane');
 
   /** @type {boolean} */
   let enabled = false;

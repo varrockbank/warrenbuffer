@@ -96,7 +96,7 @@ function createTestEditor(opts = {}) {
     container.innerHTML = `
         <div class="buffee no-select">
             <textarea class="buffee-clip" aria-hidden="true"></textarea>
-            <div class="no-select buffee-elements">
+            <div class="no-select buffee-pane">
                 <div class="buffee-rail"></div>
                 <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
             </div>
