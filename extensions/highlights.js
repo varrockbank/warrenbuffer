@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeHighlights - Fixed-position highlight extension for Buffee.
  * Creates a non-scrolling layer for rendering highlights aligned with text content.
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**
@@ -15,9 +15,11 @@ function BuffeeHighlights(editor) {
   const lineHeight = Mode.cellHeight;
 
   // Compute content offset from CSS and gutter
-  const cssPadding = parseFloat(getComputedStyle($parent).getPropertyValue('--buffee-padding'));
+  const [cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
+    ['--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
+      .map(p => parseFloat(getComputedStyle($parent).getPropertyValue(p)));
   const $gutter = $parent.querySelector('.buffee-gutter');
-  const gutterCh = $gutter ? parseFloat($gutter.style.width) || 0 : 0;
+  const gutterCh = () => $gutter ? parseFloat($gutter.style.width) || cssGutterDigitsInitial + cssGutterDigitsPadding : 0;
   const offsetPx = $gutter ? cssPadding * 3 : cssPadding;
 
   // Create fixed layer for highlights (doesn't scroll with content)
@@ -26,7 +28,7 @@ function BuffeeHighlights(editor) {
   Object.assign($layer.style, {
     position: 'absolute',
     top: cssPadding + 'px',
-    left: `calc(${gutterCh}ch + ${offsetPx}px)`,
+    left: `calc(${gutterCh()}ch + ${offsetPx}px)`,
     width: '100%',
     height: '100%',
     zIndex: 150,  // Above selection (100), below text (200)
@@ -36,6 +38,16 @@ function BuffeeHighlights(editor) {
   });
   $parent.style.position = 'relative';
   $parent.appendChild($layer);
+
+  // Keep layer position in sync with gutter width
+  let lastGutterCh = gutterCh();
+  Mode.renderHooks.push(() => {
+    const current = gutterCh();
+    if (current !== lastGutterCh) {
+      $layer.style.left = `calc(${current}ch + ${offsetPx}px)`;
+      lastGutterCh = current;
+    }
+  });
 
   const highlights = [];
 
