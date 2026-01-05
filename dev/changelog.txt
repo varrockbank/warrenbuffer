@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 13.15.3-alpha.1 [2026-01-05]  gz: 2815 / 2.75 KB (+1), br: 2571 / 2.51 KB (0), min: 6824 / 6.66 KB (0)
+- fix: update extensions to use Mode.cellHeight instead of Mode.cssCell
+
 ** 13.15.2-alpha.1 [2026-01-05]  gz: 2814 / 2.75 KB (-4), br: 2571 / 2.51 KB (-2), min: 6824 / 6.66 KB (-2)
 - test: add test confirming Enter resets maxCol for vertical navigation
 
