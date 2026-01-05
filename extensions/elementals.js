@@ -15,7 +15,7 @@
  */
 function BuffeeElementals(editor) {
   const { renderHooks, h: lineHeight } = editor.Mode;
-  const { View, r, $ } = editor;
+  const { View, render, $ } = editor;
   const $elementLayer = $.querySelector('.buffee-layer-elements');
 
   let enabled = false;
@@ -96,7 +96,7 @@ function BuffeeElementals(editor) {
       }
       // Set read-only mode to hide cursor/selection when elementals is enabled
       editor.Mode.i = enabled ? -1 : 1;
-      r();
+      render();
     },
 
     /**

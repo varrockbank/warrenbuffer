@@ -17,9 +17,9 @@ function Buffee__NAME__(editor) {
   const { renderHooks } = editor.Mode;
 
   // === EDITOR PROPERTIES ===
-  // Available: Model, Select, View, Mode, r, $
+  // Available: Model, Select, View, Mode, render, $
   // Select.bounds() returns [head, tail], Select.bounds(1) returns ordered
-  const { Model, View, Mode, r, $ } = editor;
+  const { Model, View, Mode, render, $ } = editor;
   const lineHeight = Mode.ch;
   const $e = $.querySelector('.buffee-elements');
 
@@ -39,7 +39,7 @@ function Buffee__NAME__(editor) {
     get enabled() { return enabled; },
     set enabled(v) {
       enabled = v;
-      r(true);
+      render(true);
     },
 
     // Add methods here

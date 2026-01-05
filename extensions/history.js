@@ -183,7 +183,7 @@ function BuffeeHistory(editor) {
       redoStack.push(undoneOp);
       restoreCursor(op.cursorBefore);
 
-      r();
+      render();
       return true;
     },
 
@@ -196,7 +196,7 @@ function BuffeeHistory(editor) {
         restoreCursor(op.cursorAfter);
       }
 
-      r();
+      render();
       return true;
     },
 

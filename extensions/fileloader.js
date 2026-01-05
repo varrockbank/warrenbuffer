@@ -14,13 +14,13 @@
  * await editor.FileLoader.streamMaterializedLoad(file);
  */
 function BuffeeFileLoader(editor) {
-  const { Model, Mode, r, $ } = editor;
+  const { Model, Mode, render, $ } = editor;
 
   function appendLines(newLines, skipRender = false) {
     const spaces = Mode.s;
     const expandTabs = s => spaces ? s.replace(/\t/g, ' '.repeat(spaces)) : s;
     Model._.push(...newLines.map(expandTabs));
-    if (!skipRender) r();
+    if (!skipRender) render();
   }
 
   // Create progress bar element
