@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 13.14.11-alpha.1 [2026-01-05]  gz: 2786 / 2.72 KB (+4), br: 2551 / 2.49 KB (+7), min: 6719 / 6.56 KB (1)
+- pass delta as param to render() instead of closure
+
 ** 13.14.10-alpha.1 [2026-01-05]  gz: 2782 / 2.72 KB (-3), br: 2544 / 2.48 KB (-2), min: 6718 / 6.56 KB (-3)
 - inline left variable in indent()
 
