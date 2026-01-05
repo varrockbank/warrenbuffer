@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.3.0-alpha.1';
+  this.v = '14.4.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -116,7 +116,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     },
 
     /** Collapses selection to a cursor. Optionally sets position first. */
-    makeCursor(p) {
+    cursor(p) {
       if (p) { head.row = p.row; head.col = p.col; }
       tail.row = head.row;
       tail.col = head.col;
@@ -158,7 +158,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           head.col      = lines[lines.length - 1].length;
         } else head.col = first.col + s.length;
 
-        this.makeCursor();
+        this.cursor();
       } else {
         Model.add(tail.row, tail.col, lines);
 
@@ -453,12 +453,12 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
 
       if(cmd || e.altKey) {
-        if(!sh && Selection.dir)      Selection.makeCursor();
+        if(!sh && Selection.dir)      Selection.cursor();
         else if(sh && !Selection.dir) Selection.makeSelection();
         if (arrowCode % 2) cmd ?      Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Selection.makeCursor(Selection.bounds(1)[direction > 0 | 0]);
+          Selection.cursor(Selection.bounds(1)[direction > 0 | 0]);
           render();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
@@ -466,7 +466,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           const targetAbsRow = $clamp(edge.row + direction, 0, Model.lastIndex);
 
           maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
-          Selection.makeCursor({ row: targetAbsRow, col: maxCol});
+          Selection.cursor({ row: targetAbsRow, col: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);

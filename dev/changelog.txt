@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.4.0-alpha.1 [2026-01-05]  gz: 2795 / 2.73 KB (-2), br: 2562 / 2.50 KB (-6), min: 6753 / 6.59 KB (-20)
+- refactor: rename Selection.makeCursor to Selection.cursor
+
 ** 14.3.0-alpha.1 [2026-01-05]  gz: 2797 / 2.73 KB (-9), br: 2569 / 2.51 KB (-3), min: 6773 / 6.61 KB (-28)
 - refactor: merge setCursor into makeCursor(pos?)
 

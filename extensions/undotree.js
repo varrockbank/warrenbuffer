@@ -61,7 +61,7 @@ function BuffeeUndoTree(editor) {
     if (isSelection) {
       Selection.makeSelection();
     } else {
-      Selection.makeCursor();
+      Selection.cursor();
     }
 
     const [head, tail] = editor.Selection.bounds();

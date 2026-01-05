@@ -99,7 +99,7 @@ function BuffeeIOS(editor) {
     const absRow = View.start + row;
     // Bounds check col to line length
     const lineLength = Model.lines[absRow].length;
-    Selection.makeCursor({ row: absRow, col: Math.min(col, lineLength) });
+    Selection.cursor({ row: absRow, col: Math.min(col, lineLength) });
     editor.render();
   }
 
