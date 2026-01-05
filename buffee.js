@@ -17,15 +17,15 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.14.0-alpha.1';
+  this.v = '14.15.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
   const [h, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
-    ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
-      .map(p => parseFloat(getComputedStyle($).getPropertyValue(p)));
+    ['cell', 'padding', 'gutter-digits-initial', 'gutter-digits-padding']
+      .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
   const [$e        ,$l     ,$cursor ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
         ['elements','lines','cursor','clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
 
@@ -249,7 +249,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
    * @namespace Mode
    */
   const Mode = this.Mode = {
-    spaces,
+    spaces,                                   /** spaces */
     /**
      * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
      * - 1: Full editing (default)
@@ -257,10 +257,10 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * - -1: Read-only (no cursor/selection rendering, no navigation) - used by TUI
      * @type {-1|0|1}
      */
-    i: 1,
-    frame: 0,
-    ch: h,
-    cw: $cursor.getBoundingClientRect().width,
+    i: 1,                                      
+    frame: 0,                                  /** framecount */
+    ch: h,                                     /** character width */
+    cw: $cursor.getBoundingClientRect().width, /** character height */
     renderHooks: []
   };
 

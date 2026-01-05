@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.15.0-alpha.1 [2026-01-05]  gz: 2730 / 2.67 KB (-3), br: 2505 / 2.45 KB (+4), min: 6388 / 6.24 KB (-24)
+- refactor: extract --buffee- prefix in CSS var lookup
+
 ** 14.14.0-alpha.1 [2026-01-05]  gz: 2733 / 2.67 KB (-10), br: 2502 / 2.44 KB (-13), min: 6412 / 6.26 KB (-30)
 - refactor: rename Selection.moveRow/moveCol to y/x
 
