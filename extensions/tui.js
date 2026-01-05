@@ -21,7 +21,7 @@ function BuffeeTUI(editor) {
 
   const { renderHooks } = editor.Mode;
   const { View, Model, r, $ } = editor;
-  const $textLayer = $.querySelector('.buffee-layer-text');
+  const $textLayer = $.querySelector('.buffee-ztxt');
 
   let enabled = false;
   let currentIndex = 0;

@@ -17,7 +17,7 @@ function BuffeeSyntax(editor) {
   const { View, Model, $ } = editor;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
-  const $textLayer = $.querySelector('.buffee-layer-text');
+  const $textLayer = $.querySelector('.buffee-ztxt');
 
   // State cache: stateCache[lineIndex] = startState for that line
   // State 0 = NORMAL, other states defined by language

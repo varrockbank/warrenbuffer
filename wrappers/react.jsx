@@ -110,8 +110,8 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
       <div className="no-select buffee-elements">
         {!gutterRight && gutter}
         <div className="buffee-lines" tabIndex={0}>
-          <div className="buffee-layer-selection" />
-          <blockquote className="buffee-layer-text" />
+          <div className="buffee-zsel" />
+          <blockquote className="buffee-ztxt" />
           <div className="buffee-layer-elements" />
           <div className="buffee-cursor" />
         </div>
