@@ -11,14 +11,14 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeHighlights(editor) {
-  const { $parent, Mode } = editor;
+  const { $, Mode } = editor;
   const lineHeight = Mode.cellHeight;
 
   // Compute content offset from CSS and gutter
   const [cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
-      .map(p => parseFloat(getComputedStyle($parent).getPropertyValue(p)));
-  const $gutter = $parent.querySelector('.buffee-gutter');
+      .map(p => parseFloat(getComputedStyle($).getPropertyValue(p)));
+  const $gutter = $.querySelector('.buffee-gutter');
   const gutterCh = () => $gutter ? parseFloat($gutter.style.width) || cssGutterDigitsInitial + cssGutterDigitsPadding : 0;
   const offsetPx = $gutter ? cssPadding * 3 : cssPadding;
 
@@ -36,8 +36,8 @@ function BuffeeHighlights(editor) {
     fontSize: lineHeight + 'px',
     lineHeight: lineHeight + 'px'
   });
-  $parent.style.position = 'relative';
-  $parent.appendChild($layer);
+  $.style.position = 'relative';
+  $.appendChild($layer);
 
   // Keep layer position in sync with gutter width
   let lastGutterCh = gutterCh();

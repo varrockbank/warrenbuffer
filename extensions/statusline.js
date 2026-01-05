@@ -12,12 +12,12 @@
  */
 function BuffeeStatusLine(editor) {
   const { renderHooks } = editor.Mode;
-  const { Model, Mode, $parent } = editor;
+  const { Model, Mode, $ } = editor;
 
-  const $headRow = $parent.querySelector('.buffee-head-row');
-  const $headCol = $parent.querySelector('.buffee-head-col');
-  const $lineCounter = $parent.querySelector('.buffee-linecount');
-  const $spaces = $parent.querySelector('.buffee-spaces');
+  const $headRow = $.querySelector('.buffee-head-row');
+  const $headCol = $.querySelector('.buffee-head-col');
+  const $lineCounter = $.querySelector('.buffee-linecount');
+  const $spaces = $.querySelector('.buffee-spaces');
 
   let lastRow = -1, lastCol = -1, lastLineCount = -1, lastSpaces = -1, lastOriginalLineCount = -1;
   let byteCount = 0, originalLineCount = 0;

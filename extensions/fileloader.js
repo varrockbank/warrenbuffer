@@ -14,7 +14,7 @@
  * await editor.FileLoader.streamMaterializedLoad(file);
  */
 function BuffeeFileLoader(editor) {
-  const { Model, Mode, render, $parent } = editor;
+  const { Model, Mode, render, $ } = editor;
 
   function appendLines(newLines, skipRender = false) {
     const spaces = Mode.spaces;
@@ -39,7 +39,7 @@ function BuffeeFileLoader(editor) {
     transition: 'width 0.1s ease-out'
   });
   $progress.appendChild($bar);
-  $parent.insertBefore($progress, $parent.firstChild);
+  $.insertBefore($progress, $.firstChild);
 
   /**
    * FileLoader API.

@@ -20,8 +20,8 @@ function BuffeeTUI(editor) {
   const Highlights = editor.Highlights;
 
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, render, $parent } = editor;
-  const $textLayer = $parent.querySelector('.buffee-layer-text');
+  const { Viewport, Model, render, $ } = editor;
+  const $textLayer = $.querySelector('.buffee-layer-text');
 
   let enabled = false;
   let currentIndex = 0;

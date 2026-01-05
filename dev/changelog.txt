@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.1.0-alpha.1 [2026-01-05]  gz: 2809 / 2.74 KB (-5), br: 2570 / 2.51 KB (-2), min: 6805 / 6.65 KB (-6)
+- refactor: rename Buffee.$parent to Buffee.$
+
 ** 14.0.0-alpha.1 [2026-01-05]  gz: 2814 / 2.75 KB (-6), br: 2573 / 2.51 KB (-4), min: 6811 / 6.65 KB (-7)
 - refactor: rename Buffee.version to Buffee.v
 
