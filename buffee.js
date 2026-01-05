@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.5.0-alpha.1';
+  this.v = '14.6.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -70,7 +70,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
      */
     moveRow(dir, toEdge) {
-      if (dir > 0 ? head.row < Model.lastIndex : head.row > 0) {
+      if (dir > 0 ? head.row < Model.end : head.row > 0) {
         const len = Model.lines[dir > 0 ? ++head.row : --head.row].length;
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
@@ -86,7 +86,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     moveCol(dir) {
       const right = dir > 0;
       if (right ? head.col < Model.lines[head.row].length : head.col) { maxCol = right ? ++head.col : --head.col; render(); }
-      else if (right ? head.row < Model.lastIndex : head.row) this.moveRow(dir, 1);
+      else if (right ? head.row < Model.end : head.row) this.moveRow(dir, 1);
     },
 
     /**
@@ -107,7 +107,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       if(left.row === right.row) {
         const text  = Model.lines[left.row];
         const slice = text.slice(left.col, right.col + (this.dir > 0));
-        return right.col >= text.length && left.row < Model.lastIndex ? [slice, ''] : [slice];
+        return right.col >= text.length && left.row < Model.end ? [slice, ''] : [slice];
       }
       const firstLine = Model.lines[left.row ].slice(left.col);
       const lastLine  = Model.lines[right.row].slice(0, right.col + (this.dir > 0));
@@ -204,7 +204,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.col = j;
         render();
-      } else if (fwd ? head.row < Model.lastIndex : head.row > 0) {
+      } else if (fwd ? head.row < Model.end : head.row > 0) {
         // At edge - move to adjacent line
         head.col = fwd ? 0 : Model.lines[--head.row].length;
         if (fwd && ++head.row > View.end) View.set(head.row - View.size + 1);
@@ -276,7 +276,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Index of the last line in the document.
      * @returns {number} Zero-based index of the last line
      */
-    get lastIndex() { return this.lines.length - 1 },
+    get end() { return this.lines.length - 1 },
 
     /**
      * Sets the document content from a string. Splits on newlines.
@@ -329,7 +329,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get end() { return Math.min(this.start + this.size - 1, Model.lastIndex); },
+    get end() { return Math.min(this.start + this.size - 1, Model.end); },
 
     /**
      * Sets the viewport position and optionally size.
@@ -339,7 +339,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     set(start, size = this.size) {
       const d = size - this.size;
       this.size = size;
-      this.start = $clamp(start, 0, Model.lastIndex);
+      this.start = $clamp(start, 0, Model.end);
       renderAll(d);
     },
 
@@ -463,7 +463,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
           // edge.row is already absolute
-          const targetAbsRow = $clamp(edge.row + direction, 0, Model.lastIndex);
+          const targetAbsRow = $clamp(edge.row + direction, 0, Model.end);
 
           maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
           Selection.cursor({ row: targetAbsRow, col: maxCol});

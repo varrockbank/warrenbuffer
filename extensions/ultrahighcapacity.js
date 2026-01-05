@@ -20,7 +20,7 @@ function BuffeeUltraHighCapacity(editor) {
   const $e = $.querySelector('.buffee-elements');
 
   // Store original methods/getters
-  const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'lastIndex').get;
+  const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'end').get;
 
   // Chunk state
   let enabled = false;
@@ -303,8 +303,8 @@ function BuffeeUltraHighCapacity(editor) {
       // Set navigation-only mode (can move cursor, no editing)
       editor.Mode.interactive = 0;
 
-      // Override Model.lastIndex
-      Object.defineProperty(Model, 'lastIndex', {
+      // Override Model.end
+      Object.defineProperty(Model, 'end', {
         get: () => totalLines - 1,
         configurable: true
       });
@@ -318,8 +318,8 @@ function BuffeeUltraHighCapacity(editor) {
     deactivate() {
       enabled = false;
 
-      // Restore original lastIndex getter
-      Object.defineProperty(Model, 'lastIndex', {
+      // Restore original end getter
+      Object.defineProperty(Model, 'end', {
         get: originalLastIndexGetter,
         configurable: true
       });

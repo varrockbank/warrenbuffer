@@ -128,7 +128,7 @@ editor.Model.text = "Hello\nWorld";
 
 // Access lines
 editor.Model.lines;        // ["Hello", "World"]
-editor.Model.lastIndex;    // 1
+editor.Model.end;    // 1
 ```
 
 ---
