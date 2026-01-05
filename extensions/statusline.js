@@ -41,7 +41,7 @@ function BuffeeStatusLine(editor) {
   });
 
   function updateStatusLine() {
-    const [{ row, col }] = editor.Select.bounds();
+    const [{ row, col }] = editor.Sel.bounds();
     const lineCount = Model.end + 1;
 
     if ($headRow && row !== lastRow) {

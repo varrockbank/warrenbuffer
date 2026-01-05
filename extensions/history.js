@@ -29,7 +29,7 @@ function BuffeeHistory(editor) {
 
   /** Capture current cursor/selection state */
   function captureCursor() {
-    const [head, tail] = editor.Select.bounds();
+    const [head, tail] = editor.Sel.bounds();
     return {
       headRow: head.y, headCol: head.x,
       tailRow: tail.y, tailCol: tail.x
@@ -41,12 +41,12 @@ function BuffeeHistory(editor) {
     const isSelect = cursor.headRow !== cursor.tailRow || cursor.headCol !== cursor.tailCol;
 
     if (isSelect) {
-      editor.Select.make();
+      editor.Sel.make();
     } else {
-      editor.Select.ct();
+      editor.Sel.ct();
     }
 
-    const [head, tail] = editor.Select.bounds();
+    const [head, tail] = editor.Sel.bounds();
     head.y = cursor.headRow;
     head.x = cursor.headCol;
     tail.y = cursor.tailRow;
