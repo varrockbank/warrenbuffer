@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.35.0-alpha.1';
+  this.v = '14.35.1-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -340,7 +340,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       const d = size - this.n;
       this.n = size;
       this.start = $max(0, $min(start, Model.end));
-      R(d);
+      RENDER(d);
     },
 
     /**
