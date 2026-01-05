@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 14.36.2-alpha.1 [2026-01-05]  gz: 2642 / 2.58 KB (+4), br: 2438 / 2.38 KB (-1), min: 5819 / 5.68 KB (15)
+- refactor: rename internal variables for clarity
+  - $ct → $caret, Sel.ct() → Sel.caret(), .buffee-ct → .buffee-caret
+  - $e → $pane, $l → $lines, cssPadding → padding
+
 ** 14.36.1-alpha.1 [2026-01-05]  gz: 2639 / 2.58 KB (-4), br: 2439 / 2.38 KB (-4), min: 5804 / 5.67 KB (0)
 - refactor: use head consistently instead of mixing tail/head in add()/del()
 

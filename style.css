@@ -1,6 +1,6 @@
 /**
  * Buffee Editor - Required Styles
- * @version 14.36.0-alpha.1
+ * @version 14.36.2-alpha.1
  *
  * This stylesheet contains the essential structural CSS for Buffee.
  * Colors are intentionally omitted - define them at point of usage.
@@ -8,7 +8,7 @@
  * Required color properties to define:
  *   .buffee { background-color, color }
  *   .buffee .buffee-zsel > div { background-color }
- *   .buffee .buffee-ct { background-color }
+ *   .buffee .buffee-caret { background-color }
  *   .buffee .buffee-status { background-color, color } (optional)
  */
 
@@ -81,7 +81,7 @@
 }
 
 /* Cursor overlay */
-.buffee .buffee-ct {
+.buffee .buffee-caret {
   mix-blend-mode: exclusion;
   width: 1ch;
   position: absolute;
@@ -134,7 +134,7 @@
   z-index: var(--buffee-z-elements);
 }
 
-.buffee .buffee-ct, .buffee .buffee-zsel > div { height: var(--buffee-cell); }
-.buffee .buffee-ct, .buffee .buffee-rail, .buffee .buffee-lines, .buffee .buffee-zsel > div {
+.buffee .buffee-caret, .buffee .buffee-zsel > div { height: var(--buffee-cell); }
+.buffee .buffee-caret, .buffee .buffee-rail, .buffee .buffee-lines, .buffee .buffee-zsel > div {
   font-size: var(--buffee-cell); line-height: var(--buffee-cell);
 }

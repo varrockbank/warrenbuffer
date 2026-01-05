@@ -17,17 +17,18 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.1-alpha.1';
+  this.v = '14.36.2-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const { min: $min, max: $max } = Math;
 
-  const [h, cssPadding, railInit, railPad] =
-    ['cell', 'padding', 'rail-init', 'rail-pad']
-      .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$e        ,$l     ,$ct , $clip ,$rail ,$ztxt ,$zsel] =
-        ['elements','lines','ct', 'clip','rail','ztxt','zsel'].map(q => $.querySelector('.buffee-' + q));
+  const [h     , padding  ,  railInit  , railPad] =
+        ['cell', 'padding', 'rail-init','rail-pad']
+        .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
+  const [$pane     ,$lines ,$caret , $clip ,$rail ,$ztxt ,$zsel] =
+        ['elements','lines','caret', 'clip','rail','ztxt','zsel']
+        .map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
@@ -38,8 +39,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
   // Set container width if cols specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
-  cols && !$rail && ($e.style.width = `calc(${cols}ch + ${cssPadding * 2}px)`);
-  let lRect = $l.getBoundingClientRect();
+  cols && !$rail && ($pane.style.width = `calc(${cols}ch + ${padding * 2}px)`);
+  let lRect = $lines.getBoundingClientRect();
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
   rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * h + 'px'));
 
@@ -182,7 +183,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           head.x      = lines[lines.length - 1].length;
         } else head.x = first.x + s.length;
 
-        this.ct();
+        this.caret();
       } else {
         Model.add(head.y, head.x, lines);
 
@@ -260,7 +261,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     i: 1,                                      
     frame: 0,                                  /** framecount */
     ch: h,                                     /** line and character height */
-    cw: $ct.getBoundingClientRect().width, /** computed character width  */
+    cw: $caret.getBoundingClientRect().width, /** computed character width  */
     sub: []
   };
 
@@ -361,7 +362,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     if ($rail) {
       const railCols = $max(railInit, (View.start + View.N).toString().length) + railPad;
       $rail.style.width = railCols + 'ch';
-      if (cols) $e.style.width = `calc(${railCols + cols}ch + ${cssPadding * 4}px)`;
+      if (cols) $pane.style.width = `calc(${railCols + cols}ch + ${padding * 4}px)`;
     }
     render(delta);
   };
@@ -389,25 +390,25 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       // Cursor
       const headViewRow = head.y - View.start;
       if (headViewRow >= 0 && headViewRow < View.n) {
-        $ct.style.top = headViewRow * h + 'px';
+        $caret.style.top = headViewRow * h + 'px';
         cursorLeft = head.x;
 
         // Horizontal scroll to keep cursor in view
-        const {left: cl, right: cr} = lRect, rl = lRect.left + head.x * Mode.cw - $l.scrollLeft, rr = rl + Mode.cw;
-        $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cw) * Mode.cw;
+        const {left: cl, right: cr} = lRect, rl = lRect.left + head.x * Mode.cw - $lines.scrollLeft, rr = rl + Mode.cw;
+        $lines.scrollLeft = Math.round(($lines.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cw) * Mode.cw;
       }
     }
-    $ct.style.left = cursorLeft + 'ch';
+    $caret.style.left = cursorLeft + 'ch';
 
-    Mode.sub.forEach(hook => hook($l, View, delta));
+    Mode.sub.forEach(hook => hook($lines, View, delta));
   }
   
   // Initial sizing render
   const resize = delta => {View.n += delta, RENDER(delta)};
-  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / h) - View.n)}).observe($e);
+  rows ? resize(rows) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / h) - View.n)}).observe($pane);
 
   // Reading clipboard from the keydown listener involves a different security model.
-  $l.addEventListener('paste', e => {
+  $lines.addEventListener('paste', e => {
     e.preventDefault(); // stop browser from inserting raw clipboard text
     const text = e.clipboardData.getData('text/plain');
     if (text) Sel.add(text);
@@ -423,12 +424,12 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     e.preventDefault(); // take over the clipboard contents                   
     e.clipboardData.setData('text/plain', Sel._.join('\n'));
     Sel.del();
-    $l.focus({ preventScroll: true });     // Return focus to editor
+    $lines.focus({ preventScroll: true });     // Return focus to editor
   });
 
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
   const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
-  $l.addEventListener('keydown', e => {
+  $lines.addEventListener('keydown', e => {
     const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey;
 
     const metaKeys = {
@@ -453,12 +454,12 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
 
       if(cmd || e.altKey) {
-        if(!sh && Sel.dir)      Sel.ct();
+        if(!sh && Sel.dir)      Sel.caret();
         else if(sh && !Sel.dir) Sel.make();
         if (arrowCode % 2) cmd ?      Sel.mvE(direction > 0) : Sel.mvW(direction);
       } else if (!sh && Sel.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Sel.ct(Sel.bounds(1)[direction > 0 | 0]);
+          Sel.caret(Sel.bounds(1)[direction > 0 | 0]);
           render();
         } else {
           const edge = Sel.bounds(1)[direction > 0 | 0];
@@ -466,7 +467,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           const targetAbsRow = $max(0, $min(edge.y + direction, Model.end));
 
           maxCol = $min(edge.x, Model._[targetAbsRow].length);
-          Sel.ct({ y: targetAbsRow, x: maxCol});
+          Sel.caret({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
