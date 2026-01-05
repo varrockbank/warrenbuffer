@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.5.0-alpha.1 [2026-01-05]  gz: 2791 / 2.73 KB (-4), br: 2562 / 2.50 KB (+1), min: 6732 / 6.57 KB (-21)
+- refactor: rename Selection.makeSelection to Selection.select
+
 ** 14.4.0-alpha.1 [2026-01-05]  gz: 2795 / 2.73 KB (-2), br: 2562 / 2.50 KB (-6), min: 6753 / 6.59 KB (-20)
 - refactor: rename Selection.makeCursor to Selection.cursor
 

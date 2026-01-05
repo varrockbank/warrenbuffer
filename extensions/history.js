@@ -41,7 +41,7 @@ function BuffeeHistory(editor) {
     const isSelection = cursor.headRow !== cursor.tailRow || cursor.headCol !== cursor.tailCol;
 
     if (isSelection) {
-      editor.Selection.makeSelection();
+      editor.Selection.select();
     } else {
       editor.Selection.cursor();
     }

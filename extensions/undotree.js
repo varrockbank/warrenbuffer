@@ -59,7 +59,7 @@ function BuffeeUndoTree(editor) {
     const isSelection = pos.headRow !== pos.tailRow || pos.headCol !== pos.tailCol;
 
     if (isSelection) {
-      Selection.makeSelection();
+      Selection.select();
     } else {
       Selection.cursor();
     }
