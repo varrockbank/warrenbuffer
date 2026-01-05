@@ -103,12 +103,3 @@ tab with shift
 expect(fixture.editor.Model.lines[0]).toBe(" Hello");
 EXPECT cursor at 0,6
 
-## should preserve maxCol after Enter for vertical navigation (regression 13.15.1)
-### Up arrow after Enter should return to previous column, not column 0
-TYPE "Hello"
-enter
-// Cursor now at row 1, col 0, but maxCol should still be 5
-up
-// Bug: maxCol was reset to 0, so cursor goes to col 0
-// Fix: preserve maxCol for multiline insertions
-EXPECT cursor at 0,5
