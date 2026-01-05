@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.3-alpha.1';
+  this.v = '14.36.2-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -30,12 +30,12 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         ['elements','lines','caret', 'clip','rail','ztxt','zsel']
         .map(q => $.querySelector('.buffee-' + q));
 
-  // [array, fragment, parent, updateFn]
+  // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [$ztxt, (el, i) => el.textContent = Model._[View.start + i] ?? null],
-    [$rail, (el, i) => el.textContent = View.start + i + 1],
-    [$zsel, (el) => el.style.width = 0]
-  ].map(([p, fn]) => [[], document.createDocumentFragment(), p, fn]);
+    [$ztxt, 'pre', (el, i) => el.textContent = Model._[View.start + i] ?? null],
+    [$rail, 'div', (el, i) => el.textContent = View.start + i + 1],
+    [$zsel, 'div', (el) => el.style.width = 0]
+  ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
   // Set container width if cols specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
@@ -355,7 +355,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const RENDER = this.RENDER = d => {
     const delta = d;
     if (d) {
-      for (; d > 0; d--         ) viewportLayers.forEach(([a, f]) => a.push(f.appendChild(document.createElement('div'))));
+      for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
       if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
