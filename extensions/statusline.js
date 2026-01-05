@@ -57,9 +57,9 @@ function BuffeeStatusLine(editor) {
       lastLineCount = lineCount;
       lastOriginalLineCount = originalLineCount;
     }
-    if ($spaces && Mode.spaces !== lastSpaces) {
-      $spaces.textContent = `Spaces: ${Mode.spaces}`;
-      lastSpaces = Mode.spaces;
+    if ($spaces && Mode.s !== lastSpaces) {
+      $spaces.textContent = `Spaces: ${Mode.s}`;
+      lastSpaces = Mode.s;
     }
   }
 

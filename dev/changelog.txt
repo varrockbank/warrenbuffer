@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.16.0-alpha.1 [2026-01-05]  gz: 2727 / 2.66 KB (-3), br: 2498 / 2.44 KB (-6), min: 6358 / 6.21 KB (-30)
+- refactor: rename Mode.spaces to Mode.s
+
 ** 14.15.0-alpha.1 [2026-01-05]  gz: 2730 / 2.67 KB (-3), br: 2505 / 2.45 KB (+4), min: 6388 / 6.24 KB (-24)
 - refactor: extract --buffee- prefix in CSS var lookup
 
