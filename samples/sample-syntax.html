@@ -329,13 +329,13 @@ if __name__ == "__main__":
     };
 
     // Load initial sample
-    editor.Model.text = samples.javascript;
+    editor.Model.s = samples.javascript;
 
     // Language switcher
     langSelect.addEventListener('change', () => {
       const lang = langSelect.value;
       editor.Syntax.setLanguage(lang);
-      editor.Model.text = samples[lang];
+      editor.Model.s = samples[lang];
       updateStateDisplay();
     });
 
@@ -371,7 +371,7 @@ if __name__ == "__main__":
       const reader = file.stream().getReader();
       const decoder = new TextDecoder('utf-8');
 
-      editor.Model.lines = [];
+      editor.Model._ = [];
       let remainder = '';
       let totalLines = 0;
       let chunkCount = 0;
@@ -389,7 +389,7 @@ if __name__ == "__main__":
             const completeText = fullText.substring(0, lastNewlineIndex);
             const lines = completeText.split('\n');
 
-            editor.Model.lines.push(...lines);
+            editor.Model._.push(...lines);
             totalLines += lines.length;
             remainder = fullText.substring(lastNewlineIndex + 1);
           } else {
@@ -404,7 +404,7 @@ if __name__ == "__main__":
         }
 
         if (remainder.length > 0) {
-          editor.Model.lines.push(remainder);
+          editor.Model._.push(remainder);
           totalLines++;
         }
 
@@ -430,7 +430,7 @@ if __name__ == "__main__":
       const viewport = editor.View;
       const lines = [];
 
-      for (let i = 0; i < viewport.size && viewport.start + i < editor.Model.lines.length; i++) {
+      for (let i = 0; i < viewport.size && viewport.start + i < editor.Model._.length; i++) {
         const absLine = viewport.start + i;
         const state = cache[absLine] !== undefined ? cache[absLine] : '?';
         lines.push(`L${absLine + 1}: state=${state}`);

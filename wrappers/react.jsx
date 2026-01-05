@@ -8,7 +8,7 @@
  *
  *   useEffect(() => {
  *     if (editorRef.current) {
- *       editorRef.current.Model.text = 'Hello, World!';
+ *       editorRef.current.Model.s = 'Hello, World!';
  *     }
  *   }, []);
  *
@@ -67,7 +67,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     editorRef.current = editor;
 
     if (initialText) {
-      editor.Model.text = initialText;
+      editor.Model.s = initialText;
     }
 
     if (onReady) {

@@ -143,12 +143,12 @@
     function log(s) {
       console.log(s);
       // Append line and scroll to show it
-      if (logs.Model.lines[0] === '') {
-        logs.Model.lines[0] = s;
+      if (logs.Model._[0] === '') {
+        logs.Model._[0] = s;
       } else {
-        logs.Model.lines.push(s);
+        logs.Model._.push(s);
       }
-      logs.View.start = Math.max(0, logs.Model.lines.length - logs.View.size - 1);
+      logs.View.start = Math.max(0, logs.Model._.length - logs.View.size - 1);
       logs._render(true);
     }
 
@@ -156,7 +156,7 @@
       new Buffee(editorEl, { rows: 10, logger: log })
     )));
 
-    editor.Model.text = 'Select a file to load...';
+    editor.Model.s = 'Select a file to load...';
     editorEl.focus();
 
     // View controls

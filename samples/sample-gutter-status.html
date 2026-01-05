@@ -156,29 +156,29 @@ hello();`;
     // Default
     const elDefault = document.getElementById('editor-default');
     const edDefault = BuffeeStatusLine(new Buffee(elDefault, { rows: 6 }));
-    edDefault.Model.text = content;
+    edDefault.Model.s = content;
 
     // No gutter
     const elNoGutter = document.getElementById('editor-no-gutter');
     const edNoGutter = BuffeeStatusLine(new Buffee(elNoGutter, { rows: 10 }));
-    edNoGutter.Model.text = content;
+    edNoGutter.Model.s = content;
 
     // No status bar
     const elNoStatus = document.getElementById('editor-no-status');
     const edNoStatus = new Buffee(elNoStatus, {
       rows: 10
     });
-    edNoStatus.Model.text = content;
+    edNoStatus.Model.s = content;
 
     // Status line on top
     const elStatusTop = document.getElementById('editor-status-top');
     const edStatusTop = BuffeeStatusLine(new Buffee(elStatusTop, { rows: 10 }));
-    edStatusTop.Model.text = content;
+    edStatusTop.Model.s = content;
 
     // Gutter on right
     const elGutterRight = document.getElementById('editor-gutter-right');
     const edGutterRight = BuffeeStatusLine(new Buffee(elGutterRight, { rows: 10 }));
-    edGutterRight.Model.text = content;
+    edGutterRight.Model.s = content;
   </script>
 </body>
 </html>

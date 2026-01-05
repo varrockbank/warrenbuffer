@@ -284,7 +284,7 @@
 
       // Generate test content
       const testCode = generateCode(1000);
-      editor.Model.text = testCode;
+      editor.Model.s = testCode;
 
       const testLine = 'const greeting = "Hello, World!"; // This is a comment';
 
@@ -323,7 +323,7 @@
       const iterations = getIterations();
       const editor = createFreshEditor();
       BuffeeElementals(editor);
-      editor.Model.text = '\n'.repeat(100);
+      editor.Model.s = '\n'.repeat(100);
 
       // Profile addButton
       let start = performance.now();
@@ -366,7 +366,7 @@
       const iterations = getIterations();
       const editor = createFreshEditor();
       BuffeeTUI(editor);
-      editor.Model.text = '\n'.repeat(100);
+      editor.Model.s = '\n'.repeat(100);
 
       // Profile addButton
       let start = performance.now();
