@@ -48,11 +48,11 @@ function BuffeeSyntax(editor) {
   };
 
   // Hook Model.s setter for bulk content changes
-  const textDescriptor = Object.getOwnPropertyDescriptor(Model, 'text') ||
-    { set: function(v) { this._text = v; }, get: function() { return this._text; } };
+  const textDescriptor = Object.getOwnPropertyDescriptor(Model, 's') ||
+    { set: function(v) { this._s = v; }, get: function() { return this._s; } };
   const originalTextSetter = textDescriptor.set;
 
-  Object.defineProperty(Model, 'text', {
+  Object.defineProperty(Model, 's', {
     set: function(text) {
       originalTextSetter.call(this, text);
       if (enabled) {
