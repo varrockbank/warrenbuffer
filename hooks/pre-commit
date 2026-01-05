@@ -73,7 +73,7 @@ if git rev-parse --verify HEAD >/dev/null 2>&1; then
     if git cat-file -e HEAD:dist/buffee.min.js 2>/dev/null; then
         OLD_SIZE=$(git show HEAD:dist/buffee.min.js | wc -c | tr -d ' ')
         OLD_GZIPPED=$(git show HEAD:dist/buffee.min.js | gzip -cn | wc -c)
-        OLD_BROTLI=$(git show HEAD:dist/buffee.min.js | brotli -c | wc -c | tr -d ' ')
+        OLD_BROTLI=$(git show HEAD:dist/buffee.min.js | brotli -q 11 -c | wc -c | tr -d ' ')
     else
         OLD_SIZE=0
         OLD_GZIPPED=0
@@ -90,7 +90,7 @@ terser buffee.js -c -m -o dist/buffee.min.js
 if [ $? -eq 0 ]; then
     NEW_SIZE=$(wc -c < dist/buffee.min.js | tr -d ' ')
     NEW_GZIPPED=$(gzip -cn dist/buffee.min.js | wc -c | tr -d ' ')
-    NEW_BROTLI=$(brotli -c dist/buffee.min.js | wc -c | tr -d ' ')
+    NEW_BROTLI=$(brotli -q 11 -c dist/buffee.min.js | wc -c | tr -d ' ')
     MINIFIED_KB=$(echo "$NEW_SIZE" | awk '{printf "%.2f", $1/1024}')
     GZIPPED_KB=$(echo "$NEW_GZIPPED" | awk '{printf "%.2f", $1/1024}')
     BROTLI_KB=$(echo "$NEW_BROTLI" | awk '{printf "%.2f", $1/1024}')
