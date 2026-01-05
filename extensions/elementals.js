@@ -52,7 +52,7 @@ function BuffeeElementals(editor) {
   function updatePositions() {
     for (const el of elements) {
       const viewportRow = el.row - View.start;
-      if (viewportRow >= 0 && viewportRow < View.size) {
+      if (viewportRow >= 0 && viewportRow < View.n) {
         el.$container.style.top = viewportRow * lineHeight + 'px';
         el.$container.style.display = '';
       } else {

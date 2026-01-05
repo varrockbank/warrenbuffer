@@ -139,7 +139,7 @@ editor.Model.end;    // 1
 // Read
 editor.View.start;  // First visible line (0-based)
 editor.View.end;    // Last visible line
-editor.View.size;   // Number of visible lines
+editor.View.n;   // Number of visible lines
 editor.View._;  // Array of visible line strings
 
 // Navigate

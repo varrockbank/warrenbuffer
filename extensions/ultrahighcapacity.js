@@ -284,8 +284,8 @@ function BuffeeUltraHighCapacity(editor) {
      * @throws {Error} If viewport size is larger than chunk size
      */
     activate(size = 50_000) {
-      if (View.size >= size) {
-        throw new Error(`View ${View.size} can't be larger than chunkSize ${size}`);
+      if (View.n >= size) {
+        throw new Error(`View ${View.n} can't be larger than chunkSize ${size}`);
       }
 
       enabled = true;
