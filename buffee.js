@@ -17,28 +17,28 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.28.0-alpha.1';
+  this.v = '14.29.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const { min: $min, max: $max } = Math;
 
-  const [h, cssPadding, gutterInit, gutterPad] =
-    ['cell', 'padding', 'gutter-init', 'gutter-pad']
+  const [h, cssPadding, railInit, railPad] =
+    ['cell', 'padding', 'rail-init', 'rail-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$e        ,$l     ,$ct     ,$clip  ,$gutter , $layerText ,$layerSelect] =
-        ['elements','lines','ct',    'clip','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
+  const [$e        ,$l     ,$ct     ,$clip  ,$rail , $layerText ,$layerSelect] =
+        ['elements','lines','ct',    'clip','rail','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
     [$layerText, 'pre', (el, i) => el.textContent = Model._[View.start + i] ?? null],
-    [$gutter, 'div', (el, i) => el.textContent = View.start + i + 1],
+    [$rail, 'div', (el, i) => el.textContent = View.start + i + 1],
     [$layerSelect, 'div', (el) => el.style.width = 0]
   ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
   // Set container width if cols specified
-  // Width = gutter(ch) + lines(ch) + margins(px): gutter has margin*2, lines has margin*2
-  cols && !$gutter && ($e.style.width = `calc(${cols}ch + ${cssPadding * 2}px)`);
+  // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
+  cols && !$rail && ($e.style.width = `calc(${cols}ch + ${cssPadding * 2}px)`);
   let lRect = $l.getBoundingClientRect();
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
   rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * h + 'px'));
@@ -350,7 +350,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     get _() { return Model._.slice(this.start, this.end + 1); }
   };
 
-  // Add / remove lines, selections, gutters as row changes
+  // Add / remove lines, selections, rails as row changes
   const R = this.R = d => {
     const delta = d;
     if (d) {
@@ -358,10 +358,10 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
-    if ($gutter) {
-      const gutterCols = $max(gutterInit, (View.start + View.n1).toString().length) + gutterPad;
-      $gutter.style.width = gutterCols + 'ch';
-      if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
+    if ($rail) {
+      const railCols = $max(railInit, (View.start + View.n1).toString().length) + railPad;
+      $rail.style.width = railCols + 'ch';
+      if (cols) $e.style.width = `calc(${railCols + cols}ch + ${cssPadding * 4}px)`;
     }
     r(delta);
   };

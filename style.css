@@ -1,6 +1,6 @@
 /**
  * Buffee Editor - Required Styles
- * @version 14.28.0-alpha.1
+ * @version 14.29.0-alpha.1
  *
  * This stylesheet contains the essential structural CSS for Buffee.
  * Colors are intentionally omitted - define them at point of usage.
@@ -20,8 +20,8 @@
   flex-direction: column;
   --buffee-cell: 24px;
   --buffee-padding: 4px;
-  --buffee-gutter-pad: 1ch;
-  --buffee-gutter-init: 2ch;
+  --buffee-rail-pad: 1ch;
+  --buffee-rail-init: 2ch;
   --buffee-z-selection: 100;
   --buffee-z-text: 200;
   --buffee-z-cursor: 300;
@@ -29,7 +29,7 @@
   --buffee-z-status: 600;
 }
 
-/* Content area (gutter + lines) */
+/* Content area (rail + lines) */
 .buffee > .buffee-elements {
   display: flex;
   flex: 1;
@@ -99,10 +99,10 @@
   font-size: var(--buffee-cell);
 }
 
-.buffee .buffee-gutter {
+.buffee .buffee-rail {
   text-align: right; /* config */
   padding: var(--buffee-padding); 
-  width: calc(var(--buffee-gutter-init) + var(--buffee-gutter-pad));
+  width: calc(var(--buffee-rail-init) + var(--buffee-rail-pad));
 }
 
 .buffee .buffee-layer-text {
@@ -135,6 +135,6 @@
 }
 
 .buffee .buffee-ct, .buffee .buffee-layer-selection > div { height: var(--buffee-cell); }
-.buffee .buffee-ct, .buffee .buffee-gutter, .buffee .buffee-lines, .buffee .buffee-layer-selection > div {
+.buffee .buffee-ct, .buffee .buffee-rail, .buffee .buffee-lines, .buffee .buffee-layer-selection > div {
   font-size: var(--buffee-cell); line-height: var(--buffee-cell);
 }
