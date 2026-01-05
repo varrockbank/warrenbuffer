@@ -87,7 +87,7 @@ function BuffeeIOS(editor) {
     return { x: x - padL, y: y - padT };
   }
 
-  function setCursor(evt) {
+  function makeCursor(evt) {
     const { x, y } = getPoint(evt);
     let row = Math.max(0, Math.floor(y / lineHeight));
     const col = Math.max(0, Math.floor(x / ch));
@@ -99,7 +99,7 @@ function BuffeeIOS(editor) {
     const absRow = View.start + row;
     // Bounds check col to line length
     const lineLength = Model.lines[absRow].length;
-    Selection.setCursor({ row: absRow, col: Math.min(col, lineLength) });
+    Selection.makeCursor({ row: absRow, col: Math.min(col, lineLength) });
     editor.render();
   }
 
@@ -138,7 +138,7 @@ function BuffeeIOS(editor) {
   // Focus sink on tap to show iOS keyboard
   editorElement.addEventListener('pointerdown', (e) => {
     sink.focus({ preventScroll: true });
-    setCursor(e);
+    makeCursor(e);
   });
 
   // Public API

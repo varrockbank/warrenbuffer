@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.2.0-alpha.1';
+  this.v = '14.3.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -99,16 +99,6 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     },
 
     /**
-     * Sets the cursor to an absolute position.
-     * @param {Position} position - Target cursor position (absolute row)
-     */
-    setCursor({row, col}) {
-      head.row = row;
-      head.col = col;
-      this.makeCursor();
-    },
-
-    /**
      * Gets the selected text as an array of lines.
      * @returns {string[]} Array of selected line contents
      */
@@ -125,8 +115,9 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       return [firstLine, ...middle, lastLine];
     },
 
-    /** Collapses selection to a cursor (head === tail). */
-    makeCursor() {
+    /** Collapses selection to a cursor. Optionally sets position first. */
+    makeCursor(p) {
+      if (p) { head.row = p.row; head.col = p.col; }
       tail.row = head.row;
       tail.col = head.col;
       head     = tail;
@@ -467,7 +458,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         if (arrowCode % 2) cmd ?      Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Selection.setCursor(Selection.bounds(1)[direction > 0 | 0]);
+          Selection.makeCursor(Selection.bounds(1)[direction > 0 | 0]);
           render();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
@@ -475,7 +466,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           const targetAbsRow = $clamp(edge.row + direction, 0, Model.lastIndex);
 
           maxCol = Math.min(edge.col, Model.lines[targetAbsRow].length);
-          Selection.setCursor({ row: targetAbsRow, col: maxCol});
+          Selection.makeCursor({ row: targetAbsRow, col: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
