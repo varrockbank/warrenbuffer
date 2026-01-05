@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.15.4-alpha.1';
+  this.version = '13.15.5-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -388,7 +388,7 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
     if(Mode.interactive >= 0) {
       // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
-      const rEnd = Math.min(Viewport.start + Viewport.displayLines, secondEdge.row + 1);
+      const rEnd = Math.min(Viewport.start + Viewport.size, secondEdge.row + 1);
       for (let r = Math.max(Viewport.start, firstEdge.row); r < rEnd; r++) {
         const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length, {style} = viewportLayers[2][0][r - Viewport.start];
         style.left = (f ? firstEdge.col : 0) + 'ch';

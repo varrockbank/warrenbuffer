@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 13.15.5-alpha.1 [2026-01-05]  gz: 2820 / 2.75 KB (+2), br: 2577 / 2.52 KB (+4), min: 6818 / 6.66 KB (-8)
+- fix: use Viewport.size for selection loop (matches original safety check)
+
 ** 13.15.4-alpha.1 [2026-01-05]  gz: 2818 / 2.75 KB (+3), br: 2573 / 2.51 KB (+2), min: 6826 / 6.67 KB (2)
 - fix: reset maxCol on multiline insert (Enter key)
 
