@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.16.0-alpha.1';
+  this.v = '14.17.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -74,7 +74,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         const len = Model._[dir > 0 ? ++head.row : --head.row].length;
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
-        if (head.row < View.start || head.row > View.end) View.set(dir > 0 ? head.row - View.size + 1 : head.row);
+        if (head.row < View.start || head.row > View.end) View.set(dir > 0 ? head.row - View.n + 1 : head.row);
         else r();
       }
     },
@@ -168,7 +168,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
                maxCol = head.col  = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
-      if (head.row > View.end) View.set(head.row - View.size + 1);
+      if (head.row > View.end) View.set(head.row - View.n + 1);
       else r();
     },
 
@@ -207,7 +207,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       } else if (fwd ? head.row < Model.end : head.row > 0) {
         // At edge - move to adjacent line
         head.col = fwd ? 0 : Model._[--head.row].length;
-        if (fwd && ++head.row > View.end) View.set(head.row - View.size + 1);
+        if (fwd && ++head.row > View.end) View.set(head.row - View.n + 1);
         else if (!fwd && head.row < View.start) View.set(head.row);
         else r();
       }
@@ -321,24 +321,24 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     /** @type {number} Index of the first visible line (0-indexed) */
     start: 0,
     /** @type {number} Number of visible lines */
-    size: 0,
+    n: 0,
     /** @type {number} Number of DOM line containers. +1 if auto-fit (no rows specified) */
-    get displayLines() { return this.size + !rows; },
+    get displayLines() { return this.n + !rows; },
 
     /**
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get end() { return Math.min(this.start + this.size - 1, Model.end); },
+    get end() { return Math.min(this.start + this.n - 1, Model.end); },
 
     /**
      * Sets the viewport position and optionally size.
      * @param {number} start - Line index to start at (0-indexed)
      * @param {number} [size] - Number of lines to display (optional)
      */
-    set(start, size = this.size) {
-      const d = size - this.size;
-      this.size = size;
+    set(start, size = this.n) {
+      const d = size - this.n;
+      this.n = size;
       this.start = $clamp(start, 0, Model.end);
       R(d);
     },
@@ -379,7 +379,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     if(Mode.i >= 0) {
       // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
-      const rEnd = Math.min(View.start + View.size, secondEdge.row + 1);
+      const rEnd = Math.min(View.start + View.n, secondEdge.row + 1);
       for (let r = Math.max(View.start, firstEdge.row); r < rEnd; r++) {
         const f = r === firstEdge.row, l = r === secondEdge.row, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
         style.left = (f ? firstEdge.col : 0) + 'ch';
@@ -388,7 +388,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
 
       // Cursor
       const headViewRow = head.row - View.start;
-      if (headViewRow >= 0 && headViewRow < View.size) {
+      if (headViewRow >= 0 && headViewRow < View.n) {
         $cursor.style.top = headViewRow * h + 'px';
         cursorLeft = head.col;
 
@@ -403,8 +403,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   }
   
   // Initial sizing render
-  const resize = delta => {View.size += delta, R(delta)};
-  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / h) - View.size)}).observe($e);
+  const resize = delta => {View.n += delta, R(delta)};
+  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / h) - View.n)}).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
@@ -470,7 +470,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
-          else if (targetAbsRow > View.end) View.set(targetAbsRow - View.size + 1);
+          else if (targetAbsRow > View.end) View.set(targetAbsRow - View.n + 1);
           else r();
         }
       } else { // no meta key.
