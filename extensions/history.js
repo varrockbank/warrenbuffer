@@ -29,7 +29,7 @@ function BuffeeHistory(editor) {
 
   /** Capture current cursor/selection state */
   function captureCursor() {
-    const [head, tail] = editor.Selection.bounds();
+    const [head, tail] = editor.Select.bounds();
     return {
       headRow: head.y, headCol: head.x,
       tailRow: tail.y, tailCol: tail.x
@@ -38,15 +38,15 @@ function BuffeeHistory(editor) {
 
   /** Restore cursor/selection state */
   function restoreCursor(cursor) {
-    const isSelection = cursor.headRow !== cursor.tailRow || cursor.headCol !== cursor.tailCol;
+    const isSelect = cursor.headRow !== cursor.tailRow || cursor.headCol !== cursor.tailCol;
 
-    if (isSelection) {
-      editor.Selection.select();
+    if (isSelect) {
+      editor.Select.make();
     } else {
-      editor.Selection.ct();
+      editor.Select.ct();
     }
 
-    const [head, tail] = editor.Selection.bounds();
+    const [head, tail] = editor.Select.bounds();
     head.y = cursor.headRow;
     head.x = cursor.headCol;
     tail.y = cursor.tailRow;
@@ -121,7 +121,7 @@ function BuffeeHistory(editor) {
     del(row, col, endRow, endCol);
 
     // Check if this might be the start of a combined operation
-    const isSelectionDelete = lines.length > 1 || lines[0].length > 1;
+    const isSelectDelete = lines.length > 1 || lines[0].length > 1;
 
     if (canCoalesce('delete', row, col, lines)) {
       const last = undoStack[undoStack.length - 1];
@@ -130,7 +130,7 @@ function BuffeeHistory(editor) {
       _combinedPending = null;
     } else {
       undoStack.push({ type: 'delete', row, col, endRow, endCol, lines, cursorBefore });
-      if (isSelectionDelete) {
+      if (isSelectDelete) {
         _combinedPending = { row, col };
       } else {
         _combinedPending = null;

@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.27.0-alpha.1 [2026-01-05]  gz: 2655 / 2.59 KB (+2), br: 2449 / 2.39 KB (0), min: 5873 / 5.74 KB (-9)
+- refactor: rename Selection to Select, Selection.select to Select.make
+
 ** 14.26.0-alpha.1 [2026-01-05]  gz: 2653 / 2.59 KB (-7), br: 2449 / 2.39 KB (-2), min: 5882 / 5.74 KB (-24)
 - refactor: rename cursor to ct (CSS class, DOM element, Selection method)
 

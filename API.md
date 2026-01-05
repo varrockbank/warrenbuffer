@@ -149,33 +149,33 @@ editor.View.set(99, 25);  // Scroll to line index 99, show 25 lines
 
 ---
 
-## Selection (`editor.Selection`)
+## Select (`editor.Select`)
 
 ```javascript
 // Cursor position
-editor.Selection.ct({ y: 0, x: 5 });
-editor.Selection.isSelection;  // false if cursor, true if range
-editor.Selection.bounds(1);    // [start, end] in document order
-editor.Selection.bounds();     // [head, tail] - mutable position objects
+editor.Select.ct({ y: 0, x: 5 });
+editor.Select.isSelect;  // false if cursor, true if range
+editor.Select.bounds(1);    // [start, end] in document order
+editor.Select.bounds();     // [head, tail] - mutable position objects
 
 // Selected text
-editor.Selection._;  // Array of selected lines
+editor.Select._;  // Array of selected lines
 
 // Movement
-editor.Selection.y(1);   // Down
-editor.Selection.y(-1);  // Up
-editor.Selection.x(1);   // Right
-editor.Selection.x(-1);  // Left
-editor.Selection.moveWord();
-editor.Selection.moveBackWord();
-editor.Selection.moveCursorStartOfLine();
-editor.Selection.moveCursorEndOfLine();
+editor.Select.y(1);   // Down
+editor.Select.y(-1);  // Up
+editor.Select.x(1);   // Right
+editor.Select.x(-1);  // Left
+editor.Select.moveWord();
+editor.Select.moveBackWord();
+editor.Select.moveCursorStartOfLine();
+editor.Select.moveCursorEndOfLine();
 
 // Editing
-editor.Selection.add("text");
-editor.Selection.del();
-editor.Selection.indent(4);   // Indent by 4 spaces
-editor.Selection.indent(-4);  // Unindent by 4 spaces
+editor.Select.add("text");
+editor.Select.del();
+editor.Select.indent(4);   // Indent by 4 spaces
+editor.Select.indent(-4);  // Unindent by 4 spaces
 ```
 
 ---
@@ -431,7 +431,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 
 ```javascript
 // Public properties
-const { View, Selection, Model, Mode, r, $ } = editor;
+const { View, Select, Model, Mode, r, $ } = editor;
 // Mode.frame - Number of render calls
 // Mode.ch - Line height in pixels (from CSS --buffee-cell)
 // Mode.cw - Character width in pixels (measured from cursor element)
@@ -446,8 +446,8 @@ const { _insert, _delete } = editor;
 // Render hooks via Mode.renderHooks
 const { renderHooks } = editor.Mode;
 
-// Cursor positions via Selection.bounds()
-const [head, tail] = editor.Selection.bounds();
+// Cursor positions via Select.bounds()
+const [head, tail] = editor.Select.bounds();
 ```
 
 ### Render Hooks

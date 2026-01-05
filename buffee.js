@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.26.0-alpha.1';
+  this.v = '14.27.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -26,14 +26,14 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const [h, cssPadding, gutterInit, gutterPad] =
     ['cell', 'padding', 'gutter-init', 'gutter-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$e        ,$l     ,$ct     ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
+  const [$e        ,$l     ,$ct     ,$clipboardBridge  ,$gutter , $layerText ,$layerSelect] =
         ['elements','lines','ct',    'clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
     [$layerText, 'pre', (el, i) => el.textContent = Model._[View.start + i] ?? null],
     [$gutter, 'div', (el, i) => el.textContent = View.start + i + 1],
-    [$layerSelection, 'div', (el) => el.style.width = 0]
+    [$layerSelect, 'div', (el) => el.style.width = 0]
   ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
   // Set container width if cols specified
@@ -52,17 +52,17 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   let maxCol = head.x;
 
   /**
-   * Selection management for cursor and text selection operations.
+   * Select management for cursor and text selection operations.
    * Handles cursor movement, text selection, insertion, and deletion.
-   * @namespace Selection
+   * @namespace Select
    */
-  const Selection = this.Selection = {
+  const Select = this.Select = {
     /**
      * Returns selection bounds. Pass truthy for document order, falsy for [head, tail].
      * @param {boolean} [ordered] - If true, returns [start, end] in document order
      * @returns {[Position, Position]} Array of positions
      */
-    bounds: ordered => ordered && Selection.dir > 0 ? [tail, head] : [head, tail],
+    bounds: ordered => ordered && Select.dir > 0 ? [tail, head] : [head, tail],
 
     /**
      * Moves the cursor/selection head vertically.
@@ -91,7 +91,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
     /**
      * Whether there is an active text selection (vs just a cursor).
-     * Selection direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
+     * Select direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
      * @returns {-1|0|1}
      */
     get dir() {
@@ -103,7 +103,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @returns {string[]} Array of selected line contents
      */
     get _() {
-      const [left, right] = Selection.bounds(1);
+      const [left, right] = Select.bounds(1);
       if(left.y === right.y) {
         const text  = Model._[left.y];
         const slice = text.slice(left.x, right.x + (this.dir > 0));
@@ -124,7 +124,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     },
 
     /** Begins a new selection by detaching head from tail allowing independent movement. */
-    select() {
+    make() {
       head     = detachedHead;
       head.y = tail.y;
       head.x = tail.x;
@@ -147,7 +147,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     add(s) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
-        const [first, second] = Selection.bounds(1);
+        const [first, second] = Select.bounds(1);
         Model.del(first.y, first.x, second.y, second.x + (this.dir > 0));
         Model.add(first.y, first.x, lines);
 
@@ -225,7 +225,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     indent(n) {
       // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
-      const [first, second] = Selection.bounds(1);
+      const [first, second] = Select.bounds(1);
       for (let i = first.y; i <= second.y; i++) {
         const line = Model._[i];
         if (n > 0) Model._[i] = ' '.repeat(n) + line;
@@ -377,8 +377,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
-      // Selections 
-      const [firstEdge, secondEdge] = Selection.bounds(1);
+      // Selects 
+      const [firstEdge, secondEdge] = Select.bounds(1);
       const rEnd = $min(View.start + View.n, secondEdge.y + 1);
       for (let r = $max(View.start, firstEdge.y); r < rEnd; r++) {
         const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
@@ -410,19 +410,19 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   $l.addEventListener('paste', e => {
     e.preventDefault(); // stop browser from inserting raw clipboard text
     const text = e.clipboardData.getData('text/plain');
-    if (text) Selection.add(text);
+    if (text) Select.add(text);
   });
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
   // Listen on $clipboardBridge since that's where focus moves on Ctrl+C/X.
   $clipboardBridge.addEventListener('copy', e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Selection._.join('\n'));
+    e.clipboardData.setData('text/plain', Select._.join('\n'));
   });
   $clipboardBridge.addEventListener('cut', e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Selection._.join('\n'));
-    Selection.del();
+    e.clipboardData.setData('text/plain', Select._.join('\n'));
+    Select.del();
     $l.focus({ preventScroll: true });     // Return focus to editor
   });
 
@@ -437,11 +437,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
-      Backspace: () => { Selection.del() },
-      Enter: () => { Selection.add('\n') } ,
+      Backspace: () => { Select.del() },
+      Enter: () => { Select.add('\n') } ,
       Tab: () => {
         e.preventDefault();
-        (Selection.dir || sh) ? Selection.indent(sh ? -Mode.s : Mode.s) : Selection.add(' '.repeat(Mode.s));
+        (Select.dir || sh) ? Select.indent(sh ? -Mode.s : Mode.s) : Select.add(' '.repeat(Mode.s));
       },
     };
 
@@ -453,20 +453,20 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
 
       if(cmd || e.altKey) {
-        if(!sh && Selection.dir)      Selection.ct();
-        else if(sh && !Selection.dir) Selection.select();
-        if (arrowCode % 2) cmd ?      Selection.moveLineEdge(direction > 0) : Selection.moveWord(direction);
-      } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
+        if(!sh && Select.dir)      Select.ct();
+        else if(sh && !Select.dir) Select.make();
+        if (arrowCode % 2) cmd ?      Select.moveLineEdge(direction > 0) : Select.moveWord(direction);
+      } else if (!sh && Select.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Selection.ct(Selection.bounds(1)[direction > 0 | 0]);
+          Select.ct(Select.bounds(1)[direction > 0 | 0]);
           r();
         } else {
-          const edge = Selection.bounds(1)[direction > 0 | 0];
+          const edge = Select.bounds(1)[direction > 0 | 0];
           // edge.y is already absolute
           const targetAbsRow = $max(0, $min(edge.y + direction, Model.end));
 
           maxCol = $min(edge.x, Model._[targetAbsRow].length);
-          Selection.ct({ y: targetAbsRow, x: maxCol});
+          Select.ct({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
@@ -474,14 +474,14 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           else r();
         }
       } else { // no meta key.
-        if (sh && !Selection.dir) Selection.select();
-        Selection[arrowCode % 2 ? 'x' : 'y'](direction);
+        if (sh && !Select.dir) Select.make();
+        Select[arrowCode % 2 ? 'x' : 'y'](direction);
       }
     } else if (k.length === 1) {
       if (cmd) metaKeys[k.toLowerCase()]?.();
       else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
-        Selection.add(k);
+        Select.add(k);
       }
     } else if (special[k] && Mode.i >= 1) { special[k](); }
   });
