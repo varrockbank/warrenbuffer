@@ -72,7 +72,7 @@
   </div>
 
   <fieldset>
-    <legend>Viewport:</legend>
+    <legend>View:</legend>
     <label for="viewport-start">Start:</label>
     <input id="viewport-start" value="1">
     <label for="viewport-size">Window size:</label>
@@ -148,7 +148,7 @@
       } else {
         logs.Model.lines.push(s);
       }
-      logs.Viewport.start = Math.max(0, logs.Model.lines.length - logs.Viewport.size - 1);
+      logs.View.start = Math.max(0, logs.Model.lines.length - logs.View.size - 1);
       logs._render(true);
     }
 
@@ -159,11 +159,11 @@
     editor.Model.text = 'Select a file to load...';
     editorEl.focus();
 
-    // Viewport controls
+    // View controls
     document.getElementById('viewport-update').addEventListener('click', () => {
       const viewportStart = parseInt(document.getElementById('viewport-start').value) - 1;
       const viewportSize = parseInt(document.getElementById('viewport-size').value);
-      editor.Viewport.set(viewportStart, viewportSize);
+      editor.View.set(viewportStart, viewportSize);
     });
 
     // File input handler

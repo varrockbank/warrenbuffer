@@ -18,7 +18,7 @@
  */
 function BuffeeTreeSitter(editor, { parser, query }) {
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, render, $ } = editor;
+  const { View, Model, render, $ } = editor;
   const $e = $.querySelector('.buffee-elements');
 
   /** @type {boolean} */

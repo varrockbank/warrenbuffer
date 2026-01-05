@@ -123,14 +123,14 @@ Container should have explicit height inherit some percentage from parent.
   
 `editor.Model._` is the raw list of text buffer lines 
 
-**View** `editor.View` represents the virtual viewport 
+**View** `editor.View` represents the virtual viewport
 
-`editor.View._` is the buffer lines in view 
+`editor.View._` is the buffer lines in view
 
-**Selection** `editor.Sel` represent a text selection. Cursors are the special case of this where the 
+**Span** `editor.Span` represents a text selection. Cursors are the special case of this where the
 anchor and the head/dot are the same. Text editing operations are defined relative to this selection.
 
-The controller are keyboard event handlers which route to operations on the selection. In the future, the basic controller will be refactored out of Buffee.js as an Extension such that you will have to bring-your-own controller by default. e.g. a "vim normal mode controller". 
+The controller are keyboard event handlers which route to operations on the selection. In the future, the basic controller will be refactored out of Buffee.js as an Extension such that you will have to bring-your-own controller by default. e.g. a "vim normal mode controller".
 
 See: [API notes](https://varrockbank.github.io/buffee/API.html)
 

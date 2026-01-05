@@ -15,7 +15,7 @@
  */
 function BuffeeElementals(editor) {
   const { renderHooks, cellHeight: lineHeight } = editor.Mode;
-  const { Viewport, render, $ } = editor;
+  const { View, render, $ } = editor;
   const $elementLayer = $.querySelector('.buffee-layer-elements');
 
   let enabled = false;
@@ -51,8 +51,8 @@ function BuffeeElementals(editor) {
    */
   function updatePositions() {
     for (const el of elements) {
-      const viewportRow = el.row - Viewport.start;
-      if (viewportRow >= 0 && viewportRow < Viewport.size) {
+      const viewportRow = el.row - View.start;
+      if (viewportRow >= 0 && viewportRow < View.size) {
         el.$container.style.top = viewportRow * lineHeight + 'px';
         el.$container.style.display = '';
       } else {

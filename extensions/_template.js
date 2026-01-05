@@ -17,9 +17,9 @@ function Buffee__NAME__(editor) {
   const { renderHooks } = editor.Mode;
 
   // === EDITOR PROPERTIES ===
-  // Available: Model, Selection, Viewport, Mode, render, $
+  // Available: Model, Selection, View, Mode, render, $
   // Selection.bounds() returns [head, tail], Selection.bounds(1) returns ordered
-  const { Model, Viewport, Mode, render, $ } = editor;
+  const { Model, View, Mode, render, $ } = editor;
   const lineHeight = Mode.cellHeight;
   const $e = $.querySelector('.buffee-elements');
 

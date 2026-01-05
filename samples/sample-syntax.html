@@ -412,7 +412,7 @@ if __name__ == "__main__":
         perfStats.innerHTML = `Loaded ${totalLines.toLocaleString()} lines in ${((t1-t0)/1000).toFixed(1)}s`;
 
         const t2 = performance.now();
-        editor.Viewport.set(0, editor.Viewport.size);
+        editor.View.set(0, editor.View.size);
         const t3 = performance.now();
 
         perfStats.innerHTML += ` | Render: ${(t3-t2).toFixed(0)}ms`;
@@ -427,7 +427,7 @@ if __name__ == "__main__":
     // Update state display
     function updateStateDisplay() {
       const cache = editor.Syntax.stateCache;
-      const viewport = editor.Viewport;
+      const viewport = editor.View;
       const lines = [];
 
       for (let i = 0; i < viewport.size && viewport.start + i < editor.Model.lines.length; i++) {

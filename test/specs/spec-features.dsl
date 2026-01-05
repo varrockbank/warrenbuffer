@@ -43,13 +43,13 @@ const $gutter = fixture.node.querySelector(".buffee-gutter");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
 const initialWidth = gutterWidthPx();
-// Viewport shows lines 1-10, largest visible = 10, gutter = 3ch (~43px)
+// View shows lines 1-10, largest visible = 10, gutter = 3ch (~43px)
 expect(initialWidth).toBeCloseTo(43.35);
 // Scroll down - still 2-digit line numbers visible
-fixture.editor.Viewport.set(fixture.editor.Viewport.start + 2);
+fixture.editor.View.set(fixture.editor.View.start + 2);
 expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 // Scroll back up
-fixture.editor.Viewport.set(fixture.editor.Viewport.start - 2);
+fixture.editor.View.set(fixture.editor.View.start - 2);
 expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 
 ## should grow gutter when scrolling to 3-digit lines
@@ -59,7 +59,7 @@ fixture.editor.Model.text = Array(100).fill("x").join("\n");
 const $gutter = fixture.node.querySelector(".buffee-gutter");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
-// Viewport at top shows lines 1-10, gutter = 3ch (2 digits + 1 padding) ~43px
+// View at top shows lines 1-10, gutter = 3ch (2 digits + 1 padding) ~43px
 expect(gutterWidthPx()).toBeCloseTo(43.35);
 // Navigate to line 100
 down 99 times
