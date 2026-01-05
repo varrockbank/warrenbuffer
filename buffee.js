@@ -17,17 +17,26 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.6-alpha.1';
+  this.v = '14.36.7-alpha.1';
   this.$ = $;
-  const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
+  const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
+  // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
+  // This allows selections to span beyond the viewport.
+  // In case where we have cursor, we want head === tail.
+  const detachedHead = { y: 0, x: 0};
+  let head   = { y: 0, x: 0 };
+  let tail   = head;
+  let maxCol = head.x;
 
-  const [h     , padding  ,  railInit  , railPad] =
-        ['cell', 'padding', 'rail-init','rail-pad']
+  // Interface with HTML and CSS.
+  const [ch    , padding ,  railInit , railPad  ] =
+        ['cell','padding','rail-init','rail-pad']
         .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$pane  ,$lines ,$caret , $clip ,$rail ,$ztxt ,$zsel] =
-        ['pane','lines','caret', 'clip','rail','ztxt','zsel']
+  const [$pane ,$lines ,$caret ,$clip ,$rail ,$ztxt ,$zsel ] =
+        ['pane','lines','caret','clip','rail','ztxt','zsel']
         .map(q => $.querySelector('.buffee-' + q));
+  let lRect = $lines.getBoundingClientRect();
 
   // [array, fragment, parent, updateFn]
   const viewportLayers = [
@@ -39,17 +48,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   // Set container width if cols specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
   cols && !$rail && ($pane.style.width = `calc(${cols}ch + ${padding * 2}px)`);
-  let lRect = $lines.getBoundingClientRect();
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
-  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = y * h + 'px'));
-
-  const detachedHead = { y: 0, x: 0};
-  // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
-  // This allows selections to span beyond the viewport.
-  // In case where we have cursor, we want head === tail.
-  let head   = { y: 0, x: 0 };
-  let tail   = head;
-  let maxCol = head.x;
+  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * ch + 'px'));
 
   /**
    * Sel management for cursor and text selection operations.
@@ -260,7 +260,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      */
     i: 1,                                      
     frame: 0,                                  /** framecount */
-    ch: h,                                     /** line and character height */
+    ch,                                        /** line and character height */
     cw: $caret.getBoundingClientRect().width, /** computed character width  */
     sub: []
   };
@@ -390,7 +390,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       // Cursor
       const headViewRow = head.y - View.start;
       if (headViewRow >= 0 && headViewRow < View.n) {
-        $caret.style.top = headViewRow * h + 'px';
+        $caret.style.top = headViewRow * ch + 'px';
         cursorLeft = head.x;
 
         // Horizontal scroll to keep cursor in view
@@ -405,7 +405,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   
   // Initial sizing render
   const resize = delta => {View.n += delta, RENDER(delta)};
-  rows ? resize(rows) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / h) - View.n)}).observe($pane);
+  rows ? resize(rows) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / ch) - View.n)}).observe($pane);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $lines.addEventListener('paste', e => {
