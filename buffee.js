@@ -17,11 +17,10 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.4-alpha.1';
+  this.v = '14.36.5-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
-  const { min: $min, max: $max } = Math;
 
   const [h     , padding  ,  railInit  , railPad] =
         ['cell', 'padding', 'rail-init','rail-pad']
@@ -73,7 +72,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     mvY(dir, toEdge) {
       if (dir > 0 ? head.y < Model.end : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
-        head.x = toEdge ? (dir > 0 ? 0 : len) : $min(maxCol, len);
+        head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.x;
         if (head.y < View.start || head.y > View.end) View.set(dir > 0 ? head.y - View.n + 1 : head.y);
         else render();
@@ -235,10 +234,10 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           const cursor = i === first.y ? first : i === second.y ? second : null;
           if (cursor) {
             const right    = line.slice(cursor.x).search(/[^ ]|$/);
-            const toRemove = $min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
+            const toRemove = Math.min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
             Model._[i]      = line.slice(toRemove);
             if (right < toRemove) cursor.x -= toRemove - right;
-          } else Model._[i] = line.slice($min(-n, line.search(/[^ ]|$/)));
+          } else Model._[i] = line.slice(Math.min(-n, line.search(/[^ ]|$/)));
         }
       }
       if (n > 0) { first.x += n; second.x += n; }
@@ -331,7 +330,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get end() { return $min(this.start + this.n - 1, Model.end); },
+    get end() { return Math.min(this.start + this.n - 1, Model.end); },
 
     /**
      * Sets the viewport position and optionally size.
@@ -341,7 +340,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     set(start, size = this.n) {
       const d = size - this.n;
       this.n = size;
-      this.start = $max(0, $min(start, Model.end));
+      this.start = Math.max(0, Math.min(start, Model.end));
       RENDER(d);
     },
 
@@ -361,7 +360,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
     if ($rail) {
-      const railCols = $max(railInit, (View.start + View.N).toString().length) + railPad;
+      const railCols = Math.max(railInit, (View.start + View.N).toString().length) + railPad;
       $rail.style.width = railCols + 'ch';
       if (cols) $pane.style.width = `calc(${railCols + cols}ch + ${padding * 4}px)`;
     }
@@ -381,11 +380,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     if(Mode.i >= 0) {
       // Sels 
       const [firstEdge, secondEdge] = Sel.bounds(1);
-      const rEnd = $min(View.start + View.n, secondEdge.y + 1);
-      for (let r = $max(View.start, firstEdge.y); r < rEnd; r++) {
+      const rEnd = Math.min(View.start + View.n, secondEdge.y + 1);
+      for (let r = Math.max(View.start, firstEdge.y); r < rEnd; r++) {
         const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
         style.left = (f ? firstEdge.x : 0) + 'ch';
-        style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? $min(secondEdge.x, n) : n + 1) + 'ch';
+        style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? Math.min(secondEdge.x, n) : n + 1) + 'ch';
       }
 
       // Cursor
@@ -465,9 +464,9 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         } else {
           const edge = Sel.bounds(1)[direction > 0 | 0];
           // edge.y is already absolute
-          const targetAbsRow = $max(0, $min(edge.y + direction, Model.end));
+          const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.end));
 
-          maxCol = $min(edge.x, Model._[targetAbsRow].length);
+          maxCol = Math.min(edge.x, Model._[targetAbsRow].length);
           Sel.caret({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area

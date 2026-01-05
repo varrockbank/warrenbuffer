@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.36.5-alpha.1 [2026-01-05]  gz: 2634 / 2.57 KB (-2), br: 2424 / 2.37 KB (-6), min: 5869 / 5.73 KB (+72)
+- refactor: remove Math.min/max aliases, use directly
+
 ** 14.36.4-alpha.1 [2026-01-05]  gz: 2636 / 2.57 KB (-6), br: 2430 / 2.37 KB (-7), min: 5797 / 5.66 KB (-22)
 - refactor: use pre for all viewport layers, remove tag param from viewportLayers
 
