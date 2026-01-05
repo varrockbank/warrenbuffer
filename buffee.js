@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.14.10-alpha.1';
+  this.version = '13.14.11-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -359,22 +359,24 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
 
   // Add / remove lines, selections, gutters as row changes
   const renderAll = this.renderAll = d => {
-    delta = d;
-    for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
-    if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
-    for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
+    const delta = d;
+    if (d) {
+      for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
+      if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
+      for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
+    }
     if ($gutter) {
       const gutterCols = Math.max(cssGutterDigitsInitial, (Viewport.start + Viewport.displayLines).toString().length) + cssGutterDigitsPadding;
       $gutter.style.width = gutterCols + 'ch';
       if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
     }
-    render();
+    render(delta);
   };
 
   /**
    * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
-  const render = this.render = () => {
+  const render = this.render = (delta = 0) => {
     Mode.frameCount++;
 
     // Update contents of line containers (reset to clean state)
