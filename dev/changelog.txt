@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.18.0-alpha.1 [2026-01-05]  gz: 2715 / 2.65 KB (-9), br: 2490 / 2.43 KB (-5), min: 6289 / 6.14 KB (-27)
+- refactor: rename Selection.insert/delete to add/del
+
 ** 14.17.0-alpha.1 [2026-01-05]  gz: 2724 / 2.66 KB (-3), br: 2495 / 2.44 KB (-3), min: 6316 / 6.17 KB (-42)
 - refactor: rename View.size to View.n
 
