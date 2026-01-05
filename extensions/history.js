@@ -94,7 +94,7 @@ function BuffeeHistory(editor) {
       last.endCol = last.x + last.lines[0].length;
     } else {
       _combinedPending = null;
-      undoStack.push({ type: 'insert', row, col, lines, endRow, endCol, cursorBefore });
+      undoStack.push({ type: 'insert', y: row, x: col, lines, endRow, endCol, cursorBefore });
     }
     _lastOpTime = Date.now();
     redoStack.length = 0;
@@ -129,9 +129,9 @@ function BuffeeHistory(editor) {
       last.x = col;
       _combinedPending = null;
     } else {
-      undoStack.push({ type: 'delete', row, col, endRow, endCol, lines, cursorBefore });
+      undoStack.push({ type: 'delete', y: row, x: col, endRow, endCol, lines, cursorBefore });
       if (isSelectDelete) {
-        _combinedPending = { row, col };
+        _combinedPending = { y: row, x: col };
       } else {
         _combinedPending = null;
       }
