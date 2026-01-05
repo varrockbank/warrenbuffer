@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} Position
- * @property {number} row - Row index (viewport-relative, 0-indexed)
- * @property {number} col - Column index (0-indexed)
+ * @property {number} y - Row index (0-indexed)
+ * @property {number} x - Column index (0-indexed)
  */
 
 /**
@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.20.0-alpha.1';
+  this.v = '14.21.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -43,13 +43,13 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
   rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * h + 'px'));
 
-  const detachedHead = { row : 0, col : 0};
-  // head.row and tail.row are ABSOLUTE line numbers (Model indices, not viewport-relative).
+  const detachedHead = { y: 0, x: 0};
+  // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
   // In case where we have cursor, we want head === tail.
-  let head   = { row: 0, col: 0 };
+  let head   = { y: 0, x: 0 };
   let tail   = head;
-  let maxCol = head.col;
+  let maxCol = head.x;
 
   /**
    * Selection management for cursor and text selection operations.
@@ -70,11 +70,11 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
      */
     y(dir, toEdge) {
-      if (dir > 0 ? head.row < Model.end : head.row > 0) {
-        const len = Model._[dir > 0 ? ++head.row : --head.row].length;
-        head.col = toEdge ? (dir > 0 ? 0 : len) : $min(maxCol, len);
-        if (toEdge) maxCol = head.col;
-        if (head.row < View.start || head.row > View.end) View.set(dir > 0 ? head.row - View.n + 1 : head.row);
+      if (dir > 0 ? head.y < Model.end : head.y > 0) {
+        const len = Model._[dir > 0 ? ++head.y : --head.y].length;
+        head.x = toEdge ? (dir > 0 ? 0 : len) : $min(maxCol, len);
+        if (toEdge) maxCol = head.x;
+        if (head.y < View.start || head.y > View.end) View.set(dir > 0 ? head.y - View.n + 1 : head.y);
         else r();
       }
     },
@@ -85,8 +85,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     x(dir) {
       const right = dir > 0;
-      if (right ? head.col < Model._[head.row].length : head.col) { maxCol = right ? ++head.col : --head.col; r(); }
-      else if (right ? head.row < Model.end : head.row) this.y(dir, 1);
+      if (right ? head.x < Model._[head.y].length : head.x) { maxCol = right ? ++head.x : --head.x; r(); }
+      else if (right ? head.y < Model.end : head.y) this.y(dir, 1);
     },
 
     /**
@@ -95,7 +95,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @returns {-1|0|1}
      */
     get dir() {
-      return head === tail ? 0 : (tail.row === head.row && tail.col < head.col || tail.row < head.row) ? 1 : -1;
+      return head === tail ? 0 : (tail.y === head.y && tail.x < head.x || tail.y < head.y) ? 1 : -1;
     },
 
     /**
@@ -104,30 +104,30 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     get lines() {
       const [left, right] = Selection.bounds(1);
-      if(left.row === right.row) {
-        const text  = Model._[left.row];
-        const slice = text.slice(left.col, right.col + (this.dir > 0));
-        return right.col >= text.length && left.row < Model.end ? [slice, ''] : [slice];
+      if(left.y === right.y) {
+        const text  = Model._[left.y];
+        const slice = text.slice(left.x, right.x + (this.dir > 0));
+        return right.x >= text.length && left.y < Model.end ? [slice, ''] : [slice];
       }
-      const firstLine = Model._[left.row ].slice(left.col);
-      const lastLine  = Model._[right.row].slice(0, right.col + (this.dir > 0));
-      const middle    = Model._.slice(left.row + 1, right.row);
+      const firstLine = Model._[left.y ].slice(left.x);
+      const lastLine  = Model._[right.y].slice(0, right.x + (this.dir > 0));
+      const middle    = Model._.slice(left.y + 1, right.y);
       return [firstLine, ...middle, lastLine];
     },
 
     /** Collapses selection to a cursor. Optionally sets position first. */
     cursor(p) {
-      if (p) { head.row = p.row; head.col = p.col; }
-      tail.row = head.row;
-      tail.col = head.col;
+      if (p) { head.y = p.y; head.x = p.x; }
+      tail.y = head.y;
+      tail.x = head.x;
       head     = tail;
     },
 
     /** Begins a new selection by detaching head from tail allowing independent movement. */
     select() {
       head     = detachedHead;
-      head.row = tail.row;
-      head.col = tail.col;
+      head.y = tail.y;
+      head.x = tail.x;
     },
 
     /**
@@ -135,8 +135,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
      */
     moveLineEdge(toEnd) {
-      const line = Model._[head.row];
-      maxCol = head.col = toEnd ? line.length : (c => c > 0 && c < head.col ? c : 0)(line.search(/[^ ]/));
+      const line = Model._[head.y];
+      maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
       r();
     },
 
@@ -148,43 +148,43 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = Selection.bounds(1);
-        Model.del(first.row, first.col, second.row, second.col + (this.dir > 0));
-        Model.add(first.row, first.col, lines);
+        Model.del(first.y, first.x, second.y, second.x + (this.dir > 0));
+        Model.add(first.y, first.x, lines);
 
-        head.row = first.row;
+        head.y = first.y;
         // Update cursor to end of inserted text
         if (lines.length > 1) {
-          head.row     += lines.length - 1;
-          head.col      = lines[lines.length - 1].length;
-        } else head.col = first.col + s.length;
+          head.y     += lines.length - 1;
+          head.x      = lines[lines.length - 1].length;
+        } else head.x = first.x + s.length;
 
         this.cursor();
       } else {
-        Model.add(tail.row, tail.col, lines);
+        Model.add(tail.y, tail.x, lines);
 
         // Update cursor
         if (lines.length > 1) {
-                        head.row += lines.length - 1;
-               maxCol = head.col  = lines[lines.length - 1].length;
-        } else maxCol = head.col += s.length;
+                        head.y += lines.length - 1;
+               maxCol = head.x  = lines[lines.length - 1].length;
+        } else maxCol = head.x += s.length;
       }
-      if (head.row > View.end) View.set(head.row - View.n + 1);
+      if (head.y > View.end) View.set(head.y - View.n + 1);
       else r();
     },
 
     /** Deletes the character before cursor or the current selection. */
     del() {
       if (this.dir) this.add('');
-      else if (tail.col > 0) {
+      else if (tail.x > 0) {
         // Delete character before cursor
-        Model.del(tail.row, tail.col - 1, tail.row, tail.col);
-        head.col--;
+        Model.del(tail.y, tail.x - 1, tail.y, tail.x);
+        head.x--;
         r();
-      } else if (tail.row > 0) {
+      } else if (tail.y > 0) {
         // At start of line - delete newline (join with previous line)
-        head.col = Model._[tail.row - 1].length;
-        Model.del(tail.row - 1, head.col, tail.row, 0);
-        if (--head.row < View.start) View.set(head.row);
+        head.x = Model._[tail.y - 1].length;
+        Model.del(tail.y - 1, head.x, tail.y, 0);
+        if (--head.y < View.start) View.set(head.y);
         else r();
       }
     },
@@ -193,22 +193,22 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
      */
     moveWord(dir) {
-      const s = Model._[head.row], n = s.length, fwd = dir > 0;
-      if (head.col !== (fwd ? n : 0)) {
+      const s = Model._[head.y], n = s.length, fwd = dir > 0;
+      if (head.x !== (fwd ? n : 0)) {
         // Move within line
-        let j = head.col;
+        let j = head.x;
         const ok   = fwd ? () => j<n : () => j>0 ;
         const step = fwd ? () => j++ : () => j-- ;
         if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
         else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
-        head.col = j;
+        head.x = j;
         r();
-      } else if (fwd ? head.row < Model.end : head.row > 0) {
+      } else if (fwd ? head.y < Model.end : head.y > 0) {
         // At edge - move to adjacent line
-        head.col = fwd ? 0 : Model._[--head.row].length;
-        if (fwd && ++head.row > View.end) View.set(head.row - View.n + 1);
-        else if (!fwd && head.row < View.start) View.set(head.row);
+        head.x = fwd ? 0 : Model._[--head.y].length;
+        if (fwd && ++head.y > View.end) View.set(head.y - View.n + 1);
+        else if (!fwd && head.y < View.start) View.set(head.y);
         else r();
       }
     },
@@ -226,20 +226,20 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
       const [first, second] = Selection.bounds(1);
-      for (let i = first.row; i <= second.row; i++) {
+      for (let i = first.y; i <= second.y; i++) {
         const line = Model._[i];
         if (n > 0) Model._[i] = ' '.repeat(n) + line;
         else {
-          const cursor = i === first.row ? first : i === second.row ? second : null;
+          const cursor = i === first.y ? first : i === second.y ? second : null;
           if (cursor) {
-            const right    = line.slice(cursor.col).search(/[^ ]|$/);
-            const toRemove = $min(-n, line.slice(0, cursor.col).search(/[^ ]|$/) + right);
+            const right    = line.slice(cursor.x).search(/[^ ]|$/);
+            const toRemove = $min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
             Model._[i]      = line.slice(toRemove);
-            if (right < toRemove) cursor.col -= toRemove - right;
+            if (right < toRemove) cursor.x -= toRemove - right;
           } else Model._[i] = line.slice($min(-n, line.search(/[^ ]|$/)));
         }
       }
-      if (n > 0) { first.col += n; second.col += n; }
+      if (n > 0) { first.x += n; second.x += n; }
       r();
     },
   };
@@ -379,21 +379,21 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     if(Mode.i >= 0) {
       // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
-      const rEnd = $min(View.start + View.n, secondEdge.row + 1);
-      for (let r = $max(View.start, firstEdge.row); r < rEnd; r++) {
-        const f = r === firstEdge.row, l = r === secondEdge.row, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
-        style.left = (f ? firstEdge.col : 0) + 'ch';
-        style.width = (f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? $min(secondEdge.col, n) : n + 1) + 'ch';
+      const rEnd = $min(View.start + View.n, secondEdge.y + 1);
+      for (let r = $max(View.start, firstEdge.y); r < rEnd; r++) {
+        const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
+        style.left = (f ? firstEdge.x : 0) + 'ch';
+        style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? $min(secondEdge.x, n) : n + 1) + 'ch';
       }
 
       // Cursor
-      const headViewRow = head.row - View.start;
+      const headViewRow = head.y - View.start;
       if (headViewRow >= 0 && headViewRow < View.n) {
         $cursor.style.top = headViewRow * h + 'px';
-        cursorLeft = head.col;
+        cursorLeft = head.x;
 
         // Horizontal scroll to keep cursor in view
-        const {left: cl, right: cr} = lRect, rl = lRect.left + head.col * Mode.cw - $l.scrollLeft, rr = rl + Mode.cw;
+        const {left: cl, right: cr} = lRect, rl = lRect.left + head.x * Mode.cw - $l.scrollLeft, rr = rl + Mode.cw;
         $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cw) * Mode.cw;
       }
     }
@@ -462,11 +462,11 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           r();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
-          // edge.row is already absolute
-          const targetAbsRow = $max(0, $min(edge.row + direction, Model.end));
+          // edge.y is already absolute
+          const targetAbsRow = $max(0, $min(edge.y + direction, Model.end));
 
-          maxCol = $min(edge.col, Model._[targetAbsRow].length);
-          Selection.cursor({ row: targetAbsRow, col: maxCol});
+          maxCol = $min(edge.x, Model._[targetAbsRow].length);
+          Selection.cursor({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);

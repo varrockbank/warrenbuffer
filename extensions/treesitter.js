@@ -68,8 +68,8 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       const capture = captures[j];
       const startPosition = capture.node.startPosition;
 
-      if (startPosition.row === absoluteRow) {
-        const startCol = startPosition.column;
+      if (startPosition.y === absoluteRow) {
+        const startCol = startPosition.xumn;
         const endCol = startCol + capture.node.text.length;
 
         const line = $line.textContent;
@@ -91,7 +91,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       }
 
       // If we've passed the row, stop searching
-      if (startPosition.row > absoluteRow) {
+      if (startPosition.y > absoluteRow) {
         return j;
       }
     }
