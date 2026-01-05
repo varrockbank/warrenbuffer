@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.29.0-alpha.1 [2026-01-05]  gz: 2647 / 2.58 KB (-2), br: 2439 / 2.38 KB (-1), min: 5855 / 5.72 KB (-6)
+- refactor: rename gutter to rail
+
 ** 14.28.0-alpha.1 [2026-01-05]  gz: 2649 / 2.59 KB (-6), br: 2440 / 2.38 KB (-9), min: 5861 / 5.72 KB (-12)
 - refactor: rename clipboard-bridge to clip
 

@@ -1,17 +1,17 @@
-<!-- @version 14.28.0-alpha.1 -->
+<!-- @version 14.29.0-alpha.1 -->
 <!--
   Required: buffee, buffee-clip, buffee-elements, buffee-lines, buffee-layer-text, buffee-ct
-  Optional: buffee-gutter, buffee-layer-elements, buffee-status (and children)
+  Optional: buffee-rail, buffee-layer-elements, buffee-status (and children)
 
   Positioning:
-  - buffee-gutter: can be left or right of buffee-lines
+  - buffee-rail: can be left or right of buffee-lines
   - buffee-status: can be above or below buffee-elements
   - buffee-status-left/right: content is customizable
 -->
 <div class="buffee" id="editor">
   <textarea class="buffee-clip" aria-hidden="true"></textarea>
   <div class="no-select buffee-elements">
-    <div class="buffee-gutter"></div>
+    <div class="buffee-rail"></div>
     <div class="buffee-lines" tabindex="0">
       <div class="buffee-layer-selection"></div>
       <blockquote class="buffee-layer-text"></blockquote>
