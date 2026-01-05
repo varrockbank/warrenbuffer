@@ -17,10 +17,11 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.18.0-alpha.1';
+  this.v = '14.19.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
+  const { min: $min, max: $max } = Math;
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
   const [h, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
@@ -72,7 +73,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     y(dir, toEdge) {
       if (dir > 0 ? head.row < Model.end : head.row > 0) {
         const len = Model._[dir > 0 ? ++head.row : --head.row].length;
-        head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
+        head.col = toEdge ? (dir > 0 ? 0 : len) : $min(maxCol, len);
         if (toEdge) maxCol = head.col;
         if (head.row < View.start || head.row > View.end) View.set(dir > 0 ? head.row - View.n + 1 : head.row);
         else r();
@@ -233,10 +234,10 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           const cursor = i === first.row ? first : i === second.row ? second : null;
           if (cursor) {
             const right    = line.slice(cursor.col).search(/[^ ]|$/);
-            const toRemove = Math.min(-n, line.slice(0, cursor.col).search(/[^ ]|$/) + right);
+            const toRemove = $min(-n, line.slice(0, cursor.col).search(/[^ ]|$/) + right);
             Model._[i]      = line.slice(toRemove);
             if (right < toRemove) cursor.col -= toRemove - right;
-          } else Model._[i] = line.slice(Math.min(-n, line.search(/[^ ]|$/)));
+          } else Model._[i] = line.slice($min(-n, line.search(/[^ ]|$/)));
         }
       }
       if (n > 0) { first.col += n; second.col += n; }
@@ -329,7 +330,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get end() { return Math.min(this.start + this.n - 1, Model.end); },
+    get end() { return $min(this.start + this.n - 1, Model.end); },
 
     /**
      * Sets the viewport position and optionally size.
@@ -359,7 +360,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
     if ($gutter) {
-      const gutterCols = Math.max(cssGutterDigitsInitial, (View.start + View.displayLines).toString().length) + cssGutterDigitsPadding;
+      const gutterCols = $max(cssGutterDigitsInitial, (View.start + View.displayLines).toString().length) + cssGutterDigitsPadding;
       $gutter.style.width = gutterCols + 'ch';
       if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
     }
@@ -379,11 +380,11 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     if(Mode.i >= 0) {
       // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
-      const rEnd = Math.min(View.start + View.n, secondEdge.row + 1);
-      for (let r = Math.max(View.start, firstEdge.row); r < rEnd; r++) {
+      const rEnd = $min(View.start + View.n, secondEdge.row + 1);
+      for (let r = $max(View.start, firstEdge.row); r < rEnd; r++) {
         const f = r === firstEdge.row, l = r === secondEdge.row, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
         style.left = (f ? firstEdge.col : 0) + 'ch';
-        style.width = (f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1) + 'ch';
+        style.width = (f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? $min(secondEdge.col, n) : n + 1) + 'ch';
       }
 
       // Cursor
@@ -465,7 +466,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           // edge.row is already absolute
           const targetAbsRow = $clamp(edge.row + direction, 0, Model.end);
 
-          maxCol = Math.min(edge.col, Model._[targetAbsRow].length);
+          maxCol = $min(edge.col, Model._[targetAbsRow].length);
           Selection.cursor({ row: targetAbsRow, col: maxCol});
 
           // Scroll viewport if target is outside visible area
