@@ -134,8 +134,8 @@
       <div class="buffee-gutter"></div>
     {/if}
     <div class="buffee-lines" tabindex="0">
-      <div class="buffee-layer-selection"></div>
-      <blockquote class="buffee-layer-text"></blockquote>
+      <div class="buffee-zsel"></div>
+      <blockquote class="buffee-ztxt"></blockquote>
       <div class="buffee-layer-elements"></div>
       <div class="buffee-cursor"></div>
     </div>

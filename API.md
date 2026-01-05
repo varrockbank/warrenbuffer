@@ -438,7 +438,7 @@ const { View, Sel, Model, Mode, render, $ } = editor;
 
 // Query DOM elements from $ as needed:
 const $e = $.querySelector('.buffee-elements');
-const $textLayer = $.querySelector('.buffee-layer-text');
+const $textLayer = $.querySelector('.buffee-ztxt');
 
 // Wrappable primitives (for extensions like History, Syntax)
 const { _insert, _delete } = editor;

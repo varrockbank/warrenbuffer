@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.34.0-alpha.1 [2026-01-05]  gz: 2647 / 2.58 KB (-4), br: 2446 / 2.39 KB (+3), min: 5823 / 5.69 KB (-17)
+- refactor: rename layer-text/layer-selection to ztxt/zsel
+
 ** 14.33.0-alpha.1 [2026-01-05]  gz: 2651 / 2.59 KB (0), br: 2443 / 2.39 KB (0), min: 5840 / 5.70 KB (-3)
 - refactor: rename Select to Sel
 

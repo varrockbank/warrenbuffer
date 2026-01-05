@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.33.0-alpha.1';
+  this.v = '14.34.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -27,7 +27,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     ['cell', 'padding', 'rail-init', 'rail-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
   const [$e        ,$l     ,$ct     ,$clip  ,$rail , $layerText ,$layerSel] =
-        ['elements','lines','ct',    'clip','rail','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
+        ['elements','lines','ct',    'clip','rail','ztxt','zsel'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
