@@ -439,19 +439,8 @@ if __name__ == "__main__":
       stateDisplay.textContent = lines.join(' | ');
     }
 
-    // Update state display on scroll/edit
-    const originalScroll = editor.Viewport.scroll.bind(editor.Viewport);
-    editor.Viewport.scroll = function(i) {
-      originalScroll(i);
-      updateStateDisplay();
-    };
-
-    // Initial state display
-    updateStateDisplay();
-
-    // Update on any render (keypress, etc)
-    editorEl.addEventListener('keyup', updateStateDisplay);
-    editorEl.addEventListener('click', updateStateDisplay);
+    // Update state display on render
+    editor.Mode.renderHooks.push(updateStateDisplay);
 
     // Focus editor
     editorEl.focus();
