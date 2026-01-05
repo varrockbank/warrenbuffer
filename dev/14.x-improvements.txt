@@ -1,0 +1,39 @@
+14.x Size Optimization Summary
+==============================
+
+Starting point (13.x): 6818 min / 2820 gz / 2577 br
+Final (14.29):         5855 min / 2648 gz / 2439 br
+Total saved:           -963 min / -172 gz / -138 br
+
+Version | Change                                      | Min Δ | GZ Δ | BR Δ
+--------|---------------------------------------------|------:|-----:|-----:
+14.0.0  | Buffee.version → Buffee.v                   |    -7 |   -6 |   -4
+14.1.0  | Buffee.$parent → Buffee.$                   |    -6 |   -5 |   -2
+14.2.0  | Buffee.Viewport → Buffee.View               |    -4 |   -3 |   +3
+14.3.0  | Merge setCursor into makeCursor(pos?)       |   -28 |   -9 |   -3
+14.4.0  | makeCursor → cursor                         |   -20 |   -2 |   -6
+14.5.0  | makeSelection → select                      |   -21 |   -4 |   +1
+14.6.0  | Model.lastIndex → Model.end                 |   -48 |  -13 |   -8
+14.7.0  | Mode.frameCount → Mode.frame                |   -10 |   -4 |   -4
+14.8.1  | Mode.cellHeight/cellWidth → Mode.ch/cw      |    +6 |   +2 |   +4
+14.9.0  | Model.lines → Model._                       |  -120 |   -7 |  -15
+14.10.0 | View.lines → View._                         |    -3 |   -1 |    0
+14.11.0 | render/renderAll → r/R                      |   -13 |   -3 |   -1
+14.12.0 | Mode.interactive → Mode.i                   |   -50 |   -9 |   -8
+14.13.0 | Model.text → Model.s                        |    -3 |   -1 |    0
+14.14.0 | Selection.moveRow/moveCol → y/x             |   -30 |  -10 |  -13
+14.15.0 | Extract --buffee- prefix in CSS var lookup  |   -24 |   -3 |   +4
+14.16.0 | Mode.spaces → Mode.s                        |   -30 |   -3 |   -6
+14.17.0 | View.size → View.n                          |   -42 |   -3 |   -3
+14.18.0 | Selection.insert/delete → add/del           |   -27 |   -9 |   -5
+14.19.0 | Alias Math.min/max → $min/$max              |   -44 |    0 |  +14
+14.20.0 | Inline $clamp as $max(0, $min(...))         |   -19 |  -15 |  -21
+14.21.0 | Position.row/col → y/x                      |  -252 |  -22 |  -22
+14.22.0 | config.spaces → config.s                    |    -5 |   -3 |   -2
+14.23.0 | Selection.lines → Selection._               |   -12 |   -1 |   +1
+14.24.0 | View.displayLines → View.n1                 |   -30 |   -7 |   -1
+14.25.0 | gutter-digits-* → gutter-init/pad           |   -21 |   -7 |   -6
+14.26.0 | cursor → ct (all)                           |   -24 |   -7 |   -2
+14.27.0 | Selection → Select, select → make           |    -9 |   +2 |    0
+14.28.0 | clipboard-bridge → clip                     |   -12 |   +6 |   -9
+14.29.0 | gutter → rail                               |    -6 |  -13 |   -1

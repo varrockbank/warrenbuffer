@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.28.0-alpha.1 [2026-01-05]  gz: 2649 / 2.59 KB (-6), br: 2440 / 2.38 KB (-9), min: 5861 / 5.72 KB (-12)
+- refactor: rename clipboard-bridge to clip
+
 ** 14.27.0-alpha.1 [2026-01-05]  gz: 2655 / 2.59 KB (+2), br: 2449 / 2.39 KB (0), min: 5873 / 5.74 KB (-9)
 - refactor: rename Selection to Select, Selection.select to Select.make
 
