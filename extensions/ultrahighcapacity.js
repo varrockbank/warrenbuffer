@@ -16,7 +16,7 @@
  */
 function BuffeeUltraHighCapacity(editor) {
   const { renderHooks } = editor.Mode;
-  const { View, Model, Mode, r, $ } = editor;
+  const { View, Model, Mode, render, $ } = editor;
   const $e = $.querySelector('.buffee-elements');
 
   // Store original methods/getters
@@ -144,7 +144,7 @@ function BuffeeUltraHighCapacity(editor) {
           nextBuffer = [];
         }
 
-        r();
+        render();
       };
 
       loadChunks();
@@ -243,7 +243,7 @@ function BuffeeUltraHighCapacity(editor) {
       }
     }
 
-    if (!skipRender) r();
+    if (!skipRender) render();
   }
 
   /**
@@ -309,7 +309,7 @@ function BuffeeUltraHighCapacity(editor) {
         configurable: true
       });
 
-      r(true);
+      render(true);
     },
 
     /**
@@ -338,7 +338,7 @@ function BuffeeUltraHighCapacity(editor) {
       prevBuffer = [];
       nextBuffer = [];
 
-      r(true);
+      render(true);
     },
 
     /**
@@ -364,7 +364,7 @@ function BuffeeUltraHighCapacity(editor) {
       currentChunkIndex = -1;
       prevBuffer = [];
       nextBuffer = [];
-      r(true);
+      render(true);
     }
   };
 

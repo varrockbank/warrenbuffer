@@ -38,7 +38,7 @@ expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 ## should resize gutter based on visible lines
 ### Gutter based on viewport position, not total lines
 // Add 15 lines (more than viewport of 10)
-fixture.editor.Model.text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15";
+fixture.editor.Model.s = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15";
 const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
@@ -55,7 +55,7 @@ expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 ## should grow gutter when scrolling to 3-digit lines
 ### Gutter grows from 2 to 3 digits when line 100 is visible
 // Create 100 lines
-fixture.editor.Model.text = Array(100).fill("x").join("\n");
+fixture.editor.Model.s = Array(100).fill("x").join("\n");
 const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
@@ -71,19 +71,19 @@ expect(gutterWidthPx()).toBeCloseTo(57.80);
 
 ## should have default spaces of 4
 ### Default spaces is 4 spaces
-expect(fixture.editor.Mode.spaces).toBe(4);
+expect(fixture.editor.Mode.s).toBe(4);
 
 ## should update spaces at runtime
 ### Setting spaces updates value and display
-fixture.editor.Mode.spaces = 2;
-expect(fixture.editor.Mode.spaces).toBe(2);
+fixture.editor.Mode.s = 2;
+expect(fixture.editor.Mode.s).toBe(2);
 
 ## should allow changing spaces multiple times
 ### spaces can be changed multiple times
-fixture.editor.Mode.spaces = 8;
-expect(fixture.editor.Mode.spaces).toBe(8);
-fixture.editor.Mode.spaces = 4;
-expect(fixture.editor.Mode.spaces).toBe(4);
+fixture.editor.Mode.s = 8;
+expect(fixture.editor.Mode.s).toBe(8);
+fixture.editor.Mode.s = 4;
+expect(fixture.editor.Mode.s).toBe(4);
 
 ## should initialize with custom spaces from config
 ### Config spaces=7 sets initial value
@@ -92,7 +92,7 @@ customNode.className = "buffee no-select";
 customNode.innerHTML = fixture.node.innerHTML;
 document.body.appendChild(customNode);
 const customEditor = new Buffee(customNode, { spaces: 7 });
-expect(customEditor.Mode.spaces).toBe(7);
+expect(customEditor.Mode.s).toBe(7);
 customNode.remove();
 
 
@@ -107,7 +107,7 @@ customNode.remove();
 //      → "  x".slice(3) = ""
 // Fix: charAt(k) checks each position → only 2 spaces
 //      → "  x".slice(2) = "x"
-fixture.editor.Mode.spaces = 4;
+fixture.editor.Mode.s = 4;
 TYPE "     a"
 enter
 TYPE "  x"
@@ -118,7 +118,7 @@ left with meta
 down 2 times with shift
 right with meta, shift
 tab with shift
-expect(fixture.editor.Model.lines[0]).toBe(" a");
-expect(fixture.editor.Model.lines[1]).toBe("x");
-expect(fixture.editor.Model.lines[2]).toBe("b");
+expect(fixture.editor.Model._[0]).toBe(" a");
+expect(fixture.editor.Model._[1]).toBe("x");
+expect(fixture.editor.Model._[2]).toBe("b");
 

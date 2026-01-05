@@ -22,7 +22,7 @@ expect(5).toBe(5);
 ### Replacing selection with multi-char text should position cursor correctly
 TYPE "Hello world"
 left 5 times with shift
-fixture.editor.Selection.insert('REPLACED');
+fixture.editor.Sel.add('REPLACED');
 expect(fixture).toHaveLines('Hello REPLACED');
 EXPECT cursor at 0,14
 
@@ -86,20 +86,20 @@ EXPECT selection at 0,0-0,9
 
 ## should unindent current line with Shift+Tab without selection (regression 13.15.0)
 ### Shift+Tab without selection should unindent, not insert spaces
-fixture.editor.Mode.spaces = 4;
+fixture.editor.Mode.s = 4;
 TYPE "    Hello"
 // Cursor at end, no selection
 tab with shift
-// Bug: inserted 4 spaces because Selection.dir was checked before shift key
-// Fix: (Selection.dir || sh) checks shift key too
-expect(fixture.editor.Model.lines[0]).toBe("Hello");
+// Bug: inserted 4 spaces because Sel.dir was checked before shift key
+// Fix: (Sel.dir || sh) checks shift key too
+expect(fixture.editor.Model._[0]).toBe("Hello");
 EXPECT cursor at 0,5
 
 ## should partially unindent with Shift+Tab without selection (regression 13.15.0)
 ### Shift+Tab with 5 leading spaces should leave 1 space
-fixture.editor.Mode.spaces = 4;
+fixture.editor.Mode.s = 4;
 TYPE "     Hello"
 tab with shift
-expect(fixture.editor.Model.lines[0]).toBe(" Hello");
+expect(fixture.editor.Model._[0]).toBe(" Hello");
 EXPECT cursor at 0,6
 

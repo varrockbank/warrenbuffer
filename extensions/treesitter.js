@@ -18,7 +18,7 @@
  */
 function BuffeeTreeSitter(editor, { parser, query }) {
   const { renderHooks } = editor.Mode;
-  const { View, Model, r, $ } = editor;
+  const { View, Model, render, $ } = editor;
   const $e = $.querySelector('.buffee-elements');
 
   /** @type {boolean} */
@@ -48,7 +48,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       const text = Model._.join("\n");
       tree = parser.parse(text);
       captures = query.captures(tree.rootNode);
-      r(false);
+      render(false);
     }
     requestAnimationFrame(renderLoop);
   }
@@ -129,7 +129,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       if (enabled) {
         markDirty();
       } else {
-        r(false);
+        render(false);
       }
     },
 
@@ -158,7 +158,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       const text = Model._.join("\n");
       tree = parser.parse(text);
       captures = query.captures(tree.rootNode);
-      r(false);
+      render(false);
     }
   };
 
