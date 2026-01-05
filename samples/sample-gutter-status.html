@@ -117,6 +117,24 @@
     </div>
   </div>
 
+  <h2>5. Selection range display</h2>
+  <p>Use <code>BuffeeStatusLine(editor, { showSelection: true })</code> to show selection range instead of just cursor position. Try selecting text below:</p>
+  <div class="buffee buffee-themepack1-boring" id="editor-selection">
+    <textarea class="buffee-clip"></textarea>
+    <div class="no-select buffee-elements">
+      <div class="buffee-rail"></div>
+      <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-ct"></div></div>
+    </div>
+    <div class="buffee-status">
+      <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
+      <div class="buffee-status-right">
+        <span class="buffee-head-row"></span> - <span class="buffee-head-col"></span>
+        <span class="buffee-status-divider">|</span>
+        <span class="buffee-spaces"></span>
+      </div>
+    </div>
+  </div>
+
   <h2>6. Gutter on right</h2>
   <p>Place <code>.buffee-rail</code> after <code>.buffee-lines</code> in the template:</p>
   <details>
@@ -174,6 +192,11 @@ hello();`;
     const elStatusTop = document.getElementById('editor-status-top');
     const edStatusTop = BuffeeStatusLine(new Buffee(elStatusTop, { rows: 10 }));
     edStatusTop.Model.s = content;
+
+    // Selection range display
+    const elSelection = document.getElementById('editor-selection');
+    const edSelection = BuffeeStatusLine(new Buffee(elSelection, { rows: 6 }), { showSelection: true });
+    edSelection.Model.s = content;
 
     // Gutter on right
     const elGutterRight = document.getElementById('editor-gutter-right');
