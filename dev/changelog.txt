@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.31.0-alpha.1 [2026-01-05]  gz: 2643 / 2.58 KB (-3), br: 2437 / 2.38 KB (+3), min: 5833 / 5.70 KB (-4)
+- refactor: rename indent to dent
+
 ** 14.30.0-alpha.1 [2026-01-05]  gz: 2646 / 2.58 KB (-1), br: 2434 / 2.38 KB (-5), min: 5837 / 5.70 KB (-18)
 - refactor: rename x/y/moveWord/moveLineEdge to mvX/mvY/mvW/mvE
 
