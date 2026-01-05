@@ -124,7 +124,7 @@ Read-only. Returns the line height in pixels, derived from CSS variable `--buffe
 
 ```javascript
 // Set content
-editor.Model.text = "Hello\nWorld";
+editor.Model.s = "Hello\nWorld";
 
 // Access lines
 editor.Model._;        // ["Hello", "World"]
@@ -322,13 +322,13 @@ editor.editMode = 'read';
 
 **Simple view-only mode:**
 ```javascript
-editor.Model.text = "Your content here";
+editor.Model.s = "Your content here";
 editor.editMode = 'navigate';
 ```
 
 **TUI mode** (for interactive elements):
 ```javascript
-editor.Model.text = "Your content here";
+editor.Model.s = "Your content here";
 editor.TUI.enabled = true;  // Sets editMode to 'read' automatically
 ```
 
@@ -358,7 +358,7 @@ BuffeeTreeSitter(editor, { parser: jsParser, query: jsQuery });
 editor.TreeSitter.enabled = true;
 
 // After modifying content, mark as dirty to trigger re-parse
-editor.Model.text = "function hello() { return 'world'; }";
+editor.Model.s = "function hello() { return 'world'; }";
 editor.TreeSitter.markDirty();
 
 // Force immediate re-parse
@@ -401,7 +401,7 @@ BuffeeUltraHighCapacity(editor);
 // Activate ultra-high-capacity mode (disables editing)
 editor.UltraHighCapacity.activate(50000);  // 50k lines per chunk
 
-// Append lines (must use this, not Model.text)
+// Append lines (must use this, not Model.s)
 await editor.UltraHighCapacity.appendLines(largeArrayOfLines);
 
 // Check status
@@ -418,7 +418,7 @@ editor.UltraHighCapacity.deactivate();
 
 ### Important Notes
 
-- **Do not use `Model.text`** in chunked mode - use `appendLines()` instead
+- **Do not use `Model.s`** in chunked mode - use `appendLines()` instead
 - Editing is automatically disabled when activated
 - Chunks are loaded asynchronously - "..." placeholders shown while loading
 - View can straddle at most 2 chunks (previous + current or current + next)
