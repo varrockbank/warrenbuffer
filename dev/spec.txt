@@ -5,7 +5,7 @@ Technical details for implementers and contributors.
 ## Indexing
 
 - Buffer exposes Array of lines, which is 0-indexed
-- Viewport is 0-indexed
+- View is 0-indexed
 - Selection is absolutely indexed w.r.t Buffer. 
 
 ## Conventions
@@ -118,7 +118,7 @@ The cursor is an overlay div positioned absolutely using `ch` units:
 
 ```javascript
 $cursor.style.left = head.col + 'ch';
-$cursor.style.top = headViewportRow * lineHeight + 'px';
+$cursor.style.top = headViewRow * lineHeight + 'px';
 ```
 
 This works because:

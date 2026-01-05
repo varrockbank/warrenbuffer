@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.1.0-alpha.1';
+  this.v = '14.2.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -31,8 +31,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
-    [$layerText, 'pre', (el, i) => el.textContent = Model.lines[Viewport.start + i] ?? null],
-    [$gutter, 'div', (el, i) => el.textContent = Viewport.start + i + 1],
+    [$layerText, 'pre', (el, i) => el.textContent = Model.lines[View.start + i] ?? null],
+    [$gutter, 'div', (el, i) => el.textContent = View.start + i + 1],
     [$layerSelection, 'div', (el) => el.style.width = 0]
   ].map(([p, tag, fn]) => [[], document.createDocumentFragment(), p, tag, fn]);
 
@@ -74,7 +74,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         const len = Model.lines[dir > 0 ? ++head.row : --head.row].length;
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
-        if (head.row < Viewport.start || head.row > Viewport.end) Viewport.set(dir > 0 ? head.row - Viewport.size + 1 : head.row);
+        if (head.row < View.start || head.row > View.end) View.set(dir > 0 ? head.row - View.size + 1 : head.row);
         else render();
       }
     },
@@ -177,7 +177,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
                maxCol = head.col  = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
-      if (head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
+      if (head.row > View.end) View.set(head.row - View.size + 1);
       else render();
     },
 
@@ -193,7 +193,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         // At start of line - delete newline (join with previous line)
         head.col = Model.lines[tail.row - 1].length;
         Model.del(tail.row - 1, head.col, tail.row, 0);
-        if (--head.row < Viewport.start) Viewport.set(head.row);
+        if (--head.row < View.start) View.set(head.row);
         else render();
       }
     },
@@ -216,8 +216,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       } else if (fwd ? head.row < Model.lastIndex : head.row > 0) {
         // At edge - move to adjacent line
         head.col = fwd ? 0 : Model.lines[--head.row].length;
-        if (fwd && ++head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
-        else if (!fwd && head.row < Viewport.start) Viewport.set(head.row);
+        if (fwd && ++head.row > View.end) View.set(head.row - View.size + 1);
+        else if (!fwd && head.row < View.start) View.set(head.row);
         else render();
       }
     },
@@ -324,9 +324,9 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
 
   /**
    * Virtual viewport dictacting which portion of document is seen and rendered.
-   * @namespace Viewport
+   * @namespace View
    */
-  const Viewport = this.Viewport = {
+  const View = this.View = {
     /** @type {number} Index of the first visible line (0-indexed) */
     start: 0,
     /** @type {number} Number of visible lines */
@@ -368,7 +368,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
     if ($gutter) {
-      const gutterCols = Math.max(cssGutterDigitsInitial, (Viewport.start + Viewport.displayLines).toString().length) + cssGutterDigitsPadding;
+      const gutterCols = Math.max(cssGutterDigitsInitial, (View.start + View.displayLines).toString().length) + cssGutterDigitsPadding;
       $gutter.style.width = gutterCols + 'ch';
       if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
     }
@@ -382,23 +382,23 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     Mode.frameCount++;
 
     // Update contents of line containers (reset to clean state)
-    for (let i = 0; i < Viewport.displayLines; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
+    for (let i = 0; i < View.displayLines; i++) viewportLayers.forEach(([arr, , , , update]) => arr[i] && update(arr[i], i));
 
     let cursorLeft = -1;
     if(Mode.interactive >= 0) {
       // Selections 
       const [firstEdge, secondEdge] = Selection.bounds(1);
-      const rEnd = Math.min(Viewport.start + Viewport.size, secondEdge.row + 1);
-      for (let r = Math.max(Viewport.start, firstEdge.row); r < rEnd; r++) {
-        const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length, {style} = viewportLayers[2][0][r - Viewport.start];
+      const rEnd = Math.min(View.start + View.size, secondEdge.row + 1);
+      for (let r = Math.max(View.start, firstEdge.row); r < rEnd; r++) {
+        const f = r === firstEdge.row, l = r === secondEdge.row, n = Model.lines[r].length, {style} = viewportLayers[2][0][r - View.start];
         style.left = (f ? firstEdge.col : 0) + 'ch';
         style.width = (f && l ? secondEdge.col - firstEdge.col : f ? n - firstEdge.col + 1 : l ? Math.min(secondEdge.col, n) : n + 1) + 'ch';
       }
 
       // Cursor
-      const headViewportRow = head.row - Viewport.start;
-      if (headViewportRow >= 0 && headViewportRow < Viewport.size) {
-        $cursor.style.top = headViewportRow * cellHeight + 'px';
+      const headViewRow = head.row - View.start;
+      if (headViewRow >= 0 && headViewRow < View.size) {
+        $cursor.style.top = headViewRow * cellHeight + 'px';
         cursorLeft = head.col;
 
         // Horizontal scroll to keep cursor in view
@@ -408,12 +408,12 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     }
     $cursor.style.left = cursorLeft + 'ch';
 
-    Mode.renderHooks.forEach(hook => hook($l, Viewport, delta));
+    Mode.renderHooks.forEach(hook => hook($l, View, delta));
   }
   
   // Initial sizing render
-  const resize = delta => {Viewport.size += delta, renderAll(delta)};
-  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / cellHeight) - Viewport.size)}).observe($e);
+  const resize = delta => {View.size += delta, renderAll(delta)};
+  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / cellHeight) - View.size)}).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
@@ -478,8 +478,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           Selection.setCursor({ row: targetAbsRow, col: maxCol});
 
           // Scroll viewport if target is outside visible area
-          if (targetAbsRow < Viewport.start) Viewport.set(targetAbsRow);
-          else if (targetAbsRow > Viewport.end) Viewport.set(targetAbsRow - Viewport.size + 1);
+          if (targetAbsRow < View.start) View.set(targetAbsRow);
+          else if (targetAbsRow > View.end) View.set(targetAbsRow - View.size + 1);
           else render();
         }
       } else { // no meta key.

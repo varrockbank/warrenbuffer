@@ -16,7 +16,7 @@
  */
 function BuffeeUltraHighCapacity(editor) {
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, Mode, render, $ } = editor;
+  const { View, Model, Mode, render, $ } = editor;
   const $e = $.querySelector('.buffee-elements');
 
   // Store original methods/getters
@@ -112,8 +112,8 @@ function BuffeeUltraHighCapacity(editor) {
    * Loads chunks around the viewport and updates Model.lines.
    * @private
    */
-  function loadChunksForViewport() {
-    const startChunkIndex = Math.floor(Viewport.start / chunkSize);
+  function loadChunksForView() {
+    const startChunkIndex = Math.floor(View.start / chunkSize);
 
     // Check if we need to load new chunks
     if (currentChunkIndex !== startChunkIndex) {
@@ -182,7 +182,7 @@ function BuffeeUltraHighCapacity(editor) {
           return totalLines;
         }
         if (typeof prop === 'string' && /^\d+$/.test(prop)) {
-          loadChunksForViewport();
+          loadChunksForView();
           return getChunkedLine(parseInt(prop, 10));
         }
         return target[prop];
@@ -284,8 +284,8 @@ function BuffeeUltraHighCapacity(editor) {
      * @throws {Error} If viewport size is larger than chunk size
      */
     activate(size = 50_000) {
-      if (Viewport.size >= size) {
-        throw new Error(`Viewport ${Viewport.size} can't be larger than chunkSize ${size}`);
+      if (View.size >= size) {
+        throw new Error(`View ${View.size} can't be larger than chunkSize ${size}`);
       }
 
       enabled = true;

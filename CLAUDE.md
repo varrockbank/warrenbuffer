@@ -1,6 +1,6 @@
 # Claude Instructions for buffee
 
-**Full API reference: `API.md`** — contains complete docs for Model, Selection, Viewport, TUI, TreeSitter, UltraHighCapacity, and extension API.
+**Full API reference: `API.md`** — contains complete docs for Model, Selection, View, TUI, TreeSitter, UltraHighCapacity, and extension API.
 
 ## Quick Reference
 
@@ -9,7 +9,7 @@ BuffeeStatusLine(new Buffee(el, { rows: 20, cols: 80, spaces: 4 }));
 
 editor.Model.text = "content";     // Set content
 editor.Model.lines;                // ["line1", "line2"]
-editor.Viewport.set(5);            // Scroll to line index 5
+editor.View.set(5);            // Scroll to line index 5
 editor.Selection.insert("text");   // Insert at cursor
 editor.editMode = 'navigate';      // 'write' | 'navigate' | 'read'
 ```

@@ -57,7 +57,7 @@ function BuffeeHighlights(editor) {
 
     /**
      * Create a highlight at the given position.
-     * @param {number} row - Viewport row (0-indexed)
+     * @param {number} row - View row (0-indexed)
      * @param {number} col - Column position
      * @param {number} width - Width in characters
      * @param {Object} [style] - Optional style overrides

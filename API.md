@@ -133,18 +133,18 @@ editor.Model.lastIndex;    // 1
 
 ---
 
-## Viewport (`editor.Viewport`)
+## View (`editor.View`)
 
 ```javascript
 // Read
-editor.Viewport.start;  // First visible line (0-based)
-editor.Viewport.end;    // Last visible line
-editor.Viewport.size;   // Number of visible lines
-editor.Viewport.lines;  // Array of visible line strings
+editor.View.start;  // First visible line (0-based)
+editor.View.end;    // Last visible line
+editor.View.size;   // Number of visible lines
+editor.View.lines;  // Array of visible line strings
 
 // Navigate
-editor.Viewport.set(5);       // Scroll to line index 5
-editor.Viewport.set(99, 25);  // Scroll to line index 99, show 25 lines
+editor.View.set(5);       // Scroll to line index 5
+editor.View.set(99, 25);  // Scroll to line index 99, show 25 lines
 ```
 
 ---
@@ -421,7 +421,7 @@ editor.UltraHighCapacity.deactivate();
 - **Do not use `Model.text`** in chunked mode - use `appendLines()` instead
 - Editing is automatically disabled when activated
 - Chunks are loaded asynchronously - "..." placeholders shown while loading
-- Viewport can straddle at most 2 chunks (previous + current or current + next)
+- View can straddle at most 2 chunks (previous + current or current + next)
 
 ---
 
@@ -431,7 +431,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 
 ```javascript
 // Public properties
-const { Viewport, Selection, Model, Mode, render, $ } = editor;
+const { View, Selection, Model, Mode, render, $ } = editor;
 // Mode.frameCount - Number of render calls
 // Mode.cellHeight - Line height in pixels (from CSS --buffee-cell)
 // Mode.cellWidth - Character width in pixels (measured from cursor element)

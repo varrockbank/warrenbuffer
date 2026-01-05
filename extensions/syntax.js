@@ -14,7 +14,7 @@
  */
 function BuffeeSyntax(editor) {
   const { renderHooks } = editor.Mode;
-  const { Viewport, Model, $ } = editor;
+  const { View, Model, $ } = editor;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
   const $textLayer = $.querySelector('.buffee-layer-text');
@@ -254,7 +254,7 @@ function BuffeeSyntax(editor) {
   /**
    * Highlights all visible lines in the viewport.
    */
-  function highlightViewport($container, viewport) {
+  function highlightView($container, viewport) {
     if (!enabled || !language) return;
 
     // Ensure we have state cache up to viewport end
@@ -280,7 +280,7 @@ function BuffeeSyntax(editor) {
   }
 
   // Register render hook
-  renderHooks.push(highlightViewport);
+  renderHooks.push(highlightView);
 
   // ============================================================================
   // Built-in language definitions

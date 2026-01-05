@@ -13,7 +13,7 @@
  * const editor = BuffeeIOS(Buffee(container, config));
  */
 function BuffeeIOS(editor) {
-  const { Selection, Model, Viewport, Mode, $ } = editor;
+  const { Selection, Model, View, Mode, $ } = editor;
   const lineHeight = Mode.cellHeight;
   const $e = $.querySelector('.buffee-elements');
 
@@ -92,11 +92,11 @@ function BuffeeIOS(editor) {
     let row = Math.max(0, Math.floor(y / lineHeight));
     const col = Math.max(0, Math.floor(x / ch));
     // Bounds check row to last meaningful viewport row
-    const linesFromViewportStart = Model.lastIndex - Viewport.start;
-    const lastMeaningfulViewportRow = Math.min(Viewport.size - 1, linesFromViewportStart);
-    row = Math.min(row, lastMeaningfulViewportRow);
+    const linesFromViewStart = Model.lastIndex - View.start;
+    const lastMeaningfulViewRow = Math.min(View.size - 1, linesFromViewStart);
+    row = Math.min(row, lastMeaningfulViewRow);
     // Convert to absolute row
-    const absRow = Viewport.start + row;
+    const absRow = View.start + row;
     // Bounds check col to line length
     const lineLength = Model.lines[absRow].length;
     Selection.setCursor({ row: absRow, col: Math.min(col, lineLength) });

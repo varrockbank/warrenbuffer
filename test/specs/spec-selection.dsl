@@ -623,7 +623,7 @@ TYPE "line14"
 // Go to beginning
 up 14 times
 left with meta
-expect(fixture.editor.Viewport.start).toBe(0);
+expect(fixture.editor.View.start).toBe(0);
 EXPECT cursor at 0,0
 // Select down 12 lines (more than viewport of 10)
 down 12 times with shift
@@ -666,7 +666,7 @@ TYPE "after"
 up 14 times
 left with meta
 right 2 times
-expect(fixture.editor.Viewport.start).toBe(0);
+expect(fixture.editor.View.start).toBe(0);
 // Select down 5 rows (stays within viewport of 10)
 down 5 times with shift
 EXPECT selection at 0,2-5,2
@@ -682,9 +682,9 @@ expect($sel2.style.width).toBe("6ch");
 down 8 times with shift
 right 2 times with shift
 EXPECT selection at 0,2-13,4
-// Viewport scrolled to keep head visible (row 13)
-// Viewport.start = 13 - 10 + 1 = 4, showing rows 4-13
-expect(fixture.editor.Viewport.start).toBe(4);
+// View scrolled to keep head visible (row 13)
+// View.start = 13 - 10 + 1 = 4, showing rows 4-13
+expect(fixture.editor.View.start).toBe(4);
 // First edge (row 0) is now ABOVE viewport - not rendered
 // Row 4 is viewport row 0, rendered as middle line (full width)
 const $vp0 = fixture.node.querySelectorAll(".buffee-layer-selection > div")[0];
