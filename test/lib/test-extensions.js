@@ -752,6 +752,69 @@ function defineExtensionTests() {
         });
     });
 
+    // ===== HIGHLIGHTS TESTS =====
+    extRunner.describe('Highlights', () => {
+        extRunner.it('computes gutter offset from CSS vars before first render', () => {
+            const { editor, container, cleanup } = createTestEditor();
+            try {
+                // Clear gutter style.width to simulate pre-render state
+                const $gutter = container.querySelector('.buffee-gutter');
+                $gutter.style.width = '';
+
+                BuffeeHighlights(editor);
+
+                // Layer left should use CSS vars fallback, not NaN/0
+                const left = editor.Highlights.$layer.style.left;
+                assertTrue(!left.includes('NaN'), 'Left should not contain NaN');
+                assertTrue(left.includes('ch'), 'Left should include ch units');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('creates highlight at specified position', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+                editor.Model.text = 'Hello World';
+
+                const hl = editor.Highlights.create(0, 6, 5);
+                assertTrue(!!hl, 'Should return highlight element');
+                assertEqual(hl.style.left, '6ch', 'Should be at col 6');
+                assertEqual(hl.style.width, '5ch', 'Should be 5 chars wide');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('removes highlight', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+                const hl = editor.Highlights.create(0, 0, 5);
+                assertEqual(editor.Highlights.all.length, 1, 'Should have 1 highlight');
+                editor.Highlights.remove(hl);
+                assertEqual(editor.Highlights.all.length, 0, 'Should have 0 after remove');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('clears all highlights', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+                editor.Highlights.create(0, 0, 5);
+                editor.Highlights.create(0, 10, 5);
+                assertEqual(editor.Highlights.all.length, 2, 'Should have 2 highlights');
+                editor.Highlights.clear();
+                assertEqual(editor.Highlights.all.length, 0, 'Should have 0 after clear');
+            } finally {
+                cleanup();
+            }
+        });
+    });
+
     // ===== ULTRAHIGHCAPACITY TESTS =====
     extRunner.describe('UltraHighCapacity', () => {
         extRunner.it('initializes UltraHighCapacity extension', () => {
