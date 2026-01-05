@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.13.0-alpha.1';
+  this.v = '14.14.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -69,7 +69,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * @param {number} dir - Direction: positive for down, negative for up
      * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
      */
-    moveRow(dir, toEdge) {
+    y(dir, toEdge) {
       if (dir > 0 ? head.row < Model.end : head.row > 0) {
         const len = Model._[dir > 0 ? ++head.row : --head.row].length;
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
@@ -83,10 +83,10 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      * Moves the cursor/selection head horizontally.
      * @param {number} dir - Direction: positive for right, negative for left
      */
-    moveCol(dir) {
+    x(dir) {
       const right = dir > 0;
       if (right ? head.col < Model._[head.row].length : head.col) { maxCol = right ? ++head.col : --head.col; r(); }
-      else if (right ? head.row < Model.end : head.row) this.moveRow(dir, 1);
+      else if (right ? head.row < Model.end : head.row) this.y(dir, 1);
     },
 
     /**
@@ -475,7 +475,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         }
       } else { // no meta key.
         if (sh && !Selection.dir) Selection.select();
-        Selection[arrowCode % 2 ? 'moveCol' : 'moveRow'](direction);
+        Selection[arrowCode % 2 ? 'x' : 'y'](direction);
       }
     } else if (k.length === 1) {
       if (cmd) metaKeys[k.toLowerCase()]?.();

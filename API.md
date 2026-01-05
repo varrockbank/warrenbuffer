@@ -162,10 +162,10 @@ editor.Selection.bounds();     // [head, tail] - mutable position objects
 editor.Selection.lines;  // Array of selected lines
 
 // Movement
-editor.Selection.moveRow(1);   // Down
-editor.Selection.moveRow(-1);  // Up
-editor.Selection.moveCol(1);   // Right
-editor.Selection.moveCol(-1);  // Left
+editor.Selection.y(1);   // Down
+editor.Selection.y(-1);  // Up
+editor.Selection.x(1);   // Right
+editor.Selection.x(-1);  // Left
 editor.Selection.moveWord();
 editor.Selection.moveBackWord();
 editor.Selection.moveCursorStartOfLine();
