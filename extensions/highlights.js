@@ -12,7 +12,7 @@
  */
 function BuffeeHighlights(editor) {
   const { $parent, Mode } = editor;
-  const lineHeight = Mode.cssCell;
+  const lineHeight = Mode.cellHeight;
 
   // Compute content offset from CSS and gutter
   const cssPadding = parseFloat(getComputedStyle($parent).getPropertyValue('--buffee-padding'));
