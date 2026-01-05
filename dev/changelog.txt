@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.32.0-alpha.1 [2026-01-05]  gz: 2651 / 2.59 KB (+7), br: 2443 / 2.39 KB (0), min: 5843 / 5.71 KB (+10)
+- refactor: rename r/R to render/RENDER
+
 ** 14.31.0-alpha.1 [2026-01-05]  gz: 2643 / 2.58 KB (-3), br: 2437 / 2.38 KB (+3), min: 5833 / 5.70 KB (-4)
 - refactor: rename indent to dent
 

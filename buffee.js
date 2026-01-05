@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.31.0-alpha.1';
+  this.v = '14.32.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -75,7 +75,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         head.x = toEdge ? (dir > 0 ? 0 : len) : $min(maxCol, len);
         if (toEdge) maxCol = head.x;
         if (head.y < View.start || head.y > View.end) View.set(dir > 0 ? head.y - View.n + 1 : head.y);
-        else r();
+        else render();
       }
     },
 
@@ -85,7 +85,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      */
     mvX(dir) {
       const right = dir > 0;
-      if (right ? head.x < Model._[head.y].length : head.x) { maxCol = right ? ++head.x : --head.x; r(); }
+      if (right ? head.x < Model._[head.y].length : head.x) { maxCol = right ? ++head.x : --head.x; render(); }
       else if (right ? head.y < Model.end : head.y) this.mvY(dir, 1);
     },
 
@@ -96,7 +96,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     mvE(toEnd) {
       const line = Model._[head.y];
       maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
-      r();
+      render();
     },
 
     /**
@@ -113,13 +113,13 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.x = j;
-        r();
+        render();
       } else if (fwd ? head.y < Model.end : head.y > 0) {
         // At edge - move to adjacent line
         head.x = fwd ? 0 : Model._[--head.y].length;
         if (fwd && ++head.y > View.end) View.set(head.y - View.n + 1);
         else if (!fwd && head.y < View.start) View.set(head.y);
-        else r();
+        else render();
       }
     },
 
@@ -193,7 +193,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         } else maxCol = head.x += s.length;
       }
       if (head.y > View.end) View.set(head.y - View.n + 1);
-      else r();
+      else render();
     },
 
     /** Deletes the character before cursor or the current selection. */
@@ -203,13 +203,13 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         // Delete character before cursor
         Model.del(tail.y, tail.x - 1, tail.y, tail.x);
         head.x--;
-        r();
+        render();
       } else if (tail.y > 0) {
         // At start of line - delete newline (join with previous line)
         head.x = Model._[tail.y - 1].length;
         Model.del(tail.y - 1, head.x, tail.y, 0);
         if (--head.y < View.start) View.set(head.y);
-        else r();
+        else render();
       }
     },
 
@@ -240,7 +240,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         }
       }
       if (n > 0) { first.x += n; second.x += n; }
-      r();
+      render();
     },
   };
 
@@ -284,7 +284,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      */
     set s(text) {
       this._ = expandTabs(text).split('\n');
-      r();
+      render();
     },
 
     /**
@@ -351,7 +351,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   };
 
   // Add / remove lines, selections, rails as row changes
-  const R = this.R = d => {
+  const RENDER = this.RENDER = d => {
     const delta = d;
     if (d) {
       for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
@@ -363,13 +363,13 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       $rail.style.width = railCols + 'ch';
       if (cols) $e.style.width = `calc(${railCols + cols}ch + ${cssPadding * 4}px)`;
     }
-    r(delta);
+    render(delta);
   };
 
   /**
    * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
-  const r = this.r = (delta = 0) => {
+  const render = this.render = (delta = 0) => {
     Mode.frame++;
 
     // Update contents of line containers (reset to clean state)
@@ -403,7 +403,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   }
   
   // Initial sizing render
-  const resize = delta => {View.n += delta, R(delta)};
+  const resize = delta => {View.n += delta, RENDER(delta)};
   rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / h) - View.n)}).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
@@ -459,7 +459,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       } else if (!sh && Select.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Select.ct(Select.bounds(1)[direction > 0 | 0]);
-          r();
+          render();
         } else {
           const edge = Select.bounds(1)[direction > 0 | 0];
           // edge.y is already absolute
@@ -471,7 +471,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
           else if (targetAbsRow > View.end) View.set(targetAbsRow - View.n + 1);
-          else r();
+          else render();
         }
       } else { // no meta key.
         if (sh && !Select.dir) Select.make();
