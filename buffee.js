@@ -90,6 +90,40 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     },
 
     /**
+     * Moves cursor to line edge.
+     * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
+     */
+    mvE(toEnd) {
+      const line = Model._[head.y];
+      maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
+      r();
+    },
+
+    /**
+     * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
+     */
+    mvW(dir) {
+      const s = Model._[head.y], n = s.length, fwd = dir > 0;
+      if (head.x !== (fwd ? n : 0)) {
+        // Move within line
+        let j = head.x;
+        const ok   = fwd ? () => j<n : () => j>0 ;
+        const step = fwd ? () => j++ : () => j-- ;
+        if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
+        else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
+        else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
+        head.x = j;
+        r();
+      } else if (fwd ? head.y < Model.end : head.y > 0) {
+        // At edge - move to adjacent line
+        head.x = fwd ? 0 : Model._[--head.y].length;
+        if (fwd && ++head.y > View.end) View.set(head.y - View.n + 1);
+        else if (!fwd && head.y < View.start) View.set(head.y);
+        else r();
+      }
+    },
+
+    /**
      * Whether there is an active text selection (vs just a cursor).
      * Select direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
      * @returns {-1|0|1}
@@ -128,16 +162,6 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       head     = detachedHead;
       head.y = tail.y;
       head.x = tail.x;
-    },
-
-    /**
-     * Moves cursor to line edge.
-     * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
-     */
-    mvE(toEnd) {
-      const line = Model._[head.y];
-      maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
-      r();
     },
 
     /**
@@ -185,30 +209,6 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         head.x = Model._[tail.y - 1].length;
         Model.del(tail.y - 1, head.x, tail.y, 0);
         if (--head.y < View.start) View.set(head.y);
-        else r();
-      }
-    },
-
-    /**
-     * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
-     */
-    mvW(dir) {
-      const s = Model._[head.y], n = s.length, fwd = dir > 0;
-      if (head.x !== (fwd ? n : 0)) {
-        // Move within line
-        let j = head.x;
-        const ok   = fwd ? () => j<n : () => j>0 ;
-        const step = fwd ? () => j++ : () => j-- ;
-        if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
-        else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
-        else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
-        head.x = j;
-        r();
-      } else if (fwd ? head.y < Model.end : head.y > 0) {
-        // At edge - move to adjacent line
-        head.x = fwd ? 0 : Model._[--head.y].length;
-        if (fwd && ++head.y > View.end) View.set(head.y - View.n + 1);
-        else if (!fwd && head.y < View.start) View.set(head.y);
         else r();
       }
     },
