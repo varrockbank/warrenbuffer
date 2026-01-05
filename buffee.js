@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.10.0-alpha.1';
+  this.v = '14.11.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -75,7 +75,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         head.col = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.col;
         if (head.row < View.start || head.row > View.end) View.set(dir > 0 ? head.row - View.size + 1 : head.row);
-        else render();
+        else r();
       }
     },
 
@@ -85,7 +85,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     moveCol(dir) {
       const right = dir > 0;
-      if (right ? head.col < Model._[head.row].length : head.col) { maxCol = right ? ++head.col : --head.col; render(); }
+      if (right ? head.col < Model._[head.row].length : head.col) { maxCol = right ? ++head.col : --head.col; r(); }
       else if (right ? head.row < Model.end : head.row) this.moveRow(dir, 1);
     },
 
@@ -137,7 +137,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
     moveLineEdge(toEnd) {
       const line = Model._[head.row];
       maxCol = head.col = toEnd ? line.length : (c => c > 0 && c < head.col ? c : 0)(line.search(/[^ ]/));
-      render();
+      r();
     },
 
     /**
@@ -169,7 +169,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         } else maxCol = head.col += s.length;
       }
       if (head.row > View.end) View.set(head.row - View.size + 1);
-      else render();
+      else r();
     },
 
     /** Deletes the character before cursor or the current selection. */
@@ -179,13 +179,13 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         // Delete character before cursor
         Model.del(tail.row, tail.col - 1, tail.row, tail.col);
         head.col--;
-        render();
+        r();
       } else if (tail.row > 0) {
         // At start of line - delete newline (join with previous line)
         head.col = Model._[tail.row - 1].length;
         Model.del(tail.row - 1, head.col, tail.row, 0);
         if (--head.row < View.start) View.set(head.row);
-        else render();
+        else r();
       }
     },
 
@@ -203,13 +203,13 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.col = j;
-        render();
+        r();
       } else if (fwd ? head.row < Model.end : head.row > 0) {
         // At edge - move to adjacent line
         head.col = fwd ? 0 : Model._[--head.row].length;
         if (fwd && ++head.row > View.end) View.set(head.row - View.size + 1);
         else if (!fwd && head.row < View.start) View.set(head.row);
-        else render();
+        else r();
       }
     },
 
@@ -240,7 +240,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         }
       }
       if (n > 0) { first.col += n; second.col += n; }
-      render();
+      r();
     },
   };
 
@@ -284,7 +284,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     set text(text) {
       this._ = expandTabs(text).split('\n');
-      render();
+      r();
     },
 
     /**
@@ -340,7 +340,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       const d = size - this.size;
       this.size = size;
       this.start = $clamp(start, 0, Model.end);
-      renderAll(d);
+      R(d);
     },
 
     /**
@@ -351,7 +351,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   };
 
   // Add / remove lines, selections, gutters as row changes
-  const renderAll = this.renderAll = d => {
+  const R = this.R = d => {
     const delta = d;
     if (d) {
       for (; d > 0; d--         ) viewportLayers.forEach(([a, f, , tag]) => a.push(f.appendChild(document.createElement(tag))));
@@ -363,13 +363,13 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       $gutter.style.width = gutterCols + 'ch';
       if (cols) $e.style.width = `calc(${gutterCols + cols}ch + ${cssPadding * 4}px)`;
     }
-    render(delta);
+    r(delta);
   };
 
   /**
    * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
-  const render = this.render = (delta = 0) => {
+  const r = this.r = (delta = 0) => {
     Mode.frame++;
 
     // Update contents of line containers (reset to clean state)
@@ -403,7 +403,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   }
   
   // Initial sizing render
-  const resize = delta => {View.size += delta, renderAll(delta)};
+  const resize = delta => {View.size += delta, R(delta)};
   rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / h) - View.size)}).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
@@ -459,7 +459,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       } else if (!sh && Selection.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Selection.cursor(Selection.bounds(1)[direction > 0 | 0]);
-          render();
+          r();
         } else {
           const edge = Selection.bounds(1)[direction > 0 | 0];
           // edge.row is already absolute
@@ -471,7 +471,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
           else if (targetAbsRow > View.end) View.set(targetAbsRow - View.size + 1);
-          else render();
+          else r();
         }
       } else { // no meta key.
         if (sh && !Selection.dir) Selection.select();

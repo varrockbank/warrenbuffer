@@ -16,7 +16,7 @@ function BuffeeHistory(editor) {
   const Model = editor.Model;
   const add = Model.add.bind(Model);
   const del = Model.del.bind(Model);
-  const { render } = editor;
+  const { r } = editor;
 
   // State
   const undoStack = [];
@@ -183,7 +183,7 @@ function BuffeeHistory(editor) {
       redoStack.push(undoneOp);
       restoreCursor(op.cursorBefore);
 
-      render();
+      r();
       return true;
     },
 
@@ -196,7 +196,7 @@ function BuffeeHistory(editor) {
         restoreCursor(op.cursorAfter);
       }
 
-      render();
+      r();
       return true;
     },
 

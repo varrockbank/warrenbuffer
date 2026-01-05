@@ -100,7 +100,7 @@ function BuffeeIOS(editor) {
     // Bounds check col to line length
     const lineLength = Model._[absRow].length;
     Selection.cursor({ row: absRow, col: Math.min(col, lineLength) });
-    editor.render();
+    editor.r();
   }
 
   // Dispatch synthetic keydown to the editor

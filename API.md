@@ -431,7 +431,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 
 ```javascript
 // Public properties
-const { View, Selection, Model, Mode, render, $ } = editor;
+const { View, Selection, Model, Mode, r, $ } = editor;
 // Mode.frame - Number of render calls
 // Mode.ch - Line height in pixels (from CSS --buffee-cell)
 // Mode.cw - Character width in pixels (measured from cursor element)
