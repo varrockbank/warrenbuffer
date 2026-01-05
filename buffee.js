@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.15.5-alpha.1';
+  this.v = '14.0.0-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;

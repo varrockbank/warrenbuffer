@@ -180,7 +180,7 @@
     window.primary = primary;
 
     // Set version from Buffee instance
-    document.getElementById('buffee-version').textContent = '( v' + primary.version + ' )';
+    document.getElementById('buffee-version').textContent = '( v' + primary.v + ' )';
 
     const hackerNewsElement = document.getElementById('hackernews');
     const hackernews = BuffeeStatusLine(new Buffee(hackerNewsElement, { rows: 20 }));
