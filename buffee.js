@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.27.0-alpha.1';
+  this.v = '14.28.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -26,8 +26,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   const [h, cssPadding, gutterInit, gutterPad] =
     ['cell', 'padding', 'gutter-init', 'gutter-pad']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$e        ,$l     ,$ct     ,$clipboardBridge  ,$gutter , $layerText ,$layerSelect] =
-        ['elements','lines','ct',    'clipboard-bridge','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
+  const [$e        ,$l     ,$ct     ,$clip  ,$gutter , $layerText ,$layerSelect] =
+        ['elements','lines','ct',    'clip','gutter','layer-text','layer-selection'].map(q => $.querySelector('.buffee-' + q));
 
   // [array, fragment, parent, tagName, updateFn]
   const viewportLayers = [
@@ -414,12 +414,12 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   });
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
-  // Listen on $clipboardBridge since that's where focus moves on Ctrl+C/X.
-  $clipboardBridge.addEventListener('copy', e => {
+  // Listen on $clip since that's where focus moves on Ctrl+C/X.
+  $clip.addEventListener('copy', e => {
     e.preventDefault(); // take over the clipboard contents                   
     e.clipboardData.setData('text/plain', Select._.join('\n'));
   });
-  $clipboardBridge.addEventListener('cut', e => {
+  $clip.addEventListener('cut', e => {
     e.preventDefault(); // take over the clipboard contents                   
     e.clipboardData.setData('text/plain', Select._.join('\n'));
     Select.del();
@@ -433,8 +433,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
     const metaKeys = {
       v: () => {},
-      c: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
-      x: () => { $clipboardBridge.focus({ preventScroll: true }); $clipboardBridge.select(); },
+      c: () => { $clip.focus({ preventScroll: true }); $clip.select(); },
+      x: () => { $clip.focus({ preventScroll: true }); $clip.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
       Backspace: () => { Select.del() },

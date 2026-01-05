@@ -1,6 +1,6 @@
 /**
  * Buffee Editor - Required Styles
- * @version 14.26.0-alpha.1
+ * @version 14.28.0-alpha.1
  *
  * This stylesheet contains the essential structural CSS for Buffee.
  * Colors are intentionally omitted - define them at point of usage.
@@ -47,7 +47,7 @@
 }
 
 /* Hidden clipboard bridge - must be selectable but invisible */
-.buffee-clipboard-bridge {
+.buffee-clip {
   position: fixed;
   width: 0;
   height: 0;
