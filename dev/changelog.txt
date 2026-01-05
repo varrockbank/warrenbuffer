@@ -1,7 +1,7 @@
 * Project Devlog
 
-** 14.8.0-alpha.1 [2026-01-05]  gz: 2762 / 2.70 KB (-12), br: 2539 / 2.48 KB (-8), min: 6625 / 6.47 KB (-49)
-- refactor: rename Mode.cellHeight/cellWidth to Mode.h/w
+** 14.8.1-alpha.1 [2026-01-05]  gz: 2764 / 2.70 KB (+2), br: 2542 / 2.48 KB (+4), min: 6631 / 6.48 KB (6)
+- refactor: rename Mode.cellHeight/cellWidth to Mode.ch/cw
 
 ** 14.7.0-alpha.1 [2026-01-05]  gz: 2774 / 2.71 KB (-4), br: 2548 / 2.49 KB (-4), min: 6674 / 6.52 KB (-10)
 - refactor: rename Mode.frameCount to Mode.frame

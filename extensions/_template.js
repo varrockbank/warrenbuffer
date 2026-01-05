@@ -20,7 +20,7 @@ function Buffee__NAME__(editor) {
   // Available: Model, Selection, View, Mode, render, $
   // Selection.bounds() returns [head, tail], Selection.bounds(1) returns ordered
   const { Model, View, Mode, render, $ } = editor;
-  const lineHeight = Mode.h;
+  const lineHeight = Mode.ch;
   const $e = $.querySelector('.buffee-elements');
 
   // === STATE ===

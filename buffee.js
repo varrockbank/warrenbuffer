@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.8.0-alpha.1';
+  this.v = '14.8.1-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -259,8 +259,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     interactive: 1,
     frame: 0,
-    h,
-    w: $cursor.getBoundingClientRect().width,
+    ch: h,
+    cw: $cursor.getBoundingClientRect().width,
     renderHooks: []
   };
 
@@ -393,8 +393,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
         cursorLeft = head.col;
 
         // Horizontal scroll to keep cursor in view
-        const {left: cl, right: cr} = lRect, rl = lRect.left + head.col * Mode.w - $l.scrollLeft, rr = rl + Mode.w;
-        $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.w) * Mode.w;
+        const {left: cl, right: cr} = lRect, rl = lRect.left + head.col * Mode.cw - $l.scrollLeft, rr = rl + Mode.cw;
+        $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cw) * Mode.cw;
       }
     }
     $cursor.style.left = cursorLeft + 'ch';
