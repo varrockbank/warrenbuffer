@@ -121,7 +121,7 @@ const BuffeeEditor = defineComponent({
           h('div', { class: 'buffee-zsel' }),
           h('blockquote', { class: 'buffee-ztxt' }),
           h('div', { class: 'buffee-layer-elements' }),
-          h('div', { class: 'buffee-cursor' })
+          h('div', { class: 'buffee-ct' })
         ]),
         this.gutterRight ? gutter : null
       ]),

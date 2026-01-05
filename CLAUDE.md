@@ -158,7 +158,7 @@ Templates: `extensions/_template.js`, `samples/_template.html`, `themes/_templat
 | `.buffee-zsel` | Selection layer | Contains selection `<div>`s |
 | `.buffee-ztxt` | `<blockquote>` | Text content layer |
 | `.buffee-layer-elements` | Overlay | TUI/Elementals overlay |
-| `.buffee-cursor` | Cursor | Blinking cursor |
+| `.buffee-ct` | Cursor | Blinking cursor |
 | `.buffee-status` | Status bar | Bottom bar container |
 | `.buffee-clipboard-bridge` | `<textarea>` | Hidden, for clipboard |
 
