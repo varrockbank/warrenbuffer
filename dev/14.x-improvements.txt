@@ -2,8 +2,8 @@
 ==============================
 
 Starting point (13.x): 6818 min / 2820 gz / 2577 br
-Final (14.29):         5855 min / 2647 gz / 2439 br
-Total saved:           -963 min / -173 gz / -138 br
+Final (14.31):         5833 min / 2643 gz / 2437 br
+Total saved:           -985 min / -177 gz / -140 br
 
 Version | Change                                      | Min Δ | GZ Δ | BR Δ
 --------|---------------------------------------------|------:|-----:|-----:
@@ -37,3 +37,5 @@ Version | Change                                      | Min Δ | GZ Δ | BR Δ
 14.27.0 | Selection → Select, select → make           |    -9 |   +2 |    0
 14.28.0 | clipboard-bridge → clip                     |   -12 |   -6 |   -9
 14.29.0 | gutter → rail                               |    -6 |   -2 |   -1
+14.30.0 | x/y/moveWord/moveLineEdge → mvX/mvY/mvW/mvE |   -18 |   -1 |   -5
+14.31.0 | indent → dent                               |    -4 |   -3 |   +3
