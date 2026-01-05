@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.22.0-alpha.1';
+  this.v = '14.23.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -102,7 +102,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Gets the selected text as an array of lines.
      * @returns {string[]} Array of selected line contents
      */
-    get lines() {
+    get _() {
       const [left, right] = Selection.bounds(1);
       if(left.y === right.y) {
         const text  = Model._[left.y];
@@ -417,11 +417,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   // Listen on $clipboardBridge since that's where focus moves on Ctrl+C/X.
   $clipboardBridge.addEventListener('copy', e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
+    e.clipboardData.setData('text/plain', Selection._.join('\n'));
   });
   $clipboardBridge.addEventListener('cut', e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Selection.lines.join('\n'));
+    e.clipboardData.setData('text/plain', Selection._.join('\n'));
     Selection.del();
     $l.focus({ preventScroll: true });     // Return focus to editor
   });
