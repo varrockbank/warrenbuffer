@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.10.0-alpha.1 [2026-01-05]  gz: 2756 / 2.69 KB (-1), br: 2527 / 2.47 KB (0), min: 6508 / 6.36 KB (-3)
+- refactor: rename View.lines to View._
+
 ** 14.9.0-alpha.1 [2026-01-05]  gz: 2757 / 2.69 KB (-7), br: 2527 / 2.47 KB (-15), min: 6511 / 6.36 KB (-120)
 - refactor: rename Model.lines to Model._
 
