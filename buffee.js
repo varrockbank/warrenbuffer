@@ -17,7 +17,7 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
-  this.version = '13.15.1-alpha.1';
+  this.version = '13.15.2-alpha.1';
   this.$parent = $parent;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -171,10 +171,10 @@ function Buffee($parent, { rows, cols, spaces = 4 } = {}) {
       } else {
         Model.add(tail.row, tail.col, lines);
 
-        // Update cursor
+        // Update cursor (preserve maxCol for multiline - vertical nav returns to original column)
         if (lines.length > 1) {
-                        head.row += lines.length - 1;
-               maxCol = head.col  = lines[lines.length - 1].length;
+               head.row += lines.length - 1;
+               head.col  = lines[lines.length - 1].length;
         } else maxCol = head.col += s.length;
       }
       if (head.row > Viewport.end) Viewport.set(head.row - Viewport.size + 1);
