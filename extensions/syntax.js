@@ -181,7 +181,7 @@ function BuffeeSyntax(editor) {
     while (stateCache.length <= lineIndex) {
       const prevLine = stateCache.length - 1;
       const prevState = stateCache[prevLine] || 0;
-      const { endState } = tokenizeLine(Model.lines[prevLine] || '', prevState);
+      const { endState } = tokenizeLine(Model._[prevLine] || '', prevState);
       stateCache.push(endState);
     }
   }
@@ -206,8 +206,8 @@ function BuffeeSyntax(editor) {
     const startLine = Math.max(0, fromLine);
     let state = stateCache[startLine] || 0;
 
-    for (let i = startLine; i < Model.lines.length; i++) {
-      const { endState } = tokenizeLine(Model.lines[i], state);
+    for (let i = startLine; i < Model._.length; i++) {
+      const { endState } = tokenizeLine(Model._[i], state);
 
       if (i + 1 < stateCache.length && stateCache[i + 1] === endState) {
         // State converged - no need to continue
@@ -265,12 +265,12 @@ function BuffeeSyntax(editor) {
 
     for (let i = 0; i < viewport.size; i++) {
       const absLine = viewport.start + i;
-      if (absLine >= Model.lines.length) break;
+      if (absLine >= Model._.length) break;
 
       const lineEl = lineContainer.children[i];
       if (!lineEl) continue;
 
-      const text = Model.lines[absLine] || '';
+      const text = Model._[absLine] || '';
       const startState = stateCache[absLine] || 0;
       const { tokens } = tokenizeLine(text, startState);
 
@@ -676,7 +676,7 @@ function BuffeeSyntax(editor) {
     getLineTokens(lineIndex) {
       ensureStateCache(lineIndex);
       const startState = stateCache[lineIndex] || 0;
-      const { tokens, endState } = tokenizeLine(Model.lines[lineIndex] || '', startState);
+      const { tokens, endState } = tokenizeLine(Model._[lineIndex] || '', startState);
       return { tokens, startState, endState };
     },
 

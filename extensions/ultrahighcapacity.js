@@ -109,7 +109,7 @@ function BuffeeUltraHighCapacity(editor) {
   }
 
   /**
-   * Loads chunks around the viewport and updates Model.lines.
+   * Loads chunks around the viewport and updates Model._.
    * @private
    */
   function loadChunksForView() {
@@ -172,7 +172,7 @@ function BuffeeUltraHighCapacity(editor) {
   }
 
   /**
-   * Creates a Proxy for Model.lines that returns chunked content.
+   * Creates a Proxy for Model._ that returns chunked content.
    * @private
    */
   function createLinesProxy() {
@@ -297,8 +297,8 @@ function BuffeeUltraHighCapacity(editor) {
       prevBuffer = [];
       nextBuffer = [];
 
-      // Replace Model.lines with a Proxy that returns chunked content
-      Model.lines = createLinesProxy();
+      // Replace Model._ with a Proxy that returns chunked content
+      Model._ = createLinesProxy();
 
       // Set navigation-only mode (can move cursor, no editing)
       editor.Mode.interactive = 0;
@@ -324,8 +324,8 @@ function BuffeeUltraHighCapacity(editor) {
         configurable: true
       });
 
-      // Restore Model.lines to a regular array
-      Model.lines = [];
+      // Restore Model._ to a regular array
+      Model._ = [];
 
       // Restore normal mode (full editing)
       editor.Mode.interactive = 1;

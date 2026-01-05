@@ -109,12 +109,12 @@ function BuffeeHistory(editor) {
     // Capture text before deleting (for undo - need to re-insert)
     let lines;
     if (row === endRow) {
-      lines = [Model.lines[row].slice(col, endCol)];
+      lines = [Model._[row].slice(col, endCol)];
     } else {
       lines = [
-        Model.lines[row].slice(col),
-        ...Model.lines.slice(row + 1, endRow),
-        Model.lines[endRow].slice(0, endCol)
+        Model._[row].slice(col),
+        ...Model._.slice(row + 1, endRow),
+        Model._[endRow].slice(0, endCol)
       ];
     }
 

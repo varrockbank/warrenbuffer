@@ -98,7 +98,7 @@ function BuffeeIOS(editor) {
     // Convert to absolute row
     const absRow = View.start + row;
     // Bounds check col to line length
-    const lineLength = Model.lines[absRow].length;
+    const lineLength = Model._[absRow].length;
     Selection.cursor({ row: absRow, col: Math.min(col, lineLength) });
     editor.render();
   }
