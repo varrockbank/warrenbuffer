@@ -441,6 +441,7 @@ if __name__ == "__main__":
 
     // Update state display on render
     editor.Mode.renderHooks.push(updateStateDisplay);
+    updateStateDisplay();
 
     // Focus editor
     editorEl.focus();
