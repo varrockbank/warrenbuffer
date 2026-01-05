@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeHighlights - Fixed-position highlight extension for Buffee.
  * Creates a non-scrolling layer for rendering highlights aligned with text content.
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 /**

@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeFileLoader - File loading extension for Buffee.
  * Provides multiple file loading strategies optimized for different file sizes.
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**

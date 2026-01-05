@@ -2,7 +2,7 @@
  * @fileoverview BuffeeUndoTree - Tree-based undo/redo extension for Buffee.
  * Unlike linear history where new edits discard the redo stack,
  * undo tree preserves all branches.
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**

@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeHistory - Undo/redo extension for Buffee.
  * Enables history tracking with undo/redo support.
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 /**
