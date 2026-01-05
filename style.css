@@ -1,6 +1,6 @@
 /**
  * Buffee Editor - Required Styles
- * @version 14.36.2-alpha.1
+ * @version 14.36.3-alpha.1
  *
  * This stylesheet contains the essential structural CSS for Buffee.
  * Colors are intentionally omitted - define them at point of usage.
@@ -65,10 +65,10 @@
 }
 
 /* Line elements */
-.buffee .buffee-lines pre::before {
+.buffee .buffee-ztxt > pre::before {
   content: "\200B";
 }
-.buffee .buffee-lines pre {
+.buffee .buffee-ztxt > pre {
   margin: 0;
   overflow: visible;
   white-space: pre;
