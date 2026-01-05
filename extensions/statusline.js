@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 /**
@@ -18,10 +18,11 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
 
   const $headRow = $.querySelector('.buffee-head-row');
   const $headCol = $.querySelector('.buffee-head-col');
+  const $selSep = $.querySelector('.buffee-sel-sep');
   const $lineCounter = $.querySelector('.buffee-linecount');
   const $spaces = $.querySelector('.buffee-spaces');
 
-  let lastRow = -1, lastCol = -1, lastEndRow = -1, lastEndCol = -1;
+  let lastRow = -1, lastCol = -1, lastEndRow = -1, lastEndCol = -1, lastHasSelection = false;
   let lastLineCount = -1, lastSpaces = -1, lastOriginalLineCount = -1;
   let byteCount = 0, originalLineCount = 0;
 
@@ -62,15 +63,25 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
         lastEndRow = end.y;
         lastEndCol = end.x;
       }
+      if ($selSep && !lastHasSelection) {
+        $selSep.style.display = '';
+        $headCol.style.display = '';
+        lastHasSelection = true;
+      }
     } else {
       // Show cursor position
       if ($headRow && start.y !== lastRow) {
-        $headRow.textContent = start.y + 1;
+        $headRow.textContent = `${start.y + 1}:${start.x + 1}`;
         lastRow = start.y;
       }
-      if ($headCol && start.x !== lastCol) {
-        $headCol.textContent = start.x + 1;
+      if (start.x !== lastCol) {
+        if ($headRow) $headRow.textContent = `${start.y + 1}:${start.x + 1}`;
         lastCol = start.x;
+      }
+      if ($selSep && lastHasSelection) {
+        $selSep.style.display = 'none';
+        if ($headCol) $headCol.style.display = 'none';
+        lastHasSelection = false;
       }
       lastEndRow = -1;
       lastEndCol = -1;
