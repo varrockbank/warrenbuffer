@@ -174,8 +174,8 @@ editor.Select.mvE(false); // Start of line (smart home)
 // Editing
 editor.Select.add("text");
 editor.Select.del();
-editor.Select.indent(4);   // Indent by 4 spaces
-editor.Select.indent(-4);  // Unindent by 4 spaces
+editor.Select.dent(4);   // Indent by 4 spaces
+editor.Select.dent(-4);  // Unindent by 4 spaces
 ```
 
 ---

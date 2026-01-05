@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.30.0-alpha.1';
+  this.v = '14.31.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -222,7 +222,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     // vim: removes the selection, although it does keep a hidden memory of the most recent indentation operation which you can repeat.
     // intellij: move all selected lines by indentation of number s: spaces, unless there is not enough to unindent
     // Currently we follow intellij implementation but perhaps VSCode's is the best.
-    indent(n) {
+    dent(n) {
       // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
       const [first, second] = Select.bounds(1);
@@ -441,7 +441,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       Enter: () => { Select.add('\n') } ,
       Tab: () => {
         e.preventDefault();
-        (Select.dir || sh) ? Select.indent(sh ? -Mode.s : Mode.s) : Select.add(' '.repeat(Mode.s));
+        (Select.dir || sh) ? Select.dent(sh ? -Mode.s : Mode.s) : Select.add(' '.repeat(Mode.s));
       },
     };
 
