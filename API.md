@@ -433,8 +433,8 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 // Public properties
 const { View, Selection, Model, Mode, render, $ } = editor;
 // Mode.frame - Number of render calls
-// Mode.cellHeight - Line height in pixels (from CSS --buffee-cell)
-// Mode.cellWidth - Character width in pixels (measured from cursor element)
+// Mode.h - Line height in pixels (from CSS --buffee-cell)
+// Mode.w - Character width in pixels (measured from cursor element)
 
 // Query DOM elements from $ as needed:
 const $e = $.querySelector('.buffee-elements');

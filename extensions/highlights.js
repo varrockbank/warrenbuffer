@@ -12,7 +12,7 @@
  */
 function BuffeeHighlights(editor) {
   const { $, Mode } = editor;
-  const lineHeight = Mode.cellHeight;
+  const lineHeight = Mode.h;
 
   // Compute content offset from CSS and gutter
   const [cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =

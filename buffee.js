@@ -17,13 +17,13 @@
  * editor.Model.text = 'Hello, World!';
  */
 function Buffee($, { rows, cols, spaces = 4 } = {}) {
-  this.v = '14.7.0-alpha.1';
+  this.v = '14.8.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.spaces ? s.replace(/\t/g, ' '.repeat(Mode.spaces)) : s; // 0 = retain tabs 
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   const $clamp = (value, min, max) => value < min ? min : ( value > max ? max : value);
 
-  const [cellHeight, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
+  const [h, cssPadding, cssGutterDigitsInitial, cssGutterDigitsPadding] =
     ['--buffee-cell', '--buffee-padding', '--buffee-gutter-digits-initial', '--buffee-gutter-digits-padding']
       .map(p => parseFloat(getComputedStyle($).getPropertyValue(p)));
   const [$e        ,$l     ,$cursor ,$clipboardBridge  ,$gutter , $layerText ,$layerSelection] =
@@ -41,7 +41,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   cols && !$gutter && ($e.style.width = `calc(${cols}ch + ${cssPadding * 2}px)`);
   let lRect = $l.getBoundingClientRect();
   // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
-  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * cellHeight + 'px'));
+  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * h + 'px'));
 
   const detachedHead = { row : 0, col : 0};
   // head.row and tail.row are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -259,8 +259,8 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
      */
     interactive: 1,
     frame: 0,
-    cellHeight,
-    cellWidth: $cursor.getBoundingClientRect().width,
+    h,
+    w: $cursor.getBoundingClientRect().width,
     renderHooks: []
   };
 
@@ -389,12 +389,12 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
       // Cursor
       const headViewRow = head.row - View.start;
       if (headViewRow >= 0 && headViewRow < View.size) {
-        $cursor.style.top = headViewRow * cellHeight + 'px';
+        $cursor.style.top = headViewRow * h + 'px';
         cursorLeft = head.col;
 
         // Horizontal scroll to keep cursor in view
-        const {left: cl, right: cr} = lRect, rl = lRect.left + head.col * Mode.cellWidth - $l.scrollLeft, rr = rl + Mode.cellWidth;
-        $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cellWidth) * Mode.cellWidth;
+        const {left: cl, right: cr} = lRect, rl = lRect.left + head.col * Mode.w - $l.scrollLeft, rr = rl + Mode.w;
+        $l.scrollLeft = Math.round(($l.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.w) * Mode.w;
       }
     }
     $cursor.style.left = cursorLeft + 'ch';
@@ -404,7 +404,7 @@ function Buffee($, { rows, cols, spaces = 4 } = {}) {
   
   // Initial sizing render
   const resize = delta => {View.size += delta, renderAll(delta)};
-  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / cellHeight) - View.size)}).observe($e);
+  rows ? resize(rows) : new ResizeObserver(() => {lRect = $l.getBoundingClientRect(); resize(Math.floor($e.clientHeight / h) - View.size)}).observe($e);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $l.addEventListener('paste', e => {
