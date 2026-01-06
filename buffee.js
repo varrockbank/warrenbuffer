@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.8-alpha.1';
+  this.v = '14.36.9-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -332,10 +332,10 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @param {number} [size] - Number of lines to display (optional)
      */
     set(start, size = this.n) {
-      const d = size - this.n;
+      const delta = size - this.n;
       this.n = size;
       this.start = Math.max(0, Math.min(start, Model.end));
-      RENDER(d);
+      RENDER(delta);
     },
 
     /**
@@ -346,9 +346,9 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   };
 
   // Add / remove lines, selections, rails as row changes
-  const RENDER = this.RENDER = d => {
-    const delta = d;
-    if (d) {
+  const RENDER = this.RENDER = delta => {
+    if (delta) {
+      let d = delta;
       for (; d > 0; d--         ) viewportLayers.forEach(([a, f]) => a.push(f.appendChild(document.createElement('pre'))));
       if  (delta > 0            ) viewportLayers.forEach(([, f, p]) => p?.appendChild(f));
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());

@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.36.9-alpha.1 [2026-01-06]  gz: 2624 / 2.56 KB (+6), br: 2424 / 2.37 KB (+6), min: 5852 / 5.71 KB (-1)
+- perf: move loop variable declaration inside conditional block
+
 ** 14.36.8-alpha.1 [2026-01-05]  gz: 2618 / 2.56 KB (-5), br: 2418 / 2.36 KB (+1), min: 5853 / 5.72 KB (0)
 - refactor: move container sizing to initialization section
 
