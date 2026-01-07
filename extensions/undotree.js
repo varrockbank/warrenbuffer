@@ -21,7 +21,7 @@
  */
 function BuffeeUndoTree(editor) {
   const { Sel, Model } = editor;
-  const add = Model.add.bind(Model);
+  const add = Model.ins.bind(Model);
   const del = Model.del.bind(Model);
 
   // Node ID counter
@@ -142,7 +142,7 @@ function BuffeeUndoTree(editor) {
   }
 
   // Wrap insert to record history (new API: row, col, lines[])
-  Model.add = function(row, col, lines) {
+  Model.ins = function(row, col, lines) {
     if (lines.length === 0 || (lines.length === 1 && lines[0] === '')) return;
 
     const cursorBefore = captureCursor();

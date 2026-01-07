@@ -15,7 +15,7 @@
 function BuffeeSyntax(editor) {
   const { sub } = editor.Mode;
   const { View, Model, $ } = editor;
-  const add = Model.add.bind(Model);
+  const add = Model.ins.bind(Model);
   const del = Model.del.bind(Model);
   const $textLayer = $.querySelector('.buffee-ztxt');
 
@@ -32,7 +32,7 @@ function BuffeeSyntax(editor) {
   // ============================================================================
 
   // Hook insert
-  Model.add = function(row, col, lines) {
+  Model.ins = function(row, col, lines) {
     add(row, col, lines);
     if (enabled) {
       invalidateFrom(row);

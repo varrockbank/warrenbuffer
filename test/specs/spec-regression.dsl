@@ -22,7 +22,7 @@ expect(5).toBe(5);
 ### Replacing selection with multi-char text should position cursor correctly
 TYPE "Hello world"
 left 5 times with shift
-fixture.editor.Sel.add('REPLACED');
+fixture.editor.Sel.ins('REPLACED');
 expect(fixture).toHaveLines('Hello REPLACED');
 EXPECT cursor at 0,14
 

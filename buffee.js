@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.36.9-alpha.1';
+  this.v = '14.37.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -163,12 +163,12 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Inserts a string at cursor position, replacing any selection.
      * @param {string} s - String to insert
      */
-    add(s) {
+    ins(s) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
         const [first, second] = Sel.bounds(1);
         Model.del(first.y, first.x, second.y, second.x + (this.dir > 0));
-        Model.add(first.y, first.x, lines);
+        Model.ins(first.y, first.x, lines);
 
         head.y = first.y;
         // Update cursor to end of inserted text
@@ -179,7 +179,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
         this.caret();
       } else {
-        Model.add(head.y, head.x, lines);
+        Model.ins(head.y, head.x, lines);
 
         // Update cursor
         if (lines.length > 1) {
@@ -193,7 +193,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
     /** Deletes the character before cursor or the current selection. */
     del() {
-      if (this.dir) this.add('');
+      if (this.dir) this.ins('');
       else if (head.x > 0) {
         // Delete character before cursor
         Model.del(head.y, head.x - 1, head.y, head.x);
@@ -288,7 +288,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @param {number} col - Column index
      * @param {string[]} lines - Array of lines to insert (already split)
      */
-    add(row, col, lines) {
+    ins(row, col, lines) {
       const after = this._[row].slice(col);
       this._[row] = this._[row].slice(0, col) + lines[0];
       if (lines.length === 1) this._[row] += after;
@@ -410,7 +410,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   $lines.addEventListener('paste', e => {
     e.preventDefault(); // stop browser from inserting raw clipboard text
     const text = e.clipboardData.getData('text/plain');
-    if (text) Sel.add(text);
+    if (text) Sel.ins(text);
   });
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
@@ -438,10 +438,10 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
       Backspace: () => { Sel.del() },
-      Enter: () => { Sel.add('\n') } ,
+      Enter: () => { Sel.ins('\n') } ,
       Tab: () => {
         e.preventDefault();
-        (Sel.dir || sh) ? Sel.dent(sh ? -Mode.s : Mode.s) : Sel.add(' '.repeat(Mode.s));
+        (Sel.dir || sh) ? Sel.dent(sh ? -Mode.s : Mode.s) : Sel.ins(' '.repeat(Mode.s));
       },
     };
 
@@ -481,7 +481,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       if (cmd) metaKeys[k.toLowerCase()]?.();
       else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
-        Sel.add(k);
+        Sel.ins(k);
       }
     } else if (special[k] && Mode.i >= 1) { special[k](); }
   });

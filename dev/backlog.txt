@@ -1,2 +1,44 @@
 Website
 16. everywhere in web page should use buffee 
+
+
+
+Model.end should return coordinate not just last line 
+
+
+Sel      -> Span
+ .bounds ->  .edge     // 
+ .mvX    ->  .mvX      //
+ .mvY    ->  .mY       //
+ .mvE    ->  .mvEnds   //
+ .mvW    ->  .mvWord   //
+ .dir    ->  .dir      // orientation of the selection. 0 if cursor. 
+ .del    ->  .del      // delete text w.r.t. to selection
+ .add    ->  .ins      // insert text w.r.t. to selection
+ .caret  ->  .fuse     // convert the cursor or selection to a cursor
+ .make   ->  .fiss     // convert the cursor or selection to a selection
+ .dent   ->  .dent     // indent or unindent 
+
+Mode
+ .s
+ .i                                
+ .frame -> .f // framecount
+ .ch 
+ .cw 
+ .sub 
+
+Model    Model
+ ._   ->  ._
+ .end ->  .end  // last index of model  
+ .s   ->  .s    // string 
+ .del ->  .del
+ .add ->  .ins  // 
+
+View       View
+ ._     ->  ._      // Subset of model lines that are in view
+ .n     ->  .n      // Logical Viewport Size    
+ .start ->  .start  // model index of first row of viewport
+ .end   ->  .end    // model index of last logical row of viewport. TODO: remove?
+ .set() ->  .go     // position the viewport at given start 
+
+ 
