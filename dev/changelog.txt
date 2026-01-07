@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.37.0-alpha.1 [2026-01-07]  gz: 2619 / 2.56 KB (-2), br: 2418 / 2.36 KB (-4), min: 5851 / 5.71 KB (0)
+- api: rename Sel.add/Model.add to Sel.ins/Model.ins
+
 ** 14.36.9-alpha.1 [2026-01-06]  gz: 2624 / 2.56 KB (+6), br: 2424 / 2.37 KB (+6), min: 5852 / 5.71 KB (-1)
 - perf: move loop variable declaration inside conditional block
 

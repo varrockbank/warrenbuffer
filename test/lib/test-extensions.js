@@ -410,7 +410,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 assertEqual(editor.Model._[0], 'A', 'Should have "A"');
                 editor.History.undo();
                 assertEqual(editor.Model._[0], '', 'Should be empty after undo');
@@ -423,7 +423,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 editor.History.undo();
                 assertEqual(editor.Model._[0], '', 'Should be empty after undo');
                 editor.History.redo();
@@ -437,9 +437,9 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('A');
-                editor.Sel.add('B');
-                editor.Sel.add('C');
+                editor.Sel.ins('A');
+                editor.Sel.ins('B');
+                editor.Sel.ins('C');
                 assertEqual(editor.Model._[0], 'ABC', 'Should have "ABC"');
                 editor.History.undo();
                 assertEqual(editor.Model._[0], '', 'Should be empty after single undo (coalesced)');
@@ -452,7 +452,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('AB');
+                editor.Sel.ins('AB');
                 // Wait to break coalescing
                 editor.History._lastOpTime = 0;
                 editor.Sel.del();
@@ -468,11 +468,11 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('Hello');
+                editor.Sel.ins('Hello');
                 editor.History._lastOpTime = 0;
-                editor.Sel.add('\n');
+                editor.Sel.ins('\n');
                 editor.History._lastOpTime = 0;
-                editor.Sel.add('World');
+                editor.Sel.ins('World');
                 assertEqual(editor.Model._.length, 2, 'Should have 2 lines');
                 editor.History.undo();
                 assertEqual(editor.Model._[1], '', 'Second line should be empty after undo');
@@ -487,10 +487,10 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 editor.History.undo();
                 assertEqual(editor.History.redoStack.length, 1, 'Should have 1 redo item');
-                editor.Sel.add('B');
+                editor.Sel.ins('B');
                 assertEqual(editor.History.redoStack.length, 0, 'Redo stack should be cleared');
             } finally {
                 cleanup();
@@ -501,7 +501,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('Hello');
+                editor.Sel.ins('Hello');
                 assertEqual(editor.Sel.bounds()[0].x, 5, 'Cursor should be at col 5');
                 editor.History.undo();
                 assertEqual(editor.Sel.bounds()[0].x, 0, 'Cursor should be at col 0 after undo');
@@ -514,7 +514,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('AB');
+                editor.Sel.ins('AB');
                 editor.History.undo();
                 assertEqual(editor.Sel.bounds()[0].x, 0, 'Cursor should be at col 0 after undo');
                 editor.History.redo();
@@ -528,8 +528,8 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHistory(editor);
-                editor.Sel.add('A');
-                editor.Sel.add('B');
+                editor.Sel.ins('A');
+                editor.Sel.ins('B');
                 assertTrue(editor.History.undoStack.length > 0, 'Should have undo items');
                 editor.History.clear();
                 assertEqual(editor.History.undoStack.length, 0, 'Undo stack should be empty');
@@ -545,7 +545,7 @@ function defineExtensionTests() {
             try {
                 BuffeeHistory(editor);
                 // Type "Hello World"
-                editor.Sel.add('Hello World');
+                editor.Sel.ins('Hello World');
                 editor.History._lastOpTime = 0;
 
                 // Select "Hello" (first 5 chars)
@@ -555,7 +555,7 @@ function defineExtensionTests() {
                 tail1.x = 5;
 
                 // Replace selection with "Hi"
-                editor.Sel.add('Hi');
+                editor.Sel.ins('Hi');
                 assertEqual(editor.Model._[0], 'Hi World', 'Should have replaced "Hello" with "Hi"');
 
                 // Single undo should restore "Hello World"
@@ -572,7 +572,7 @@ function defineExtensionTests() {
             try {
                 BuffeeHistory(editor);
                 // Type some text
-                editor.Sel.add('Hello World');
+                editor.Sel.ins('Hello World');
                 editor.History._lastOpTime = 0;
 
                 // Make a selection (this changes head to detachedHead internally)
@@ -616,7 +616,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeUndoTree(editor);
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 assertEqual(editor.Model._[0], 'A', 'Should have "A"');
                 editor.UndoTree.undo();
                 assertEqual(editor.Model._[0], '', 'Should be empty after undo');
@@ -631,12 +631,12 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeUndoTree(editor);
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 editor.UndoTree._lastOpTime = 0; // Break coalescing
                 editor.UndoTree.undo();
 
                 // Make a new edit - should create branch, not discard
-                editor.Sel.add('B');
+                editor.Sel.ins('B');
 
                 // Root should have 2 children (branches)
                 const tree = editor.UndoTree.getTree();
@@ -652,12 +652,12 @@ function defineExtensionTests() {
                 BuffeeUndoTree(editor);
 
                 // Create first branch
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 editor.UndoTree._lastOpTime = 0;
                 editor.UndoTree.undo();
 
                 // Create second branch
-                editor.Sel.add('B');
+                editor.Sel.ins('B');
                 editor.UndoTree._lastOpTime = 0;
                 assertEqual(editor.Model._[0], 'B', 'Should be on B branch');
 
@@ -680,10 +680,10 @@ function defineExtensionTests() {
             try {
                 BuffeeUndoTree(editor);
 
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 editor.UndoTree._lastOpTime = 0;
                 editor.UndoTree.undo();
-                editor.Sel.add('B');
+                editor.Sel.ins('B');
                 editor.UndoTree._lastOpTime = 0;
                 editor.UndoTree.undo();
 
@@ -702,12 +702,12 @@ function defineExtensionTests() {
                 BuffeeUndoTree(editor);
 
                 // Create: root -> A -> B -> C
-                editor.Sel.add('A');
+                editor.Sel.ins('A');
                 editor.UndoTree._lastOpTime = 0;
                 const nodeAId = editor.UndoTree.current.id;
-                editor.Sel.add('B');
+                editor.Sel.ins('B');
                 editor.UndoTree._lastOpTime = 0;
-                editor.Sel.add('C');
+                editor.Sel.ins('C');
                 editor.UndoTree._lastOpTime = 0;
 
                 assertEqual(editor.Model._[0], 'ABC', 'Should have ABC');
@@ -724,7 +724,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeUndoTree(editor);
-                editor.Sel.add('X');
+                editor.Sel.ins('X');
 
                 const tree = editor.UndoTree.getTree();
                 assertEqual(tree.id, 0, 'Root should have id 0');
@@ -740,8 +740,8 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeUndoTree(editor);
-                editor.Sel.add('A');
-                editor.Sel.add('B');
+                editor.Sel.ins('A');
+                editor.Sel.ins('B');
 
                 assertTrue(editor.UndoTree.canUndo, 'Should be able to undo');
                 editor.UndoTree.clear();

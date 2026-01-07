@@ -172,7 +172,7 @@ editor.Sel.mvE(true);  // End of line
 editor.Sel.mvE(false); // Start of line (smart home)
 
 // Editing
-editor.Sel.add("text");
+editor.Sel.ins("text");
 editor.Sel.del();
 editor.Sel.dent(4);   // Indent by 4 spaces
 editor.Sel.dent(-4);  // Unindent by 4 spaces
@@ -432,7 +432,7 @@ Internal state is exposed via `editor._` for building extensions. Extensions can
 ```javascript
 // Public properties
 const { View, Sel, Model, Mode, render, $ } = editor;
-// Mode.frame - Number of render calls
+// Mode.f - Number of render calls
 // Mode.ch - Line height in pixels (from CSS --buffee-cell)
 // Mode.cw - Character width in pixels (measured from cursor element)
 

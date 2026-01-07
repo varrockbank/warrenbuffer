@@ -13,7 +13,7 @@
  */
 function Buffee__NAME__(editor) {
   // === WRAPPABLE PRIMITIVES ===
-  // const add = Model.add.bind(Model), del = Model.del.bind(Model);
+  // const add = Model.ins.bind(Model), del = Model.del.bind(Model);
   const { sub } = editor.Mode;
 
   // === EDITOR PROPERTIES ===

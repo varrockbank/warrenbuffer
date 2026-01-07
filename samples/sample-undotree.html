@@ -288,10 +288,10 @@
     });
 
     // Update tree on any edit
-    const originalAdd = editor.Model.add;
+    const originalAdd = editor.Model.ins;
     const originalDel = editor.Model.del;
 
-    editor.Model.add = function(...args) {
+    editor.Model.ins = function(...args) {
       originalAdd.apply(this, args);
       setTimeout(updateTree, 0);
     };
