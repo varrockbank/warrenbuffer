@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.37.0-alpha.1';
+  this.v = '14.38.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -123,7 +123,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @returns {-1|0|1}
      */
     get dir() {
-      return head === tail ? 0 : (tail.y === head.rows && tail.x < head.x || tail.y < head.y) ? 1 : -1;
+      return head === tail ? 0 : (tail.y === head.y && tail.x < head.x || tail.y < head.y) ? 1 : -1;
     },
 
     /**
@@ -253,7 +253,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @type {-1|0|1}
      */
     i: 1,                                      
-    frame: 0,                                  /** framecount */
+    f: 0,                                      /** framecount */
     ch,                                        /** line and character height */
     cw: $caret.getBoundingClientRect().width, /** computed character width  */
     sub: []
@@ -365,7 +365,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
    * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
   const render = this.render = (delta = 0) => {
-    Mode.frame++;
+    Mode.f++;
 
     // Update contents of line containers (reset to clean state)
     for (let i = 0; i < View.N; i++) viewportLayers.forEach(([arr, , , update]) => arr[i] && update(arr[i], i));
