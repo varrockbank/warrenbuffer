@@ -5,40 +5,38 @@ Website
 
 Model.end should return coordinate not just last line 
 
-
-Sel      -> Span
- .bounds ->  .edge     // 
- .mvX    ->  .mvX      //
- .mvY    ->  .mY       //
- .mvE    ->  .mvEnds   //
- .mvW    ->  .mvWord   //
- .dir    ->  .dir      // orientation of the selection. 0 if cursor. 
- .del    ->  .del      // delete text w.r.t. to selection
- .add    ->  .ins      // insert text w.r.t. to selection
- .caret  ->  .fuse     // convert the cursor or selection to a cursor
- .make   ->  .fiss     // convert the cursor or selection to a selection
- .dent   ->  .dent     // indent or unindent 
-
 Mode
- .s
- .i                                
- .frame -> .f // framecount
- .ch 
- .cw 
- .sub 
+ .s    // spacing
+ .i    // interactivity mode              
+ .f    // Frame count 
+ .ch   // character width
+ .cw   // character height 
+ .sub  // render subscriptions 
 
-Model    Model
- ._   ->  ._
- .end ->  .end  // last index of model  
- .s   ->  .s    // string 
- .del ->  .del
- .add ->  .ins  // 
+Model
+ ._ 
+ .end   // Last Index of model 
+ .s     // "\n" joined string 
+ .del   // primitive model-wise delete
+ .ins   // primitive model-wise insert
 
-View       View
- ._     ->  ._      // Subset of model lines that are in view
- .n     ->  .n      // Logical Viewport Size    
- .start ->  .start  // model index of first row of viewport
- .end   ->  .end    // model index of last logical row of viewport. TODO: remove?
- .set() ->  .go     // position the viewport at given start 
+View    
+ ._     // Subset of model lines that are in view
+ .n     // Logical Viewport Size    
+ .N     // Rendered Viewport size, which sometimes include an extra line beyond the logical viewport 
+ .start // model index of first row of viewport
+ .end   // model index of last logical row of viewport. TODO: remove?
+ .set   // set viewport to position 
 
- 
+Span
+ .bounds ->  .edge     // 
+ .mvX    // move horizontally 
+ .mvY    // move vertically
+ .mvE    ->  .mvLn     // move next to new line character
+ .mvW    // move by words 
+ .dir    // orientation of the selection. 0 if cursor. 
+ .del    // delete text Span-wise delete
+ .add    // insert text Span-wise insert
+ .cursor // convert the span to a cursor
+ .select // convert the span to a selection
+ .dent   // indent or unindent 

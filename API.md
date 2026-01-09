@@ -149,33 +149,33 @@ editor.View.set(99, 25);  // Scroll to line index 99, show 25 lines
 
 ---
 
-## Sel (`editor.Sel`)
+## Span (`editor.Span`)
 
 ```javascript
 // Cursor position
-editor.Sel.ct({ y: 0, x: 5 });
-editor.Sel.isSelect;  // false if cursor, true if range
-editor.Sel.bounds(1);    // [start, end] in document order
-editor.Sel.bounds();     // [head, tail] - mutable position objects
+editor.Span.cursor({ y: 0, x: 5 });
+editor.Span.select();  // Begin selection (detach head from tail)
+editor.Span.bounds(1);    // [start, end] in document order
+editor.Span.bounds();     // [head, tail] - mutable position objects
 
 // Selected text
-editor.Sel._;  // Array of selected lines
+editor.Span._;  // Array of selected lines
 
 // Movement
-editor.Sel.mvY(1);   // Down
-editor.Sel.mvY(-1);  // Up
-editor.Sel.mvX(1);   // Right
-editor.Sel.mvX(-1);  // Left
-editor.Sel.mvW(1);   // Forward word
-editor.Sel.mvW(-1);  // Backward word
-editor.Sel.mvE(true);  // End of line
-editor.Sel.mvE(false); // Start of line (smart home)
+editor.Span.mvY(1);   // Down
+editor.Span.mvY(-1);  // Up
+editor.Span.mvX(1);   // Right
+editor.Span.mvX(-1);  // Left
+editor.Span.mvW(1);   // Forward word
+editor.Span.mvW(-1);  // Backward word
+editor.Span.mvE(true);  // End of line
+editor.Span.mvE(false); // Start of line (smart home)
 
 // Editing
-editor.Sel.ins("text");
-editor.Sel.del();
-editor.Sel.dent(4);   // Indent by 4 spaces
-editor.Sel.dent(-4);  // Unindent by 4 spaces
+editor.Span.ins("text");
+editor.Span.del();
+editor.Span.dent(4);   // Indent by 4 spaces
+editor.Span.dent(-4);  // Unindent by 4 spaces
 ```
 
 ---
@@ -446,8 +446,8 @@ const { _insert, _delete } = editor;
 // Render hooks via Mode.renderHooks
 const { renderHooks } = editor.Mode;
 
-// Cursor positions via Sel.bounds()
-const [head, tail] = editor.Sel.bounds();
+// Cursor positions via Span.bounds()
+const [head, tail] = editor.Span.bounds();
 ```
 
 ### Render Hooks

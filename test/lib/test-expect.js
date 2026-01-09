@@ -15,12 +15,12 @@ function expect(actual) {
         });
       },
       toHaveCursorAt(row, col) {
-        const [firstEdge, secondEdge] = actual.editor.Sel.bounds(1);
+        const [firstEdge, secondEdge] = actual.editor.Span.bounds(1);
         const isSelectionByReference = firstEdge !== secondEdge;
 
         // Check consistency between reference check and dir property
-        if (isSelectionByReference !== (actual.editor.Sel.dir !== 0)) {
-          throw new Error(`REGRESSION: Sel.dir (${actual.editor.Sel.dir}) is inconsistent with reference check (${isSelectionByReference})`);
+        if (isSelectionByReference !== (actual.editor.Span.dir !== 0)) {
+          throw new Error(`REGRESSION: Span.dir (${actual.editor.Span.dir}) is inconsistent with reference check (${isSelectionByReference})`);
         }
 
         // Check it's a cursor (firstEdge === secondEdge by reference)
@@ -35,12 +35,12 @@ function expect(actual) {
         }
       },
       toHaveSelectionAt(startRow, startCol, endRow, endCol) {
-        const [firstEdge, secondEdge] = actual.editor.Sel.bounds(1);
+        const [firstEdge, secondEdge] = actual.editor.Span.bounds(1);
         const isSelectionByReference = firstEdge !== secondEdge;
 
         // Check consistency between reference check and dir property
-        if (isSelectionByReference !== (actual.editor.Sel.dir !== 0)) {
-          throw new Error(`REGRESSION: Sel.dir (${actual.editor.Sel.dir}) is inconsistent with reference check (${isSelectionByReference})`);
+        if (isSelectionByReference !== (actual.editor.Span.dir !== 0)) {
+          throw new Error(`REGRESSION: Span.dir (${actual.editor.Span.dir}) is inconsistent with reference check (${isSelectionByReference})`);
         }
 
         // Check it's a selection (firstEdge !== secondEdge by reference)

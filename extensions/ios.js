@@ -13,7 +13,7 @@
  * const editor = BuffeeIOS(Buffee(container, config));
  */
 function BuffeeIOS(editor) {
-  const { Select, Model, View, Mode, $ } = editor;
+  const { Span, Model, View, Mode, $ } = editor;
   const lineHeight = Mode.ch;
   const $e = $.querySelector('.buffee-pane');
 
@@ -99,7 +99,7 @@ function BuffeeIOS(editor) {
     const absRow = View.start + row;
     // Bounds check col to line length
     const lineLength = Model._[absRow].length;
-    Select.caret({ y: absRow, x: Math.min(col, lineLength) });
+    Span.cursor({ y: absRow, x: Math.min(col, lineLength) });
     editor.render();
   }
 

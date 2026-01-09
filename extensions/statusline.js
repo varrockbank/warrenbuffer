@@ -45,9 +45,9 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
   });
 
   function updateStatusLine() {
-    const [head, tail] = editor.Sel.bounds();  // head first, unordered
-    const [start, end] = editor.Sel.bounds(1); // ordered by position
-    const hasSelection = editor.Sel.dir !== 0;
+    const [head, tail] = editor.Span.bounds();  // head first, unordered
+    const [start, end] = editor.Span.bounds(1); // ordered by position
+    const hasSelection = editor.Span.dir !== 0;
     const lineCount = Model.end + 1;
 
     if (showSelection && hasSelection) {
