@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.38.0-alpha.1';
+  this.v = '14.39.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -46,17 +46,17 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   ].map(([p, fn]) => [[], document.createDocumentFragment(), p, fn]);
 
   /**
-   * Sel management for cursor and text selection operations.
+   * Span management for cursor and text selection operations.
    * Handles cursor movement, text selection, insertion, and deletion.
-   * @namespace Sel
+   * @namespace Span
    */
-  const Sel = this.Sel = {
+  const Span = this.Span = {
     /**
      * Returns selection bounds. Pass truthy for document order, falsy for [head, tail].
      * @param {boolean} [ordered] - If true, returns [start, end] in document order
      * @returns {[Position, Position]} Array of positions
      */
-    bounds: ordered => ordered && Sel.dir > 0 ? [tail, head] : [head, tail],
+    bounds: ordered => ordered && Span.dir > 0 ? [tail, head] : [head, tail],
 
     /**
      * Moves the cursor/selection head vertically.
@@ -119,7 +119,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
     /**
      * Whether there is an active text selection (vs just a cursor).
-     * Sel direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
+     * Span direction: 1 (forward), -1 (backward), 0 (no selection/cursor)
      * @returns {-1|0|1}
      */
     get dir() {
@@ -131,7 +131,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @returns {string[]} Array of selected line contents
      */
     get _() {
-      const [left, right] = Sel.bounds(1);
+      const [left, right] = Span.bounds(1);
       if(left.y === right.y) {
         const text  = Model._[left.y];
         const slice = text.slice(left.x, right.x + (this.dir > 0));
@@ -145,7 +145,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     },
 
     /** Collapses selection to a cursor. Optionally sets position first. */
-    caret(p) {
+    cursor(p) {
       if (p) { head.y = p.y; head.x = p.x; }
       tail.y = head.y;
       tail.x = head.x;
@@ -153,7 +153,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     },
 
     /** Begins a new selection by detaching head from tail allowing independent movement. */
-    make() {
+    select() {
       head   = detachedHead;
       head.y = tail.y;
       head.x = tail.x;
@@ -166,7 +166,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     ins(s) {
       const lines = expandTabs(s).split('\n');
       if (this.dir) {
-        const [first, second] = Sel.bounds(1);
+        const [first, second] = Span.bounds(1);
         Model.del(first.y, first.x, second.y, second.x + (this.dir > 0));
         Model.ins(first.y, first.x, lines);
 
@@ -177,7 +177,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           head.x      = lines[lines.length - 1].length;
         } else head.x = first.x + s.length;
 
-        this.caret();
+        this.cursor();
       } else {
         Model.ins(head.y, head.x, lines);
 
@@ -220,7 +220,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     dent(n) {
       // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
-      const [first, second] = Sel.bounds(1);
+      const [first, second] = Span.bounds(1);
       for (let i = first.y; i <= second.y; i++) {
         const line = Model._[i];
         if (n > 0) Model._[i] = ' '.repeat(n) + line;
@@ -373,7 +373,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     let cursorLeft = -1;
     if(Mode.i >= 0) {
       // Sels 
-      const [firstEdge, secondEdge] = Sel.bounds(1);
+      const [firstEdge, secondEdge] = Span.bounds(1);
       const rEnd = Math.min(View.start + View.n, secondEdge.y + 1);
       for (let r = Math.max(View.start, firstEdge.y); r < rEnd; r++) {
         const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
@@ -410,19 +410,19 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
   $lines.addEventListener('paste', e => {
     e.preventDefault(); // stop browser from inserting raw clipboard text
     const text = e.clipboardData.getData('text/plain');
-    if (text) Sel.ins(text);
+    if (text) Span.ins(text);
   });
   // Triggered by a keydown paste event. a copy event handler can read the clipboard
   // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
   // Listen on $clip since that's where focus moves on Ctrl+C/X.
   $clip.addEventListener('copy', e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Sel._.join('\n'));
+    e.clipboardData.setData('text/plain', Span._.join('\n'));
   });
   $clip.addEventListener('cut', e => {
     e.preventDefault(); // take over the clipboard contents                   
-    e.clipboardData.setData('text/plain', Sel._.join('\n'));
-    Sel.del();
+    e.clipboardData.setData('text/plain', Span._.join('\n'));
+    Span.del();
     $lines.focus({ preventScroll: true });     // Return focus to editor
   });
 
@@ -437,11 +437,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       x: () => { $clip.focus({ preventScroll: true }); $clip.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
-      Backspace: () => { Sel.del() },
-      Enter: () => { Sel.ins('\n') } ,
+      Backspace: () => { Span.del() },
+      Enter: () => { Span.ins('\n') } ,
       Tab: () => {
         e.preventDefault();
-        (Sel.dir || sh) ? Sel.dent(sh ? -Mode.s : Mode.s) : Sel.ins(' '.repeat(Mode.s));
+        (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins(' '.repeat(Mode.s));
       },
     };
 
@@ -453,20 +453,20 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
 
       if(cmd || e.altKey) {
-        if(!sh && Sel.dir)      Sel.caret();
-        else if(sh && !Sel.dir) Sel.make();
-        if (arrowCode % 2) cmd ?      Sel.mvE(direction > 0) : Sel.mvW(direction);
-      } else if (!sh && Sel.dir) { // no meta key, no shift key, selection.
+        if(!sh && Span.dir)      Span.cursor();
+        else if(sh && !Span.dir) Span.select();
+        if (arrowCode % 2) cmd ?      Span.mvE(direction > 0) : Span.mvW(direction);
+      } else if (!sh && Span.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
-          Sel.caret(Sel.bounds(1)[direction > 0 | 0]);
+          Span.cursor(Span.bounds(1)[direction > 0 | 0]);
           render();
         } else {
-          const edge = Sel.bounds(1)[direction > 0 | 0];
+          const edge = Span.bounds(1)[direction > 0 | 0];
           // edge.y is already absolute
           const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.end));
 
           maxCol = Math.min(edge.x, Model._[targetAbsRow].length);
-          Sel.caret({ y: targetAbsRow, x: maxCol});
+          Span.cursor({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.start) View.set(targetAbsRow);
@@ -474,14 +474,14 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
           else render();
         }
       } else { // no meta key.
-        if (sh && !Sel.dir) Sel.make();
-        Sel[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
+        if (sh && !Span.dir) Span.select();
+        Span[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
       }
     } else if (k.length === 1) {
       if (cmd) metaKeys[k.toLowerCase()]?.();
       else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
-        Sel.ins(k);
+        Span.ins(k);
       }
     } else if (special[k] && Mode.i >= 1) { special[k](); }
   });

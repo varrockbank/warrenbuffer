@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 14.39.0-alpha.1 [2026-01-09]  gz: 2627 / 2.57 KB (+12), br: 2423 / 2.37 KB (-1), min: 5862 / 5.72 KB (+19)
+- api: rename Sel to Span, caret to cursor, make to select
+
 ** 14.38.0-alpha.1 [2026-01-08]  gz: 2615 / 2.55 KB (-4), br: 2424 / 2.37 KB (+6), min: 5843 / 5.71 KB (-8)
 - api: rename Mode.frame to Mode.f
 

@@ -51,11 +51,11 @@ EXPECT selection at 0,0-0,5
 TYPE "Hello World"
 left with meta
 right 5 times with shift
-expect(fixture.editor.Sel.dir).toBe(1);
+expect(fixture.editor.Span.dir).toBe(1);
 EXPECT selection at 0,0-0,5
 right with meta
 left 5 times with shift
-expect(fixture.editor.Sel.dir).toBe(-1);
+expect(fixture.editor.Span.dir).toBe(-1);
 EXPECT selection at 0,6-0,11
 
 ## should show head position in status line during selection
@@ -368,13 +368,13 @@ EXPECT cursor at 0,6
 TYPE "Hello"
 left with meta
 right 3 times with shift
-expect(fixture.editor.Sel.dir).toBe(1);
+expect(fixture.editor.Span.dir).toBe(1);
 
 ## should return -1 for dir when head is before tail (backward selection)
 ### dir is -1 when head < tail
 TYPE "Hello"
 left 3 times with shift
-expect(fixture.editor.Sel.dir).toBe(-1);
+expect(fixture.editor.Span.dir).toBe(-1);
 
 ## should use head.row when clamping column after moving head
 ### Uses head.row when clamping column after moving head
