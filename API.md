@@ -168,8 +168,8 @@ editor.Span.mvX(1);   // Right
 editor.Span.mvX(-1);  // Left
 editor.Span.mvW(1);   // Forward word
 editor.Span.mvW(-1);  // Backward word
-editor.Span.mvE(true);  // End of line
-editor.Span.mvE(false); // Start of line (smart home)
+editor.Span.mvLn(true);  // End of line
+editor.Span.mvLn(false); // Start of line (smart home)
 
 // Editing
 editor.Span.ins("text");

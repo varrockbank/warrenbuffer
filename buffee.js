@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.39.0-alpha.1';
+  this.v = '14.40.0-alpha.1';
   this.$ = $;
   const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
@@ -87,7 +87,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Moves cursor to line edge.
      * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
      */
-    mvE(toEnd) {
+    mvLn(toEnd) {
       const line = Model._[head.y];
       maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
       render();
@@ -455,7 +455,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       if(cmd || e.altKey) {
         if(!sh && Span.dir)      Span.cursor();
         else if(sh && !Span.dir) Span.select();
-        if (arrowCode % 2) cmd ?      Span.mvE(direction > 0) : Span.mvW(direction);
+        if (arrowCode % 2) cmd ?      Span.mvLn(direction > 0) : Span.mvW(direction);
       } else if (!sh && Span.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Span.cursor(Span.bounds(1)[direction > 0 | 0]);
