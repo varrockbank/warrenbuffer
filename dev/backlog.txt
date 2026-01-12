@@ -4,39 +4,3 @@ Website
 
 
 Model.end should return coordinate not just last line 
-
-Mode
- .s    // spacing
- .i    // interactivity mode              
- .f    // Frame count 
- .ch   // character width
- .cw   // character height 
- .sub  // render subscriptions 
-
-Model
- ._ 
- .end   // Last Index of model 
- .s     // "\n" joined string 
- .del   // primitive model-wise delete
- .ins   // primitive model-wise insert
-
-View    
- ._     // Subset of model lines that are in view
- .n     // Logical Viewport Size    
- .N     // Rendered Viewport size, which sometimes include an extra line beyond the logical viewport 
- .start // model index of first row of viewport
- .end   // model index of last logical row of viewport. TODO: remove?
- .set   // set viewport to position 
-
-Span
- .bounds ->  .edge     // 
- .mvX    // move horizontally 
- .mvY    // move vertically
- .mvE    ->  .mvLn     // move next to new line character
- .mvW    // move by words 
- .dir    // orientation of the selection. 0 if cursor. 
- .del    // delete text Span-wise delete
- .add    // insert text Span-wise insert
- .cursor // convert the span to a cursor
- .select // convert the span to a selection
- .dent   // indent or unindent 
