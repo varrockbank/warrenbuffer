@@ -1,5 +1,15 @@
 * Project Devlog
 
+** 15.0.0-alpha.1 [2026-01-12]  gz: 2597 / 2.54 KB (-29), br: 2392 / 2.34 KB (-30), min: 5812 / 5.68 KB (-51)
+- breaking: remove automatic tab expansion from core
+- Buffee no longer sanitizes text - tabs/Unicode inserted as-is
+- Users should sanitize text before passing to Model.s or Span.ins
+- new: BuffeeSanitize extension for opt-in text sanitization
+  - Converts tabs to spaces (based on Mode.s)
+  - Removes zero-width characters (ZWSP, ZWNJ, ZWJ, BOM)
+  - Normalizes multi-width Unicode spaces to regular space
+  - API: Sanitize.line(), Sanitize.text(), Sanitize.lines()
+
 ** Extensions [2026-01-12]
 - fix(treesitter.js 1.0.2): use tree-sitter API row/column, viewport.n not viewport.size
 - fix(tui.js 3.0.2): use row/col for elements, viewport.n not viewport.size

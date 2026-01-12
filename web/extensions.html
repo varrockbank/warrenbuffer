@@ -98,6 +98,26 @@ editor.iOS.destroy() // Cleanup</pre>
   <pre>const editor = BuffeeStatusLine(new Buffee(container, config))</pre>
   <p><a href="../samples/sample-basic.html">Demo →</a></p>
 
+  <h2>Sanitize</h2>
+  <p><a href="../extensions/sanitize.js"><code>extensions/sanitize.js</code></a></p>
+  <p>Text sanitization for content set via <code>Model.s</code> or <code>Span.ins()</code>. Buffee core does not sanitize text—tabs and problematic Unicode characters are inserted as-is. This extension automatically cleans input text.</p>
+  <p><strong>Handles:</strong></p>
+  <ul>
+    <li><strong>Tabs</strong> → spaces (based on <code>Mode.s</code> setting)</li>
+    <li><strong>Zero-width characters</strong> → removed (ZWSP, ZWNJ, ZWJ, BOM)</li>
+    <li><strong>Multi-width Unicode spaces</strong> → regular space (em space, en space, figure space, etc.)</li>
+  </ul>
+  <pre>const editor = BuffeeSanitize(new Buffee(container, config))
+
+// Automatic sanitization on all inserts
+editor.Model.s = "text\twith\ttabs"  // tabs become spaces
+
+// Manual sanitization utilities
+editor.Sanitize.line("hello\tworld")   // "hello    world"
+editor.Sanitize.text("a\tb\nc\td")     // sanitize multi-line string
+editor.Sanitize.lines(["a\tb", "c\td"]) // sanitize array of lines</pre>
+  <p><strong>Why opt-in?</strong> Buffee's core is minimal. Automatic sanitization adds overhead and may not suit all use cases. Some applications may want to handle tabs differently, preserve certain Unicode, or sanitize upstream.</p>
+
   <hr>
 
   <h2>Using Multiple Extensions</h2>
