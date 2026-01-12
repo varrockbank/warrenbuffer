@@ -169,6 +169,7 @@ function BuffeeIOS(editor) {
 
   // Attach to editor instance
   editor.iOS = iOS;
+  editor.Mode.ext.push('iOS');
 
   return editor;
 }

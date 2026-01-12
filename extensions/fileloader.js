@@ -394,6 +394,7 @@ function BuffeeFileLoader(editor) {
 
   // Attach to editor instance
   editor.FileLoader = FileLoader;
+  editor.Mode.ext.push('FileLoader');
 
   return editor;
 }

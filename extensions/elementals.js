@@ -366,6 +366,7 @@ function BuffeeElementals(editor) {
 
   // Attach to editor instance
   editor.Elementals = Elementals;
+  editor.Mode.ext.push('Elementals');
 
   return editor;
 }

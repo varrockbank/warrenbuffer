@@ -370,6 +370,7 @@ function BuffeeUltraHighCapacity(editor) {
 
   // Attach to editor instance
   editor.UltraHighCapacity = UltraHighCapacity;
+  editor.Mode.ext.push('UltraHighCapacity');
 
   return editor;
 }

@@ -326,5 +326,7 @@ function BuffeeTUI(editor) {
   });
 
   editor.TUI = TUI;
+  editor.Mode.ext.push('TUI');
+
   return editor;
 }

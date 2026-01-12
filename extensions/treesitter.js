@@ -164,6 +164,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
 
   // Attach to editor instance
   editor.TreeSitter = TreeSitter;
+  editor.Mode.ext.push('TreeSitter');
 
   return editor;
 }

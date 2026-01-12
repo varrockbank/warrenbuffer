@@ -110,5 +110,7 @@ function BuffeeHighlights(editor) {
   };
 
   editor.Highlights = Highlights;
+  editor.Mode.ext.push('Highlights');
+
   return editor;
 }

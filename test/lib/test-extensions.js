@@ -1131,6 +1131,183 @@ function defineExtensionTests() {
             }
         });
     });
+
+    // ===== EXTENSION REGISTRATION TESTS =====
+    extRunner.describe('Extension Registration', () => {
+        extRunner.it('Mode.ext starts as empty array', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                assertTrue(Array.isArray(editor.Mode.ext), 'Mode.ext should be an array');
+                assertEqual(editor.Mode.ext.length, 0, 'Mode.ext should be empty initially');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('History registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHistory(editor);
+                assertTrue(editor.Mode.ext.includes('History'), 'Mode.ext should include History');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('Sanitize registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeSanitize(editor);
+                assertTrue(editor.Mode.ext.includes('Sanitize'), 'Mode.ext should include Sanitize');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('Syntax registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeSyntax(editor);
+                assertTrue(editor.Mode.ext.includes('Syntax'), 'Mode.ext should include Syntax');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('StatusLine registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeStatusLine(editor);
+                assertTrue(editor.Mode.ext.includes('StatusLine'), 'Mode.ext should include StatusLine');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('Elementals registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeElementals(editor);
+                assertTrue(editor.Mode.ext.includes('Elementals'), 'Mode.ext should include Elementals');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('Highlights registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+                assertTrue(editor.Mode.ext.includes('Highlights'), 'Mode.ext should include Highlights');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('TUI registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeTUI(editor);
+                assertTrue(editor.Mode.ext.includes('TUI'), 'Mode.ext should include TUI');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('FileLoader registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeFileLoader(editor);
+                assertTrue(editor.Mode.ext.includes('FileLoader'), 'Mode.ext should include FileLoader');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('UltraHighCapacity registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeUltraHighCapacity(editor);
+                assertTrue(editor.Mode.ext.includes('UltraHighCapacity'), 'Mode.ext should include UltraHighCapacity');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('UndoTree registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeUndoTree(editor);
+                assertTrue(editor.Mode.ext.includes('UndoTree'), 'Mode.ext should include UndoTree');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('chained extensions register in order', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                // Chain multiple extensions
+                BuffeeHistory(editor);
+                BuffeeSanitize(editor);
+                BuffeeSyntax(editor);
+                BuffeeStatusLine(editor);
+                BuffeeElementals(editor);
+
+                // Verify registration order
+                assertDeepEqual(editor.Mode.ext, [
+                    'History',
+                    'Sanitize',
+                    'Syntax',
+                    'StatusLine',
+                    'Elementals'
+                ], 'Extensions should be registered in order');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('decorator pattern preserves registration order', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                // Use decorator pattern (nested calls)
+                const decorated = BuffeeHighlights(
+                    BuffeeTUI(
+                        BuffeeFileLoader(
+                            BuffeeHistory(editor)
+                        )
+                    )
+                );
+
+                // Verify registration order (innermost first)
+                assertDeepEqual(decorated.Mode.ext, [
+                    'History',
+                    'FileLoader',
+                    'TUI',
+                    'Highlights'
+                ], 'Decorator pattern should register innermost first');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('reduce pattern preserves registration order', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                // Use reduce pattern
+                const extensions = [BuffeeHistory, BuffeeSanitize, BuffeeUndoTree];
+                extensions.reduce((ed, ext) => ext(ed), editor);
+
+                assertDeepEqual(editor.Mode.ext, [
+                    'History',
+                    'Sanitize',
+                    'UndoTree'
+                ], 'Reduce pattern should register in array order');
+            } finally {
+                cleanup();
+            }
+        });
+    });
 }
 
 // ===========================================

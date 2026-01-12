@@ -90,6 +90,7 @@ function BuffeeSanitize(editor) {
   };
 
   editor.Sanitize = Sanitize;
+  editor.Mode.ext.push('Sanitize');
 
   return editor;
 }

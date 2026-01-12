@@ -701,6 +701,7 @@ function BuffeeSyntax(editor) {
 
   // Attach to editor instance
   editor.Syntax = Syntax;
+  editor.Mode.ext.push('Syntax');
 
   return editor;
 }
