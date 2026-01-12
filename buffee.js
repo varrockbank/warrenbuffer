@@ -17,9 +17,8 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '14.40.0-alpha.1';
+  this.v = '15.0.0-alpha.1';
   this.$ = $;
-  const expandTabs = s => Mode.s ? s.replace(/\t/g, ' '.repeat(Mode.s)) : s; // 0 = retain tabs
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -164,7 +163,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @param {string} s - String to insert
      */
     ins(s) {
-      const lines = expandTabs(s).split('\n');
+      const lines = s.split('\n');
       if (this.dir) {
         const [first, second] = Span.bounds(1);
         Model.del(first.y, first.x, second.y, second.x + (this.dir > 0));
@@ -244,7 +243,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
    * @namespace Mode
    */
   const Mode = this.Mode = {
-    s,                                           /** spaces */
+    s,                                         /** spaces                    */
     /**
      * Interactive mode: 1 (normal), 0 (navigation-only), -1 (read-only)
      * - 1: Full editing (default)
@@ -252,11 +251,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * - -1: Read-only (no cursor/selection rendering, no navigation) - used by TUI
      * @type {-1|0|1}
      */
-    i: 1,                                      
-    f: 0,                                      /** framecount */
+    i: 1,
+    f: 0,                                      /** framecount                */
     ch,                                        /** line and character height */
-    cw: $caret.getBoundingClientRect().width, /** computed character width  */
-    sub: []
+    cw: $caret.getBoundingClientRect().width,  /** computed character width  */
+    sub: []                                    /** render callbacks          */
   };
 
   /**
@@ -278,7 +277,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @param {string} text - The full document text
      */
     set s(text) {
-      this._ = expandTabs(text).split('\n');
+      this._ = text.split('\n');
       render();
     },
 

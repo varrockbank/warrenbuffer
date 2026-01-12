@@ -44,16 +44,30 @@ Finally, (V8) arrays, not being real arrays, prove miraculuously viable as a buf
 
 ## Usage
 
-### Font Requirements
+### Monowidth Character Handling
+
+Buffee's fixed-width grid layout requires all characters to occupy exactly one cell. This section covers common issues that break grid alignment.
+
+#### Font Requirements
 
 Buffee assumes monospace fonts having accurate CSS `ch` values. If this assumption breaks, the cursor position
-will be visually misaligned from true position. This is  evident with variable-width 
-text but some monospace fonts can cause "drift", fractions of a pixel per character, that accumulate numerical errors. 
+will be visually misaligned from true position. This is  evident with variable-width
+text but some monospace fonts can cause "drift", fractions of a pixel per character, that accumulate numerical errors.
 
 - **Good:** Menlo, Consolas, `monospace` (generic)
 - **Bad:** Monaco
 
 To test: type "A" 100+ times and move cursor to end. If misaligned, try a different font.
+
+#### Tab Sanitization
+
+Tab characters (`\t`) break grid alignment because browsers render them as variable-width. Buffee core does not sanitize input—if you set content containing tabs via `Model.s` or `Span.ins()`, they appear as-is.
+
+**Solutions:**
+- **BuffeeSanitize extension** — Automatically converts tabs to spaces, removes zero-width characters, and normalizes multi-width Unicode spaces. See [Sanitize extension](web/extensions.html#sanitize).
+- **Pre-sanitize** — Clean your text before passing to Buffee: `text.replace(/\t/g, '    ')`
+
+The keyboard controller already handles Tab key presses by inserting spaces (based on `Mode.s`), so typed tabs are not an issue—only programmatic content.
 
 ### CSS 
 
@@ -166,6 +180,7 @@ Available extensions:
 - **FileLoader** - Multiple strategies for large file loading
 - **UltraHighCapacity** - Gzip-compressed storage for 1B+ lines
 - **iOS** - Touch and on-screen keyboard support
+- **Sanitize** - Tab/Unicode normalization for programmatic content
 
 See: [Extensions](docs/extensions.md)
 

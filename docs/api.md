@@ -12,6 +12,22 @@ const editor = new Buffee(element, { rows, cols, s })
 | `cols` | number | auto | Fixed text columns |
 | `s` | number | 4 | Tab width (0 = hard tabs) |
 
+## Text Sanitization
+
+Buffee does **not** sanitize text. Content set via `Model.s` or `Span.ins()` is inserted as-is. This means:
+
+- **Tabs** (`\t`) render with browser-default variable width, breaking grid alignment
+- **Zero-width characters** (ZWSP, ZWNJ, ZWJ, BOM) cause invisible cursor drift
+- **Multi-width Unicode spaces** (em space, en space, etc.) misalign subsequent characters
+
+**Solutions:**
+- Use `BuffeeSanitize` extension for automatic sanitization
+- Pre-sanitize text before passing to Buffee
+
+Note: The keyboard controller converts Tab key presses to spaces—only programmatic content is affected.
+
+---
+
 ## Top-level properties
 
 ```javascript

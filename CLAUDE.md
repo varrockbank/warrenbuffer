@@ -103,6 +103,7 @@ Located in `extensions/`, tested in "Extensions" tab of `test/index.html`.
 | `tui.js` | `BuffeeTUI(editor)` | Text-based UI via text manipulation |
 | `ios.js` | `BuffeeIOS(editor)` | iOS touch/keyboard support |
 | `fileloader.js` | `BuffeeFileLoader(editor)` | File loading strategies |
+| `sanitize.js` | `BuffeeSanitize(editor)` | Tab/Unicode sanitization |
 | `ultrahighcapacity.js` | `BuffeeUltraHighCapacity(editor)` | 1B+ line support |
 | `treesitter.js` | `BuffeeTreeSitter(editor, opts)` | Tree-sitter integration |
 
