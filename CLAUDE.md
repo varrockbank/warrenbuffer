@@ -1,17 +1,20 @@
 # Claude Instructions for buffee
 
-**Full API reference: `API.md`** — contains complete docs for Model, Selection, View, TUI, TreeSitter, UltraHighCapacity, and extension API.
+**Documentation:** `docs/` folder
+- `docs/onboarding.md` — Getting started guide
+- `docs/api.md` — API surface reference
+- `docs/extensions.md` — Extension documentation
 
 ## Quick Reference
 
 ```javascript
-BuffeeStatusLine(new Buffee(el, { rows: 20, cols: 80, spaces: 4 }));
+BuffeeStatusLine(new Buffee(el, { rows: 20, cols: 80, s: 4 }));
 
-editor.Model.text = "content";     // Set content
-editor.Model.lines;                // ["line1", "line2"]
-editor.View.set(5);            // Scroll to line index 5
-editor.Selection.insert("text");   // Insert at cursor
-editor.editMode = 'navigate';      // 'write' | 'navigate' | 'read'
+editor.Model.s = "content";   // Set content
+editor.Model._;               // ["line1", "line2"]
+editor.View.set(5);           // Scroll to line index 5
+editor.Span.ins("text");      // Insert at cursor
+editor.Span.cursor({y:0,x:0});// Move cursor
 ```
 
 ## Required HTML Structure

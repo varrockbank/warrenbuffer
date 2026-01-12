@@ -132,7 +132,7 @@ anchor and the head/dot are the same. Text editing operations are defined relati
 
 The controller are keyboard event handlers which route to operations on the selection. In the future, the basic controller will be refactored out of Buffee.js as an Extension such that you will have to bring-your-own controller by default. e.g. a "vim normal mode controller".
 
-See: [API notes](https://varrockbank.github.io/buffee/API.html)
+See: [API Reference](docs/api.md) | [Getting Started](docs/onboarding.md)
 
 ## Extensibility
 
@@ -167,7 +167,7 @@ Available extensions:
 - **UltraHighCapacity** - Gzip-compressed storage for 1B+ lines
 - **iOS** - Touch and on-screen keyboard support
 
-See: [Extensions](https://varrockbank.github.io/buffee/web/extensions.html)
+See: [Extensions](docs/extensions.md)
 
 ## Versioning 
 
