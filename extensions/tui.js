@@ -2,7 +2,7 @@
  * @fileoverview BuffeeTUI - Terminal User Interface extension for Buffee.
  * Renders text-based UI elements (buttons, prompts, scrollboxes) by modifying line content.
  * Depends on BuffeeHighlights for rendering selection highlights.
- * @version 3.0.0
+ * @version 3.0.2
  */
 
 /**
@@ -85,7 +85,7 @@ function BuffeeTUI(editor) {
    * @private
    */
   function sortElements() {
-    elements.sort((a, b) => a.y - b.y || a.x - b.x);
+    elements.sort((a, b) => a.row - b.row || a.col - b.col);
   }
 
   function addElement(el) {
@@ -285,23 +285,23 @@ function BuffeeTUI(editor) {
     if (enabled && elements.length > 0) {
       for (const el of elements) {
         for (let i = 0; i < el.contents.length; i++) {
-          const absRow = el.y + i;
+          const absRow = el.row + i;
           const viewportRow = absRow - viewport.start;
 
-          if (viewportRow >= 0 && viewportRow < viewport.size) {
+          if (viewportRow >= 0 && viewportRow < viewport.n) {
             const $line = $textLayer.children[viewportRow];
             if (!$line) continue;
 
             let text = $line.textContent || '';
 
             // Ensure line is long enough
-            while (text.length < el.x + el.width) {
+            while (text.length < el.col + el.width) {
               text += ' ';
             }
 
             // Splice in element content
-            const before = text.slice(0, el.x);
-            const after = text.slice(el.x + el.width);
+            const before = text.slice(0, el.col);
+            const after = text.slice(el.col + el.width);
             $line.textContent = before + el.contents[i] + after;
           }
         }
@@ -316,11 +316,11 @@ function BuffeeTUI(editor) {
     if (!currentEl) return;
 
     for (let i = 0; i < currentEl.contents.length; i++) {
-      const absRow = currentEl.y + i;
+      const absRow = currentEl.row + i;
       const viewportRow = absRow - viewport.start;
 
-      if (viewportRow >= 0 && viewportRow < viewport.size) {
-        Highlights.create(viewportRow, currentEl.x, currentEl.width);
+      if (viewportRow >= 0 && viewportRow < viewport.n) {
+        Highlights.create(viewportRow, currentEl.col, currentEl.width);
       }
     }
   });

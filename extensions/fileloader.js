@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeFileLoader - File loading extension for Buffee.
  * Provides multiple file loading strategies optimized for different file sizes.
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 /**
@@ -288,7 +288,7 @@ function BuffeeFileLoader(editor) {
 
           bytesRead += value.length;
           const text = decoder.decode(value, { stream: true });
-          const lastNewlineIndex = text.endOf('\n');
+          const lastNewlineIndex = text.lastIndexOf('\n');
 
           if (lastNewlineIndex !== -1) {
             const allLines = text.split('\n');
@@ -354,7 +354,7 @@ function BuffeeFileLoader(editor) {
 
           bytesRead += value.length;
           const text = decoder.decode(value, { stream: true });
-          const lastNewlineIndex = text.endOf('\n');
+          const lastNewlineIndex = text.lastIndexOf('\n');
 
           if (lastNewlineIndex !== -1) {
             const allLines = text.split('\n');

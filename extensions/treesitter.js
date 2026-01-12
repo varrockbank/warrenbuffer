@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeTreeSitter - Tree-sitter syntax highlighting extension for Buffee.
  * Provides syntax highlighting using Tree-sitter parsers.
- * @version 1.0.0
+ * @version 1.0.2
  */
 
 /**
@@ -68,8 +68,8 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       const capture = captures[j];
       const startPosition = capture.node.startPosition;
 
-      if (startPosition.y === absoluteRow) {
-        const startCol = startPosition.xumn;
+      if (startPosition.row === absoluteRow) {
+        const startCol = startPosition.column;
         const endCol = startCol + capture.node.text.length;
 
         const line = $line.textContent;
@@ -91,7 +91,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       }
 
       // If we've passed the row, stop searching
-      if (startPosition.y > absoluteRow) {
+      if (startPosition.row > absoluteRow) {
         return j;
       }
     }
@@ -103,7 +103,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
     if (!enabled || !tree || captures.length === 0) return;
 
     let minJ = 0;
-    for (let i = 0; i < viewport.size; i++) {
+    for (let i = 0; i < viewport.n; i++) {
       const $line = $container.children[i];
       // Clear any previous HTML and reset to text
       $line.innerHTML = "";
