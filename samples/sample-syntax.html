@@ -412,7 +412,7 @@ if __name__ == "__main__":
         perfStats.innerHTML = `Loaded ${totalLines.toLocaleString()} lines in ${((t1-t0)/1000).toFixed(1)}s`;
 
         const t2 = performance.now();
-        editor.View.set(0, editor.View.size);
+        editor.View.set(0, editor.View.n);
         const t3 = performance.now();
 
         perfStats.innerHTML += ` | Render: ${(t3-t2).toFixed(0)}ms`;
@@ -430,7 +430,7 @@ if __name__ == "__main__":
       const viewport = editor.View;
       const lines = [];
 
-      for (let i = 0; i < viewport.size && viewport.start + i < editor.Model._.length; i++) {
+      for (let i = 0; i < viewport.n && viewport.start + i < editor.Model._.length; i++) {
         const absLine = viewport.start + i;
         const state = cache[absLine] !== undefined ? cache[absLine] : '?';
         lines.push(`L${absLine + 1}: state=${state}`);

@@ -2,7 +2,7 @@
  * @fileoverview BuffeeElementals - Layer-based UI elements for Buffee.
  * Unlike tui-legacy which manipulates textContent, Elementals creates
  * actual DOM elements in a dedicated layer above the text.
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 /**
@@ -51,7 +51,7 @@ function BuffeeElementals(editor) {
    */
   function updatePositions() {
     for (const el of elements) {
-      const viewportRow = el.y - View.start;
+      const viewportRow = el.row - View.start;
       if (viewportRow >= 0 && viewportRow < View.n) {
         el.$container.style.top = viewportRow * lineHeight + 'px';
         el.$container.style.display = '';
@@ -271,7 +271,7 @@ function BuffeeElementals(editor) {
     getFocusableElements() {
       return elements
         .filter(el => el.focusable !== false && el.type !== 'label')
-        .sort((a, b) => a.y - b.y || a.x - b.x);
+        .sort((a, b) => a.row - b.row || a.col - b.col);
     },
 
     /**

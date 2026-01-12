@@ -148,7 +148,7 @@
       } else {
         logs.Model._.push(s);
       }
-      logs.View.start = Math.max(0, logs.Model._.length - logs.View.size - 1);
+      logs.View.start = Math.max(0, logs.Model._.length - logs.View.n - 1);
       logs._render(true);
     }
 

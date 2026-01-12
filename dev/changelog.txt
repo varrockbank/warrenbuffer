@@ -1,5 +1,14 @@
 * Project Devlog
 
+** Extensions [2026-01-12]
+- fix(treesitter.js 1.0.2): use tree-sitter API row/column, viewport.n not viewport.size
+- fix(tui.js 3.0.2): use row/col for elements, viewport.n not viewport.size
+- fix(elementals.js 1.0.2): use row/col for elements, not y/x
+- fix(fileloader.js 1.0.2): use lastIndexOf not endOf
+- fix(syntax.js 1.0.2): use viewport.n not viewport.size, fix Model.s setter hook
+- fix(samples): use View.n not View.size in sample-syntax.html and sample-loader.html
+- Tests: add regression tests for extension fixes
+
 ** 14.40.0-alpha.1 [2026-01-10]  gz: 2626 / 2.56 KB (-1), br: 2422 / 2.37 KB (-1), min: 5863 / 5.73 KB (+2)
 - api: rename Span.mvE to Span.mvLn
 

@@ -221,10 +221,96 @@ function defineExtensionTests() {
                 cleanup();
             }
         });
+
+        // Regression: highlightView must use viewport.n not viewport.size
+        extRunner.it('renders highlights for all visible viewport lines', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeSyntax(editor);
+                editor.Syntax.setLanguage('javascript');
+                editor.Syntax.enabled = true;
+                // Create 10 lines to fill viewport
+                editor.Model.s = 'const a = 1;\nconst b = 2;\nconst c = 3;\nconst d = 4;\nconst e = 5;\nconst f = 6;\nconst g = 7;\nconst h = 8;\nconst i = 9;\nconst j = 10;';
+                editor.render();
+
+                // Check that highlighting was applied to lines in viewport
+                const $textLayer = editor.$.querySelector('.buffee-ztxt');
+                // Line should contain span elements from syntax highlighting
+                const firstLine = $textLayer.children[0];
+                assertTrue(firstLine.innerHTML.includes('<span'), 'First line should have highlighted spans');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Regression: Model.s setter hook must invalidate cache
+        extRunner.it('resets state cache when Model.s is set', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeSyntax(editor);
+                editor.Syntax.setLanguage('javascript');
+                editor.Syntax.enabled = true;
+
+                // Set initial multiline content
+                editor.Model.s = '/* comment\nstill comment\nend */';
+                editor.Syntax.ensureStateCache(3);
+                assertTrue(editor.Syntax.stateCache.length >= 3, 'Cache should be populated');
+
+                // Setting Model.s should reset cache
+                editor.Model.s = 'new content';
+                assertEqual(editor.Syntax.stateCache.length, 1, 'Cache should be reset to 1 after Model.s set');
+            } finally {
+                cleanup();
+            }
+        });
     });
 
     // ===== ELEMENTALS TESTS =====
     extRunner.describe('Elementals', () => {
+        // Regression: elements must be correctly positioned (was broken by y/x vs row/col mismatch)
+        extRunner.it('positions elements correctly in viewport', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeElementals(editor);
+                editor.Model.s = '\n\n\n\n\n';
+                editor.Elementals.addButton({ row: 2, col: 5, label: 'Test' });
+                editor.Elementals.enabled = true;
+                editor.render();
+
+                // Element should be visible (not display:none) and positioned
+                const el = editor.Elementals.elements[0];
+                assertTrue(el.$container.style.display !== 'none', 'Element should be visible in viewport');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Regression: sorting must work correctly (was broken by y/x vs row/col)
+        extRunner.it('navigates elements in correct row/col order', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeElementals(editor);
+                editor.Model.s = '\n\n\n\n\n';
+                // Add in non-sorted order: C at row 3, A at row 1 col 2, B at row 1 col 5
+                editor.Elementals.addButton({ row: 3, col: 1, label: 'C' });
+                editor.Elementals.addButton({ row: 1, col: 2, label: 'A' });
+                editor.Elementals.addButton({ row: 1, col: 5, label: 'B' });
+                editor.Elementals.enabled = true;
+
+                // Get focusable elements - should be sorted by row then col
+                const sorted = editor.Elementals.getFocusableElements();
+                assertEqual(sorted.length, 3, 'Should have 3 focusable elements');
+                // First element should be A (row 1, col 2)
+                assertTrue(sorted[0].$button.textContent === 'A', 'First should be A');
+                // Second element should be B (row 1, col 5)
+                assertTrue(sorted[1].$button.textContent === 'B', 'Second should be B');
+                // Third element should be C (row 3, col 1)
+                assertTrue(sorted[2].$button.textContent === 'C', 'Third should be C');
+            } finally {
+                cleanup();
+            }
+        });
+
         extRunner.it('adds button elements', () => {
             const { editor, cleanup } = createTestEditor();
             try {
@@ -318,6 +404,70 @@ function defineExtensionTests() {
 
     // ===== TUI LEGACY TESTS =====
     extRunner.describe('TUI Legacy', () => {
+        // Regression: elements must be sorted correctly (was broken by y/x vs row/col)
+        extRunner.it('sorts elements by row then col for navigation', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeTUI(editor);
+                editor.Model.s = '\n\n\n\n\n';
+                // Add in non-sorted order: C at row 3, A at row 1 col 2, B at row 1 col 5
+                editor.TUI.addButton({ row: 3, col: 1, label: 'C' });
+                editor.TUI.addButton({ row: 1, col: 2, label: 'A' });
+                editor.TUI.addButton({ row: 1, col: 5, label: 'B' });
+                editor.TUI.enabled = true;
+
+                // Elements array should be sorted by row, then col
+                // First: A (row 1, col 2), Second: B (row 1, col 5), Third: C (row 3, col 1)
+                assertEqual(editor.TUI.elements[0].contents[0], 'A', 'First element should be A');
+                assertEqual(editor.TUI.elements[1].contents[0], 'B', 'Second element should be B');
+                assertEqual(editor.TUI.elements[2].contents[0], 'C', 'Third element should be C');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Regression: current element selection must work (depends on correct row/col access)
+        extRunner.it('navigates to correct current element', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeTUI(editor);
+                editor.Model.s = '\n\n\n\n\n';
+                editor.TUI.addButton({ row: 1, col: 0, label: 'First' });
+                editor.TUI.addButton({ row: 2, col: 0, label: 'Second' });
+                editor.TUI.enabled = true;
+
+                // Should start at first element
+                assertEqual(editor.TUI.currentElement().contents[0], 'First', 'Should start at First');
+
+                // Navigate to next
+                editor.TUI.nextElement();
+                assertEqual(editor.TUI.currentElement().contents[0], 'Second', 'Should move to Second');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Regression: render hook must use viewport.n not viewport.size
+        extRunner.it('renders elements within viewport bounds', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeTUI(editor);
+                // Create enough lines to fill viewport (10 lines in test editor)
+                editor.Model.s = '0\n1\n2\n3\n4\n5\n6\n7\n8\n9';
+                editor.TUI.addButton({ row: 5, col: 0, label: 'Mid' });
+                editor.TUI.enabled = true;
+                editor.render();
+
+                // Element at row 5 should be in viewport (0-9 visible)
+                // If viewport.size was used instead of viewport.n, this would fail
+                const $textLayer = editor.$.querySelector('.buffee-ztxt');
+                const line5 = $textLayer.children[5];
+                assertTrue(line5.textContent.includes('Mid'), 'Button should render at row 5');
+            } finally {
+                cleanup();
+            }
+        });
+
         extRunner.it('initializes TUI extension', () => {
             const { editor, cleanup } = createTestEditor();
             try {
@@ -813,6 +963,65 @@ function defineExtensionTests() {
                 cleanup();
             }
         });
+
+        // Test multiple highlights at different rows
+        extRunner.it('creates multiple highlights at different rows', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+                editor.Model.s = 'Line 0\nLine 1\nLine 2\nLine 3\nLine 4';
+
+                editor.Highlights.create(0, 0, 3);
+                editor.Highlights.create(2, 5, 4);
+                editor.Highlights.create(4, 0, 6);
+
+                assertEqual(editor.Highlights.all.length, 3, 'Should have 3 highlights');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Test highlight row positioning via top style
+        extRunner.it('positions highlights at correct row via top style', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+                editor.Model.s = 'Line 0\nLine 1\nLine 2';
+
+                const hl0 = editor.Highlights.create(0, 0, 5);
+                const hl2 = editor.Highlights.create(2, 0, 5);
+
+                // Row 0 should have top: 0
+                assertTrue(hl0.style.top === '0px' || hl0.style.top.startsWith('0'), 'Row 0 should be at top 0');
+                // Row 2 should have non-zero top (2 * lineHeight)
+                assertTrue(hl2.style.top !== '0px' && hl2.style.top !== '0', 'Row 2 should have non-zero top');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Test that highlight count matches number of create calls
+        extRunner.it('tracks correct count after multiple operations', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeHighlights(editor);
+
+                const hl1 = editor.Highlights.create(0, 0, 5);
+                const hl2 = editor.Highlights.create(1, 0, 5);
+                assertEqual(editor.Highlights.all.length, 2, 'Should have 2 after 2 creates');
+
+                editor.Highlights.remove(hl1);
+                assertEqual(editor.Highlights.all.length, 1, 'Should have 1 after remove');
+
+                editor.Highlights.create(2, 0, 5);
+                assertEqual(editor.Highlights.all.length, 2, 'Should have 2 after another create');
+
+                editor.Highlights.clear();
+                assertEqual(editor.Highlights.all.length, 0, 'Should have 0 after clear');
+            } finally {
+                cleanup();
+            }
+        });
     });
 
     // ===== ULTRAHIGHCAPACITY TESTS =====
@@ -884,6 +1093,39 @@ function defineExtensionTests() {
                 // Should immediately show correct originalLineCount (not 0L)
                 assertTrue($lineCounter.textContent.includes('originally: 5L'),
                     'Should show originally: 5L, got: ' + $lineCounter.textContent);
+            } finally {
+                cleanup();
+            }
+        });
+    });
+
+    // ===== FILELOADER TESTS =====
+    extRunner.describe('FileLoader', () => {
+        extRunner.it('initializes FileLoader extension', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeFileLoader(editor);
+                assertTrue(!!editor.FileLoader, 'FileLoader should be attached to editor');
+                assertTrue(typeof editor.FileLoader.naiveLoad === 'function', 'Should have naiveLoad method');
+            } finally {
+                cleanup();
+            }
+        });
+
+        // Regression: naiveLoad must correctly load text content
+        extRunner.it('loads text content correctly via naiveLoad', async () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeFileLoader(editor);
+                const content = 'line1\nline2\nline3';
+                const blob = new Blob([content], { type: 'text/plain' });
+                const file = new File([blob], 'test.txt', { type: 'text/plain' });
+
+                await editor.FileLoader.naiveLoad(file);
+                assertEqual(editor.Model._.length, 3, 'Should have 3 lines');
+                assertEqual(editor.Model._[0], 'line1', 'First line should be line1');
+                assertEqual(editor.Model._[1], 'line2', 'Second line should be line2');
+                assertEqual(editor.Model._[2], 'line3', 'Third line should be line3');
             } finally {
                 cleanup();
             }

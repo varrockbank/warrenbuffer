@@ -18,8 +18,8 @@ const editor = new Buffee(element, { rows, cols, s })
 editor
   .v                 // Version string
   .$                 // Root DOM element
-  .render(delta)     // Render content (delta = viewport size change)
-  .RENDER(delta)     // Rebuild viewport DOM
+  .render(delta)     // Render content only (delta = viewport size change)
+  .RENDER(delta)     // Rebuild containers and render content
   .Model             // see Model namespace below
   .View              // see View  namespace below
   .Span              // see Span  namespace below
