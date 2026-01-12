@@ -83,7 +83,7 @@ Span
   .mvLn(value)   // move to '\n'      : 1 end   ,  0 front
   .mvW(value)    // move by words     : 1 next  , -1 prev
   .del()         // delete text Span-wise delete
-  .ins(text)     // insert text Span-wise insert
+  .ins(lines)    // insert lines (string[]) Span-wise insert
   .select()      // make selection
   .cursor()      // make cursor 
   .dent(value)   // indent or unindent : 1 indent, -1 unident
@@ -96,13 +96,14 @@ Span
 Editor state and configuration.
 
 ```javascript
-mode
+Mode
   .s            // Tab width
   .i            // Edit mode: 1=write, 0=navigate, -1=read
   .f            // Render frame counter
   .ch           // Line height in pixels
   .cw           // Character width in pixels
   .sub          // subscriptions for render callback
+  .ext          // Array of registered extension names (in order)
 ```
 
 ---

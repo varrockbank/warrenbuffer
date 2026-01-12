@@ -5,6 +5,7 @@
   <title>buffee - Ultra High Capacity</title>
   <script src="../buffee.js"></script>
   <script src="../extensions/statusline.js"></script>
+  <script src="../extensions/sanitize.js"></script>
   <script src="../extensions/fileloader.js"></script>
   <script src="../extensions/ultrahighcapacity.js"></script>
   <link rel="stylesheet" href="../assets/reset.css">
@@ -152,9 +153,9 @@
       logs._render(true);
     }
 
-    const editor = BuffeeUltraHighCapacity(BuffeeFileLoader(BuffeeStatusLine(
+    const editor = BuffeeUltraHighCapacity(BuffeeFileLoader(BuffeeSanitize(BuffeeStatusLine(
       new Buffee(editorEl, { rows: 10, logger: log })
-    )));
+    ))));
 
     editor.Model.s = 'Select a file to load...';
     editorEl.focus();

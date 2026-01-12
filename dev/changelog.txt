@@ -1,5 +1,12 @@
 * Project Devlog
 
+** 15.2.0-alpha.1 [2026-01-12]  gz: 2600 / 2.54 KB (-1), br: 2402 / 2.35 KB (+7), min: 5834 / 5.70 KB (15)
+- breaking: Span.ins now takes array of lines instead of string
+  - `Span.ins('text')` → `Span.ins(['text'])`
+  - `Span.ins('line1\nline2')` → `Span.ins(['line1', 'line2'])`
+  - Client handles newline splitting, not buffee core
+- FileLoader: remove expandTabs from appendLines helper
+
 ** 15.1.0-alpha.1 [2026-01-12]  gz: 2601 / 2.54 KB (+4), br: 2395 / 2.34 KB (+3), min: 5819 / 5.68 KB (+7)
 - new: Mode.ext array tracks registered extensions in order
   - Each extension pushes its name to Mode.ext on initialization

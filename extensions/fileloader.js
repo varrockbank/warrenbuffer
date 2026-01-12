@@ -17,9 +17,7 @@ function BuffeeFileLoader(editor) {
   const { Model, Mode, render, $ } = editor;
 
   function appendLines(newLines, skipRender = false) {
-    const spaces = Mode.s;
-    const expandTabs = s => spaces ? s.replace(/\t/g, ' '.repeat(spaces)) : s;
-    Model._.push(...newLines.map(expandTabs));
+    Model._.push(...newLines);
     if (!skipRender) render();
   }
 
