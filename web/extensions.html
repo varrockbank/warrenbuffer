@@ -64,7 +64,10 @@ editor.TUI.enabled = true</pre>
   <h2>FileLoader</h2>
   <p><a href="../extensions/fileloader.js"><code>extensions/fileloader.js</code></a></p>
   <p>Multiple file loading strategies optimized for different file sizes. Choose the right loader based on your file size and memory constraints.</p>
-  <pre>const editor = BuffeeFileLoader(Buffee(container, config))
+  <p><strong>Note:</strong> FileLoader does not sanitize text. If files may contain tabs, wrap with <code>BuffeeSanitize</code>:</p>
+  <pre>// With tab sanitization
+const editor = BuffeeFileLoader(BuffeeSanitize(Buffee(container, config)))
+
 await editor.FileLoader.naiveLoad(file)           // &lt;10M lines
 await editor.FileLoader.chunkedBlobLoad(file)     // &lt;70M lines
 await editor.FileLoader.chunkedFileReaderLoad(file)
