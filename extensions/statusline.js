@@ -102,5 +102,7 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
   sub.push(updateStatusLine);
   updateStatusLine(); // Initial population
 
+  editor.Mode.ext.push('StatusLine');
+
   return editor;
 }

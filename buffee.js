@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '15.0.0-alpha.1';
+  this.v = '15.1.0-alpha.1';
   this.$ = $;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -255,7 +255,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     f: 0,                                      /** framecount                */
     ch,                                        /** line and character height */
     cw: $caret.getBoundingClientRect().width,  /** computed character width  */
-    sub: []                                    /** render callbacks          */
+    sub: [],                                   /** render callbacks          */
+    ext: []                                    /** registered extensions     */
   };
 
   /**

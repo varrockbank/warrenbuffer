@@ -207,6 +207,7 @@ function BuffeeHistory(editor) {
   };
 
   editor.History = History;
+  editor.Mode.ext.push('History');
 
   return editor;
 }

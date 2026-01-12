@@ -356,6 +356,8 @@ function BuffeeUndoTree(editor) {
     set: (v) => { _lastOpTime = v; }
   });
 
+  editor.Mode.ext.push('UndoTree');
+
   return editor;
 }
 

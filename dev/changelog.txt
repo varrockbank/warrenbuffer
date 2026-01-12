@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 15.1.0-alpha.1 [2026-01-12]  gz: 2601 / 2.54 KB (+4), br: 2395 / 2.34 KB (+3), min: 5819 / 5.68 KB (+7)
+- new: Mode.ext array tracks registered extensions in order
+  - Each extension pushes its name to Mode.ext on initialization
+  - Allows inspection of extension registration order
+
 ** 15.0.0-alpha.1 [2026-01-12]  gz: 2597 / 2.54 KB (-29), br: 2392 / 2.34 KB (-30), min: 5812 / 5.68 KB (-51)
 - breaking: remove automatic tab expansion from core
 - Buffee no longer sanitizes text - tabs/Unicode inserted as-is
