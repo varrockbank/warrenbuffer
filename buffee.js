@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.10-alpha.1';
+  this.v = '15.9.11-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -412,6 +412,9 @@ function Buffee($, { h, w, s = 4 } = {}) {
           e.preventDefault();
           (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]);
         },
+    },
+      cmdMap = {
+        z: () => this.History?.[sh ? 'redo' : 'undo'](),
     };
 
     if (arrowCode) {
@@ -446,7 +449,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         Span[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
       }
     } else if (k.length === 1) {
-      if (cmd) { if (k === 'z') { e.preventDefault(); this.History?.[sh ? 'redo' : 'undo'](); } }
+      if (cmd) { if (cmdMap[k]) { e.preventDefault(); cmdMap[k](); } }
       else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
         Span.ins([k]);
