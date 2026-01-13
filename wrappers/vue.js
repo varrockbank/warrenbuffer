@@ -1,5 +1,14 @@
 /**
  * @fileoverview Vue 3 wrapper for Buffee editor
+ *
+ * Required: Include buffee.js and style.css before using this component.
+ * Optional: Include extensions (e.g., statusline.js) and theme CSS.
+ *
+ * Themes: The `theme` prop adds a CSS class (e.g., `buffee-themepack1-eva`).
+ * You must load the theme CSS separately:
+ *   <link rel="stylesheet" href="themes/theme-eva.css">
+ *   // or: import 'buffee/themes/theme-eva.css';
+ *
  * @example
  * <script setup>
  * import BuffeeEditor from './vue.js';
