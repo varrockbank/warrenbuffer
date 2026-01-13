@@ -186,7 +186,7 @@
         function setEditorContent(text) {
             if (dslEditor) {
                 dslEditor.Model._ = text.split('\n');
-                dslEditor.render();
+                dslEditor.View.render();
             }
         }
 
@@ -263,7 +263,7 @@
                 if (jsOutputEditor) {
                     jsOutputEditor.Syntax.clearCache();
                     jsOutputEditor.Model._ = jsOutput.split('\n');
-                    jsOutputEditor.render();
+                    jsOutputEditor.View.render();
                 }
                 const outputEl = document.getElementById('js-output');
                 outputEl.dataset.plainJs = jsOutput; // Store plain JavaScript for eval
@@ -350,7 +350,7 @@
                 lastCompileErrors = [];
                 if (jsOutputEditor) {
                     jsOutputEditor.Model._ = [`Error: ${error.message}`];
-                    jsOutputEditor.render();
+                    jsOutputEditor.View.render();
                 }
                 delete outputEl.dataset.plainJs;
                 outputEl.classList.remove('has-errors');

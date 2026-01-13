@@ -9,7 +9,7 @@
  *
  * function handleReady(editor) {
  *   editor.Model._ = ['Hello, World!'];
- *   editor.render();
+ *   editor.View.render();
  * }
  * </script>
  *
@@ -76,7 +76,7 @@ const BuffeeEditor = defineComponent({
 
       if (props.initialText) {
         editor.value.Model._ = props.initialText.split('\n');
-        editor.value.render();
+        editor.value.View.render();
       }
 
       emit('ready', editor.value);

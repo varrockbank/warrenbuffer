@@ -53,7 +53,7 @@ BuffeeStatusLine(editor);
 
 ```javascript
 editor.Model._ = ["Hello, World!"];  // Array of lines
-editor.render();  // Trigger re-render after setting content
+editor.View.render();  // Trigger re-render after setting content
 ```
 
 ## Sizing

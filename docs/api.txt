@@ -1,0 +1,86 @@
+Buffee API Reference
+====================
+
+Instantiation
+-------------
+const instance = new Buffee(element, { h, w, s })
+
+  Option   Type     Default   Description
+  ------   ------   -------   ----------------------
+  h        number   auto      Fixed visible lines
+  w        number   auto      Fixed text columns
+  s        number   4         Tab width (0 = hard tabs)
+
+
+Top-level properties
+--------------------
+instance
+  .v                 Version string
+  .$                 Root DOM element
+  .Model             see Model namespace below
+  .View              see View  namespace below
+  .Span              see Span  namespace below
+  .Mode              see Mode  namespace below
+
+
+instance.Model
+--------------------
+Model
+  ._                 text buffer. Assumes sanitized '\n', '\t', zero/multi-width chars
+  .ins               primitive insert
+  .del               primitive del
+  .last              index of last line of Model
+
+When updating buffer, call render if necessary. If you append to ._ and the new
+lines are out of view, then a render would not be necessary. While we could have
+added a setter for the model that would know to call render, this would mean that
+the Model has to be concerned with the view. The philosophy is that Model should
+be agnostic to existence of rendering.
+
+
+instance.View
+------------------
+View
+  .first             Model index of first line of viewport
+  .n                 Viewport size - number of lines (settable)
+  .set(first)        Scroll to line, keep current size
+  .set(first, n)     Scroll to line with new size
+  ._                 Visible lines array (derived: Model._.slice(first, last + 1))
+  .render(delta)     Render content only (delta = viewport size change)
+  .RENDER(delta)     Rebuild containers and render content
+  .last              Model index of last line viewport
+  .N                 Number of DOM containers (n + 1 if auto-fit)
+
+The paradigm is to define first and size, but last is derived. An alternative
+implementation was first and last, but size is derived. The latter's API appears
+symmetrical but it was not as intuitive and the implementation uglier.
+
+
+instance.Span
+------------------
+A continuous text span from a starting and end coordinate.
+
+Span
+  .bounds(value)     returns bounds: truthy [start, end], falsey [head, tail]
+  .dir               orientation: 1 (forward), -1 (backward), 0 (cursor)
+  .mvX(value)        move horizontally : 1 right , -1 left
+  .mvY(value)        move vertically   : 1 down  , -1 up
+  .mvLn(value)       move to '\n'      : 1 end   ,  0 front
+  .mvW(value)        move by words     : 1 next  , -1 prev
+  .del()             delete text Span-wise
+  .ins(lines)        insert lines (string[]) Span-wise
+  .select()          make selection
+  .cursor()          make cursor
+  .dent(value)       indent or unindent : 1 indent, -1 unindent
+
+
+instance.Mode
+------------------
+Mode (editor.Mode)
+  .s                 Tab width
+  .i                 Edit mode: 1=write, 0=navigate, -1=read
+  .f                 Render frame counter
+  .ch                Line height in pixels
+  .cw                Character width in pixels
+  .sub               subscriptions for render callback
+  .ext               Array of registered extension names (in order)

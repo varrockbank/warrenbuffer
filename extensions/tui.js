@@ -20,7 +20,8 @@ function BuffeeTUI(editor) {
   const Highlights = editor.Highlights;
 
   const { sub } = editor.Mode;
-  const { View, Model, render, $ } = editor;
+  const { View, Model, $ } = editor;
+  const { render } = View;
   const $textLayer = $.querySelector('.buffee-ztxt');
 
   let enabled = false;

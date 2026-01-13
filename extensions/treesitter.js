@@ -18,7 +18,8 @@
  */
 function BuffeeTreeSitter(editor, { parser, query }) {
   const { sub } = editor.Mode;
-  const { View, Model, render, $ } = editor;
+  const { View, Model, $ } = editor;
+  const { render } = View;
   const $e = $.querySelector('.buffee-pane');
 
   /** @type {boolean} */

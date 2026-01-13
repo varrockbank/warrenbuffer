@@ -198,56 +198,56 @@
     const edAutoBoth = BuffeeStatusLine(new Buffee(elAutoBoth));
     edAutoBoth.Model._ = [ruler(120), '// Auto-h and auto-w', '// Drag corner to resize'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
-    edAutoBoth.render();
+    edAutoBoth.View.render();
 
     // 2. Fixed-h, auto-w
     const elFixedRowsAutoCols = document.getElementById('editor-fixed-rows-auto-cols');
     const edFixedRowsAutoCols = BuffeeStatusLine(new Buffee(elFixedRowsAutoCols, { h: 8 }));
     edFixedRowsAutoCols.Model._ = [ruler(120), '// Fixed 8 rows, auto-w', 'Line 3'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
-    edFixedRowsAutoCols.render();
+    edFixedRowsAutoCols.View.render();
 
     // 3. h smaller than container
     const elFixedRowsLarge = document.getElementById('editor-fixed-rows-large-container');
     const edFixedRowsLarge = BuffeeStatusLine(new Buffee(elFixedRowsLarge, { h: 5 }));
     edFixedRowsLarge.Model._ = [ruler(80), '// h: 5 overrides container height'].concat(
       Array.from({length: 10}, (_, i) => `Line ${i + 3}`));
-    edFixedRowsLarge.render();
+    edFixedRowsLarge.View.render();
 
     // 4. h larger than container
     const elFixedRowsOverflow = document.getElementById('editor-fixed-rows-overflow');
     const edFixedRowsOverflow = BuffeeStatusLine(new Buffee(elFixedRowsOverflow, { h: 20 }));
     edFixedRowsOverflow.Model._ = [ruler(80), '// h: 20 exceeds container height'].concat(
       Array.from({length: 25}, (_, i) => `Line ${i + 3}`));
-    edFixedRowsOverflow.render();
+    edFixedRowsOverflow.View.render();
 
     // 5. h larger than container (scrollable)
     const elFixedRowsScroll = document.getElementById('editor-fixed-rows-scroll');
     const edFixedRowsScroll = BuffeeStatusLine(new Buffee(elFixedRowsScroll, { h: 20 }));
     edFixedRowsScroll.Model._ = [ruler(80), '// h: 20 exceeds container height', '// Scroll to see more'].concat(
       Array.from({length: 25}, (_, i) => `Line ${i + 4}`));
-    edFixedRowsScroll.render();
+    edFixedRowsScroll.View.render();
 
     // 6. Auto-h, fixed-w (status bar stretches)
     const elFixedCols = document.getElementById('editor-fixed-cols');
     const edFixedCols = BuffeeStatusLine(new Buffee(elFixedCols, { w: 40 }));
     edFixedCols.Model._ = [ruler(40), '// Fixed 55 cols', '// Status bar stretches'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
-    edFixedCols.render();
+    edFixedCols.View.render();
 
     // 7. Auto-h, fixed-w (fit-content)
     const elFitContent = document.getElementById('editor-fit-content');
     const edFitContent = BuffeeStatusLine(new Buffee(elFitContent, { w: 40 }));
     edFitContent.Model._ = [ruler(55), '// Fixed 55 cols', '// width: fit-content'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
-    edFitContent.render();
+    edFitContent.View.render();
 
     // 8. Auto-h, fixed-w (contain: inline-size)
     const elContain = document.getElementById('editor-contain');
     const edContain = BuffeeStatusLine(new Buffee(elContain, { w: 20 }));
     edContain.Model._ = [ruler(20), '// Fixed 20 cols', '// contain: inline-size'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
-    edContain.render();
+    edContain.View.render();
 
   </script>
 </body>
