@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
- * @version 1.2.0
+ * @version 1.3.0
  */
 
 /**
@@ -23,13 +23,30 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
   const $spaces = $.querySelector('.buffee-spaces');
 
   let lastRow = -1, lastCol = -1, lastEndRow = -1, lastEndCol = -1, lastHasSelection = false;
-  let lastLineCount = -1, lastSpaces = -1;
+  let lastLineCount = -1, lastByteCount = -1, lastSpaces = -1;
+  let originalLineCount = null;
+  let originalByteCount = null;
+
+  function computeByteCount() {
+    let bytes = 0;
+    for (const line of Model._) {
+      bytes += line.length + 1; // +1 for newline
+    }
+    return bytes > 0 ? bytes - 1 : 0; // Remove trailing newline
+  }
 
   function updateStatusLine() {
     const [head, tail] = editor.Span.bounds();  // head first, unordered
     const [start, end] = editor.Span.bounds(1); // ordered by position
     const hasSelection = editor.Span.dir !== 0;
     const lineCount = Model.last + 1;
+    const byteCount = computeByteCount();
+
+    // Capture original counts on first non-empty content
+    if (originalLineCount === null && lineCount > 1) {
+      originalLineCount = lineCount;
+      originalByteCount = byteCount;
+    }
 
     if (showSelection && hasSelection) {
       // Show selection range: "1:5 - 3:10"
@@ -69,15 +86,30 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
       lastEndCol = -1;
     }
 
-    if ($lineCounter && lineCount !== lastLineCount) {
-      $lineCounter.textContent = `${lineCount.toLocaleString()} lines`;
+    if ($lineCounter && (lineCount !== lastLineCount || byteCount !== lastByteCount)) {
+      let text = `${lineCount.toLocaleString()}L`;
+      if (originalLineCount !== null) {
+        text += `, originally: ${originalLineCount.toLocaleString()}L, ${originalByteCount.toLocaleString()} bytes`;
+      }
+      $lineCounter.textContent = text;
       lastLineCount = lineCount;
+      lastByteCount = byteCount;
     }
     if ($spaces && Mode.s !== lastSpaces) {
       $spaces.textContent = `Spaces: ${Mode.s}`;
       lastSpaces = Mode.s;
     }
   }
+
+  // API to reset original counts (e.g., after loading new file)
+  editor.StatusLine = {
+    resetOriginal() {
+      originalLineCount = null;
+      originalByteCount = null;
+      lastLineCount = -1;
+      lastByteCount = -1;
+    }
+  };
 
   sub.push(updateStatusLine);
   updateStatusLine(); // Initial population
