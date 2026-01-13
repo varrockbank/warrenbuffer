@@ -1,5 +1,6 @@
 /**
  * @fileoverview React wrapper for Buffee editor
+ * @version 1.1.0
  *
  * Required: Include buffee.js and style.css before using this component.
  * Optional: Include extensions (e.g., statusline.js) and theme CSS.
