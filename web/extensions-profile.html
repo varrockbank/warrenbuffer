@@ -285,7 +285,7 @@
       // Generate test content
       const testCode = generateCode(1000);
       editor.Model._ = testCode.split('\n');
-      editor.render();
+      editor.View.render();
 
       const testLine = 'const greeting = "Hello, World!"; // This is a comment';
 
@@ -396,7 +396,7 @@
       editor.TUI.enabled = true;
       start = performance.now();
       for (let i = 0; i < iterations; i++) {
-        editor.render();
+        editor.View.render();
       }
       setMetric('tui-render', (performance.now() - start) / iterations, { fast: 1, medium: 5 });
 

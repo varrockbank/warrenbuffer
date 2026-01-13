@@ -330,7 +330,7 @@ if __name__ == "__main__":
 
     // Load initial sample
     editor.Model._ = samples.javascript.split('\n');
-    editor.render();
+    editor.View.render();
 
     // Language switcher
     langSelect.addEventListener('change', () => {
@@ -338,7 +338,7 @@ if __name__ == "__main__":
       editor.Syntax.setLanguage(lang);
       editor.Syntax.clearCache();
       editor.Model._ = samples[lang].split('\n');
-      editor.render();
+      editor.View.render();
       updateStateDisplay();
     });
 
@@ -346,7 +346,7 @@ if __name__ == "__main__":
     const syntaxCheckbox = document.getElementById('syntax-checkbox');
     syntaxCheckbox.addEventListener('change', () => {
       editor.Syntax.enabled = syntaxCheckbox.checked;
-      editor.render();
+      editor.View.render();
     });
 
     // File loader

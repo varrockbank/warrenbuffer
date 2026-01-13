@@ -9,7 +9,7 @@
  *   useEffect(() => {
  *     if (editorRef.current) {
  *       editorRef.current.Model._ = ['Hello, World!'];
- *       editorRef.current.render();
+ *       editorRef.current.View.render();
  *     }
  *   }, []);
  *
@@ -69,7 +69,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
 
     if (initialText) {
       editor.Model._ = initialText.split('\n');
-      editor.render();
+      editor.View.render();
     }
 
     if (onReady) {

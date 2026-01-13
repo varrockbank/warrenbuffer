@@ -1,7 +1,7 @@
 # Claude Instructions for buffee
 
 **Full API reference: `docs/`** — Read these files for complete documentation:
-- `docs/api.md` — Model, View, Span, Mode API
+- `docs/api.txt` — Model, View, Span, Mode API
 - `docs/onboarding.md` — Getting started, sizing, keybindings
 - `docs/extensions.md` — Extension documentation
 
@@ -11,6 +11,7 @@
 BuffeeStatusLine(new Buffee(el, { h: 20, w: 80, s: 4 }));
 
 editor.Model._ = ["line1", "line2"];  // Set content (array of lines)
+editor.View.render();                 // Render after content changes
 editor.View.set(5);                   // Scroll to line index 5
 editor.Span.ins(["text"]);            // Insert at cursor
 editor.Span.cursor({y:0,x:0});        // Move cursor

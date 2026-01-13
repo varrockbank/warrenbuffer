@@ -14,7 +14,8 @@
  * await editor.FileLoader.streamMaterializedLoad(file);
  */
 function BuffeeFileLoader(editor) {
-  const { Model, Mode, render, $ } = editor;
+  const { Model, Mode, View, $ } = editor;
+  const { render } = View;
 
   function appendLines(newLines, skipRender = false) {
     Model._.push(...newLines);

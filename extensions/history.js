@@ -16,7 +16,7 @@ function BuffeeHistory(editor) {
   const Model = editor.Model;
   const add = Model.ins.bind(Model);
   const del = Model.del.bind(Model);
-  const { render } = editor;
+  const { render } = editor.View;
 
   // State
   const undoStack = [];

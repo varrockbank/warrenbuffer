@@ -16,7 +16,8 @@
  */
 function BuffeeUltraHighCapacity(editor) {
   const { sub } = editor.Mode;
-  const { View, Model, Mode, render, $ } = editor;
+  const { View, Model, Mode, $ } = editor;
+  const { render } = View;
   const $e = $.querySelector('.buffee-pane');
 
   // Store original methods/getters

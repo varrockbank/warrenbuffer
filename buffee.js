@@ -15,10 +15,10 @@
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
  * editor.Model._ = ['Hello, World!'];
- * editor.render();
+ * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.5.1-alpha.1';
+  this.v = '15.6.0-alpha.1';
   this.$ = $;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -336,7 +336,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
   };
 
   // Add / remove lines, selections, rails as row changes
-  const RENDER = this.RENDER = delta => {
+  const RENDER = View.RENDER = delta => {
     if (delta) {
       let d = delta;
       for (; d > 0; d--         ) viewportLayers.forEach(([a, f]) => a.push(f.appendChild(document.createElement('pre'))));
@@ -354,7 +354,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
   /**
    * Renders the editor viewport, selection, cursor, and calls extension hooks.
    */
-  const render = this.render = (delta = 0) => {
+  const render = View.render = (delta = 0) => {
     Mode.f++;
 
     // Update contents of line containers (reset to clean state)

@@ -85,7 +85,7 @@ example();`;
     const edTui = BuffeeStatusLine(new Buffee(elTui, { h: 10 }));
     BuffeeTUI(edTui);
     edTui.Model._ = content.split('\n');
-    edTui.render();
+    edTui.View.render();
     edTui.TUI.enabled = true;
 
     // Option 2: Ultra High Capacity mode (for large files)

@@ -132,7 +132,7 @@ function defineExtensionTests() {
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
                 editor.Model._ = ['const x = 42;'];
-                editor.render();
+                editor.View.render();
 
                 const { tokens } = editor.Syntax.tokenizeLine('const x = 42;', 0);
                 assertTrue(tokens.length > 0, 'Should have tokens');
@@ -162,7 +162,7 @@ function defineExtensionTests() {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
                 editor.Model._ = ['/* start', 'middle', 'end */'];
-                editor.render();
+                editor.View.render();
 
                 // First line starts comment
                 const result1 = editor.Syntax.tokenizeLine('/* start', 0);
@@ -187,7 +187,7 @@ function defineExtensionTests() {
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
                 editor.Model._ = ['line1', 'line2', 'line3'];
-                editor.render();
+                editor.View.render();
 
                 // Force state cache population
                 editor.Syntax.ensureStateCache(2);
@@ -234,7 +234,7 @@ function defineExtensionTests() {
                 editor.Syntax.enabled = true;
                 // Create 10 lines to fill viewport
                 editor.Model._ = ['const a = 1;', 'const b = 2;', 'const c = 3;', 'const d = 4;', 'const e = 5;', 'const f = 6;', 'const g = 7;', 'const h = 8;', 'const i = 9;', 'const j = 10;'];
-                editor.render();
+                editor.View.render();
 
                 // Check that highlighting was applied to lines in viewport
                 const $textLayer = editor.$.querySelector('.buffee-ztxt');
@@ -256,7 +256,7 @@ function defineExtensionTests() {
 
                 // Set initial multiline content
                 editor.Model._ = ['/* comment', 'still comment', 'end */'];
-                editor.render();
+                editor.View.render();
                 editor.Syntax.ensureStateCache(3);
                 assertTrue(editor.Syntax.stateCache.length >= 3, 'Cache should be populated');
 
@@ -279,7 +279,7 @@ function defineExtensionTests() {
                 editor.Model._ = ['', '', '', '', '', ''];
                 editor.Elementals.addButton({ row: 2, col: 5, label: 'Test' });
                 editor.Elementals.enabled = true;
-                editor.render();
+                editor.View.render();
 
                 // Element should be visible (not display:none) and positioned
                 const el = editor.Elementals.elements[0];
@@ -460,7 +460,7 @@ function defineExtensionTests() {
                 editor.Model._ = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
                 editor.TUI.addButton({ row: 5, col: 0, label: 'Mid' });
                 editor.TUI.enabled = true;
-                editor.render();
+                editor.View.render();
 
                 // Element at row 5 should be in viewport (0-9 visible)
                 // If viewport.size was used instead of viewport.n, this would fail
@@ -1093,7 +1093,7 @@ function defineExtensionTests() {
 
                 // Set text with 5 lines
                 editor.Model._ = ['line1', 'line2', 'line3', 'line4', 'line5'];
-                editor.render();
+                editor.View.render();
 
                 // Should show correct line count
                 assertTrue($lineCounter.textContent.includes('5'),

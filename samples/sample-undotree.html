@@ -267,7 +267,7 @@
     btnClear.onclick = () => {
       editor.UndoTree.clear();
       editor.Model._ = [''];
-      editor.render();
+      editor.View.render();
       updateTree();
     };
 

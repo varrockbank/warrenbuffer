@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 15.6.0-alpha.1 [2026-01-13]  gz: 2587 / 2.53 KB (-1), br: 2387 / 2.33 KB (+2), min: 5801 / 5.67 KB (-6)
+- api: move render/RENDER to View namespace (editor.View.render(), editor.View.RENDER())
+- docs: convert api.md to api.txt (ASCII plaintext format)
+
 ** 15.5.1-alpha.1 [2026-01-13]  gz: 2588 / 2.53 KB (+3), br: 2385 / 2.33 KB (-3), min: 5807 / 5.67 KB (0)
 - perf: optimize hotpath, isolate regex for move word until they are needed
 

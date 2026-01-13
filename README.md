@@ -146,7 +146,7 @@ anchor and the head/dot are the same. Text editing operations are defined relati
 
 The controller are keyboard event handlers which route to operations on the selection. In the future, the basic controller will be refactored out of Buffee.js as an Extension such that you will have to bring-your-own controller by default. e.g. a "vim normal mode controller".
 
-See: [API Reference](docs/api.md) | [Getting Started](docs/onboarding.md)
+See: [API Reference](docs/api.txt) | [Getting Started](docs/onboarding.md)
 
 ## Extensibility
 

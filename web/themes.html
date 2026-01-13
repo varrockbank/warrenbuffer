@@ -284,7 +284,7 @@ for (let i = 0; i < 10; i++) {
       const el = document.getElementById('ed-' + name);
       const editor = BuffeeStatusLine(new Buffee(el));
       editor.Model._ = sampleLines.slice();
-      editor.render();
+      editor.View.render();
     });
   </script>
 </body>

@@ -17,9 +17,10 @@ function Buffee__NAME__(editor) {
   const { sub } = editor.Mode;
 
   // === EDITOR PROPERTIES ===
-  // Available: Model, Select, View, Mode, render, $
+  // Available: Model, Select, View, Mode, $
   // Select.bounds() returns [head, tail], Select.bounds(1) returns ordered
-  const { Model, View, Mode, render, $ } = editor;
+  const { Model, View, Mode, $ } = editor;
+  const { render } = View;
   const lineHeight = Mode.ch;
   const $e = $.querySelector('.buffee-pane');
 
