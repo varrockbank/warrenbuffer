@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.8.0-alpha.1';
+  this.v = '15.8.1-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -300,7 +300,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
    * Virtual viewport dictacting which portion of document is seen and rendered.
    * @namespace View
    */
-  let vFirst = 0, vN = 0;
+  let vFirst = 0, vN = h ? 0 : -1;
   const View = this.View = {
     /** @type {number} Index of the first visible line (0-indexed) */
     get first() { return vFirst; },
@@ -308,8 +308,6 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /** @type {number} Number of visible lines */
     get n() { return vN; },
     set n(v) { const d = v - vN; vN = v; RENDER(d); },
-    /** @type {number} Number of DOM line containers. +1 if auto-fit (no h specified) */
-    get N() { return vN + !h; },
     /**
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
@@ -326,7 +324,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       for (d = delta; d < 0; d++) for (const [a]      of viewportLayers) a.pop()?.remove();
     }
     if ($rail) {
-      const railCols = Math.max(railInit, (View.first + View.N).toString().length) + railPad;
+      const railCols = Math.max(railInit, (View.first + vN + !h).toString().length) + railPad;
       $rail.style.width = railCols + 'ch';
       if (w) $pane.style.width = `calc(${railCols + w}ch + ${padding * 4}px)`;
     }
@@ -340,7 +338,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     Mode.f++;
 
     // Update contents of line containers (reset to clean state)
-    for (let i = 0; i < View.N; i++) for (const [arr, , , update] of viewportLayers) arr[i] && update(arr[i], i);
+    for (let i = 0; i < vN + !h; i++) for (const [arr, , , update] of viewportLayers) arr[i] && update(arr[i], i);
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
@@ -375,7 +373,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
   // Set container height if h specified (don't use flex: 1). TODO: perhaps can just set on parent
   if (h) for (const [, , p] of viewportLayers) p && (p.style.height = h * ch + 'px');
   // Initial sizing render
-  h ? View.n = h : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); View.n = Math.floor($pane.clientHeight / ch)}).observe($pane);
+  h ? View.n = h : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); View.n = Math.floor($lines.clientHeight / ch)}).observe($pane);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $lines.addEventListener('paste', e => {

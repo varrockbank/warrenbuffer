@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.8.1-alpha.1 [2026-01-13]  gz: 2570 / 2.51 KB (-3), br: 2368 / 2.31 KB (+4), min: 5732 / 5.60 KB (-14)
+- fix: viewport scroll regression (use $lines.clientHeight, inline View.N, init vN=-1 for auto-fit)
+
 ** 15.8.0-alpha.1 [2026-01-13]  gz: 2573 / 2.51 KB (0), br: 2364 / 2.31 KB (-7), min: 5746 / 5.61 KB (0)
 - api: View.first and View.n are now setters (replaces View.set() and View.size())
 
