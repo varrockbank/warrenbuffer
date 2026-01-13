@@ -169,7 +169,7 @@
 
   <script>
     const el = document.getElementById('editor');
-    const editor = BuffeeStatusLine(new Buffee(el, { rows: 10 }));
+    const editor = BuffeeStatusLine(new Buffee(el, { h: 10 }));
     BuffeeUndoTree(editor);
 
     const btnUndo = document.getElementById('btn-undo');

@@ -175,7 +175,7 @@
 <script>
   window.addEventListener("DOMContentLoaded", () => {
     const mainElement = document.getElementById("playground");
-    const primary = BuffeeHistory(BuffeeStatusLine(new Buffee(mainElement, { rows: 20 })));
+    const primary = BuffeeHistory(BuffeeStatusLine(new Buffee(mainElement, { h: 20 })));
     mainElement.querySelector('.buffee-lines').focus();
     window.primary = primary;
 
@@ -183,7 +183,7 @@
     document.getElementById('buffee-version').textContent = '( v' + primary.v + ' )';
 
     const hackerNewsElement = document.getElementById('hackernews');
-    const hackernews = BuffeeStatusLine(new Buffee(hackerNewsElement, { rows: 20 }));
+    const hackernews = BuffeeStatusLine(new Buffee(hackerNewsElement, { h: 20 }));
 
     fetch("assets/instructions.txt")
       .then(response => response.text())
@@ -223,7 +223,7 @@
 
     // TUI Mode Demo
     const tuiDemoElement = document.getElementById('tui-demo');
-    const tuiDemo = BuffeeTUI(BuffeeStatusLine(new Buffee(tuiDemoElement, { rows: 15 })));
+    const tuiDemo = BuffeeTUI(BuffeeStatusLine(new Buffee(tuiDemoElement, { h: 15 })));
 
 const fileTemplate = `
                 ║

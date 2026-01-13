@@ -1,14 +1,14 @@
 # Claude Instructions for buffee
 
-**Documentation:** `docs/` folder
-- `docs/onboarding.md` — Getting started guide
-- `docs/api.md` — API surface reference
+**Full API reference: `docs/`** — Read these files for complete documentation:
+- `docs/api.md` — Model, View, Span, Mode API
+- `docs/onboarding.md` — Getting started, sizing, keybindings
 - `docs/extensions.md` — Extension documentation
 
 ## Quick Reference
 
 ```javascript
-BuffeeStatusLine(new Buffee(el, { rows: 20, cols: 80, s: 4 }));
+BuffeeStatusLine(new Buffee(el, { h: 20, w: 80, s: 4 }));
 
 editor.Model._ = ["line1", "line2"];  // Set content (array of lines)
 editor.View.set(5);                   // Scroll to line index 5

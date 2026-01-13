@@ -32,7 +32,7 @@
   <!-- Content -->
   <h1>[Sample Name]</h1>
   <p>[Description of what this sample demonstrates]</p>
-  <p><code>new Buffee(el, { rows: 10 })</code></p>
+  <p><code>new Buffee(el, { h: 10 })</code></p>
 
   <!-- Editor container -->
   <div class="buffee buffee-themepack1-boring" id="editor">
@@ -54,7 +54,7 @@
   <!-- Initialization -->
   <script>
     const el = document.getElementById('editor');
-    const editor = BuffeeStatusLine(new Buffee(el, { rows: 10 }));
+    const editor = BuffeeStatusLine(new Buffee(el, { h: 10 }));
 
     // Initialize extensions
     // BuffeeSyntax(editor);

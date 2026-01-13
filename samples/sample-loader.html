@@ -139,7 +139,7 @@
     const editorEl = document.getElementById('editor');
     const logsEl = document.getElementById('logs-editor');
 
-    const logs = BuffeeStatusLine(new Buffee(logsEl, { rows: 8 }));
+    const logs = BuffeeStatusLine(new Buffee(logsEl, { h: 8 }));
 
     function log(s) {
       console.log(s);
@@ -154,7 +154,7 @@
     }
 
     const editor = BuffeeUltraHighCapacity(BuffeeFileLoader(BuffeeSanitize(BuffeeStatusLine(
-      new Buffee(editorEl, { rows: 10, logger: log })
+      new Buffee(editorEl, { h: 10, logger: log })
     ))));
 
     editor.Model._ = ['Select a file to load...'];

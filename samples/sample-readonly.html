@@ -82,7 +82,7 @@ example();`;
 
     // Option 1: TUI mode
     const elTui = document.getElementById('editor-tui');
-    const edTui = BuffeeStatusLine(new Buffee(elTui, { rows: 10 }));
+    const edTui = BuffeeStatusLine(new Buffee(elTui, { h: 10 }));
     BuffeeTUI(edTui);
     edTui.Model._ = content.split('\n');
     edTui.render();
@@ -90,7 +90,7 @@ example();`;
 
     // Option 2: Ultra High Capacity mode (for large files)
     const elChunked = document.getElementById('editor-chunked');
-    const edChunked = BuffeeStatusLine(new Buffee(elChunked, { rows: 10 }));
+    const edChunked = BuffeeStatusLine(new Buffee(elChunked, { h: 10 }));
     BuffeeUltraHighCapacity(edChunked);
     edChunked.UltraHighCapacity.activate();
     (async () => {

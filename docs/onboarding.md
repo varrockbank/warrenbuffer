@@ -40,9 +40,9 @@ See `web/template.html` for the required HTML structure:
 
 ```javascript
 const editor = new Buffee(document.querySelector('.buffee'), {
-  rows: 20,  // Optional: fixed height (omit to auto-fit)
-  cols: 80,  // Optional: fixed width (omit to fill parent)
-  s: 4       // Tab width (default: 4)
+  h: 20,  // Optional: fixed height (omit to auto-fit)
+  w: 80,  // Optional: fixed width (omit to fill parent)
+  s: 4    // Tab width (default: 4)
 });
 
 // Optional: add status line updates
@@ -60,8 +60,8 @@ editor.render();  // Trigger re-render after setting content
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `rows` | auto | Fixed visible lines (omit to auto-fit to container) |
-| `cols` | auto | Fixed text columns (omit to fill parent width) |
+| `h` | auto | Fixed visible lines (omit to auto-fit to container) |
+| `w` | auto | Fixed text columns (omit to fill parent width) |
 
 ### Auto-fit (Default)
 
@@ -74,7 +74,7 @@ The editor auto-fits to its container. Requires the container to have defined di
 ### Fixed Dimensions
 
 ```javascript
-new Buffee(el, { rows: 25, cols: 80 });
+new Buffee(el, { h: 25, w: 80 });
 ```
 
 ## Keybindings

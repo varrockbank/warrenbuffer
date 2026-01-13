@@ -112,7 +112,7 @@ function createTestEditor(opts = {}) {
     `;
     document.body.appendChild(container);
     const el = container.querySelector('.buffee');
-    const editor = new Buffee(el, { rows: 10, ...opts });
+    const editor = new Buffee(el, { h: 10, ...opts });
     return { editor, container, cleanup: () => container.remove() };
 }
 

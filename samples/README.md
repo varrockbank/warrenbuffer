@@ -33,7 +33,7 @@ editor.Model.text = 'Hello, World!';
 ## Fixed Size
 
 ```javascript
-new Buffee(el, { rows: 25, cols: 80 });
+new Buffee(el, { h: 25, w: 80 });
 ```
 
 ## With Syntax Highlighting

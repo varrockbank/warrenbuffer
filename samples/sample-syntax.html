@@ -90,7 +90,7 @@ editor.Syntax.enabled = true</pre>
     const langSelect = document.getElementById('lang-select');
     const stateDisplay = document.getElementById('state-display');
 
-    const editor = BuffeeStatusLine(new Buffee(editorEl, { rows: 10 }));
+    const editor = BuffeeStatusLine(new Buffee(editorEl, { h: 10 }));
 
     // Initialize syntax highlighting
     BuffeeSyntax(editor);
