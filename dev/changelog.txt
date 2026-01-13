@@ -1,6 +1,9 @@
 * Project Devlog
 
-** 15.9.10-alpha.1 [2026-01-13]  gz: 2510 / 2.45 KB (+15), br: 2311 / 2.26 KB (-4), min: 5545 / 5.42 KB (-8)
+** 15.9.11-alpha.1 [2026-01-13]  gz: 2506 / 2.45 KB (+10), br: 2317 / 2.26 KB (+9), min: 5560 / 5.43 KB (+14)
+- refactor: reintroduce cmdMap for keyboard shortcuts
+
+** 15.9.10-alpha.1 [2026-01-13]  gz: 2496 / 2.44 KB (+1), br: 2308 / 2.25 KB (-6), min: 5546 / 5.42 KB (-7)
 - golf: extract cw to local const, use in render
 
 ** 15.9.9-alpha.1 [2026-01-13]  gz: 2495 / 2.44 KB (-1), br: 2315 / 2.26 KB (-1), min: 5553 / 5.42 KB (0)
