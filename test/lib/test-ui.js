@@ -184,7 +184,10 @@
         }
 
         function setEditorContent(text) {
-            if (dslEditor) dslEditor.Model.s = text;
+            if (dslEditor) {
+                dslEditor.Model._ = text.split('\n');
+                dslEditor.render();
+            }
         }
 
         let jsOutputEditor = null;
@@ -258,7 +261,9 @@
 
                 // Display generated JavaScript
                 if (jsOutputEditor) {
-                    jsOutputEditor.Model.s = jsOutput;
+                    jsOutputEditor.Syntax.clearCache();
+                    jsOutputEditor.Model._ = jsOutput.split('\n');
+                    jsOutputEditor.render();
                 }
                 const outputEl = document.getElementById('js-output');
                 outputEl.dataset.plainJs = jsOutput; // Store plain JavaScript for eval
@@ -344,7 +349,8 @@
                 lastCompileHadErrors = false;
                 lastCompileErrors = [];
                 if (jsOutputEditor) {
-                    jsOutputEditor.Model.s = `Error: ${error.message}`;
+                    jsOutputEditor.Model._ = [`Error: ${error.message}`];
+                    jsOutputEditor.render();
                 }
                 delete outputEl.dataset.plainJs;
                 outputEl.classList.remove('has-errors');

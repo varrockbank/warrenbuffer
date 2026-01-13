@@ -55,14 +55,17 @@ editor.iOS.destroy() // Cleanup</pre>
       BuffeeIOS(editor);
     }
 
-    editor.Model.s = `// iOS Support Demo
-// On iOS: tap to position cursor, use on-screen keyboard
-
-function greet(name) {
-  return "Hello, " + name + "!";
-}
-
-console.log(greet("iOS"));`;
+    editor.Model._ = [
+      '// iOS Support Demo',
+      '// On iOS: tap to position cursor, use on-screen keyboard',
+      '',
+      'function greet(name) {',
+      '  return "Hello, " + name + "!";',
+      '}',
+      '',
+      'console.log(greet("iOS"));'
+    ];
+    editor.render();
 
     el.focus();
   </script>

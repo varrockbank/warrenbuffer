@@ -7,7 +7,8 @@
 
     function handleReady(e) {
       editor = e.detail;
-      editor.Model.s = 'Hello, World!';
+      editor.Model._ = ['Hello, World!'];
+      editor.render();
     }
   </script>
 
@@ -94,7 +95,8 @@
     }
 
     if (initialText) {
-      editor.Model.s = initialText;
+      editor.Model._ = initialText.split('\n');
+      editor.render();
     }
 
     dispatch('ready', editor);

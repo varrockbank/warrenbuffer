@@ -115,7 +115,7 @@ editor.Elementals.addButton({ row: 1, col: 5, label: 'Click Me' })</pre>
     const buttonsEl = document.getElementById('buttons-demo');
     const buttonsEditor = BuffeeStatusLine(new Buffee(buttonsEl, { rows: 5 }));
     BuffeeElementals(buttonsEditor);
-    buttonsEditor.Model.s = '\n\n\n\n';
+    buttonsEditor.Model._ = ['', '', '', '', ''];
     buttonsEditor.Elementals.addButton({
       row: 1, col: 2,
       label: 'Save',
@@ -151,7 +151,7 @@ editor.Elementals.addButton({ row: 1, col: 5, label: 'Click Me' })</pre>
     const inputsEl = document.getElementById('inputs-demo');
     const inputsEditor = BuffeeStatusLine(new Buffee(inputsEl, { rows: 5 }));
     BuffeeElementals(inputsEditor);
-    inputsEditor.Model.s = '\n\n\n\n';
+    inputsEditor.Model._ = ['', '', '', '', ''];
     inputsEditor.Elementals.addLabel({ row: 1, col: 2, text: 'Name:' });
     inputsEditor.Elementals.addInput({
       row: 1, col: 9,
@@ -178,7 +178,7 @@ editor.Elementals.addButton({ row: 1, col: 5, label: 'Click Me' })</pre>
     const mixedEl = document.getElementById('mixed-demo');
     const mixedEditor = BuffeeStatusLine(new Buffee(mixedEl, { rows: 8 }));
     BuffeeElementals(mixedEditor);
-    mixedEditor.Model.s = '\n\n\n\n\n\n\n';
+    mixedEditor.Model._ = ['', '', '', '', '', '', '', ''];
 
     // Form layout
     mixedEditor.Elementals.addLabel({ row: 1, col: 2, text: 'Search:' });

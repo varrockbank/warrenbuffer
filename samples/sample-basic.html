@@ -47,14 +47,17 @@
     const el = document.getElementById('editor');
     const editor = BuffeeStatusLine(new Buffee(el, { rows: 10 }));
 
-    editor.Model.s = `// Welcome to buffee
-// Start typing...
-
-function hello() {
-  console.log("Hello, world!");
-}
-
-hello();`;
+    editor.Model._ = [
+      '// Welcome to buffee',
+      '// Start typing...',
+      '',
+      'function hello() {',
+      '  console.log("Hello, world!");',
+      '}',
+      '',
+      'hello();'
+    ];
+    editor.render();
 
     el.focus();
   </script>

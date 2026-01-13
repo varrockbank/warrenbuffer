@@ -11,6 +11,9 @@
  * @returns {Buffee} The extended editor instance
  */
 function BuffeeHighlights(editor) {
+  // Idempotent: return if already applied
+  if (editor.Highlights) return editor;
+
   const { $, Mode } = editor;
   const lineHeight = Mode.ch;
 

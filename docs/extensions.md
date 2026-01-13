@@ -179,6 +179,26 @@ Enables touch-to-position cursor and virtual keyboard handling.
 
 ---
 
+## Extension API
+
+For building extensions:
+
+```javascript
+const { Model, View, Span, Mode, render, $ } = editor;
+
+// Register render hook
+Mode.renderHooks.push(($container, viewport, rebuilt) => {
+  // Called after each render
+});
+
+// Wrap primitives
+const originalIns = Model.ins.bind(Model);
+Model.ins = function(row, col, lines) {
+  // Custom logic
+  return originalIns(row, col, lines);
+};
+```
+
 ## Creating Extensions
 
 ```javascript

@@ -1,9 +1,12 @@
 * Project Devlog
 
+** 15.4.0-alpha.1 [2026-01-13]  gz: 2589 / 2.53 KB (-17), br: 2393 / 2.34 KB (-12), min: 5813 / 5.68 KB (-35)
+- api: remove Model.s = "foobar". Delegate to user to render on Model._ = ["foobar"]
+
 ** 15.3.0-alpha.1 [2026-01-13]  gz: 2606 / 2.54 KB (+6), br: 2405 / 2.35 KB (+3), min: 5848 / 5.71 KB (14)
-- refactor: rename Model.end to Model.last
-- refactor: rename View.start to View.first
-- refactor: rename View.end to View.last
+- api: rename Model.end to Model.last
+- api: rename View.start to View.first
+- api: rename View.end to View.last
 
 ** 15.2.0-alpha.1 [2026-01-12]  gz: 2600 / 2.54 KB (-1), br: 2402 / 2.35 KB (+7), min: 5834 / 5.70 KB (15)
 - breaking: Span.ins now takes array of lines instead of string

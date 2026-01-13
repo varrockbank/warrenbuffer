@@ -279,10 +279,12 @@ for (let i = 0; i < 10; i++) {
 
     const themeNames = ['eva', 'hn', 'neo', 'star', 'chelsey', 'drak', 'kai', 'nord', 'darkly', 'gruv', 'boring'];
 
+    const sampleLines = sampleCode.split('\n');
     themeNames.forEach(name => {
       const el = document.getElementById('ed-' + name);
       const editor = BuffeeStatusLine(new Buffee(el));
-      editor.Model.s = sampleCode;
+      editor.Model._ = sampleLines.slice();
+      editor.render();
     });
   </script>
 </body>

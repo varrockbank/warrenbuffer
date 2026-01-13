@@ -286,7 +286,7 @@ function BuffeeTUI(editor) {
       for (const el of elements) {
         for (let i = 0; i < el.contents.length; i++) {
           const absRow = el.row + i;
-          const viewportRow = absRow - viewport.start;
+          const viewportRow = absRow - viewport.first;
 
           if (viewportRow >= 0 && viewportRow < viewport.n) {
             const $line = $textLayer.children[viewportRow];
@@ -317,7 +317,7 @@ function BuffeeTUI(editor) {
 
     for (let i = 0; i < currentEl.contents.length; i++) {
       const absRow = currentEl.row + i;
-      const viewportRow = absRow - viewport.start;
+      const viewportRow = absRow - viewport.first;
 
       if (viewportRow >= 0 && viewportRow < viewport.n) {
         Highlights.create(viewportRow, currentEl.col, currentEl.width);

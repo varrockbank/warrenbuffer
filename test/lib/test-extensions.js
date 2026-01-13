@@ -131,7 +131,8 @@ function defineExtensionTests() {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
-                editor.Model.s = 'const x = 42;';
+                editor.Model._ = ['const x = 42;'];
+                editor.render();
 
                 const { tokens } = editor.Syntax.tokenizeLine('const x = 42;', 0);
                 assertTrue(tokens.length > 0, 'Should have tokens');
@@ -160,7 +161,8 @@ function defineExtensionTests() {
             try {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
-                editor.Model.s = '/* start\nmiddle\nend */';
+                editor.Model._ = ['/* start', 'middle', 'end */'];
+                editor.render();
 
                 // First line starts comment
                 const result1 = editor.Syntax.tokenizeLine('/* start', 0);
@@ -184,14 +186,15 @@ function defineExtensionTests() {
                 BuffeeSyntax(editor);
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
-                editor.Model.s = 'line1\nline2\nline3';
+                editor.Model._ = ['line1', 'line2', 'line3'];
+                editor.render();
 
                 // Force state cache population
                 editor.Syntax.ensureStateCache(2);
                 assertTrue(editor.Syntax.stateCache.length >= 3, 'State cache should be populated');
 
-                // Simulate edit by setting text
-                editor.Model.s = 'changed';
+                // clearCache should reset the cache
+                editor.Syntax.clearCache();
                 assertEqual(editor.Syntax.stateCache.length, 1, 'State cache should be reset');
             } finally {
                 cleanup();
@@ -230,7 +233,7 @@ function defineExtensionTests() {
                 editor.Syntax.setLanguage('javascript');
                 editor.Syntax.enabled = true;
                 // Create 10 lines to fill viewport
-                editor.Model.s = 'const a = 1;\nconst b = 2;\nconst c = 3;\nconst d = 4;\nconst e = 5;\nconst f = 6;\nconst g = 7;\nconst h = 8;\nconst i = 9;\nconst j = 10;';
+                editor.Model._ = ['const a = 1;', 'const b = 2;', 'const c = 3;', 'const d = 4;', 'const e = 5;', 'const f = 6;', 'const g = 7;', 'const h = 8;', 'const i = 9;', 'const j = 10;'];
                 editor.render();
 
                 // Check that highlighting was applied to lines in viewport
@@ -243,8 +246,8 @@ function defineExtensionTests() {
             }
         });
 
-        // Regression: Model.s setter hook must invalidate cache
-        extRunner.it('resets state cache when Model.s is set', () => {
+        // Regression: clearCache must invalidate state cache
+        extRunner.it('resets state cache when clearCache is called', () => {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeSyntax(editor);
@@ -252,13 +255,14 @@ function defineExtensionTests() {
                 editor.Syntax.enabled = true;
 
                 // Set initial multiline content
-                editor.Model.s = '/* comment\nstill comment\nend */';
+                editor.Model._ = ['/* comment', 'still comment', 'end */'];
+                editor.render();
                 editor.Syntax.ensureStateCache(3);
                 assertTrue(editor.Syntax.stateCache.length >= 3, 'Cache should be populated');
 
-                // Setting Model.s should reset cache
-                editor.Model.s = 'new content';
-                assertEqual(editor.Syntax.stateCache.length, 1, 'Cache should be reset to 1 after Model.s set');
+                // clearCache should reset cache
+                editor.Syntax.clearCache();
+                assertEqual(editor.Syntax.stateCache.length, 1, 'Cache should be reset to 1 after clearCache');
             } finally {
                 cleanup();
             }
@@ -272,7 +276,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n\n\n';
+                editor.Model._ = ['', '', '', '', '', ''];
                 editor.Elementals.addButton({ row: 2, col: 5, label: 'Test' });
                 editor.Elementals.enabled = true;
                 editor.render();
@@ -290,7 +294,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n\n\n';
+                editor.Model._ = ['', '', '', '', '', ''];
                 // Add in non-sorted order: C at row 3, A at row 1 col 2, B at row 1 col 5
                 editor.Elementals.addButton({ row: 3, col: 1, label: 'C' });
                 editor.Elementals.addButton({ row: 1, col: 2, label: 'A' });
@@ -315,7 +319,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 const id = editor.Elementals.addButton({
                     row: 1, col: 5, label: 'Test'
                 });
@@ -331,7 +335,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 editor.Elementals.addLabel({ row: 1, col: 5, text: 'Label' });
                 assertEqual(editor.Elementals.elements.length, 1, 'Should have 1 element');
                 assertEqual(editor.Elementals.elements[0].type, 'label', 'Should be label type');
@@ -344,7 +348,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 editor.Elementals.addInput({
                     row: 1, col: 5, width: 20, placeholder: 'Type here'
                 });
@@ -359,7 +363,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n\n\n';
+                editor.Model._ = ['', '', '', '', '', ''];
                 editor.Elementals.addButton({ row: 1, col: 2, label: 'A' });
                 editor.Elementals.addButton({ row: 2, col: 2, label: 'B' });
                 editor.Elementals.addButton({ row: 3, col: 2, label: 'C' });
@@ -376,7 +380,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 const id = editor.Elementals.addButton({ row: 1, col: 2, label: 'Test' });
                 assertEqual(editor.Elementals.elements.length, 1, 'Should have 1 element');
                 editor.Elementals.removeElement(id);
@@ -390,7 +394,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeElementals(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 editor.Elementals.addButton({ row: 1, col: 2, label: 'A' });
                 editor.Elementals.addButton({ row: 2, col: 2, label: 'B' });
                 assertEqual(editor.Elementals.elements.length, 2, 'Should have 2 elements');
@@ -409,7 +413,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.s = '\n\n\n\n\n';
+                editor.Model._ = ['', '', '', '', '', ''];
                 // Add in non-sorted order: C at row 3, A at row 1 col 2, B at row 1 col 5
                 editor.TUI.addButton({ row: 3, col: 1, label: 'C' });
                 editor.TUI.addButton({ row: 1, col: 2, label: 'A' });
@@ -431,7 +435,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.s = '\n\n\n\n\n';
+                editor.Model._ = ['', '', '', '', '', ''];
                 editor.TUI.addButton({ row: 1, col: 0, label: 'First' });
                 editor.TUI.addButton({ row: 2, col: 0, label: 'Second' });
                 editor.TUI.enabled = true;
@@ -453,7 +457,7 @@ function defineExtensionTests() {
             try {
                 BuffeeTUI(editor);
                 // Create enough lines to fill viewport (10 lines in test editor)
-                editor.Model.s = '0\n1\n2\n3\n4\n5\n6\n7\n8\n9';
+                editor.Model._ = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
                 editor.TUI.addButton({ row: 5, col: 0, label: 'Mid' });
                 editor.TUI.enabled = true;
                 editor.render();
@@ -483,7 +487,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 const id = editor.TUI.addButton({
                     row: 1, col: 2, label: ' OK '
                 });
@@ -498,7 +502,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.s = '\n\n\n\n';
+                editor.Model._ = ['', '', '', '', ''];
                 const id = editor.TUI.addButton({
                     row: 1, col: 2, label: 'OK', border: true
                 });
@@ -514,7 +518,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.s = '\n\n\n\n';
+                editor.Model._ = ['', '', '', '', ''];
                 editor.TUI.addButton({ row: 1, col: 2, label: 'A' });
                 editor.TUI.addButton({ row: 2, col: 2, label: 'B' });
                 editor.TUI.enabled = true;
@@ -530,7 +534,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeTUI(editor);
-                editor.Model.s = '\n\n\n';
+                editor.Model._ = ['', '', '', ''];
                 editor.TUI.addButton({ row: 1, col: 2, label: 'Test' });
                 editor.TUI.clear();
                 assertEqual(editor.TUI.elements.length, 0, 'Should have 0 elements after clear');
@@ -926,7 +930,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHighlights(editor);
-                editor.Model.s = 'Hello World';
+                editor.Model._ = ['Hello World'];
 
                 const hl = editor.Highlights.create(0, 6, 5);
                 assertTrue(!!hl, 'Should return highlight element');
@@ -969,7 +973,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHighlights(editor);
-                editor.Model.s = 'Line 0\nLine 1\nLine 2\nLine 3\nLine 4';
+                editor.Model._ = ['Line 0', 'Line 1', 'Line 2', 'Line 3', 'Line 4'];
 
                 editor.Highlights.create(0, 0, 3);
                 editor.Highlights.create(2, 5, 4);
@@ -986,7 +990,7 @@ function defineExtensionTests() {
             const { editor, cleanup } = createTestEditor();
             try {
                 BuffeeHighlights(editor);
-                editor.Model.s = 'Line 0\nLine 1\nLine 2';
+                editor.Model._ = ['Line 0', 'Line 1', 'Line 2'];
 
                 const hl0 = editor.Highlights.create(0, 0, 5);
                 const hl2 = editor.Highlights.create(2, 0, 5);
@@ -1081,18 +1085,19 @@ function defineExtensionTests() {
 
     // ===== STATUSLINE TESTS =====
     extRunner.describe('StatusLine', () => {
-        extRunner.it('updates originalLineCount immediately when Model.s is set', () => {
+        extRunner.it('updates line count when Model._ is set and render is called', () => {
             const { editor, container, cleanup } = createTestEditor();
             try {
                 BuffeeStatusLine(editor);
                 const $lineCounter = container.querySelector('.buffee-linecount');
 
                 // Set text with 5 lines
-                editor.Model.s = 'line1\nline2\nline3\nline4\nline5';
+                editor.Model._ = ['line1', 'line2', 'line3', 'line4', 'line5'];
+                editor.render();
 
-                // Should immediately show correct originalLineCount (not 0L)
-                assertTrue($lineCounter.textContent.includes('originally: 5L'),
-                    'Should show originally: 5L, got: ' + $lineCounter.textContent);
+                // Should show correct line count
+                assertTrue($lineCounter.textContent.includes('5'),
+                    'Should show 5 lines, got: ' + $lineCounter.textContent);
             } finally {
                 cleanup();
             }
@@ -1279,12 +1284,13 @@ function defineExtensionTests() {
                     )
                 );
 
-                // Verify registration order (innermost first)
+                // Verify registration order (innermost first, dependencies before dependents)
+                // TUI internally initializes Highlights, so Highlights registers before TUI
                 assertDeepEqual(decorated.Mode.ext, [
                     'History',
                     'FileLoader',
-                    'TUI',
-                    'Highlights'
+                    'Highlights',
+                    'TUI'
                 ], 'Decorator pattern should register innermost first');
             } finally {
                 cleanup();

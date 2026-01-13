@@ -38,7 +38,8 @@ expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 ## should resize gutter based on visible lines
 ### Gutter based on viewport position, not total lines
 // Add 15 lines (more than viewport of 10)
-fixture.editor.Model.s = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15";
+fixture.editor.Model._ = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"];
+fixture.editor.render();
 const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);
@@ -46,16 +47,17 @@ const initialWidth = gutterWidthPx();
 // View shows lines 1-10, largest visible = 10, gutter = 3ch (~43px)
 expect(initialWidth).toBeCloseTo(43.35);
 // Scroll down - still 2-digit line numbers visible
-fixture.editor.View.set(fixture.editor.View.start + 2);
+fixture.editor.View.set(fixture.editor.View.first + 2);
 expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 // Scroll back up
-fixture.editor.View.set(fixture.editor.View.start - 2);
+fixture.editor.View.set(fixture.editor.View.first - 2);
 expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 
 ## should grow gutter when scrolling to 3-digit lines
 ### Gutter grows from 2 to 3 digits when line 100 is visible
 // Create 100 lines
-fixture.editor.Model.s = Array(100).fill("x").join("\n");
+fixture.editor.Model._ = Array(100).fill("x");
+fixture.editor.render();
 const $gutter = fixture.node.querySelector(".buffee-rail");
 // Using tolerance because computed style can differ slightly from actual
 const gutterWidthPx = () => parseFloat(getComputedStyle($gutter).width);

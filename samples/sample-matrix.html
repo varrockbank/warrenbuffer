@@ -88,7 +88,8 @@
         lines.push(line);
       }
 
-      editor.Model.s = lines.join('\n');
+      editor.Model._ = lines;
+      editor.render();
     }
 
     // Start Matrix animation

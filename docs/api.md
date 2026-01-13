@@ -12,20 +12,6 @@ const editor = new Buffee(element, { rows, cols, s })
 | `cols` | number | auto | Fixed text columns |
 | `s` | number | 4 | Tab width (0 = hard tabs) |
 
-## Text Sanitization
-
-Buffee does **not** sanitize text. Content set via `Model.s` or `Span.ins()` is inserted as-is. This means:
-
-- **Tabs** (`\t`) render with browser-default variable width, breaking grid alignment
-- **Zero-width characters** (ZWSP, ZWNJ, ZWJ, BOM) cause invisible cursor drift
-- **Multi-width Unicode spaces** (em space, en space, etc.) misalign subsequent characters
-
-**Solutions:**
-- Use `BuffeeSanitize` extension for automatic sanitization
-- Pre-sanitize text before passing to Buffee
-
-Note: The keyboard controller converts Tab key presses to spaces—only programmatic content is affected.
-
 ## Top-level properties
 
 ```javascript
@@ -40,33 +26,41 @@ editor
   .Mode              // see Mode  namespace below
 ```
 
-## Model (`editor.Model`)\
+## Model (`editor.Model`)
 
 ```javascript
 Model
-  ._    // Array of text lines, without '\n
-  .s    // Set content (string with \n)
-  .last // Index of last line of Model
+  ._    // text buffer. Assumes user sanitized '\n', '\t', zero-width, multi-width chars 
   .ins  // primitive insert
   .del  // primitive del
+
+  // Convenience utilities
+  .last // index of last line of Model
 ```
 
-## View (`editor.View`)
+When updating buffer, recall render if necessary. Suppose you append to ._ and the new lines 
+are out of view, then a render would not be necessary. While we could have added a setter 
+for the model that would know to call render, this would meant that the Model has to be concerned
+with the view. The philosophy is that Model should be agnostic to existence of rendering.
 
-The paradigm is to define first and size, but last is derived. An alternative implementation
-was first and last, but size is derived. The latter's API appears symmetrical but it was not
-as intuitive and the implementation uglier.
+## View (`editor.View`)
 
 ```javascript
 View
   .first         // Model index of first line of viewport 
-  .last          // Model index of last line viewport 
   .n             // Viewport size - number of lines (settable)
-  .N             // Number of DOM containers (n + 1 if auto-fit)
   .set(first)    // Scroll to line, keep current size
   .set(first, n) // Scroll to line with new size
   ._             // Visible lines array (derived: Model._.slice(first, last + 1))
+
+  // Convenience utilities
+  .last          // Model index of last line viewport 
+  .N             // Number of DOM containers (n + 1 if auto-fit)
 ```
+
+The paradigm is to define first and size, but last is derived. An alternative implementation
+was first and last, but size is derived. The latter's API appears symmetrical but it was not
+as intuitive and the implementation uglier.
 
 ## Span (`editor.Span`)
 
@@ -98,24 +92,4 @@ Mode
   .cw           // Character width in pixels
   .sub          // subscriptions for render callback
   .ext          // Array of registered extension names (in order)
-```
-
-## Extension API
-
-For building extensions:
-
-```javascript
-const { Model, View, Span, Mode, render, $ } = editor;
-
-// Register render hook
-Mode.renderHooks.push(($container, viewport, rebuilt) => {
-  // Called after each render
-});
-
-// Wrap primitives
-const originalIns = Model.ins.bind(Model);
-Model.ins = function(row, col, lines) {
-  // Custom logic
-  return originalIns(row, col, lines);
-};
 ```

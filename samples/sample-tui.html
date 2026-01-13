@@ -106,7 +106,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
     const plainEl = document.getElementById('buttons-plain');
     const plainEditor = BuffeeStatusLine(new Buffee(plainEl, { rows: 3 }));
     BuffeeTUI(plainEditor);
-    plainEditor.Model.s = '\n  Select action:';
+    plainEditor.Model._ = ['', '  Select action:'];
     plainEditor.TUI.addButton({ row: 1, col: 20, label: '[Save]', onActivate: () => { alert('Save clicked'); } });
     plainEditor.TUI.addButton({ row: 1, col: 28, label: '[Load]', onActivate: () => { alert('Load clicked'); } });
     plainEditor.TUI.addButton({ row: 1, col: 36, label: '[Exit]', onActivate: () => { alert('Exit clicked'); } });
@@ -120,7 +120,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
     const borderEl = document.getElementById('buttons-border');
     const borderEditor = BuffeeStatusLine(new Buffee(borderEl, { rows: 5 }));
     BuffeeTUI(borderEditor);
-    borderEditor.Model.s = '\n\n\n\n';
+    borderEditor.Model._ = ['', '', '', '', ''];
     borderEditor.TUI.addButton({ row: 1, col: 2, label: ' OK ', border: true, onActivate: () => { alert('OK clicked'); } });
     borderEditor.TUI.addButton({ row: 1, col: 12, label: ' Cancel ', border: true, onActivate: () => { alert('Cancel clicked'); } });
     borderEditor.TUI.addButton({ row: 1, col: 26, label: ' Apply ', border: true, onActivate: () => { alert('Apply clicked'); } });
@@ -134,7 +134,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
     const promptEl = document.getElementById('prompt-demo');
     const promptEditor = BuffeeStatusLine(new Buffee(promptEl, { rows: 8 }));
     BuffeeTUI(promptEditor);
-    promptEditor.Model.s = '\n\n\n\n\n\n\n';
+    promptEditor.Model._ = ['', '', '', '', '', '', '', ''];
     promptEditor.TUI.addPrompt({ row: 1, col: 2, width: 30, title: 'Search', onActivate: (el) => { alert('Search: ' + el.input); } });
     promptEditor.TUI.addPrompt({ row: 5, col: 2, width: 40, title: 'Command', onActivate: (el) => { alert('Command: ' + el.input); } });
     promptEditor.TUI.enabled = true;
@@ -147,7 +147,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
     const scrollEl = document.getElementById('scrollbox-demo');
     const scrollEditor = BuffeeStatusLine(new Buffee(scrollEl, { rows: 10 }));
     BuffeeTUI(scrollEditor);
-    scrollEditor.Model.s = '\n\n\n\n\n\n\n\n\n';
+    scrollEditor.Model._ = ['', '', '', '', '', '', '', '', '', ''];
     const logLines = [
       '[INFO] Server started on port 3000',
       '[INFO] Database connected',

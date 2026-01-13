@@ -171,37 +171,45 @@
 
 hello();`;
 
+    const contentLines = content.split('\n');
+
     // Default
     const elDefault = document.getElementById('editor-default');
     const edDefault = BuffeeStatusLine(new Buffee(elDefault, { rows: 6 }));
-    edDefault.Model.s = content;
+    edDefault.Model._ = contentLines.slice();
+    edDefault.render();
 
     // No gutter
     const elNoGutter = document.getElementById('editor-no-gutter');
     const edNoGutter = BuffeeStatusLine(new Buffee(elNoGutter, { rows: 10 }));
-    edNoGutter.Model.s = content;
+    edNoGutter.Model._ = contentLines.slice();
+    edNoGutter.render();
 
     // No status bar
     const elNoStatus = document.getElementById('editor-no-status');
     const edNoStatus = new Buffee(elNoStatus, {
       rows: 10
     });
-    edNoStatus.Model.s = content;
+    edNoStatus.Model._ = contentLines.slice();
+    edNoStatus.render();
 
     // Status line on top
     const elStatusTop = document.getElementById('editor-status-top');
     const edStatusTop = BuffeeStatusLine(new Buffee(elStatusTop, { rows: 10 }));
-    edStatusTop.Model.s = content;
+    edStatusTop.Model._ = contentLines.slice();
+    edStatusTop.render();
 
     // Selection range display
     const elSelection = document.getElementById('editor-selection');
     const edSelection = BuffeeStatusLine(new Buffee(elSelection, { rows: 6 }), { showSelection: true });
-    edSelection.Model.s = content;
+    edSelection.Model._ = contentLines.slice();
+    edSelection.render();
 
     // Gutter on right
     const elGutterRight = document.getElementById('editor-gutter-right');
     const edGutterRight = BuffeeStatusLine(new Buffee(elGutterRight, { rows: 10 }));
-    edGutterRight.Model.s = content;
+    edGutterRight.Model._ = contentLines.slice();
+    edGutterRight.render();
   </script>
 </body>
 </html>
