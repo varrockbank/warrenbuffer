@@ -87,9 +87,9 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     }
 
     if ($lineCounter && (lineCount !== lastLineCount || byteCount !== lastByteCount)) {
-      let text = `${lineCount.toLocaleString()}L`;
+      let text = `${lineCount}L`;
       if (originalLineCount !== null) {
-        text += `, originally: ${originalLineCount.toLocaleString()}L, ${originalByteCount.toLocaleString()} bytes`;
+        text += `, originally: ${originalLineCount}L, ${originalByteCount} bytes`;
       }
       $lineCounter.textContent = text;
       lastLineCount = lineCount;
