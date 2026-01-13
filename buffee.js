@@ -18,15 +18,13 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.7.3-alpha.1';
+  this.v = '15.7.4-alpha.1';
   this.$ = $;
-  // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
+  // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
-  // In case where we have cursor, we want head === tail.
-  const detachedHead = {};
-  let head   = { y: 0, x: 0 };
-  let tail   = head;
-  let maxCol = head.x;
+  // In case where we have cursor, we want head === anchor.
+  const anchor = { y: 0, x: 0 }, detached = {};
+  let head = anchor, maxCol = 0;
 
   // Interface with HTML and CSS.
   const [ch    , padding ,  railInit , railPad  ] =
@@ -51,11 +49,11 @@ function Buffee($, { h, w, s = 4 } = {}) {
    */
   const Span = this.Span = {
     /**
-     * Returns selection bounds. Pass truthy for document order, falsy for [head, tail].
+     * Returns selection bounds. Pass truthy for document order, falsy for [head, anchor].
      * @param {boolean} [ordered] - If true, returns [start, end] in document order
      * @returns {[Position, Position]} Array of positions
      */
-    bounds: ordered => ordered && Span.dir > 0 ? [tail, head] : [head, tail],
+    bounds: ordered => ordered && Span.dir > 0 ? [anchor, head] : [head, anchor],
 
     /**
      * Moves the cursor/selection head vertically.
@@ -122,7 +120,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      * @returns {-1|0|1}
      */
     get dir() {
-      return head === tail ? 0 : (tail.y === head.y && tail.x < head.x || tail.y < head.y) ? 1 : -1;
+      return head === anchor ? 0 : (anchor.y === head.y && anchor.x < head.x || anchor.y < head.y) ? 1 : -1;
     },
 
     /**
@@ -146,16 +144,16 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /** Collapses selection to a cursor. Optionally sets position first. */
     cursor(p) {
       if (p) { head.y = p.y; head.x = p.x; }
-      tail.y = head.y;
-      tail.x = head.x;
-      head   = tail;
+      anchor.y = head.y;
+      anchor.x = head.x;
+      head     = anchor;
     },
 
-    /** Begins a new selection by detaching head from tail allowing independent movement. */
+    /** Begins a new selection by detaching head from anchor allowing independent movement. */
     select() {
-      head   = detachedHead;
-      head.y = tail.y;
-      head.x = tail.x;
+      head   = detached;
+      head.y = anchor.y;
+      head.x = anchor.x;
     },
 
     /**
