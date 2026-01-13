@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.11-alpha.1';
+  this.v = '15.10.0-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -61,7 +61,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update Mode.mx
      */
     mvY(dir, toEdge) {
-      if (dir > 0 ? head.y < Model.last : head.y > 0) {
+      if (dir > 0 ? head.y < Model.end.y : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(Mode.mx, len);
         if (toEdge) Mode.mx = head.x;
@@ -77,7 +77,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     mvX(dir) {
       const right = dir > 0;
       if (right ? head.x < Model._[head.y].length : head.x) { Mode.mx = right ? ++head.x : --head.x; render(); }
-      else if (right ? head.y < Model.last : head.y) this.mvY(dir, 1);
+      else if (right ? head.y < Model.end.y : head.y) this.mvY(dir, 1);
     },
 
     /**
@@ -107,7 +107,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.x = j;
         render();
-      } else if (fwd ? head.y < Model.last : head.y > 0) {
+      } else if (fwd ? head.y < Model.end.y : head.y > 0) {
                                               // At edge - move to adjacent line
                                               head.x = fwd ? 0 : Model._[--head.y].length;
         if (fwd && ++head.y > View.last)      View.first = head.y - View.n + 1;
@@ -135,7 +135,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       if (left.y === right.y) {
         const text  = Model._[left.y];
         const slice = text.slice(left.x, right.x + fwd);
-        return right.x >= text.length && left.y < Model.last ? [slice, ''] : [slice];
+        return right.x >= text.length && left.y < Model.end.y ? [slice, ''] : [slice];
       }
       return [
         Model._[left.y].slice(left.x), 
@@ -152,11 +152,11 @@ function Buffee($, { h, w, s = 4 } = {}) {
       head     = anchor;
     },
 
-    /** Begins a new selection by detaching head from anchor allowing independent movement. */
-    select() {
+    /** Begins a new selection by detaching head from anchor. Optionally sets head position. */
+    select(p = anchor) {
       head   = detached;
-      head.y = anchor.y;
-      head.x = anchor.x;
+      head.y = p.y;
+      head.x = p.x;
     },
 
     /**
@@ -271,10 +271,10 @@ function Buffee($, { h, w, s = 4 } = {}) {
     _: [''],
 
     /**
-     * Index of the last line in the document.
-     * @returns {number} Zero-based index of the last line
+     * Last coordinate in the document.
+     * @returns {Position} Position of last character {y, x}
      */
-    get last() { return this._.length - 1 },
+    get end() { const y = this._.length - 1; return { y, x: this._[y].length } },
 
     /**
      * Primitive insert operation. Inserts lines at position.
@@ -310,7 +310,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
   const View = this.View = {
     /** @type {number} Index of the first visible line (0-indexed) */
     get first() { return vFirst; },
-    set first(v) { vFirst = Math.max(0, Math.min(v, Model.last)); RENDER(); },
+    set first(v) { vFirst = Math.max(0, Math.min(v, Model.end.y)); RENDER(); },
     /** @type {number} Number of visible lines */
     get n() { return vN; },
     set n(v) { const d = v - vN; vN = v; RENDER(d); },
@@ -318,7 +318,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get last() { return vFirst + vN - 1 < Model.last ? vFirst + vN - 1 : Model.last; }
+    get last() { return vFirst + vN - 1 < Model.end.y ? vFirst + vN - 1 : Model.end.y; }
   };
 
   // Add / remove lines, selections, rails as row changes
@@ -434,7 +434,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         } else {
           const edge = Span.bounds(1)[direction > 0 | 0];
           // edge.y is already absolute
-          const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.last));
+          const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.end.y));
 
           Mode.mx = Math.min(edge.x, Model._[targetAbsRow].length);
           Span.cursor({ y: targetAbsRow, x: Mode.mx});
