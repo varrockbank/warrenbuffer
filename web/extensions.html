@@ -124,6 +124,7 @@ editor.Sanitize.line("hello\tworld")   // "hello    world"
 editor.Sanitize.text("a\tb\nc\td")     // sanitize multi-line string
 editor.Sanitize.lines(["a\tb", "c\td"]) // sanitize array of lines</pre>
   <p><strong>Why opt-in?</strong> Buffee's core is minimal. Automatic sanitization adds overhead and may not suit all use cases. Some applications may want to handle tabs differently, preserve certain Unicode, or sanitize upstream.</p>
+  <p><a href="../samples/sample-sanitize.html">Demo →</a></p>
 
   <hr>
 
