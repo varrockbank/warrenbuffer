@@ -68,24 +68,34 @@
   &lt;/div&gt;
 &lt;/div&gt;</pre>
 
-  <h2>3. Include Buffee</h2>
-  <p>Buffee is just a JavaScript function made globally available when you include <a href="../dist/buffee.min.js">dist/buffee.min.js</a></p>
-  <pre>&lt;script src="dist/buffee.min.js"&gt;&lt;/script&gt;</pre>
-
-  <h2>4. Initialize instance </h2>
-  Instantiate Buffee which binds to the HTML element.
-  <pre>const editor = new Buffee(document.getElementById('editor'))
-editor.Model._ = ["Hello, World!"]
-editor.View.render();
+  <h2>3. JavaScript</h2>
+  <p><code>Buffee</code> is a JavaScript function globally available when you include <a href="../dist/buffee.min.js">dist/buffee.min.js</a></p>
+  <pre>&lt;script src="dist/buffee.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    // Binds to the HTML element specified earlier 
+    const instance = new Buffee(document.getElementById('editor'))
+    instance.Model._ = ["Hello, World!"]
+    instance.View.render();
+&lt;/script&gt;
 </pre>
-  <h3>Auto-sizing</h3>
-  <p>By default (when <code>h</code> is omitted), the editor auto-fits to its container height. To disable auto-fit, specify <code>h</code>:</p>
+  <h3>Sizing</h3>
+  <p>By default, the editor auto-fits to fill parent container. Specify a dimension overrides this.</p>
   <pre>new Buffee(el, {})                  // Auto-fit (default)
-new Buffee(el, { h: 20 })           // Fixed row count
-new Buffee(el, { w: 80 })           // Fixed column width
-new Buffee(el, { h: 20, w: 80 })    // Both fixed</pre>
+new Buffee(el, { h: 20 })           // Fixed number of rows
+new Buffee(el, { w: 80 })           // Fixed number of columns
+new Buffee(el, { h: 20, w: 80 })    // Fixed number of rows and columns</pre>
   <p>For auto-fit to work, the container must have a defined height (e.g., <code>height: 100%</code> with sized parent, or explicit pixels).</p>
-  <p><a href="../samples/sample-sizing.html">Demo →</a></p>
+  <p>See more scenarios in <a href="../samples/sample-sizing.html">sizing examples</a>.</p>
+
+   <h3>API</h3>
+  <p>Buffee exposes four namespaces:</p>
+  <pre>instance.Model._          // Array of text lines
+instance.View.render()    // Render after changes
+instance.View.set(n)      // Scroll to line n
+instance.Span.ins(lines)  // Insert at cursor
+instance.Span.del()       // Delete selection
+instance.Mode.i           // Edit mode: 1=write, 0=navigate, -1=read</pre>
+  <p>See full <a href="../docs/api.txt">API reference</a>.</p>
 
 </body>
 </html>
