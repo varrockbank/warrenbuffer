@@ -695,3 +695,52 @@ const $vp9 = fixture.node.querySelectorAll(".buffee-zsel > pre")[9];
 expect($vp9.style.left).toBe("0ch");
 expect($vp9.style.width).toBe("4ch");
 
+
+# Select All (Cmd+A)
+
+## should select all text with Cmd+A on single line
+### Select All on single line
+TYPE "Hello World"
+left with meta
+fixture.press('a').withMetaKey().once();
+EXPECT selection at 0,0-0,11
+
+## should select all text with Cmd+A on multiple lines
+### Select All on multiple lines
+TYPE "First line"
+enter
+TYPE "Second line"
+enter
+TYPE "Third line"
+fixture.press('a').withMetaKey().once();
+EXPECT selection at 0,0-2,10
+
+## should select all from cursor in middle of document
+### Select All from middle position
+TYPE "Line 1"
+enter
+TYPE "Line 2"
+enter
+TYPE "Line 3"
+up
+right 3 times
+fixture.press('a').withMetaKey().once();
+EXPECT selection at 0,0-2,6
+
+## should select all on empty document
+### Select All on empty document
+fixture.press('a').withMetaKey().once();
+// Empty document: cursor at 0,0, selection from 0,0 to 0,0
+expect(fixture.editor.Span.dir).toBe(0);
+EXPECT cursor at 0,0
+
+## should replace all text after Select All
+### Select All then type replaces everything
+TYPE "Old content"
+enter
+TYPE "More old content"
+fixture.press('a').withMetaKey().once();
+TYPE "New"
+expect(fixture).toHaveLines('New');
+EXPECT cursor at 0,3
+

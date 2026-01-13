@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.0.0-alpha.1 [2026-01-13]  gz: 2536 / 2.48 KB (+13), br: 2345 / 2.29 KB (+12), min: 5649 / 5.52 KB (47)
+- feat: add Select All (Cmd+A)
+
 ** 15.10.0-alpha.1 [2026-01-13]  gz: 2523 / 2.46 KB (0), br: 2333 / 2.28 KB (0), min: 5602 / 5.47 KB (0)
 - api: add Model.end returning last coordinate {y, x}
 - api: Span.select() accepts optional position for head
