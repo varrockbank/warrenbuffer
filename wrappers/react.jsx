@@ -129,7 +129,6 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
       ref={containerRef}
       className={`buffee ${themeClass} ${className}`.trim()}
     >
-      <textarea className="buffee-clip" aria-hidden="true" />
       {statusTop && statusBar}
       <div className="no-select buffee-pane">
         {!gutterRight && gutter}

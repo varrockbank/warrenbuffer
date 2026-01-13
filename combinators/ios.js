@@ -1,7 +1,12 @@
 /**
  * @fileoverview BuffeeIOS - iOS/touch support extension for Buffee.
  * Enables touch interactions and on-screen keyboard input on iOS devices.
- * @version 1.0.0
+ * @version 1.0.1
+ *
+ * TODO: This extension should dynamically add a clipboard bridge element
+ * (hidden textarea) and override the copy/cut behavior. The clipboard bridge
+ * that was removed from core in v15.9.0 was originally built for iOS,
+ * which requires a real DOM selection to fire clipboard events.
  */
 
 /**

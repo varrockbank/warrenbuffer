@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.8.3-alpha.1';
+  this.v = '15.9.0-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -30,8 +30,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
   const [ch    , padding ,  railInit , railPad  ] =
         ['cell','padding','rail-init','rail-pad']
         .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
-  const [$pane ,$lines ,$caret ,$clip ,$rail ,$ztxt ,$zsel ] =
-        ['pane','lines','caret','clip','rail','ztxt','zsel']
+  const [$pane ,$lines ,$caret ,$rail ,$ztxt ,$zsel ] =
+        ['pane','lines','caret','rail','ztxt','zsel']
         .map(q => $.querySelector('.buffee-' + q));
   let lRect = $lines.getBoundingClientRect();
 
@@ -381,18 +381,15 @@ function Buffee($, { h, w, s = 4 } = {}) {
     const text = e.clipboardData.getData('text/plain');
     if (text) Span.ins(text.split('\n'));
   });
-  // Triggered by a keydown paste event. a copy event handler can read the clipboard
-  // by the standard security model. Meanwhile, we don't have to make the editor "selectable".
-  // Listen on $clip since that's where focus moves on Ctrl+C/X.
-  $clip.addEventListener('copy', e => {
-    e.preventDefault(); // take over the clipboard contents                   
+  // Modern browsers fire copy/cut events on any focused element.
+  $lines.addEventListener('copy', e => {
+    e.preventDefault();
     e.clipboardData.setData('text/plain', Span._.join('\n'));
   });
-  $clip.addEventListener('cut', e => {
-    e.preventDefault(); // take over the clipboard contents                   
+  $lines.addEventListener('cut', e => {
+    e.preventDefault();
     e.clipboardData.setData('text/plain', Span._.join('\n'));
     Span.del();
-    $lines.focus({ preventScroll: 1 });     // Return focus to editor
   });
 
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
@@ -402,8 +399,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
     const metaKeys = {
       v: () => {},
-      c: () => { $clip.focus({ preventScroll: 1 }); $clip.select(); },
-      x: () => { $clip.focus({ preventScroll: 1 }); $clip.select(); },
+      c: () => {},
+      x: () => {},
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
       Backspace: () => { Span.del() },

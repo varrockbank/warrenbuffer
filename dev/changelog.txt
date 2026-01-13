@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 15.9.0-alpha.1 [2026-01-13]  gz: 2531 / 2.47 KB (-38), br: 2334 / 2.28 KB (-32), min: 5619 / 5.49 KB (-110)
+- refactor: remove $clip clipboard bridge - modern browsers fire copy/cut on any focused element
+- breaking: buffee-clip textarea no longer required in HTML template
+- update: all wrappers (React, Vue, Svelte), samples, tests, and CSS
+
 ** 15.8.3-alpha.1 [2026-01-13]  gz: 2569 / 2.51 KB (-1), br: 2366 / 2.31 KB (-2), min: 5729 / 5.59 KB (-3)
 - perf: use preventScroll:1 instead of preventScroll:true
 

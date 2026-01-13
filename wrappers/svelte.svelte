@@ -154,7 +154,6 @@
   bind:this={container}
   class="buffee {themeClass} {className}"
 >
-  <textarea class="buffee-clip" aria-hidden="true"></textarea>
   {#if showStatus && statusTop}{@render statusBar()}{/if}
   <div class="no-select buffee-pane">
     {#if showGutter && !gutterRight}

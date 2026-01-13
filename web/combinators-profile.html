@@ -19,7 +19,6 @@
       font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
     }
     .no-select { user-select: none; }
-    .buffee-clip {
       position: fixed; left: 0; top: 1px;
       width: 0; height: 1px; opacity: 0; pointer-events: none;
     }
@@ -204,7 +203,6 @@
     <!-- Hidden test editor -->
     <div id="test-container" style="position: absolute; left: -9999px; visibility: hidden;">
       <div class="buffee no-select" id="test-editor">
-        <textarea class="buffee-clip" aria-hidden="true"></textarea>
         <div class="no-select buffee-pane" style="display: flex">
           <div class="buffee-rail"></div>
           <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
@@ -252,7 +250,6 @@
       const container = document.getElementById('test-container');
       container.innerHTML = `
         <div class="buffee no-select" id="test-editor">
-          <textarea class="buffee-clip" aria-hidden="true"></textarea>
           <div class="no-select buffee-pane" style="display: flex">
             <div class="buffee-rail"></div>
             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
