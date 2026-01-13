@@ -15,10 +15,13 @@
 
   <h1>Getting Started</h1>
 
-  <h2>1. Required CSS</h2>
-  <p>Include the css found in <a href="../style.css">style.css</a> for structural styles, then define your colors:</p>
-  <pre>&lt;link rel="stylesheet" href="style.css"&gt;
-&lt;style&gt;
+  <h2>1. Core CSS</h2>
+  <p>Include <a href="../style.css">style.css</a> for structural styles:</p>
+  <pre>&lt;link rel="stylesheet" href="style.css"&gt;</pre>
+
+  <h3>1a. Custom Theme</h3>
+  <p>Define your own colors:</p>
+  <pre>&lt;style&gt;
 .buffee {
   background-color: #282C34;
   color: #B2B2B2;
@@ -35,6 +38,12 @@
   color: #636D83;
 }
 &lt;/style&gt;</pre>
+
+  <h3>1b. Pre-built Theme</h3>
+  <p>Or import one of the <a href="themes.html">pre-built themes</a>:</p>
+  <pre>&lt;link rel="stylesheet" href="themes/theme-eva.css"&gt;</pre>
+  <p>Add the theme class to your editor element:</p>
+  <pre>&lt;div class="buffee buffee-themepack1-eva" id="editor"&gt;</pre>
 
   <h2>2. Required HTML Structure</h2>
   <p>Add HTML outlined in <a href="template.html">template.html</a>.</p>
