@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.0-alpha.1';
+  this.v = '15.9.1-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -377,9 +377,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
   // Reading clipboard from the keydown listener involves a different security model.
   $lines.addEventListener('paste', e => {
-    e.preventDefault(); // stop browser from inserting raw clipboard text
-    const text = e.clipboardData.getData('text/plain');
-    if (text) Span.ins(text.split('\n'));
+    e.preventDefault();
+    Span.ins(e.clipboardData.getData('text/plain').split('\n'));
   });
   // Modern browsers fire copy/cut events on any focused element.
   $lines.addEventListener('copy', e => {

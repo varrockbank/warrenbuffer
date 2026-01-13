@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.9.1-alpha.1 [2026-01-13]  gz: 2526 / 2.47 KB (-5), br: 2330 / 2.28 KB (-3), min: 5606 / 5.47 KB (-13)
+- perf: simplify paste handler (empty clipboard paste is no-op)
+
 ** 15.9.0-alpha.1 [2026-01-13]  gz: 2531 / 2.47 KB (-38), br: 2334 / 2.28 KB (-32), min: 5619 / 5.49 KB (-110)
 - refactor: remove $clip clipboard bridge - modern browsers fire copy/cut on any focused element
 - breaking: buffee-clip textarea no longer required in HTML template
