@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/reset.css">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../themes/theme-chelsey.css">
+  <link rel="stylesheet" href="../themes/theme-kai.css">
 </head>
 <body class="sample">
   <nav id="nav"></nav>
@@ -66,6 +67,38 @@ TUI.addButton({ row: 1, col: 2, label: ' OK ', border: true })</pre>
 TUI.addPrompt({ row: 1, col: 2, width: 30, title: 'Search' })
 TUI.handleKeyDown(e.key)</pre>
   <div class="buffee buffee-themepack1-chelsey" id="prompt-demo">
+    <textarea class="buffee-clip"></textarea>
+    <div class="no-select buffee-pane">
+      <div class="buffee-rail"></div>
+      <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
+    </div>
+    <div class="buffee-status">
+      <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
+      <div class="buffee-status-right">
+        Ln <span class="buffee-head-row"></span>, Col <span class="buffee-head-col"></span>
+        <span class="buffee-status-divider">|</span>
+        <span class="buffee-spaces"></span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Interactive Demo</h2>
+  <p>Toggle TUI mode, highlight elements, and add custom buttons.</p>
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
+    <button id="tui-toggle-btn">Enable TUI Mode</button>
+    <button id="tui-highlight-toggle-btn" class="hidden">Highlight All</button>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
+    <label>Row:</label>
+    <input type="number" id="tui-row" value="0" style="width: 60px;">
+    <label>Col:</label>
+    <input type="number" id="tui-col" value="0" style="width: 60px;">
+    <label>Content:</label>
+    <input type="text" id="tui-content" value="Foobar" style="width: 120px;">
+    <button id="tui-add-btn">Add Element</button>
+  </div>
+  <p><kbd>Tab</kbd> to next element. <kbd>Enter</kbd> to activate.</p>
+  <div class="buffee buffee-themepack1-kai" id="interactive-demo">
     <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-pane">
       <div class="buffee-rail"></div>
@@ -175,6 +208,168 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
     scrollEl.addEventListener('keydown', (e) => {
       if (e.key === 'Tab') { e.preventDefault(); scrollEditor.TUI.nextElement(); }
       else { e.preventDefault(); scrollEditor.TUI.handleKeyDown(e.key); }
+    });
+
+    // Interactive Demo
+    const interactiveEl = document.getElementById('interactive-demo');
+    const interactiveEditor = BuffeeTUI(BuffeeStatusLine(new Buffee(interactiveEl, { h: 15 })));
+
+    const fileTemplate = `
+                ║
+─┤░░░░Files░░░├─╠══════════════════════════════════════════════════
+════════════════╣
+                ║
+                ║
+                ║
+                ║
+                ║
+                ║
+                ║
+                ║
+`;
+
+    const files = {
+      'main.js': [
+        'function main() {',
+        '  console.log("Hello");',
+        '  init();',
+        '}',
+        '',
+        'main();'
+      ],
+      'styles.css': [
+        'body {',
+        '  margin: 0;',
+        '  font-family: sans;',
+        '}',
+        '.btn { color: blue; }'
+      ],
+      'config.json': [
+        '{',
+        '  "name": "myapp",',
+        '  "version": "1.0",',
+        '  "port": 3000',
+        '}'
+      ],
+      'README.md': [
+        '# My Project',
+        '',
+        'A demo application.',
+        '',
+        '## Install',
+        'npm install'
+      ],
+      'index.html': [
+        '<!DOCTYPE html>',
+        '<html>',
+        '<head>',
+        '  <title>App</title>',
+        '</head>',
+        '<body></body>',
+        '</html>'
+      ],
+      'data.csv': [
+        'name,age,city',
+        'Alice,30,NYC',
+        'Bob,25,LA',
+        'Carol,35,Chicago'
+      ],
+      '.env': [
+        'API_KEY=sk-xxx',
+        'DEBUG=true',
+        'PORT=8080'
+      ],
+      'notes.txt': [
+        'TODO:',
+        '- Fix bug #42',
+        '- Add tests',
+        '- Update docs'
+      ]
+    };
+
+    const fileElementIds = {};
+
+    function loadFile(name) {
+      const fileNames = Object.keys(files);
+      fileNames.forEach((fname, i) => {
+        if (fileElementIds[fname]) {
+          interactiveEditor.TUI.removeElement(fileElementIds[fname]);
+        }
+        const label = fname === name ? '> ' + fname : '  ' + fname;
+        fileElementIds[fname] = interactiveEditor.TUI.addButton({
+          row: i + 3,
+          col: 2,
+          label,
+          onActivate: () => loadFile(fname)
+        });
+      });
+
+      const fileIndex = fileNames.indexOf(name);
+      if (fileIndex !== -1) interactiveEditor.TUI.setCurrentIndex(fileIndex);
+
+      const lines = interactiveEditor.Model._;
+      const content = files[name] || [];
+      for (let i = 0; i < lines.length; i++) {
+        if (i === 1 || i === 2) continue;
+        const dividerPos = lines[i].search(/[║╠╣]/);
+        if (dividerPos === -1) continue;
+        let right;
+        if (i === 0) {
+          lines[i] = '                ║' + ' ' + name;
+          continue;
+        }
+        const left = lines[i].slice(0, dividerPos + 1);
+        if (i >= 3) {
+          right = ' ' + (content[i - 3] || '');
+        }
+        lines[i] = left + right;
+      }
+      interactiveEditor.TUI.enabled = true;
+    }
+
+    interactiveEditor.Model._ = fileTemplate.trim().split('\n');
+    loadFile('main.js');
+
+    interactiveEditor.TUI.addPrompt({
+      row: 12,
+      col: 18,
+      width: 40,
+      title: 'Command',
+      onActivate: (el) => alert('Command: ' + el.input)
+    });
+
+    interactiveEditor.TUI.enabled = true;
+
+    const tuiToggleBtn = document.getElementById('tui-toggle-btn');
+    const tuiHighlightBtn = document.getElementById('tui-highlight-toggle-btn');
+    let tuiHighlighted = true;
+
+    tuiToggleBtn.textContent = 'Disable TUI Mode';
+    tuiHighlightBtn.classList.remove('hidden');
+    tuiHighlightBtn.textContent = 'Unhighlight All';
+
+    tuiToggleBtn.addEventListener('click', () => {
+      interactiveEditor.TUI.enabled = !interactiveEditor.TUI.enabled;
+      tuiToggleBtn.textContent = interactiveEditor.TUI.enabled ? 'Disable TUI Mode' : 'Enable TUI Mode';
+      tuiHighlightBtn.classList.toggle('hidden', !interactiveEditor.TUI.enabled);
+    });
+
+    tuiHighlightBtn.addEventListener('click', () => {
+      tuiHighlighted = !tuiHighlighted;
+      interactiveEditor.TUI.setHighlight(tuiHighlighted);
+      tuiHighlightBtn.textContent = tuiHighlighted ? 'Unhighlight All' : 'Highlight All';
+    });
+
+    document.getElementById('tui-add-btn').addEventListener('click', () => {
+      const row = parseInt(document.getElementById('tui-row').value) || 0;
+      const col = parseInt(document.getElementById('tui-col').value) || 0;
+      const label = document.getElementById('tui-content').value || 'Button';
+      interactiveEditor.TUI.addButton({ row, col, label, onActivate: () => { alert(label + ' clicked'); } });
+    });
+
+    interactiveEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') { e.preventDefault(); interactiveEditor.TUI.nextElement(); }
+      else { e.preventDefault(); interactiveEditor.TUI.handleKeyDown(e.key); }
     });
 
     // Focus first editor

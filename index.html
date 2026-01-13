@@ -33,7 +33,7 @@
       .then(r => r.text())
       .then(html => document.getElementById('nav').innerHTML = html);
   </script>
-  <p><strong>Buffee, the text slayer</strong> <a href="dev/changelog.txt" id="buffee-version" style="font-family: monospace"></a> — embeddable terminal-style text editor for netizens — compact, fast, unbounded</p>
+  <p><strong>Buffee, the text slayer</strong> <a href="dev/changelog.txt" id="buffee-version" style="font-family: monospace"></a> — embeddable terminal-like text editor for netizens — compact, fast, unbounded</p>
 
   <div class="point">
     <div>
@@ -88,50 +88,49 @@
 
     <!-- About -->
     <section>
-      <h3>Inspired by the terminal</h3>
+      <h3>Blazing fast and minimalist text interface, Inspired by Vim and the terminal: </h3>
+      <p>The core is a rendering engine of monospace plaintext in grid-layout.</p>
+      <p>As a text buffer, Buffee is efficient by maintaining a viewport with a small DOM footprint. Performance does not degrade with the length of the text.
+        In fact, this project descend from an initiative to inspect massive distributed server logs in browser, distilling breakthroughs in that space.
+      </p>
+
+      <p>To maximize performance, the implementation tightly couples text editing capabilities with the rendering and text buffering core.
+      </p>
+
       <p>
-        This microlibrary is inspired by the spartan performance and minimalism of terminal interfaces and Vim.
+        Credit to the wizards of V8. Compactness was feasible with V8 arrays being viable as a text buffer. 
+        Compare with complex structures, plural, needed by native editors, e.g. <a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">piecetable</a>. 
+        Content and syntax aware considerations aside, Buffee rivals the performance of native text editors. 
+      </p>  
+
+      <h3>Combinator-oriented extension system, adopting Neovim's modular ethos</h3>
+      <p>
+        Buffee is designed to be hackable with a minimal but powerful API: <a href="docs/api.txt">API cheatsheet</a></h3>
+      <p>
+        The extension system is with combinators - functions that take as input a buffee instance and return a buffee instance with more functionality.
+        This is novel because, unlike other text editors, Buffee is just a callable function that you can readily access and reprogram.
       </p>
-      <p>Buffee is efficient as a rendering engine for monospace plaintext in grid-layout.
-        The grid being viewport into an arbitrarily large buffer of text lines.
-      </p>
-      <p>To maximize performance, the core implementation tighly couples text editing operations with rendering.
-        The project originated as a way to inspect massive, distributed server log files directly in the browser.
-        Breakthroughs in this problem space were distilled down to Buffee. 
-        The key optimization is sidestepping DOM bottlenecks and avoiding JavaScript fatigue. 
+      <p>The Neovim paradigm is to be modular, consisting of many 
+        single-purpose extensions. Buffee follows the same philosophy, having a lightweight core with 
+        extensions that can be chained and combined, hence combinator.
       </p>
       <p>
-        TUI capabilities ship as an extension. One day we will liberate OrgMode from the text-based-UI, err operating system, that is Emacs. 
-        Terminal-based agentic coding tools have also ignited interest in TUIs. 
-        Where <a href="https://github.com/dankamongmen/notcurses">notcurses</a> brings browser bling to the terminal, Buffee completes the circle 
-        by ushering in 20th century paradigms to the modern web.  
+        Explore: <a href="web/combinators.html">combinators</a>
       </p>
-      </p>
-      <p>
-        Much is owed to the wizards of V8. Compactness was made possible because V8 arrays proved instaneously fast. Compare with complex 
-        structures, plural, needed by native editors, e.g. <a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">piecetable</a>. 
-        Content/syntax-aware considerations aside, Buffee rivals titans of the text editor industry. 
-      </p>
+   
     </section>
 
     <!-- TUI Mode Demo -->
     <section>
-      <h3>TUI Mode</h3>
-      <p>Terminal UI mode placing interactive elements in the buffer. <kbd>Tab</kbd> to next element. <kbd>Enter</kbd> to activate.</p>
-
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
-        <button id="tui-toggle-btn">Enable TUI Mode</button>
-        <button id="tui-highlight-toggle-btn" class="hidden">Highlight All</button>
-      </div>
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
-        <label>Row:</label>
-        <input type="number" id="tui-row" value="0" style="width: 60px;">
-        <label>Col:</label>
-        <input type="number" id="tui-col" value="0" style="width: 60px;">
-        <label>Content:</label>
-        <input type="text" id="tui-content" value="Foobar" style="width: 120px;">
-        <button id="tui-add-btn">Add Element</button>
-      </div>
+      <h3>TUI</h3>
+        <p>
+        TUI mode ship as a <a href="web/combinators.html">combinator</a>.
+         As <a href="https://github.com/dankamongmen/notcurses">notcurses</a> brings browser bling to the terminal, Buffee completes the circle 
+        by ushering in 20th century paradigms to the modern web.  
+        Terminal-based agentic coding tools have re-ignited interest in TUIs. 
+        Personally, I'm keen on liberating OrgMode from the text-based-UI, err operating system, that is Emacs. 
+      </p>
+      <p><kbd>Tab</kbd> to next element. <kbd>Enter</kbd> to activate.</p>
       <div class="buffee buffee-themepack1-kai" id="tui-demo">
         <textarea class="buffee-clip" aria-hidden="true"></textarea>
         <div class="no-select buffee-pane">
@@ -154,10 +153,10 @@
       </div>
     </section>
 
+
     <!-- Dynamic Data Demo -->
     <section>
-      <h3>HackerNews Front Page</h3>
-      <p>Example of loading data from APIs.</p>
+    <h3>Live HackerNews Front Page</h3>
     <div class="buffee buffee-themepack1-hn" id="hackernews">
       <textarea class="buffee-clip" aria-hidden="true"></textarea>
       <div class="no-select buffee-pane">
@@ -366,31 +365,6 @@ const fileTemplate = `
 
     // Enable TUI mode by default
     tuiDemo.TUI.enabled = true;
-    document.getElementById('tui-toggle-btn').textContent = 'Disable TUI Mode';
-
-    const tuiHighlightBtn = document.getElementById('tui-highlight-toggle-btn');
-    tuiHighlightBtn.classList.remove('hidden');
-    tuiHighlightBtn.textContent = 'Unhighlight All';
-    let tuiHighlighted = true;
-
-    document.getElementById('tui-toggle-btn').addEventListener('click', () => {
-      tuiDemo.TUI.enabled = !tuiDemo.TUI.enabled;
-      document.getElementById('tui-toggle-btn').textContent = tuiDemo.TUI.enabled ? 'Disable TUI Mode' : 'Enable TUI Mode';
-      tuiHighlightBtn.classList.toggle('hidden', !tuiDemo.TUI.enabled);
-    });
-
-    tuiHighlightBtn.addEventListener('click', () => {
-      tuiHighlighted = !tuiHighlighted;
-      tuiDemo.TUI.setHighlight(tuiHighlighted);
-      tuiHighlightBtn.textContent = tuiHighlighted ? 'Unhighlight All' : 'Highlight All';
-    });
-
-    document.getElementById('tui-add-btn').addEventListener('click', () => {
-      const row = parseInt(document.getElementById('tui-row').value) || 0;
-      const col = parseInt(document.getElementById('tui-col').value) || 0;
-      const label = document.getElementById('tui-content').value || 'Button';
-      tuiDemo.TUI.addButton({ row, col, label });
-    });
 
     // Bind Tab to nextElement, other keys to handleKeyDown in TUI mode
     tuiDemoElement.addEventListener('keydown', (e) => {
