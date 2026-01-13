@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.8.2-alpha.1 [2026-01-13]  gz: 2570 / 2.51 KB (0), br: 2368 / 2.31 KB (+1), min: 5732 / 5.60 KB (0)
+- fix(css): rail clipping (add margin + overflow:hidden)
+
 ** 15.8.1-alpha.1 [2026-01-13]  gz: 2570 / 2.51 KB (-3), br: 2368 / 2.31 KB (+4), min: 5732 / 5.60 KB (-14)
 - fix: viewport scroll regression (use $lines.clientHeight, inline View.N, init vN=-1 for auto-fit)
 
