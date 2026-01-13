@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.9.5-alpha.1 [2026-01-13]  gz: 2490 / 2.43 KB (-7), br: 2311 / 2.26 KB (+1), min: 5539 / 5.41 KB (0)
+- golf: move mvW regexes from default params to local consts
+
 ** 15.9.4-alpha.1 [2026-01-13]  gz: 2497 / 2.44 KB (-1), br: 2311 / 2.26 KB (-2), min: 5539 / 5.41 KB (-4)
 - golf: remove braces from single-expression arrow functions
 

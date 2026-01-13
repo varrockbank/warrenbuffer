@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.4-alpha.1';
+  this.v = '15.9.5-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -93,13 +93,15 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /**
      * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
      */
-    mvW(dir, spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u) {
+    mvW(dir) {
       const s = Model._[head.y], n = s.length, fwd = dir > 0;
       if (head.x !== (fwd ? n : 0)) {
         // Move within line
-        let j = head.x;
-        const ok   = fwd ? () => j<n : () => j>0 ;
-        const step = fwd ? () => j++ : () => j-- ;
+        let j         = head.x;
+        const spaceRe = /\s/;
+        const wordRe  = /[\p{L}\p{Nd}_]/u;
+        const ok      = fwd ? () => j<n : () => j>0 ;
+        const step    = fwd ? () => j++ : () => j-- ;
         if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
         else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
