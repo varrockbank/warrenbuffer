@@ -13,7 +13,7 @@
  *     }
  *   }, []);
  *
- *   return <BuffeeEditor ref={editorRef} rows={10} theme="eva" />;
+ *   return <BuffeeEditor ref={editorRef} h={10} theme="eva" />;
  * }
  */
 
@@ -22,9 +22,9 @@ import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react
 /**
  * React component wrapper for Buffee editor.
  * @param {Object} props
- * @param {number} [props.rows] - Fixed number of visible lines
- * @param {number} [props.cols] - Fixed number of text columns
- * @param {number} [props.spaces=4] - Spaces per tab
+ * @param {number} [props.h] - Fixed number of visible lines
+ * @param {number} [props.w] - Fixed number of text columns
+ * @param {number} [props.s=4] - Spaces per tab
  * @param {string} [props.theme] - Theme name (e.g., 'eva', 'nord', 'gruv')
  * @param {string} [props.className] - Additional CSS classes
  * @param {boolean} [props.showGutter=true] - Show line numbers
@@ -34,9 +34,9 @@ import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react
  */
 const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
   const {
-    rows,
-    cols,
-    spaces = 4,
+    h,
+    w,
+    s = 4,
     theme,
     className = '',
     showGutter = true,
@@ -57,7 +57,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     if (!containerRef.current || typeof Buffee === 'undefined') return;
 
     const el = containerRef.current;
-    const config = { rows, cols, spaces };
+    const config = { h, w, s };
 
     let editor = new Buffee(el, config);
 
@@ -83,7 +83,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
       }
       editorRef.current = null;
     };
-  }, [rows, cols, spaces]);
+  }, [h, w, s]);
 
   const themeClass = theme ? `buffee-themepack1-${theme}` : '';
 

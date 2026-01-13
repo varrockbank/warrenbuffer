@@ -28,6 +28,16 @@ See `web/template.html` for the required HTML structure. Missing any element wil
 - `samples/*.html` (all sample files)
 - `web/themes.html`
 
+## API Changes
+
+**When changing the Buffee API (config options, method names, namespaces), also update:**
+- `wrappers/react.jsx` - React component props and config
+- `wrappers/svelte.svelte` - Svelte component props and config
+- `wrappers/vue.js` - Vue component props and config
+- `docs/api.txt` - API reference
+- `web/getting-started.html` - Usage examples
+- `web/wrappers.html` - Wrapper documentation
+
 ## Cursor Model (Vim-style)
 
 - **Cursor sits ON a character**, not between characters
