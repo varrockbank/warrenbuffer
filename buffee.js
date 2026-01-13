@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.7.4-alpha.1';
+  this.v = '15.8.0-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -65,7 +65,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.x;
-        if (head.y < View.first || head.y > View.last) View.set(dir > 0 ? head.y - View.n + 1 : head.y);
+        if (head.y < View.first || head.y > View.last) View.first = dir > 0 ? head.y - View.n + 1 : head.y;
         else render();
       }
     },
@@ -108,8 +108,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
       } else if (fwd ? head.y < Model.last : head.y > 0) {
         // At edge - move to adjacent line
         head.x = fwd ? 0 : Model._[--head.y].length;
-        if (fwd && ++head.y > View.last) View.set(head.y - View.n + 1);
-        else if (!fwd && head.y < View.first) View.set(head.y);
+        if (fwd && ++head.y > View.last) View.first = head.y - View.n + 1;
+        else if (!fwd && head.y < View.first) View.first = head.y;
         else render();
       }
     },
@@ -183,7 +183,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
                maxCol = head.x  = lines[lines.length - 1].length;
         } else maxCol = head.x += lines[0]?.length || 0;
       }
-      if (head.y > View.last) View.set(head.y - View.n + 1);
+      if (head.y > View.last) View.first = head.y - View.n + 1;
       else render();
     },
 
@@ -199,7 +199,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         // At start of line - delete newline (join with previous line)
         head.x = Model._[head.y - 1].length;
         Model.del(head.y - 1, head.x, head.y, 0);
-        if (--head.y < View.first) View.set(head.y);
+        if (--head.y < View.first) View.first = head.y;
         else render();
       }
     },
@@ -300,32 +300,21 @@ function Buffee($, { h, w, s = 4 } = {}) {
    * Virtual viewport dictacting which portion of document is seen and rendered.
    * @namespace View
    */
+  let vFirst = 0, vN = 0;
   const View = this.View = {
     /** @type {number} Index of the first visible line (0-indexed) */
-    first: 0,
+    get first() { return vFirst; },
+    set first(v) { vFirst = Math.max(0, Math.min(v, Model.last)); RENDER(); },
     /** @type {number} Number of visible lines */
-    n: 0,
+    get n() { return vN; },
+    set n(v) { const d = v - vN; vN = v; RENDER(d); },
     /** @type {number} Number of DOM line containers. +1 if auto-fit (no h specified) */
-    get N() { return this.n + !h; },
-
+    get N() { return vN + !h; },
     /**
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get last() { return Math.min(this.first + this.n - 1, Model.last); },
-
-    /**
-     * Sets the viewport position and optionally size.
-     * @param {number} start - Line index to start at (0-indexed)
-     * @param {number} [size] - Number of lines to display (optional)
-     */
-    set(first, size = this.n) {
-      const delta = size - this.n;
-      this.n = size;
-      this.first = Math.max(0, Math.min(first, Model.last));
-      RENDER(delta);
-    },
-
+    get last() { return vFirst + vN - 1 < Model.last ? vFirst + vN - 1 : Model.last; }
   };
 
   // Add / remove lines, selections, rails as row changes
@@ -386,8 +375,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
   // Set container height if h specified (don't use flex: 1). TODO: perhaps can just set on parent
   if (h) for (const [, , p] of viewportLayers) p && (p.style.height = h * ch + 'px');
   // Initial sizing render
-  const resize = delta => {View.n += delta, RENDER(delta)};
-  h ? resize(h) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / ch) - View.n)}).observe($pane);
+  h ? View.n = h : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); View.n = Math.floor($pane.clientHeight / ch)}).observe($pane);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $lines.addEventListener('paste', e => {
@@ -452,8 +440,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
           Span.cursor({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
-          if (targetAbsRow < View.first) View.set(targetAbsRow);
-          else if (targetAbsRow > View.last) View.set(targetAbsRow - View.n + 1);
+          if (targetAbsRow < View.first) View.first = targetAbsRow;
+          else if (targetAbsRow > View.last) View.first = targetAbsRow - View.n + 1;
           else render();
         }
       } else { // no meta key.

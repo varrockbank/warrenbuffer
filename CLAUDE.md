@@ -12,7 +12,7 @@ BuffeeStatusLine(new Buffee(el, { h: 20, w: 80, s: 4 }));
 
 editor.Model._ = ["line1", "line2"];  // Set content (array of lines)
 editor.View.render();                 // Render after content changes
-editor.View.set(5);                   // Scroll to line index 5
+editor.View.first = 5;                // Scroll to line index 5
 editor.Span.ins(["text"]);            // Insert at cursor
 editor.Span.cursor({y:0,x:0});        // Move cursor
 ```

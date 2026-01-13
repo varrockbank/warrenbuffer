@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.8.0-alpha.1 [2026-01-13]  gz: 2573 / 2.51 KB (0), br: 2364 / 2.31 KB (-7), min: 5746 / 5.61 KB (0)
+- api: View.first and View.n are now setters (replaces View.set() and View.size())
+
 ** 15.7.4-alpha.1 [2026-01-13]  gz: 2575 / 2.51 KB (+3), br: 2371 / 2.32 KB (-2), min: 5744 / 5.61 KB (-2)
 - refactor: rename tail→anchor, detachedHead→detached for clarity
 
