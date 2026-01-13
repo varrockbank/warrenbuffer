@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.5.1-alpha.1 [2026-01-13]  gz: 2588 / 2.53 KB (+3), br: 2385 / 2.33 KB (-3), min: 5807 / 5.67 KB (0)
+- perf: optimize hotpath, isolate regex for move word until they are needed
+
 ** 15.5.0-alpha.1 [2026-01-13]  gz: 2585 / 2.52 KB (-4), br: 2388 / 2.33 KB (-4), min: 5807 / 5.67 KB (-6)
 - config: fixed width/height specified with 'w' and 'h' instead 'cols' and 'rows'
 

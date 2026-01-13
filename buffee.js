@@ -7,10 +7,10 @@
 /**
  * Creates a new Buffee editor instance bound to $.
  * @constructor
- * @param {HTMLElement} $ - Container element
- * @param {Object} [config={}] - Configuration options
- * @param {number} [config.h] - Fixed visible lines (omit to auto-fit)
- * @param {number} [config.w] - Fixed text columns (omit to fill parent)
+ * @param {HTMLElement} $       - Container element
+ * @param {Object} [config={} ] - Configuration options
+ * @param {number} [config.h  ] - Fixed visible lines (omit to auto-fit)
+ * @param {number} [config.w  ] - Fixed text columns (omit to fill parent)
  * @param {number} [config.s=4] - Spaces per tab/indentation
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
@@ -18,9 +18,8 @@
  * editor.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.5.0-alpha.1';
+  this.v = '15.5.1-alpha.1';
   this.$ = $;
-  const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
   // In case where we have cursor, we want head === tail.
@@ -96,7 +95,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /**
      * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
      */
-    mvW(dir) {
+    mvW(dir, spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u) {
       const s = Model._[head.y], n = s.length, fwd = dir > 0;
       if (head.x !== (fwd ? n : 0)) {
         // Move within line
