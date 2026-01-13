@@ -29,7 +29,7 @@ Model
   ._                 text buffer. Assumes sanitized '\n', '\t', zero/multi-width chars
   .ins               primitive insert
   .del               primitive del
-  .last              index of last line of Model
+  .end               last coordinate {y, x} in model
 
 When updating buffer, call render if necessary. If you append to ._ and the new
 lines are out of view, then a render would not be necessary. While we could have
@@ -68,7 +68,7 @@ Span
   .mvW(value)        move by words     : 1 next  , -1 prev
   .del()             delete text Span-wise
   .ins(lines)        insert lines (string[]) Span-wise
-  .select()          make selection
+  .select(pos)       make selection, optionally set head to {y, x}
   .cursor(pos)       make cursor, optionally at {y, x}
   .dent(value)       indent or unindent : 1 indent, -1 unindent
 
@@ -85,10 +85,14 @@ mutate these directly for surgical adjustments without going through the API.
   head.x = 10;
   editor.View.render();
 
-  // Expand selection by adjusting anchor
+  // Expand selection by adjusting head
   editor.Span.select();                    // detach head from anchor
   const [h, a] = editor.Span.bounds();
   h.y = 10;                                // move head to line 10
+  editor.View.render();
+
+  // Or set head position directly via select()
+  editor.Span.select(editor.Model.end);    // select to end of document
   editor.View.render();
 
 When dir === 0 (cursor mode), head and anchor are the same object reference.
