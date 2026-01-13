@@ -1,9 +1,14 @@
 /**
  * @fileoverview React wrapper for Buffee editor
- * @version 1.1.0
+ * @version 1.2.0
  *
  * Required: Include buffee.js and style.css before using this component.
- * Optional: Include extensions (e.g., statusline.js) and theme CSS.
+ * Optional: Include extensions and theme CSS.
+ *
+ * Extensions: Pass an array of extension functions via the `extensions` prop.
+ * Extensions are applied in order. Import or load them globally first:
+ *   import BuffeeHistory from 'buffee/extensions/history.js';
+ *   <BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} />
  *
  * Themes: The `theme` prop adds a CSS class (e.g., `buffee-themepack1-eva`).
  * You must load the theme CSS separately:
@@ -40,6 +45,7 @@ import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react
  * @param {boolean} [props.showGutter=true] - Show line numbers
  * @param {boolean} [props.showStatus=true] - Show status bar
  * @param {string[]} [props.lines] - Initial content as array of lines (pre-sanitized)
+ * @param {Function[]} [props.extensions] - Array of extension functions to apply
  * @param {Function} [props.onReady] - Callback when editor is initialized
  */
 const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
@@ -54,6 +60,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     showStatus = true,
     statusTop = false,
     lines,
+    extensions = [],
     onReady
   } = props;
 
@@ -71,8 +78,13 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
 
     let editor = new Buffee(el, config);
 
-    // Add status line extension if available
-    if (showStatus && typeof BuffeeStatusLine !== 'undefined') {
+    // Apply extensions in order
+    for (const ext of extensions) {
+      editor = ext(editor);
+    }
+
+    // Add status line extension if available and not already in extensions
+    if (showStatus && typeof BuffeeStatusLine !== 'undefined' && !extensions.includes(BuffeeStatusLine)) {
       editor = BuffeeStatusLine(editor);
     }
     editorRef.current = editor;
