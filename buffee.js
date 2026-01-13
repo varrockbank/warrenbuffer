@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.3-alpha.1';
+  this.v = '15.9.4-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -397,8 +397,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
     const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey;
 
     const special = {
-      Backspace: () => { Span.del() },
-      Enter: () => { Span.ins(['', '']) } ,
+      Backspace: () => Span.del(),
+      Enter: () => Span.ins(['', '']),
       Tab: () => {
         e.preventDefault();
         (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]);

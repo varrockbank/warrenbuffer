@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.9.4-alpha.1 [2026-01-13]  gz: 2497 / 2.44 KB (-1), br: 2311 / 2.26 KB (-2), min: 5539 / 5.41 KB (-4)
+- golf: remove braces from single-expression arrow functions
+
 ** 15.9.3-alpha.1 [2026-01-13]  gz: 2498 / 2.44 KB (-18), br: 2314 / 2.26 KB (-8), min: 5543 / 5.41 KB (-36)
 - perf: inline metaKeys map (only has z for undo/redo)
 
