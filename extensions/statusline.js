@@ -89,7 +89,7 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     if ($lineCounter && (lineCount !== lastLineCount || byteCount !== lastByteCount)) {
       let text = `${lineCount}L`;
       if (originalLineCount !== null) {
-        text += `, originally: ${originalLineCount}L, ${originalByteCount} bytes`;
+        text += ` originally: ${originalLineCount}L ${originalByteCount} bytes`;
       }
       $lineCounter.textContent = text;
       lastLineCount = lineCount;
@@ -101,13 +101,22 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     }
   }
 
-  // API to reset original counts (e.g., after loading new file)
+  // API to manage original counts
   editor.StatusLine = {
+    /** Reset original counts (called before loading new file) */
     resetOriginal() {
       originalLineCount = null;
       originalByteCount = null;
       lastLineCount = -1;
       lastByteCount = -1;
+    },
+    /** Set original byte count from raw file size (before tab expansion, etc.) */
+    setOriginalBytes(bytes) {
+      originalByteCount = bytes;
+    },
+    /** Set original line count */
+    setOriginalLines(lines) {
+      originalLineCount = lines;
     }
   };
 
