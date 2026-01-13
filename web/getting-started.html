@@ -15,11 +15,11 @@
 
   <h1>Getting Started</h1>
 
-  <h2>1. Core CSS</h2>
+  <h2>1. Include base CSS</h2>
   <p>Include <a href="../style.css">style.css</a> for structural styles:</p>
   <pre>&lt;link rel="stylesheet" href="style.css"&gt;</pre>
 
-  <h3>1a. Custom Theme</h3>
+  <h3>1a. Specify custom theme</h3>
   <p>Define your own colors:</p>
   <pre>&lt;style&gt;
 .buffee {
@@ -39,13 +39,13 @@
 }
 &lt;/style&gt;</pre>
 
-  <h3>1b. Pre-built Theme</h3>
+  <h3>1b. Or include pre-built theme</h3>
   <p>Or import one of the <a href="themes.html">pre-built themes</a>:</p>
   <pre>&lt;link rel="stylesheet" href="themes/theme-eva.css"&gt;</pre>
   <p>Add the theme class to your editor element:</p>
   <pre>&lt;div class="buffee buffee-themepack1-eva" id="editor"&gt;</pre>
 
-  <h2>2. Required HTML Structure</h2>
+  <h2>2. Add HTML Structure</h2>
   <p>Add HTML outlined in <a href="https://raw.githubusercontent.com/varrockbank/buffee/main/web/template.html">template.html</a>.</p>
   <pre>&lt;div class="buffee" id="editor"&gt;
   &lt;textarea class="buffee-clip" aria-hidden="true"&gt;&lt;/textarea&gt;
@@ -68,23 +68,24 @@
   &lt;/div&gt;
 &lt;/div&gt;</pre>
 
-  <h2>3. Include the Buffee</h2>
+  <h2>3. Include Buffee</h2>
   <p>Buffee is just a JavaScript function made globally available when you include <a href="../dist/buffee.min.js">dist/buffee.min.js</a></p>
   <pre>&lt;script src="dist/buffee.min.js"&gt;&lt;/script&gt;</pre>
 
-  <h2>4. Initialize</h2>
+  <h2>4. Initialize instance </h2>
   Instantiate Buffee which binds to the HTML element.
   <pre>const editor = new Buffee(document.getElementById('editor'))
 editor.Model._ = ["Hello, World!"]
 editor.View.render();
 </pre>
-  <h2>5. Auto-fit View</h2>
+  <h3>Auto-sizing</h3>
   <p>By default (when <code>h</code> is omitted), the editor auto-fits to its container height. To disable auto-fit, specify <code>h</code>:</p>
   <pre>new Buffee(el, {})                  // Auto-fit (default)
 new Buffee(el, { h: 20 })           // Fixed row count
 new Buffee(el, { w: 80 })           // Fixed column width
 new Buffee(el, { h: 20, w: 80 })    // Both fixed</pre>
   <p>For auto-fit to work, the container must have a defined height (e.g., <code>height: 100%</code> with sized parent, or explicit pixels).</p>
+  <p><a href="../samples/sample-sizing.html">Demo →</a></p>
 
 </body>
 </html>
