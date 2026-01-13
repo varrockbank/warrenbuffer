@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.7.3-alpha.1 [2026-01-13]  gz: 2572 / 2.51 KB (0), br: 2374 / 2.32 KB (0), min: 5746 / 5.61 KB (-7)
+- perf: remove unnecessary detachedHead initialization
+
 ** 15.7.2-alpha.1 [2026-01-13]  gz: 2572 / 2.51 KB (+3), br: 2374 / 2.32 KB (+5), min: 5753 / 5.62 KB (12)
 - refactor: use const in for..of loops
 
