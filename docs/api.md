@@ -26,8 +26,6 @@ Buffee does **not** sanitize text. Content set via `Model.s` or `Span.ins()` is 
 
 Note: The keyboard controller converts Tab key presses to spaces—only programmatic content is affected.
 
----
-
 ## Top-level properties
 
 ```javascript
@@ -48,31 +46,31 @@ editor
 Model
   ._    // Array of text lines, without '\n
   .s    // Set content (string with \n)
-  .end  // Last line index
+  .last // Index of last line of Model
   .ins  // primitive insert
   .del  // primitive del
 ```
 
----
-
 ## View (`editor.View`)
+
+The paradigm is to define first and size, but last is derived. An alternative implementation
+was first and last, but size is derived. The latter's API appears symmetrical but it was not
+as intuitive and the implementation uglier.
 
 ```javascript
 View
-  ._            // subset of model lines in view 
-  .start        // First visible line index
-  .end          // Last visible line index
-  .n            // Number of logical lines
-  .N            // Number of rendered lines
-  .set(line)    // Scroll to line
-  .set(line, n) // Scroll to line, show n lines
+  .first         // Model index of first line of viewport 
+  .last          // Model index of last line viewport 
+  .n             // Viewport size - number of lines (settable)
+  .N             // Number of DOM containers (n + 1 if auto-fit)
+  .set(first)    // Scroll to line, keep current size
+  .set(first, n) // Scroll to line with new size
+  ._             // Visible lines array (derived: Model._.slice(first, last + 1))
 ```
-
----
 
 ## Span (`editor.Span`)
 
-Cursor and selection management.
+A continuous text span from a starting and end coordinate. 
 
 ```javascript 
 Span
@@ -89,11 +87,7 @@ Span
   .dent(value)   // indent or unindent : 1 indent, -1 unident
 ```
 
----
-
 ## Mode (`editor.Mode`)
-
-Editor state and configuration.
 
 ```javascript
 Mode
@@ -105,8 +99,6 @@ Mode
   .sub          // subscriptions for render callback
   .ext          // Array of registered extension names (in order)
 ```
-
----
 
 ## Extension API
 

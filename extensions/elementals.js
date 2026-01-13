@@ -51,7 +51,7 @@ function BuffeeElementals(editor) {
    */
   function updatePositions() {
     for (const el of elements) {
-      const viewportRow = el.row - View.start;
+      const viewportRow = el.row - View.first;
       if (viewportRow >= 0 && viewportRow < View.n) {
         el.$container.style.top = viewportRow * lineHeight + 'px';
         el.$container.style.display = '';

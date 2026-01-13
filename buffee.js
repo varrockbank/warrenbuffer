@@ -17,7 +17,7 @@
  * editor.Model.s = 'Hello, World!';
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '15.2.0-alpha.1';
+  this.v = '15.3.0-alpha.1';
   this.$ = $;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -39,8 +39,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
 
   // [array, fragment, parent, updateFn]
   const viewportLayers = [
-    [$ztxt, (el, i) => el.textContent = Model._[View.start + i] ?? null],
-    [$rail, (el, i) => el.textContent = View.start + i + 1],
+    [$ztxt, (el, i) => el.textContent = Model._[View.first + i] ?? null],
+    [$rail, (el, i) => el.textContent = View.first + i + 1],
     [$zsel, (el) => el.style.width = 0]
   ].map(([p, fn]) => [[], document.createDocumentFragment(), p, fn]);
 
@@ -63,11 +63,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
      */
     mvY(dir, toEdge) {
-      if (dir > 0 ? head.y < Model.end : head.y > 0) {
+      if (dir > 0 ? head.y < Model.last : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
         if (toEdge) maxCol = head.x;
-        if (head.y < View.start || head.y > View.end) View.set(dir > 0 ? head.y - View.n + 1 : head.y);
+        if (head.y < View.first || head.y > View.last) View.set(dir > 0 ? head.y - View.n + 1 : head.y);
         else render();
       }
     },
@@ -79,7 +79,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     mvX(dir) {
       const right = dir > 0;
       if (right ? head.x < Model._[head.y].length : head.x) { maxCol = right ? ++head.x : --head.x; render(); }
-      else if (right ? head.y < Model.end : head.y) this.mvY(dir, 1);
+      else if (right ? head.y < Model.last : head.y) this.mvY(dir, 1);
     },
 
     /**
@@ -107,11 +107,11 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.x = j;
         render();
-      } else if (fwd ? head.y < Model.end : head.y > 0) {
+      } else if (fwd ? head.y < Model.last : head.y > 0) {
         // At edge - move to adjacent line
         head.x = fwd ? 0 : Model._[--head.y].length;
-        if (fwd && ++head.y > View.end) View.set(head.y - View.n + 1);
-        else if (!fwd && head.y < View.start) View.set(head.y);
+        if (fwd && ++head.y > View.last) View.set(head.y - View.n + 1);
+        else if (!fwd && head.y < View.first) View.set(head.y);
         else render();
       }
     },
@@ -134,7 +134,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       if(left.y === right.y) {
         const text  = Model._[left.y];
         const slice = text.slice(left.x, right.x + (this.dir > 0));
-        return right.x >= text.length && left.y < Model.end ? [slice, ''] : [slice];
+        return right.x >= text.length && left.y < Model.last ? [slice, ''] : [slice];
       }
       return [
         Model._[left.y].slice(left.x),
@@ -185,7 +185,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
                maxCol = head.x  = lines[lines.length - 1].length;
         } else maxCol = head.x += lines[0]?.length || 0;
       }
-      if (head.y > View.end) View.set(head.y - View.n + 1);
+      if (head.y > View.last) View.set(head.y - View.n + 1);
       else render();
     },
 
@@ -201,7 +201,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         // At start of line - delete newline (join with previous line)
         head.x = Model._[head.y - 1].length;
         Model.del(head.y - 1, head.x, head.y, 0);
-        if (--head.y < View.start) View.set(head.y);
+        if (--head.y < View.first) View.set(head.y);
         else render();
       }
     },
@@ -270,7 +270,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Index of the last line in the document.
      * @returns {number} Zero-based index of the last line
      */
-    get end() { return this._.length - 1 },
+    get last() { return this._.length - 1 },
 
     /**
      * Sets the document content from a string. Splits on newlines.
@@ -313,7 +313,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
    */
   const View = this.View = {
     /** @type {number} Index of the first visible line (0-indexed) */
-    start: 0,
+    first: 0,
     /** @type {number} Number of visible lines */
     n: 0,
     /** @type {number} Number of DOM line containers. +1 if auto-fit (no rows specified) */
@@ -323,17 +323,17 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Index of the last visible line.
      * @returns {number} Index of the last line in the viewport
      */
-    get end() { return Math.min(this.start + this.n - 1, Model.end); },
+    get last() { return Math.min(this.first + this.n - 1, Model.last); },
 
     /**
      * Sets the viewport position and optionally size.
      * @param {number} start - Line index to start at (0-indexed)
      * @param {number} [size] - Number of lines to display (optional)
      */
-    set(start, size = this.n) {
+    set(first, size = this.n) {
       const delta = size - this.n;
       this.n = size;
-      this.start = Math.max(0, Math.min(start, Model.end));
+      this.first = Math.max(0, Math.min(first, Model.last));
       RENDER(delta);
     },
 
@@ -341,7 +341,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * Gets the lines currently visible in the viewport.
      * @returns {string[]} Array of visible line contents
      */
-    get _() { return Model._.slice(this.start, this.end + 1); }
+    get _() { return Model._.slice(this.first, this.last + 1); }
   };
 
   // Add / remove lines, selections, rails as row changes
@@ -353,7 +353,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
       for (d = delta; d < 0; d++) viewportLayers.forEach(([a]) => a.pop()?.remove());
     }
     if ($rail) {
-      const railCols = Math.max(railInit, (View.start + View.N).toString().length) + railPad;
+      const railCols = Math.max(railInit, (View.first + View.N).toString().length) + railPad;
       $rail.style.width = railCols + 'ch';
       if (cols) $pane.style.width = `calc(${railCols + cols}ch + ${padding * 4}px)`;
     }
@@ -373,15 +373,15 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     if(Mode.i >= 0) {
       // Sels 
       const [firstEdge, secondEdge] = Span.bounds(1);
-      const rEnd = Math.min(View.start + View.n, secondEdge.y + 1);
-      for (let r = Math.max(View.start, firstEdge.y); r < rEnd; r++) {
-        const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.start];
+      const rEnd = Math.min(View.first + View.n, secondEdge.y + 1);
+      for (let r = Math.max(View.first, firstEdge.y); r < rEnd; r++) {
+        const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.first];
         style.left = (f ? firstEdge.x : 0) + 'ch';
         style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? Math.min(secondEdge.x, n) : n + 1) + 'ch';
       }
 
       // Cursor
-      const headViewRow = head.y - View.start;
+      const headViewRow = head.y - View.first;
       if (headViewRow >= 0 && headViewRow < View.n) {
         $caret.style.top = headViewRow * ch + 'px';
         cursorLeft = head.x;
@@ -462,14 +462,14 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
         } else {
           const edge = Span.bounds(1)[direction > 0 | 0];
           // edge.y is already absolute
-          const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.end));
+          const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.last));
 
           maxCol = Math.min(edge.x, Model._[targetAbsRow].length);
           Span.cursor({ y: targetAbsRow, x: maxCol});
 
           // Scroll viewport if target is outside visible area
-          if (targetAbsRow < View.start) View.set(targetAbsRow);
-          else if (targetAbsRow > View.end) View.set(targetAbsRow - View.n + 1);
+          if (targetAbsRow < View.first) View.set(targetAbsRow);
+          else if (targetAbsRow > View.last) View.set(targetAbsRow - View.n + 1);
           else render();
         }
       } else { // no meta key.

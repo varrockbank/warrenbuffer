@@ -20,7 +20,7 @@ function BuffeeUltraHighCapacity(editor) {
   const $e = $.querySelector('.buffee-pane');
 
   // Store original methods/getters
-  const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'end').get;
+  const originalLastIndexGetter = Object.getOwnPropertyDescriptor(Model, 'last').get;
 
   // Chunk state
   let enabled = false;
@@ -113,7 +113,7 @@ function BuffeeUltraHighCapacity(editor) {
    * @private
    */
   function loadChunksForView() {
-    const startChunkIndex = Math.floor(View.start / chunkSize);
+    const startChunkIndex = Math.floor(View.first / chunkSize);
 
     // Check if we need to load new chunks
     if (currentChunkIndex !== startChunkIndex) {
@@ -303,8 +303,8 @@ function BuffeeUltraHighCapacity(editor) {
       // Set navigation-only mode (can move cursor, no editing)
       editor.Mode.i = 0;
 
-      // Override Model.end
-      Object.defineProperty(Model, 'end', {
+      // Override Model.last
+      Object.defineProperty(Model, 'last', {
         get: () => totalLines - 1,
         configurable: true
       });
@@ -318,8 +318,8 @@ function BuffeeUltraHighCapacity(editor) {
     deactivate() {
       enabled = false;
 
-      // Restore original end getter
-      Object.defineProperty(Model, 'end', {
+      // Restore original last getter
+      Object.defineProperty(Model, 'last', {
         get: originalLastIndexGetter,
         configurable: true
       });
