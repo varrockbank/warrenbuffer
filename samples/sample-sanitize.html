@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>buffee - Sanitize Extension</title>
+  <script src="../buffee.js"></script>
+  <script src="../extensions/statusline.js"></script>
+  <script src="../extensions/sanitize.js"></script>
+  <link rel="stylesheet" href="../assets/reset.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../themes/theme-boring.css">
+</head>
+<body class="sample">
+  <nav id="nav"></nav>
+  <script>
+    fetch('../web/navigation.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('nav').innerHTML = html);
+  </script>
+  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Sanitize Extension</p>
+
+  <h1>Sanitize Extension</h1>
+  <p>Automatically converts tabs to spaces and normalizes problematic Unicode characters.</p>
+  <p><code>BuffeeSanitize(new Buffee(el, {}))</code></p>
+
+  <div class="buffee buffee-themepack1-boring" id="editor">
+    <textarea class="buffee-clip"></textarea>
+    <div class="no-select buffee-pane">
+      <div class="buffee-rail"></div>
+      <div class="buffee-lines" tabindex="0">
+        <div class="buffee-zsel"></div>
+        <blockquote class="buffee-ztxt"></blockquote>
+        <div class="buffee-layer-elements"></div>
+        <div class="buffee-caret"></div>
+      </div>
+    </div>
+    <div class="buffee-status">
+      <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
+      <div class="buffee-status-right">
+        Ln <span class="buffee-head-row"></span>, Col <span class="buffee-head-col"></span>
+        <span class="buffee-status-divider">|</span>
+        <span class="buffee-spaces"></span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Demo</h2>
+  <p>The content below was loaded with tabs and Unicode spaces. Sanitize converted them:</p>
+  <ul>
+    <li>Tabs (<code>\t</code>) become 4 spaces</li>
+    <li>Em spaces, en spaces become regular spaces</li>
+    <li>Zero-width characters are removed</li>
+  </ul>
+  <p>Try pasting text with tabs - they'll be converted automatically.</p>
+
+  <h2>Manual Sanitization</h2>
+  <p>When setting <code>Model._</code> directly, use the Sanitize utilities:</p>
+  <pre>editor.Model._ = editor.Sanitize.lines(["a\tb", "c\td"]);
+editor.View.render();</pre>
+
+  <script>
+    const el = document.getElementById('editor');
+    const editor = BuffeeSanitize(BuffeeStatusLine(new Buffee(el, { h: 12 })));
+
+    // Content with tabs and special Unicode
+    // Using Sanitize.lines() to clean before setting Model._
+    const rawLines = [
+      '// Text with tabs and Unicode spaces',
+      '',
+      'function example() {',
+      '\tconst a = 1;\t// tab-indented',
+      '\tconst b = 2;\t// another tab',
+      '}',
+      '',
+      '// Em space:\u2003between words',
+      '// En space:\u2002between words',
+      '// After sanitization, all use regular spaces'
+    ];
+
+    editor.Model._ = editor.Sanitize.lines(rawLines);
+    editor.View.render();
+
+    el.focus();
+  </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
 web - github pages related stuff
 test - test related stuff 
 assets - for github pages assets 
-samples - kitchen sink samples
+samples - examples
 theme - css themess 
 wrappers - Component wrappers in JavaScript UI frameworks
 resources - test files, mostly for load testing 
