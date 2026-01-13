@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.2-alpha.1';
+  this.v = '15.9.3-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -396,9 +396,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
   $lines.addEventListener('keydown', e => {
     const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey;
 
-    const metaKeys = {
-      z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
-    },     special = {
+    const special = {
       Backspace: () => { Span.del() },
       Enter: () => { Span.ins(['', '']) } ,
       Tab: () => {
@@ -440,7 +438,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         Span[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
       }
     } else if (k.length === 1) {
-      if (cmd) metaKeys[k.toLowerCase()]?.();
+      if (cmd) { if (k === 'z') { e.preventDefault(); this.History?.[sh ? 'redo' : 'undo'](); } }
       else if (Mode.i > 0) {
         k === ' ' && e.preventDefault();
         Span.ins([k]);

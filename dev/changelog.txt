@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.9.3-alpha.1 [2026-01-13]  gz: 2498 / 2.44 KB (-18), br: 2314 / 2.26 KB (-8), min: 5543 / 5.41 KB (-36)
+- perf: inline metaKeys map (only has z for undo/redo)
+
 ** 15.9.2-alpha.1 [2026-01-13]  gz: 2516 / 2.46 KB (-10), br: 2323 / 2.27 KB (-7), min: 5579 / 5.45 KB (-27)
 - perf: remove empty v/c/x handlers (optional chaining handles missing keys)
 
