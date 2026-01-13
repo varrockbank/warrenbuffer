@@ -48,7 +48,7 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     const [head, tail] = editor.Span.bounds();  // head first, unordered
     const [start, end] = editor.Span.bounds(1); // ordered by position
     const hasSelection = editor.Span.dir !== 0;
-    const lineCount = Model.end + 1;
+    const lineCount = Model.last + 1;
 
     if (showSelection && hasSelection) {
       // Show selection range: "1:5 - 3:10"
