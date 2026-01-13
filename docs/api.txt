@@ -69,8 +69,42 @@ Span
   .del()             delete text Span-wise
   .ins(lines)        insert lines (string[]) Span-wise
   .select()          make selection
-  .cursor()          make cursor
+  .cursor(pos)       make cursor, optionally at {y, x}
   .dent(value)       indent or unindent : 1 indent, -1 unindent
+
+Direct position manipulation
+----------------------------
+bounds() returns references to the internal position objects {y, x}. You can
+mutate these directly for surgical adjustments without going through the API.
+
+  const [head, anchor] = editor.Span.bounds();  // [head, anchor] order
+  const [start, end]   = editor.Span.bounds(1); // document order
+
+  // Move cursor to specific position
+  head.y = 5;
+  head.x = 10;
+  editor.View.render();
+
+  // Expand selection by adjusting anchor
+  editor.Span.select();                    // detach head from anchor
+  const [h, a] = editor.Span.bounds();
+  h.y = 10;                                // move head to line 10
+  editor.View.render();
+
+When dir === 0 (cursor mode), head and anchor are the same object reference.
+Mutating one automatically mutates the other. After select(), they become
+separate objects and can be moved independently.
+
+  // In cursor mode:
+  const [h, a] = editor.Span.bounds();
+  h === a                                  // true - same object
+  h.x = 5;                                 // anchor.x is also now 5
+
+  // After select():
+  editor.Span.select();
+  const [h2, a2] = editor.Span.bounds();
+  h2 === a2                                // false - separate objects
+  h2.x = 10;                               // anchor.x unchanged
 
 
 instance.Mode
@@ -79,6 +113,7 @@ Mode (editor.Mode)
   .s                 Tab width
   .i                 Edit mode: 1=write, 0=navigate, -1=read
   .f                 Render frame counter
+  .mx                Max column for vertical cursor movement
   .ch                Line height in pixels
   .cw                Character width in pixels
   .sub               subscriptions for render callback
