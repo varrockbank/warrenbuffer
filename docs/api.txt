@@ -42,19 +42,17 @@ instance.View
 ------------------
 View
   .first             Model index of first line of viewport
+  .last              Model index of last line viewport
   .n                 Viewport size - number of lines (settable)
+  .N                 Number of DOM containers (n + 1 if auto-fit)
   .set(first)        Scroll to line, keep current size
   .set(first, n)     Scroll to line with new size
-  ._                 Visible lines array (derived: Model._.slice(first, last + 1))
   .render(delta)     Render content only (delta = viewport size change)
   .RENDER(delta)     Rebuild containers and render content
-  .last              Model index of last line viewport
-  .N                 Number of DOM containers (n + 1 if auto-fit)
 
-The paradigm is to define first and size, but last is derived. An alternative
-implementation was first and last, but size is derived. The latter's API appears
-symmetrical but it was not as intuitive and the implementation uglier.
-
+First and size is primary, but last is derived. An alternative
+would have been to make first and last, but size is derived. The latter 
+is a more symmetrical API but not as intuitive and the implementation uglier.
 
 instance.Span
 ------------------

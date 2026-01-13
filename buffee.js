@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.6.0-alpha.1';
+  this.v = '15.7.0-alpha.1';
   this.$ = $;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -328,11 +328,6 @@ function Buffee($, { h, w, s = 4 } = {}) {
       RENDER(delta);
     },
 
-    /**
-     * Gets the lines currently visible in the viewport.
-     * @returns {string[]} Array of visible line contents
-     */
-    get _() { return Model._.slice(this.first, this.last + 1); }
   };
 
   // Add / remove lines, selections, rails as row changes
