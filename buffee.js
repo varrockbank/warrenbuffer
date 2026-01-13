@@ -18,13 +18,13 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.6-alpha.1';
+  this.v = '15.9.7-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
   // In case where we have cursor, we want head === anchor.
   const anchor = { y: 0, x: 0 }, detached = {};
-  let head = anchor, maxCol = 0;
+  let head = anchor;
 
   // Interface with HTML and CSS.
   const [ch    , padding ,  railInit , railPad  ] =
@@ -58,13 +58,13 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /**
      * Moves the cursor/selection head vertically.
      * @param {number} dir - Direction: positive for down, negative for up
-     * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update maxCol
+     * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update Mode.mx
      */
     mvY(dir, toEdge) {
       if (dir > 0 ? head.y < Model.last : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
-        head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(maxCol, len);
-        if (toEdge) maxCol = head.x;
+        head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(Mode.mx, len);
+        if (toEdge) Mode.mx = head.x;
         if (head.y < View.first || head.y > View.last) View.first = dir > 0 ? head.y - View.n + 1 : head.y;
         else render();
       }
@@ -76,7 +76,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     mvX(dir) {
       const right = dir > 0;
-      if (right ? head.x < Model._[head.y].length : head.x) { maxCol = right ? ++head.x : --head.x; render(); }
+      if (right ? head.x < Model._[head.y].length : head.x) { Mode.mx = right ? ++head.x : --head.x; render(); }
       else if (right ? head.y < Model.last : head.y) this.mvY(dir, 1);
     },
 
@@ -86,7 +86,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     mvLn(toEnd) {
       const line = Model._[head.y];
-      maxCol = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
+      Mode.mx = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
       render();
     },
 
@@ -183,8 +183,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
         // Update cursor
         if (lines.length > 1) {
                         head.y += lines.length - 1;
-               maxCol = head.x  = lines[lines.length - 1].length;
-        } else maxCol = head.x += lines[0]?.length || 0;
+               Mode.mx = head.x  = lines[lines.length - 1].length;
+        } else Mode.mx = head.x += lines[0]?.length || 0;
       }
       if (head.y > View.last) View.first = head.y - View.n + 1;
       else render();
@@ -253,6 +253,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     i: 1,
     f: 0,                                      /** framecount                */
+    mx: 0,                                     /** max column for vertical movement */
     ch,                                        /** line and character height */
     cw: $caret.getBoundingClientRect().width,  /** computed character width  */
     sub: [],                                   /** render callbacks          */
@@ -428,8 +429,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
           // edge.y is already absolute
           const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.last));
 
-          maxCol = Math.min(edge.x, Model._[targetAbsRow].length);
-          Span.cursor({ y: targetAbsRow, x: maxCol});
+          Mode.mx = Math.min(edge.x, Model._[targetAbsRow].length);
+          Span.cursor({ y: targetAbsRow, x: Mode.mx});
 
           // Scroll viewport if target is outside visible area
           if (targetAbsRow < View.first) View.first = targetAbsRow;

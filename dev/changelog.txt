@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.9.7-alpha.1 [2026-01-13]  gz: 2499 / 2.44 KB (+5), br: 2318 / 2.26 KB (+12), min: 5555 / 5.42 KB (+25)
+- api: expose maxCol as Mode.mx for external access
+
 ** 15.9.6-alpha.1 [2026-01-13]  gz: 2494 / 2.44 KB (+4), br: 2306 / 2.25 KB (-4), min: 5530 / 5.40 KB (-9)
 - golf: simplify Span._ getter (shorter vars, factor out dir check)
 
