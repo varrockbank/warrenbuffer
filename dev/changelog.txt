@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.8.3-alpha.1 [2026-01-13]  gz: 2569 / 2.51 KB (-1), br: 2366 / 2.31 KB (-2), min: 5729 / 5.59 KB (-3)
+- perf: use preventScroll:1 instead of preventScroll:true
+
 ** 15.8.2-alpha.1 [2026-01-13]  gz: 2570 / 2.51 KB (0), br: 2368 / 2.31 KB (+1), min: 5732 / 5.60 KB (0)
 - fix(css): rail clipping (add margin + overflow:hidden)
 
