@@ -47,10 +47,10 @@ const initialWidth = gutterWidthPx();
 // View shows lines 1-10, largest visible = 10, gutter = 3ch (~43px)
 expect(initialWidth).toBeCloseTo(43.35);
 // Scroll down - still 2-digit line numbers visible
-fixture.editor.View.set(fixture.editor.View.first + 2);
+fixture.editor.View.first = fixture.editor.View.first + 2;
 expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 // Scroll back up
-fixture.editor.View.set(fixture.editor.View.first - 2);
+fixture.editor.View.first = fixture.editor.View.first - 2;
 expect(gutterWidthPx()).toBeCloseTo(initialWidth);
 
 ## should grow gutter when scrolling to 3-digit lines

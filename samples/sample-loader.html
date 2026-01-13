@@ -165,7 +165,8 @@
     document.getElementById('viewport-update').addEventListener('click', () => {
       const viewportStart = parseInt(document.getElementById('viewport-start').value) - 1;
       const viewportSize = parseInt(document.getElementById('viewport-size').value);
-      editor.View.set(viewportStart, viewportSize);
+      editor.View.n = viewportSize;
+      editor.View.first = viewportStart;
     });
 
     // File input handler

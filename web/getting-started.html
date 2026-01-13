@@ -90,7 +90,7 @@ new Buffee(el, { h: 20, w: 80 })    // Fixed number of rows and columns</pre>
   <p>Buffee exposes four namespaces:</p>
   <pre>instance.Model._          // Array of text lines
 instance.View.render()    // Render after changes
-instance.View.set(n)      // Scroll to line n
+instance.View.first = n   // Scroll to line n
 instance.Span.ins(lines)  // Insert at cursor
 instance.Span.del()       // Delete selection
 instance.Mode.i           // Edit mode: 1=write, 0=navigate, -1=read</pre>

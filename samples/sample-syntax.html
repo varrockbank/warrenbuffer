@@ -415,7 +415,7 @@ if __name__ == "__main__":
         perfStats.innerHTML = `Loaded ${totalLines.toLocaleString()} lines in ${((t1-t0)/1000).toFixed(1)}s`;
 
         const t2 = performance.now();
-        editor.View.set(0, editor.View.n);
+        editor.View.first = 0;
         const t3 = performance.now();
 
         perfStats.innerHTML += ` | Render: ${(t3-t2).toFixed(0)}ms`;

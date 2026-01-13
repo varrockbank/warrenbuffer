@@ -41,17 +41,17 @@ be agnostic to existence of rendering.
 instance.View
 ------------------
 View
-  .first             Model index of first line of viewport
-  .last              Model index of last line viewport
-  .n                 Viewport size - number of lines (settable)
-  .N                 Number of DOM containers (n + 1 if auto-fit)
-  .set(first)        Scroll to line, keep current size
-  .set(first, n)     Scroll to line with new size
+  .first             Get Model index of first line of viewport
+  .first = 5         Set model index of first line of viewport 
+  .n                 Get logical Viewport size - number of lines
+  .n     = 20        Set viewport size 
+  .last              Get Model index of last line viewport
+  .N                 Get Number of DOM containers (n + 1 if auto-fit)
   .render(delta)     Render content only (delta = viewport size change)
   .RENDER(delta)     Rebuild containers and render content
 
-First and size is primary, but last is derived. An alternative
-would have been to make first and last, but size is derived. The latter 
+You can set first and n but not last. An alternative
+would have been to make first and last,but not size. The latter 
 is a more symmetrical API but not as intuitive and the implementation uglier.
 
 instance.Span
