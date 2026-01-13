@@ -37,6 +37,7 @@ See `web/template.html` for the required HTML structure. Missing any element wil
 - `docs/api.txt` - API reference
 - `web/getting-started.html` - Usage examples
 - `web/wrappers.html` - Wrapper documentation
+- `dev/changelog.txt` - Add entry for wrapper updates
 
 ## Cursor Model (Vim-style)
 
