@@ -10,10 +10,10 @@ theme - css themess
 wrappers - Component wrappers in JavaScript UI frameworks
 resources - test files, mostly for load testing 
 
-## Extensions 
+## Combinators
 
-1. Add to extensions directory
-2. update web/extensions.html
+1. Add to combinators directory
+2. update web/combinators.html
 
 ## Distributable
 

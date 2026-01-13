@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>buffee - Extensions</title>
+  <title>buffee - Combinators</title>
   <link rel="stylesheet" href="../assets/reset.css">
 </head>
 <body>
@@ -13,12 +13,12 @@
       .then(html => document.getElementById('nav').innerHTML = html);
   </script>
 
-  <h1>Extensions</h1>
+  <h1>Combinators</h1>
   <p>Optional modules for buffee. Load independently.</p>
 
   <h2>History</h2>
-  <p><a href="../extensions/history.js"><code>extensions/history.js</code></a></p>
-  <p>Undo/redo support with operation coalescing. Without this extension, editors have no history.</p>
+  <p><a href="../combinators/history.js"><code>combinators/history.js</code></a></p>
+  <p>Undo/redo support with operation coalescing. Without this combinator, editors have no history.</p>
   <pre>BuffeeHistory(editor)
 editor.History.undo()
 editor.History.redo()
@@ -26,7 +26,7 @@ editor.History.clear()</pre>
   <p><a href="../samples/sample-history.html">Demo →</a></p>
 
   <h2>UndoTree</h2>
-  <p><a href="../extensions/undotree.js"><code>extensions/undotree.js</code></a></p>
+  <p><a href="../combinators/undotree.js"><code>combinators/undotree.js</code></a></p>
   <p>Tree-based undo/redo that preserves all branches. When you undo and make a new edit, you create a new branch instead of losing history.</p>
   <pre>BuffeeUndoTree(editor)
 editor.UndoTree.undo()
@@ -38,7 +38,7 @@ editor.UndoTree.getTree()      // Get tree for visualization</pre>
   <p><a href="../samples/sample-undotree.html">Demo →</a></p>
 
   <h2>Syntax</h2>
-  <p><a href="../extensions/syntax.js"><code>extensions/syntax.js</code></a></p>
+  <p><a href="../combinators/syntax.js"><code>combinators/syntax.js</code></a></p>
   <p>Regex-based syntax highlighting with incremental state caching. Ships with JavaScript, HTML, CSS, JSON, and Python.</p>
   <pre>const editor = BuffeeSyntax(Buffee(container, config))
 editor.Syntax.setLanguage('javascript')
@@ -46,7 +46,7 @@ editor.Syntax.enabled = true</pre>
   <p><a href="../samples/sample-syntax.html">Demo →</a></p>
 
   <h2>Elementals</h2>
-  <p><a href="../extensions/elementals.js"><code>extensions/elementals.js</code></a></p>
+  <p><a href="../combinators/elementals.js"><code>combinators/elementals.js</code></a></p>
   <p>DOM-based UI elements in a layer above text. Buttons, inputs, labels with character-unit positioning.</p>
   <pre>const editor = BuffeeElementals(Buffee(container, config))
 editor.Elementals.addButton({ row: 1, col: 5, label: 'OK' })
@@ -54,7 +54,7 @@ editor.Elementals.enabled = true</pre>
   <p><a href="../samples/sample-elementals.html">Demo →</a></p>
 
   <h2>TUI Legacy</h2>
-  <p><a href="../extensions/tui.js"><code>extensions/tui.js</code></a></p>
+  <p><a href="../combinators/tui.js"><code>combinators/tui.js</code></a></p>
   <p>Terminal UI via text manipulation. Buttons, prompts, scrollboxes using box-drawing characters.</p>
   <pre>const editor = BuffeeTUI(Buffee(container, config))
 editor.TUI.addButton({ row: 1, col: 2, label: 'OK', border: true })
@@ -62,7 +62,7 @@ editor.TUI.enabled = true</pre>
   <p><a href="../samples/sample-tui.html">Demo →</a></p>
 
   <h2>FileLoader</h2>
-  <p><a href="../extensions/fileloader.js"><code>extensions/fileloader.js</code></a></p>
+  <p><a href="../combinators/fileloader.js"><code>combinators/fileloader.js</code></a></p>
   <p>Multiple file loading strategies optimized for different file sizes. Choose the right loader based on your file size and memory constraints.</p>
   <p><strong>Note:</strong> FileLoader does not sanitize text. If files may contain tabs, wrap with <code>BuffeeSanitize</code>:</p>
   <pre>// With tab sanitization
@@ -77,7 +77,7 @@ await editor.FileLoader.streamGcHintsLoad(file)   // &lt;90M lines</pre>
   <p><a href="../samples/sample-loader.html">Demo →</a></p>
 
   <h2>UltraHighCapacity</h2>
-  <p><a href="../extensions/ultrahighcapacity.js"><code>extensions/ultrahighcapacity.js</code></a></p>
+  <p><a href="../combinators/ultrahighcapacity.js"><code>combinators/ultrahighcapacity.js</code></a></p>
   <p>Gzip-compressed chunked storage for massive files (1B+ lines). Decompress on scroll. Forces editor into navigation-only mode.</p>
   <pre>const editor = BuffeeUltraHighCapacity(Buffee(container, config))
 editor.UltraHighCapacity.activate(50000)
@@ -85,7 +85,7 @@ await editor.UltraHighCapacity.appendLines(lines)</pre>
   <p><a href="../samples/sample-loader.html">Demo →</a></p>
 
   <h2>iOS</h2>
-  <p><a href="../extensions/ios.js"><code>extensions/ios.js</code></a></p>
+  <p><a href="../combinators/ios.js"><code>combinators/ios.js</code></a></p>
   <p>Touch interactions and on-screen keyboard input for iOS devices.</p>
   <pre>let editor = Buffee(container, config)
 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
@@ -96,14 +96,14 @@ editor.iOS.destroy() // Cleanup</pre>
   <p><a href="../samples/sample-ios.html">Demo →</a></p>
 
   <h2>StatusLine</h2>
-  <p><a href="../extensions/statusline.js"><code>extensions/statusline.js</code></a></p>
+  <p><a href="../combinators/statusline.js"><code>combinators/statusline.js</code></a></p>
   <p>Updates status bar elements (row, col, line count, spaces) on each render. Looks for elements with classes <code>.buffee-head-row</code>, <code>.buffee-head-col</code>, <code>.buffee-linecount</code>, <code>.buffee-spaces</code>.</p>
   <pre>const editor = BuffeeStatusLine(new Buffee(container, config))</pre>
   <p><a href="../samples/sample-basic.html">Demo →</a></p>
 
   <h2>Sanitize</h2>
-  <p><a href="../extensions/sanitize.js"><code>extensions/sanitize.js</code></a></p>
-  <p>Text sanitization for content set via <code>Model.s</code> or <code>Span.ins()</code>. Buffee core does not sanitize text—tabs and problematic Unicode characters are inserted as-is. This extension automatically cleans input text.</p>
+  <p><a href="../combinators/sanitize.js"><code>combinators/sanitize.js</code></a></p>
+  <p>Text sanitization for content set via <code>Model.s</code> or <code>Span.ins()</code>. Buffee core does not sanitize text—tabs and problematic Unicode characters are inserted as-is. This combinator automatically cleans input text.</p>
   <p><strong>Handles:</strong></p>
   <ul>
     <li><strong>Tabs</strong> → spaces (based on <code>Mode.s</code> setting)</li>
@@ -128,8 +128,8 @@ editor.Sanitize.lines(["a\tb", "c\td"]) // sanitize array of lines</pre>
 
   <hr>
 
-  <h2>Using Multiple Extensions</h2>
-  <p>Compose extensions using the decorator pattern.</p>
+  <h2>Using Multiple Combinators</h2>
+  <p>Compose combinators using the decorator pattern.</p>
   <pre>const editor = BuffeeElementals(
   BuffeeSyntax(
     Buffee(container, config)
@@ -147,11 +147,11 @@ editor.Elementals.addButton({
 editor.Elementals.enabled = true</pre>
 
   <h3>Syntactic Sugar: reduce</h3>
-  <p>For many extensions, use <code>reduce</code> to avoid deep nesting:</p>
-  <pre>const extensions = [BuffeeHistory, BuffeeSyntax, BuffeeElementals]
+  <p>For many combinators, use <code>reduce</code> to avoid deep nesting:</p>
+  <pre>const combinators = [BuffeeHistory, BuffeeSyntax, BuffeeElementals]
 
-const editor = extensions.reduce(
-  (ed, ext) => ext(ed),
+const editor = combinators.reduce(
+  (ed, comb) => comb(ed),
   new Buffee(container, config)
 )</pre>
 

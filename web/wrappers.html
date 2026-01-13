@@ -76,34 +76,34 @@ gutterRight  Boolean     Position gutter on right side (default: false)
 showStatus   Boolean     Show status bar (default: true)
 statusTop    Boolean     Position status bar at top (default: false)
 lines        String[]    Initial content as array of lines (pre-sanitized)
-extensions   Function[]  Array of extension functions to apply</pre>
+combinators  Function[]  Array of combinator functions to apply</pre>
 
   <hr>
 
-  <h2>Extensions</h2>
-  <p>Pass extensions via the <code>extensions</code> prop. Extensions are applied in order.</p>
-  <p>Import extensions or load them globally via script tags:</p>
+  <h2>Combinators</h2>
+  <p>Pass combinators via the <code>combinators</code> prop. Combinators are applied in order.</p>
+  <p>Import combinators or load them globally via script tags:</p>
 
   <h3>ES Modules</h3>
-  <pre>import BuffeeHistory from 'buffee/extensions/history.js';
-import BuffeeSyntax from 'buffee/extensions/syntax.js';
+  <pre>import BuffeeHistory from 'buffee/combinators/history.js';
+import BuffeeSyntax from 'buffee/combinators/syntax.js';
 
-&lt;BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} /&gt;</pre>
+&lt;BuffeeEditor combinators={[BuffeeHistory, BuffeeSyntax]} /&gt;</pre>
 
   <h3>Script Tags</h3>
-  <pre>&lt;script src="buffee/extensions/history.js"&gt;&lt;/script&gt;
-&lt;script src="buffee/extensions/syntax.js"&gt;&lt;/script&gt;
+  <pre>&lt;script src="buffee/combinators/history.js"&gt;&lt;/script&gt;
+&lt;script src="buffee/combinators/syntax.js"&gt;&lt;/script&gt;
 
-&lt;BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} /&gt;</pre>
+&lt;BuffeeEditor combinators={[BuffeeHistory, BuffeeSyntax]} /&gt;</pre>
 
-  <h3>Accessing Extension APIs</h3>
-  <p>Use the <code>onReady</code> callback to access extension APIs:</p>
+  <h3>Accessing Combinator APIs</h3>
+  <p>Use the <code>onReady</code> callback to access combinator APIs:</p>
   <pre>function handleReady(editor) {
   editor.History.undo();
   editor.Syntax.setLanguage('javascript');
 }</pre>
 
-  <p><strong>Note:</strong> <code>BuffeeStatusLine</code> is applied automatically when <code>showStatus</code> is true. You don't need to include it in the extensions array.</p>
+  <p><strong>Note:</strong> <code>BuffeeStatusLine</code> is applied automatically when <code>showStatus</code> is true. You don't need to include it in the combinators array.</p>
 
 </body>
 </html>

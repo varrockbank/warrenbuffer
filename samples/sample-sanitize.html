@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>buffee - Sanitize Extension</title>
+  <title>buffee - Sanitize Combinator</title>
   <script src="../buffee.js"></script>
-  <script src="../extensions/statusline.js"></script>
-  <script src="../extensions/sanitize.js"></script>
+  <script src="../combinators/statusline.js"></script>
+  <script src="../combinators/sanitize.js"></script>
   <link rel="stylesheet" href="../assets/reset.css">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../themes/theme-boring.css">
@@ -17,9 +17,9 @@
       .then(r => r.text())
       .then(html => document.getElementById('nav').innerHTML = html);
   </script>
-  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Sanitize Extension</p>
+  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Sanitize Combinator</p>
 
-  <h1>Sanitize Extension</h1>
+  <h1>Sanitize Combinator</h1>
   <p>Automatically converts tabs to spaces and normalizes problematic Unicode characters.</p>
   <p><code>BuffeeSanitize(new Buffee(el, {}))</code></p>
 

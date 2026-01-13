@@ -1,6 +1,6 @@
-# Buffee Extensions
+# Buffee Combinators
 
-Extensions use the decorator pattern to add functionality:
+Combinators use the decorator pattern to add functionality:
 
 ```javascript
 const editor = BuffeeStatusLine(new Buffee(el, opts));
@@ -179,9 +179,9 @@ Enables touch-to-position cursor and virtual keyboard handling.
 
 ---
 
-## Extension API
+## Combinator API
 
-For building extensions:
+For building combinators:
 
 ```javascript
 const { Model, View, Span, Mode, render, $ } = editor;
@@ -199,10 +199,10 @@ Model.ins = function(row, col, lines) {
 };
 ```
 
-## Creating Extensions
+## Creating Combinators
 
 ```javascript
-function MyExtension(editor) {
+function MyCombinator(editor) {
   const { Mode, render } = editor;
 
   // Hook into render cycle
@@ -211,7 +211,7 @@ function MyExtension(editor) {
   });
 
   // Expose API
-  editor.MyExtension = {
+  editor.MyCombinator = {
     enable() { /* ... */ },
     disable() { /* ... */ }
   };

@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>buffee - History Extension</title>
+  <title>buffee - History Combinator</title>
   <script src="../buffee.js"></script>
-  <script src="../extensions/statusline.js"></script>
-  <script src="../extensions/history.js"></script>
+  <script src="../combinators/statusline.js"></script>
+  <script src="../combinators/history.js"></script>
   <link rel="stylesheet" href="../assets/reset.css">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../themes/theme-boring.css">
@@ -18,9 +18,9 @@
       .then(r => r.text())
       .then(html => document.getElementById('nav').innerHTML = html);
   </script>
-  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / History Extension</p>
+  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / History Combinator</p>
 
-  <h1>History Extension (Undo/Redo)</h1>
+  <h1>History Combinator (Undo/Redo)</h1>
   <p>History tracking is opt-in. By default, editors have no undo/redo.</p>
 
   <h2>Without History</h2>
