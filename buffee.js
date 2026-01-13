@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.7-alpha.1';
+  this.v = '15.9.8-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -39,8 +39,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
   const viewportLayers = [
     [$ztxt, (el, i) => el.textContent = Model._[View.first + i] ?? null],
     [$rail, (el, i) => el.textContent = View.first + i + 1],
-    [$zsel, (el) => el.style.width = 0]
-  ].map(([p, fn]) => [[], document.createDocumentFragment(), p, fn]);
+    [$zsel, (el)    => el.style.width = 0]
+  ].map(([e, f]) => [[], document.createDocumentFragment(), e, f]);
 
   /**
    * Span management for cursor and text selection operations.
@@ -108,11 +108,11 @@ function Buffee($, { h, w, s = 4 } = {}) {
         head.x = j;
         render();
       } else if (fwd ? head.y < Model.last : head.y > 0) {
-        // At edge - move to adjacent line
-        head.x = fwd ? 0 : Model._[--head.y].length;
-        if (fwd && ++head.y > View.last) View.first = head.y - View.n + 1;
+                                              // At edge - move to adjacent line
+                                              head.x = fwd ? 0 : Model._[--head.y].length;
+        if (fwd && ++head.y > View.last)      View.first = head.y - View.n + 1;
         else if (!fwd && head.y < View.first) View.first = head.y;
-        else render();
+        else                                  render();
       }
     },
 
@@ -224,7 +224,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         const line = Model._[i];
         if (n > 0) Model._[i] = ' '.repeat(n) + line;
         else {
-          const cursor = i === first.y ? first : i === second.y ? second : null;
+          const cursor = first.y === i && first || second.y === i && second;
           if (cursor) {
             const right    = line.slice(cursor.x).search(/[^ ]|$/);
             const toRemove = Math.min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
