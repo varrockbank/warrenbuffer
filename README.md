@@ -138,8 +138,6 @@ Container should have explicit height inherit some percentage from parent.
 
 **View** `editor.View` represents the virtual viewport
 
-`editor.View._` is the buffer lines in view
-
 **Span** `editor.Span` represents a text selection. Cursors are the special case of this where the
 anchor and the head/dot are the same. Text editing operations are defined relative to this selection.
 
