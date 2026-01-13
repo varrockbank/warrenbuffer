@@ -9,16 +9,16 @@
  * @constructor
  * @param {HTMLElement} $ - Container element
  * @param {Object} [config={}] - Configuration options
- * @param {number} [config.rows] - Fixed visible lines (omit to auto-fit)
- * @param {number} [config.cols] - Fixed text columns (omit to fill parent)
+ * @param {number} [config.h] - Fixed visible lines (omit to auto-fit)
+ * @param {number} [config.w] - Fixed text columns (omit to fill parent)
  * @param {number} [config.s=4] - Spaces per tab/indentation
  * @example
- * const editor = new Buffee(document.getElementById('editor'), { rows: 25 });
+ * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
  * editor.Model._ = ['Hello, World!'];
  * editor.render();
  */
-function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '15.4.0-alpha.1';
+function Buffee($, { h, w, s = 4 } = {}) {
+  this.v = '15.5.0-alpha.1';
   this.$ = $;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -308,8 +308,8 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     first: 0,
     /** @type {number} Number of visible lines */
     n: 0,
-    /** @type {number} Number of DOM line containers. +1 if auto-fit (no rows specified) */
-    get N() { return this.n + !rows; },
+    /** @type {number} Number of DOM line containers. +1 if auto-fit (no h specified) */
+    get N() { return this.n + !h; },
 
     /**
      * Index of the last visible line.
@@ -347,7 +347,7 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     if ($rail) {
       const railCols = Math.max(railInit, (View.first + View.N).toString().length) + railPad;
       $rail.style.width = railCols + 'ch';
-      if (cols) $pane.style.width = `calc(${railCols + cols}ch + ${padding * 4}px)`;
+      if (w) $pane.style.width = `calc(${railCols + w}ch + ${padding * 4}px)`;
     }
     render(delta);
   };
@@ -388,14 +388,14 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
     Mode.sub.forEach(hook => hook($lines, View, delta));
   }
   
-  // Set container width if cols specified
+  // Set container width if w specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
-  cols && !$rail && ($pane.style.width = `calc(${cols}ch + ${padding * 2}px)`);
-  // Set container height if rows specified (don't use flex: 1). TODO: perhaps can just set on parent
-  rows && viewportLayers.forEach(([, , p]) => p && (p.style.height = rows * ch + 'px'));
+  w && !$rail && ($pane.style.width = `calc(${w}ch + ${padding * 2}px)`);
+  // Set container height if h specified (don't use flex: 1). TODO: perhaps can just set on parent
+  h && viewportLayers.forEach(([, , p]) => p && (p.style.height = h * ch + 'px'));
   // Initial sizing render
   const resize = delta => {View.n += delta, RENDER(delta)};
-  rows ? resize(rows) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / ch) - View.n)}).observe($pane);
+  h ? resize(h) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / ch) - View.n)}).observe($pane);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $lines.addEventListener('paste', e => {

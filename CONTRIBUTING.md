@@ -1,18 +1,19 @@
 # Commits 
 
-## Scopes:
+## Directory structure
 
 web - github pages related stuff
 test - test related stuff 
-
-## Files 
-
 assets - for github pages assets 
+samples - kitchen sink samples
+theme - css themess 
+wrappers - Component wrappers in JavaScript UI frameworks
+resources - test files, mostly for load testing 
 
 ## Extensions 
 
 1. Add to extensions directory
-2. update web/extensions.html 
+2. update web/extensions.html
 
 ## Distributable
 

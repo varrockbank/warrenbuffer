@@ -3,14 +3,14 @@
 ## Instantiation
 
 ```javascript
-const editor = new Buffee(element, { rows, cols, s })
+const editor = new Buffee(element, { h, w, s })
 ```
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `rows` | number | auto | Fixed visible lines |
-| `cols` | number | auto | Fixed text columns |
-| `s` | number | 4 | Tab width (0 = hard tabs) |
+| `h`    | number | auto | Fixed visible lines |
+| `w`    | number | auto | Fixed text columns |
+| `s`    | number | 4 | Tab width (0 = hard tabs) |
 
 ## Top-level properties
 

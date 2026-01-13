@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.5.0-alpha.1 [2026-01-13]  gz: 2585 / 2.52 KB (-4), br: 2388 / 2.33 KB (-4), min: 5807 / 5.67 KB (-6)
+- config: fixed width/height specified with 'w' and 'h' instead 'cols' and 'rows'
+
 ** 15.4.0-alpha.1 [2026-01-13]  gz: 2589 / 2.53 KB (-17), br: 2393 / 2.34 KB (-12), min: 5813 / 5.68 KB (-35)
 - api: remove Model.s = "foobar". Delegate to user to render on Model._ = ["foobar"]
 

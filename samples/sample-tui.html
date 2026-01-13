@@ -24,7 +24,7 @@
   <p>Press <kbd>Tab</kbd> to navigate, <kbd>Enter</kbd> to activate</p>
 
   <h2>Buttons (no border)</h2>
-  <pre>new Buffee(el, { rows: 3 })
+  <pre>new Buffee(el, { h: 3 })
 TUI.addButton({ row: 1, col: 20, label: '[Save]' })</pre>
   <div class="buffee buffee-themepack1-chelsey" id="buttons-plain">
     <textarea class="buffee-clip"></textarea>
@@ -43,7 +43,7 @@ TUI.addButton({ row: 1, col: 20, label: '[Save]' })</pre>
   </div>
 
   <h2>Buttons (with border)</h2>
-  <pre>new Buffee(el, { rows: 5 })
+  <pre>new Buffee(el, { h: 5 })
 TUI.addButton({ row: 1, col: 2, label: ' OK ', border: true })</pre>
   <div class="buffee buffee-themepack1-chelsey" id="buttons-border">
     <textarea class="buffee-clip"></textarea>
@@ -62,7 +62,7 @@ TUI.addButton({ row: 1, col: 2, label: ' OK ', border: true })</pre>
   </div>
 
   <h2>Prompt (type to input, Enter to submit)</h2>
-  <pre>new Buffee(el, { rows: 8 })
+  <pre>new Buffee(el, { h: 8 })
 TUI.addPrompt({ row: 1, col: 2, width: 30, title: 'Search' })
 TUI.handleKeyDown(e.key)</pre>
   <div class="buffee buffee-themepack1-chelsey" id="prompt-demo">
@@ -82,7 +82,7 @@ TUI.handleKeyDown(e.key)</pre>
   </div>
 
   <h2>ScrollBox (Arrow keys to scroll)</h2>
-  <pre>new Buffee(el, { rows: 10 })
+  <pre>new Buffee(el, { h: 10 })
 TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [...] })</pre>
   <div class="buffee buffee-themepack1-chelsey" id="scrollbox-demo">
     <textarea class="buffee-clip"></textarea>
@@ -104,7 +104,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
 
     // Buttons (no border)
     const plainEl = document.getElementById('buttons-plain');
-    const plainEditor = BuffeeStatusLine(new Buffee(plainEl, { rows: 3 }));
+    const plainEditor = BuffeeStatusLine(new Buffee(plainEl, { h: 3 }));
     BuffeeTUI(plainEditor);
     plainEditor.Model._ = ['', '  Select action:'];
     plainEditor.TUI.addButton({ row: 1, col: 20, label: '[Save]', onActivate: () => { alert('Save clicked'); } });
@@ -118,7 +118,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
 
     // Buttons (with border)
     const borderEl = document.getElementById('buttons-border');
-    const borderEditor = BuffeeStatusLine(new Buffee(borderEl, { rows: 5 }));
+    const borderEditor = BuffeeStatusLine(new Buffee(borderEl, { h: 5 }));
     BuffeeTUI(borderEditor);
     borderEditor.Model._ = ['', '', '', '', ''];
     borderEditor.TUI.addButton({ row: 1, col: 2, label: ' OK ', border: true, onActivate: () => { alert('OK clicked'); } });
@@ -132,7 +132,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
 
     // Prompt
     const promptEl = document.getElementById('prompt-demo');
-    const promptEditor = BuffeeStatusLine(new Buffee(promptEl, { rows: 8 }));
+    const promptEditor = BuffeeStatusLine(new Buffee(promptEl, { h: 8 }));
     BuffeeTUI(promptEditor);
     promptEditor.Model._ = ['', '', '', '', '', '', '', ''];
     promptEditor.TUI.addPrompt({ row: 1, col: 2, width: 30, title: 'Search', onActivate: (el) => { alert('Search: ' + el.input); } });
@@ -145,7 +145,7 @@ TUI.addScrollBox({ row: 1, col: 2, width: 40, height: 8, title: 'Logs', lines: [
 
     // ScrollBox
     const scrollEl = document.getElementById('scrollbox-demo');
-    const scrollEditor = BuffeeStatusLine(new Buffee(scrollEl, { rows: 10 }));
+    const scrollEditor = BuffeeStatusLine(new Buffee(scrollEl, { h: 10 }));
     BuffeeTUI(scrollEditor);
     scrollEditor.Model._ = ['', '', '', '', '', '', '', '', '', ''];
     const logLines = [

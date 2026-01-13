@@ -22,12 +22,12 @@
   <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Editor Sizing</p>
 
   <h1>Editor Sizing</h1>
-  <p>By default, the editor auto-fits to its container. Use <code>rows</code> to fix the number of visible rows.</p>
+  <p>By default, the editor auto-fits to its container. Use <code>h</code> to fix the number of visible rows.</p>
 
-  <h2>1. Auto-rows, auto-cols (recommended)</h2>
+  <h2>1. Auto-h, auto-w (recommended)</h2>
   <p><code>.buffee { width: 960px; height: 300px; padding: 20px; }</code></p>
   <p><code>new Buffee(el, {})</code></p>
-  <p>Default behavior: auto-fit rows and cols. Drag bottom-right to resize.</p>
+  <p>Default behavior: auto-fit h and w. Drag bottom-right to resize.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-auto-both" style="width: 960px; height: 300px; padding: 20px; border: 2px dashed #666; resize: both; overflow: hidden;">
     <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-pane">
@@ -44,9 +44,9 @@
     </div>
   </div>
 
-  <h2>2. Fixed-rows, auto-cols</h2>
+  <h2>2. Fixed-h, auto-w</h2>
   <p><code>.buffee { width: 640px; padding: 20px; }</code></p>
-  <p><code>new Buffee(el, { rows: 8 })</code></p>
+  <p><code>new Buffee(el, { h: 8 })</code></p>
   <p>Fixed 8 rows, columns auto-calculated from width. Drag to resize width.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-fixed-rows-auto-cols" style="width: 640px; padding: 20px; border: 2px dashed #666; resize: horizontal; overflow: hidden;">
     <textarea class="buffee-clip"></textarea>
@@ -64,10 +64,10 @@
     </div>
   </div>
 
-  <h2>3. rows smaller than container</h2>
+  <h2>3. h smaller than container</h2>
   <p><code>.buffee { height: 400px; padding: 20px; }</code></p>
-  <p><code>new Buffee(el, { rows: 5 })</code></p>
-  <p>Container is 400px tall, but editor only shows 5 rows. rows takes precedence instead of autofill remaining space.</p>
+  <p><code>new Buffee(el, { h: 5 })</code></p>
+  <p>Container is 400px tall, but editor only shows 5 rows. h takes precedence instead of autofill remaining space.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-fixed-rows-large-container" style="height: 400px; padding: 20px; border: 2px solid #666;">
     <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-pane">
@@ -84,10 +84,10 @@
     </div>
   </div>
 
-  <h2>4. rows larger than container (clipped)</h2>
+  <h2>4. h larger than container (clipped)</h2>
   <p><code>.buffee { height: 400px; padding: 20px; overflow: hidden; }</code></p>
-  <p><code>new Buffee(el, { rows: 20 })</code></p>
-  <p>Container is 400px tall, but rows requests 20 rows. Use <code>overflow: hidden</code> to clip.</p>
+  <p><code>new Buffee(el, { h: 20 })</code></p>
+  <p>Container is 400px tall, but h requests 20 rows. Use <code>overflow: hidden</code> to clip.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-fixed-rows-overflow" style="height: 400px; padding: 20px; border: 2px solid #666; overflow: hidden;">
     <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-pane">
@@ -104,10 +104,10 @@
     </div>
   </div>
 
-  <h2>5. rows larger than container (scrollable)</h2>
+  <h2>5. h larger than container (scrollable)</h2>
   <p><code>.buffee { height: 400px; padding: 20px; overflow: scroll; display: block; }</code></p>
-  <p><code>new Buffee(el, { rows: 20 })</code></p>
-  <p>Container is 400px tall, but rows requests 20 rows. Use <code>overflow: scroll</code> and <code>display: block</code> to scroll.</p>
+  <p><code>new Buffee(el, { h: 20 })</code></p>
+  <p>Container is 400px tall, but h requests 20 rows. Use <code>overflow: scroll</code> and <code>display: block</code> to scroll.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-fixed-rows-scroll" style="height: 400px; padding: 20px; border: 2px solid #666; overflow: scroll; display: block;">
     <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-pane">
@@ -124,9 +124,9 @@
     </div>
   </div>
 
-  <h2>6. Auto-rows, fixed-cols (status bar stretches)</h2>
+  <h2>6. Auto-h, fixed-w (status bar stretches)</h2>
   <p><code>.buffee { height: 300px; padding: 20px; }</code></p>
-  <p><code>new Buffee(el, { cols: 40 })</code></p>
+  <p><code>new Buffee(el, { w: 40 })</code></p>
   <p>Fixed 55 columns, rows auto-calculated from height. Note: status bar stretches to container width while content is narrower.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-fixed-cols" style="height: 300px; padding: 20px; border: 2px dashed #666; resize: vertical; overflow: hidden;">
     <textarea class="buffee-clip"></textarea>
@@ -144,9 +144,9 @@
     </div>
   </div>
 
-  <h2>7. Auto-rows, fixed-cols (fit-content)</h2>
+  <h2>7. Auto-h, fixed-w (fit-content)</h2>
   <p><code>.buffee { height: 300px; padding: 20px; width: fit-content; }</code></p>
-  <p><code>new Buffee(el, { cols: 40 })</code></p>
+  <p><code>new Buffee(el, { w: 40 })</code></p>
   <p>Same as example 6, but with <code>width: fit-content</code> so the container shrinks to match content width.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-fit-content" style="height: 300px; padding: 20px; border: 2px dashed #666; width: fit-content; resize: vertical; overflow: hidden;">
     <textarea class="buffee-clip"></textarea>
@@ -164,11 +164,11 @@
     </div>
   </div>
 
-  <h2>8. Auto-rows, fixed-cols (contain: inline-size)</h2>
+  <h2>8. Auto-h, fixed-w (contain: inline-size)</h2>
   <p><code>.buffee { height: 300px; padding: 20px; width: fit-content; }</code></p>
   <p><code>.buffee-status { contain: inline-size; }</code></p>
-  <p><code>new Buffee(el, { cols: 20 })</code></p>
-  <p>When <code>cols</code> is small, status line content may be wider than editor. Use <code>contain: inline-size</code> on status bar so gutter + lines determine container width.</p>
+  <p><code>new Buffee(el, { w: 20 })</code></p>
+  <p>When <code>w</code> is small, status line content may be wider than editor. Use <code>contain: inline-size</code> on status bar so gutter + lines determine container width.</p>
   <div class="buffee buffee-themepack1-boring" id="editor-contain" style="height: 300px; padding: 20px; border: 2px dashed #666; width: fit-content; resize: vertical; overflow: hidden;">
     <textarea class="buffee-clip"></textarea>
     <div class="no-select buffee-pane">
@@ -193,58 +193,58 @@
       return s;
     }
 
-    // 1. Auto-rows and auto-cols (default behavior)
+    // 1. Auto-h and auto-w (default behavior)
     const elAutoBoth = document.getElementById('editor-auto-both');
     const edAutoBoth = BuffeeStatusLine(new Buffee(elAutoBoth));
-    edAutoBoth.Model._ = [ruler(120), '// Auto-rows and auto-cols', '// Drag corner to resize'].concat(
+    edAutoBoth.Model._ = [ruler(120), '// Auto-h and auto-w', '// Drag corner to resize'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
     edAutoBoth.render();
 
-    // 2. Fixed-rows, auto-cols
+    // 2. Fixed-h, auto-w
     const elFixedRowsAutoCols = document.getElementById('editor-fixed-rows-auto-cols');
-    const edFixedRowsAutoCols = BuffeeStatusLine(new Buffee(elFixedRowsAutoCols, { rows: 8 }));
-    edFixedRowsAutoCols.Model._ = [ruler(120), '// Fixed 8 rows, auto-cols', 'Line 3'].concat(
+    const edFixedRowsAutoCols = BuffeeStatusLine(new Buffee(elFixedRowsAutoCols, { h: 8 }));
+    edFixedRowsAutoCols.Model._ = [ruler(120), '// Fixed 8 rows, auto-w', 'Line 3'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
     edFixedRowsAutoCols.render();
 
-    // 3. rows smaller than container
+    // 3. h smaller than container
     const elFixedRowsLarge = document.getElementById('editor-fixed-rows-large-container');
-    const edFixedRowsLarge = BuffeeStatusLine(new Buffee(elFixedRowsLarge, { rows: 5 }));
-    edFixedRowsLarge.Model._ = [ruler(80), '// rows: 5 overrides container height'].concat(
+    const edFixedRowsLarge = BuffeeStatusLine(new Buffee(elFixedRowsLarge, { h: 5 }));
+    edFixedRowsLarge.Model._ = [ruler(80), '// h: 5 overrides container height'].concat(
       Array.from({length: 10}, (_, i) => `Line ${i + 3}`));
     edFixedRowsLarge.render();
 
-    // 4. rows larger than container
+    // 4. h larger than container
     const elFixedRowsOverflow = document.getElementById('editor-fixed-rows-overflow');
-    const edFixedRowsOverflow = BuffeeStatusLine(new Buffee(elFixedRowsOverflow, { rows: 20 }));
-    edFixedRowsOverflow.Model._ = [ruler(80), '// rows: 20 exceeds container height'].concat(
+    const edFixedRowsOverflow = BuffeeStatusLine(new Buffee(elFixedRowsOverflow, { h: 20 }));
+    edFixedRowsOverflow.Model._ = [ruler(80), '// h: 20 exceeds container height'].concat(
       Array.from({length: 25}, (_, i) => `Line ${i + 3}`));
     edFixedRowsOverflow.render();
 
-    // 5. rows larger than container (scrollable)
+    // 5. h larger than container (scrollable)
     const elFixedRowsScroll = document.getElementById('editor-fixed-rows-scroll');
-    const edFixedRowsScroll = BuffeeStatusLine(new Buffee(elFixedRowsScroll, { rows: 20 }));
-    edFixedRowsScroll.Model._ = [ruler(80), '// rows: 20 exceeds container height', '// Scroll to see more'].concat(
+    const edFixedRowsScroll = BuffeeStatusLine(new Buffee(elFixedRowsScroll, { h: 20 }));
+    edFixedRowsScroll.Model._ = [ruler(80), '// h: 20 exceeds container height', '// Scroll to see more'].concat(
       Array.from({length: 25}, (_, i) => `Line ${i + 4}`));
     edFixedRowsScroll.render();
 
-    // 6. Auto-rows, fixed-cols (status bar stretches)
+    // 6. Auto-h, fixed-w (status bar stretches)
     const elFixedCols = document.getElementById('editor-fixed-cols');
-    const edFixedCols = BuffeeStatusLine(new Buffee(elFixedCols, { cols: 40 }));
+    const edFixedCols = BuffeeStatusLine(new Buffee(elFixedCols, { w: 40 }));
     edFixedCols.Model._ = [ruler(40), '// Fixed 55 cols', '// Status bar stretches'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
     edFixedCols.render();
 
-    // 7. Auto-rows, fixed-cols (fit-content)
+    // 7. Auto-h, fixed-w (fit-content)
     const elFitContent = document.getElementById('editor-fit-content');
-    const edFitContent = BuffeeStatusLine(new Buffee(elFitContent, { cols: 40 }));
+    const edFitContent = BuffeeStatusLine(new Buffee(elFitContent, { w: 40 }));
     edFitContent.Model._ = [ruler(55), '// Fixed 55 cols', '// width: fit-content'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
     edFitContent.render();
 
-    // 8. Auto-rows, fixed-cols (contain: inline-size)
+    // 8. Auto-h, fixed-w (contain: inline-size)
     const elContain = document.getElementById('editor-contain');
-    const edContain = BuffeeStatusLine(new Buffee(elContain, { cols: 20 }));
+    const edContain = BuffeeStatusLine(new Buffee(elContain, { w: 20 }));
     edContain.Model._ = [ruler(20), '// Fixed 20 cols', '// contain: inline-size'].concat(
       Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
     edContain.render();

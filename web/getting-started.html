@@ -70,11 +70,11 @@ editor.Model._ = ["Hello, World!"]
 editor._.render(true);
 </pre>
   <h2>5. Auto-fit View</h2>
-  <p>By default (when <code>rows</code> is omitted), the editor auto-fits to its container height. To disable auto-fit, specify <code>rows</code>:</p>
-  <pre>new Buffee(el, {})                        // Auto-fit (default)
-new Buffee(el, { rows: 20 })      // Fixed row count
-new Buffee(el, { cols: 80 })      // Fixed column width
-new Buffee(el, { rows: 20, cols: 80 }) // Both fixed</pre>
+  <p>By default (when <code>h</code> is omitted), the editor auto-fits to its container height. To disable auto-fit, specify <code>h</code>:</p>
+  <pre>new Buffee(el, {})                  // Auto-fit (default)
+new Buffee(el, { h: 20 })           // Fixed row count
+new Buffee(el, { w: 80 })           // Fixed column width
+new Buffee(el, { h: 20, w: 80 })    // Both fixed</pre>
   <p>For auto-fit to work, the container must have a defined height (e.g., <code>height: 100%</code> with sized parent, or explicit pixels).</p>
 
 </body>

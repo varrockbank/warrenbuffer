@@ -14,7 +14,7 @@
  * </script>
  *
  * <template>
- *   <BuffeeEditor ref="editorRef" :rows="10" theme="eva" @ready="handleReady" />
+ *   <BuffeeEditor ref="editorRef" :h="10" theme="eva" @ready="handleReady" />
  * </template>
  */
 
@@ -28,9 +28,9 @@ const BuffeeEditor = defineComponent({
 
   props: {
     /** Fixed number of visible lines */
-    rows: { type: Number, default: undefined },
+    h: { type: Number, default: undefined },
     /** Fixed number of text columns */
-    cols: { type: Number, default: undefined },
+    w: { type: Number, default: undefined },
     /** Spaces per tab */
     spaces: { type: Number, default: 4 },
     /** Theme name (e.g., 'eva', 'nord', 'gruv') */
@@ -60,9 +60,9 @@ const BuffeeEditor = defineComponent({
       if (!container.value || typeof Buffee === 'undefined') return;
 
       const config = {
-        rows: props.rows,
-        cols: props.cols,
-        spaces: props.spaces
+        h: props.h,
+        w: props.w,
+        s: props.spaces
       };
 
       let ed = new Buffee(container.value, config);
