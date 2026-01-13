@@ -67,15 +67,43 @@ function handleReady(editor) {
 
   <h2>Props</h2>
   <p>All wrappers support these props:</p>
-  <pre>h            Number    Fixed number of visible lines
-w            Number    Fixed number of text columns
-s            Number    Spaces per tab (default: 4)
-theme        String    Theme name (e.g., 'eva', 'nord', 'gruv')
-showGutter   Boolean   Show line numbers (default: true)
-gutterRight  Boolean   Position gutter on right side (default: false)
-showStatus   Boolean   Show status bar (default: true)
-statusTop    Boolean   Position status bar at top (default: false)
-lines        String[]  Initial content as array of lines (pre-sanitized)</pre>
+  <pre>h            Number      Fixed number of visible lines
+w            Number      Fixed number of text columns
+s            Number      Spaces per tab (default: 4)
+theme        String      Theme name (e.g., 'eva', 'nord', 'gruv')
+showGutter   Boolean     Show line numbers (default: true)
+gutterRight  Boolean     Position gutter on right side (default: false)
+showStatus   Boolean     Show status bar (default: true)
+statusTop    Boolean     Position status bar at top (default: false)
+lines        String[]    Initial content as array of lines (pre-sanitized)
+extensions   Function[]  Array of extension functions to apply</pre>
+
+  <hr>
+
+  <h2>Extensions</h2>
+  <p>Pass extensions via the <code>extensions</code> prop. Extensions are applied in order.</p>
+  <p>Import extensions or load them globally via script tags:</p>
+
+  <h3>ES Modules</h3>
+  <pre>import BuffeeHistory from 'buffee/extensions/history.js';
+import BuffeeSyntax from 'buffee/extensions/syntax.js';
+
+&lt;BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} /&gt;</pre>
+
+  <h3>Script Tags</h3>
+  <pre>&lt;script src="buffee/extensions/history.js"&gt;&lt;/script&gt;
+&lt;script src="buffee/extensions/syntax.js"&gt;&lt;/script&gt;
+
+&lt;BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} /&gt;</pre>
+
+  <h3>Accessing Extension APIs</h3>
+  <p>Use the <code>onReady</code> callback to access extension APIs:</p>
+  <pre>function handleReady(editor) {
+  editor.History.undo();
+  editor.Syntax.setLanguage('javascript');
+}</pre>
+
+  <p><strong>Note:</strong> <code>BuffeeStatusLine</code> is applied automatically when <code>showStatus</code> is true. You don't need to include it in the extensions array.</p>
 
 </body>
 </html>

@@ -1,9 +1,14 @@
 /**
  * @fileoverview Vue 3 wrapper for Buffee editor
- * @version 1.1.0
+ * @version 1.2.0
  *
  * Required: Include buffee.js and style.css before using this component.
- * Optional: Include extensions (e.g., statusline.js) and theme CSS.
+ * Optional: Include extensions and theme CSS.
+ *
+ * Extensions: Pass an array of extension functions via the `extensions` prop.
+ * Extensions are applied in order. Import or load them globally first:
+ *   import BuffeeHistory from 'buffee/extensions/history.js';
+ *   <BuffeeEditor :extensions="[BuffeeHistory, BuffeeSyntax]" />
  *
  * Themes: The `theme` prop adds a CSS class (e.g., `buffee-themepack1-eva`).
  * You must load the theme CSS separately:
@@ -54,7 +59,9 @@ const BuffeeEditor = defineComponent({
     /** Position status bar at top */
     statusTop: { type: Boolean, default: false },
     /** Initial content as array of lines (pre-sanitized) */
-    lines: { type: Array, default: undefined }
+    lines: { type: Array, default: undefined },
+    /** Array of extension functions to apply */
+    extensions: { type: Array, default: () => [] }
   },
 
   emits: ['ready'],
@@ -77,8 +84,13 @@ const BuffeeEditor = defineComponent({
 
       let ed = new Buffee(container.value, config);
 
-      // Add status line extension if available
-      if (props.showStatus && typeof BuffeeStatusLine !== 'undefined') {
+      // Apply extensions in order
+      for (const ext of props.extensions) {
+        ed = ext(ed);
+      }
+
+      // Add status line extension if available and not already in extensions
+      if (props.showStatus && typeof BuffeeStatusLine !== 'undefined' && !props.extensions.includes(BuffeeStatusLine)) {
         ed = BuffeeStatusLine(ed);
       }
 
