@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.7.4-alpha.1 [2026-01-13]  gz: 2575 / 2.51 KB (+3), br: 2371 / 2.32 KB (-2), min: 5744 / 5.61 KB (-2)
+- refactor: rename tail→anchor, detachedHead→detached for clarity
+
 ** 15.7.3-alpha.1 [2026-01-13]  gz: 2572 / 2.51 KB (0), br: 2374 / 2.32 KB (0), min: 5746 / 5.61 KB (-7)
 - perf: remove unnecessary detachedHead initialization
 
