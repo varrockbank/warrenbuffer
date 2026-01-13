@@ -175,7 +175,6 @@ Templates: `combinators/_template.js`, `samples/_template.html`, `themes/_templa
 | `.buffee-layer-elements` | Overlay | TUI/Elementals overlay |
 | `.buffee-caret` | Cursor | Blinking cursor |
 | `.buffee-status` | Status bar | Bottom bar container |
-| `.buffee-clip` | `<textarea>` | Hidden, for clipboard |
 
 ## Keybindings Reference
 

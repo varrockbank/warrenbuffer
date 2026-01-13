@@ -87,7 +87,6 @@ Editor instances attach to a root node having such structure:
 
 ```html
 <div class="buffee" id="editor">
-  <textarea class="buffee-clip" aria-hidden="true"></textarea>
   <div class="no-select buffee-pane">
     <!-- Can omit optional gutter rail -->
     <div class="buffee-rail"></div>

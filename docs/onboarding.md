@@ -15,7 +15,6 @@ See `web/template.html` for the required HTML structure:
 
 ```html
 <div class="buffee">
-  <textarea class="buffee-clip" aria-hidden="true"></textarea>
   <div class="no-select buffee-pane">
     <div class="buffee-rail"></div>
     <div class="buffee-lines" tabindex="0">

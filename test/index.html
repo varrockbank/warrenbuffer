@@ -126,7 +126,6 @@
         .buffee { background-color: #282C34; color: #B2B2B2; position: relative; outline: none; font-family: monospace; display: flex; flex-direction: column; }
         .buffee-content { display: flex; flex: 1;  }
         .no-select { user-select: none; }
-        .buffee-clip { position: fixed; left: 0; top: 1px; width: 0; height: 1px; opacity: 0; pointer-events: none; }
         .buffee .buffee-lines pre::before { content: "\200B"; }
         .buffee .buffee-lines pre { margin: 0;  }
         .buffee .buffee-zsel > div { background-color: #EDAD10; mix-blend-mode: difference; }
@@ -261,7 +260,6 @@
             <!-- Hidden editor container for tests -->
             <div class="editor-container">
                 <div class="buffee no-select">
-                    <textarea class="buffee-clip" aria-hidden="true"></textarea>
                     <div class="no-select buffee-pane">
                         <div class="buffee-rail"></div>
                         <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
@@ -312,7 +310,6 @@
                 </div>
                 <div class="pane-content">
                     <div class="buffee no-select" id="dsl-editor">
-                        <textarea class="buffee-clip" aria-hidden="true"></textarea>
                         <div class="no-select buffee-pane">
                             <div class="buffee-rail"></div>
                             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
@@ -334,7 +331,6 @@
                 </div>
                 <div class="pane-content">
                     <div class="buffee no-select" id="js-output">
-                        <textarea class="buffee-clip" aria-hidden="true"></textarea>
                         <div class="no-select buffee-pane">
                             <div class="buffee-rail"></div>
                             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
@@ -433,7 +429,6 @@ expect(3+5).toBe(8);               <span class="g-arr">→</span>  expect(3+5).t
                 </div>
                 <div class="editor-view-container">
                     <div class="buffee" id="walkthrough-editor">
-                        <textarea class="buffee-clip" aria-hidden="true"></textarea>
                         <div class="no-select buffee-pane">
                             <div class="buffee-rail"></div>
                             <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
