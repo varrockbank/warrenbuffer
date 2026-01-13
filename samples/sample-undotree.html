@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>buffee - Undo Tree Extension</title>
+  <title>buffee - Undo Tree Combinator</title>
   <script src="../buffee.js"></script>
-  <script src="../extensions/statusline.js"></script>
-  <script src="../extensions/undotree.js"></script>
+  <script src="../combinators/statusline.js"></script>
+  <script src="../combinators/undotree.js"></script>
   <link rel="stylesheet" href="../assets/reset.css">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../themes/theme-eva.css">
@@ -123,9 +123,9 @@
       .then(r => r.text())
       .then(html => document.getElementById('nav').innerHTML = html);
   </script>
-  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Undo Tree Extension</p>
+  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Undo Tree Combinator</p>
 
-  <h1>Undo Tree Extension</h1>
+  <h1>Undo Tree Combinator</h1>
   <p>Unlike linear history, undo tree preserves <strong>all branches</strong>. When you undo and make a new edit, you create a new branch instead of losing history.</p>
 
   <div class="controls">

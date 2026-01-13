@@ -5,7 +5,7 @@ const pages = [
   // Root pages
   { name: 'index', path: '/' },
   { name: 'getting-started', path: '/web/getting-started.html' },
-  { name: 'extensions', path: '/web/extensions.html' },
+  { name: 'combinators', path: '/web/combinators.html' },
   { name: 'themes', path: '/web/themes.html' },
   { name: 'comparison', path: '/web/comparison.html' },
 
@@ -26,7 +26,7 @@ const pages = [
 
   // Test pages
   { name: 'test-index', path: '/test/' },
-  { name: 'test-extensions', path: '/test/#extensions' },
+  { name: 'test-combinators', path: '/test/#combinators' },
 ];
 
 // Selectors for dynamic content to mask during screenshots

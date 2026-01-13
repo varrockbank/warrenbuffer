@@ -5,11 +5,11 @@
   <title>buffee - [Sample Name]</title>
   <!-- Core -->
   <script src="../buffee.js"></script>
-  <script src="../extensions/statusline.js"></script>
-  <!-- Extensions (add as needed) -->
-  <!-- <script src="../extensions/syntax.js"></script> -->
-  <!-- <script src="../extensions/elementals.js"></script> -->
-  <!-- <script src="../extensions/tui.js"></script> -->
+  <script src="../combinators/statusline.js"></script>
+  <!-- Combinators (add as needed) -->
+  <!-- <script src="../combinators/syntax.js"></script> -->
+  <!-- <script src="../combinators/elementals.js"></script> -->
+  <!-- <script src="../combinators/tui.js"></script> -->
   <!-- Styles -->
   <link rel="stylesheet" href="../assets/reset.css">
   <link rel="stylesheet" href="../style.css">
@@ -56,7 +56,7 @@
     const el = document.getElementById('editor');
     const editor = BuffeeStatusLine(new Buffee(el, { h: 10 }));
 
-    // Initialize extensions
+    // Initialize combinators
     // BuffeeSyntax(editor);
 
     // Set content

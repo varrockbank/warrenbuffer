@@ -220,7 +220,7 @@
 
     <div class="tabs">
         <button class="tab active" data-tab="tests">Tests</button>
-        <button class="tab" data-tab="extensions">Extensions</button>
+        <button class="tab" data-tab="combinators">Combinators</button>
         <button class="tab" data-tab="source">Source</button>
         <button class="tab" data-tab="grammar">Grammar</button>
         <button class="tab" data-tab="diagnostics">AI Diagnostics</button>
@@ -280,7 +280,7 @@
             </div>
         </main>
     </div>
-    <div id="tab-extensions" class="tab-content">
+    <div id="tab-combinators" class="tab-content">
         <main>
             <div class="summary">
                 <div class="summary-item">
@@ -458,16 +458,16 @@ expect(3+5).toBe(8);               <span class="g-arr">→</span>  expect(3+5).t
 
     <!-- Test dependencies -->
     <script src="../buffee.js"></script>
-    <script src="../extensions/statusline.js"></script>
-    <script src="../extensions/syntax.js"></script>
-    <script src="../extensions/elementals.js"></script>
-    <script src="../extensions/highlights.js"></script>
-    <script src="../extensions/tui.js"></script>
-    <script src="../extensions/ultrahighcapacity.js"></script>
-    <script src="../extensions/history.js"></script>
-    <script src="../extensions/undotree.js"></script>
-    <script src="../extensions/fileloader.js"></script>
-    <script src="../extensions/sanitize.js"></script>
+    <script src="../combinators/statusline.js"></script>
+    <script src="../combinators/syntax.js"></script>
+    <script src="../combinators/elementals.js"></script>
+    <script src="../combinators/highlights.js"></script>
+    <script src="../combinators/tui.js"></script>
+    <script src="../combinators/ultrahighcapacity.js"></script>
+    <script src="../combinators/history.js"></script>
+    <script src="../combinators/undotree.js"></script>
+    <script src="../combinators/fileloader.js"></script>
+    <script src="../combinators/sanitize.js"></script>
     <script src="lib/test-walkthrough.js"></script>
     <script src="lib/test-runner.js"></script>
     <script src="lib/test-expect.js"></script>
@@ -477,7 +477,7 @@ expect(3+5).toBe(8);               <span class="g-arr">→</span>  expect(3+5).t
     <script src="./dsl/dsl-transpiler.js"></script>
     <script src="./dsl/dsl-generator.js"></script>
 
-    <script src="lib/test-extensions.js"></script>
+    <script src="lib/test-combinators.js"></script>
     <script src="lib/test-ui.js"></script>
 </body>
 </html>

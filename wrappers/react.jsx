@@ -1,14 +1,14 @@
 /**
  * @fileoverview React wrapper for Buffee editor
- * @version 1.2.0
+ * @version 1.3.0
  *
  * Required: Include buffee.js and style.css before using this component.
- * Optional: Include extensions and theme CSS.
+ * Optional: Include combinators and theme CSS.
  *
- * Extensions: Pass an array of extension functions via the `extensions` prop.
- * Extensions are applied in order. Import or load them globally first:
- *   import BuffeeHistory from 'buffee/extensions/history.js';
- *   <BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} />
+ * Combinators: Pass an array of combinator functions via the `combinators` prop.
+ * Combinators are applied in order. Import or load them globally first:
+ *   import BuffeeHistory from 'buffee/combinators/history.js';
+ *   <BuffeeEditor combinators={[BuffeeHistory, BuffeeSyntax]} />
  *
  * Themes: The `theme` prop adds a CSS class (e.g., `buffee-themepack1-eva`).
  * You must load the theme CSS separately:
@@ -45,7 +45,7 @@ import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react
  * @param {boolean} [props.showGutter=true] - Show line numbers
  * @param {boolean} [props.showStatus=true] - Show status bar
  * @param {string[]} [props.lines] - Initial content as array of lines (pre-sanitized)
- * @param {Function[]} [props.extensions] - Array of extension functions to apply
+ * @param {Function[]} [props.combinators] - Array of combinator functions to apply
  * @param {Function} [props.onReady] - Callback when editor is initialized
  */
 const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
@@ -60,7 +60,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     showStatus = true,
     statusTop = false,
     lines,
-    extensions = [],
+    combinators = [],
     onReady
   } = props;
 
@@ -78,13 +78,13 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
 
     let editor = new Buffee(el, config);
 
-    // Apply extensions in order
-    for (const ext of extensions) {
-      editor = ext(editor);
+    // Apply combinators in order
+    for (const comb of combinators) {
+      editor = comb(editor);
     }
 
-    // Add status line extension if available and not already in extensions
-    if (showStatus && typeof BuffeeStatusLine !== 'undefined' && !extensions.includes(BuffeeStatusLine)) {
+    // Add status line combinator if available and not already in combinators
+    if (showStatus && typeof BuffeeStatusLine !== 'undefined' && !combinators.includes(BuffeeStatusLine)) {
       editor = BuffeeStatusLine(editor);
     }
     editorRef.current = editor;

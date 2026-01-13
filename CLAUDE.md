@@ -3,7 +3,7 @@
 **Full API reference: `docs/`** — Read these files for complete documentation:
 - `docs/api.txt` — Model, View, Span, Mode API
 - `docs/onboarding.md` — Getting started, sizing, keybindings
-- `docs/extensions.md` — Extension documentation
+- `docs/combinators.md` — Combinator documentation
 
 ## Quick Reference
 
@@ -96,12 +96,12 @@ left with alt
 EXPECT cursor at 0,5
 ```
 
-## Extensions
+## Combinators
 
-Located in `extensions/`, tested in "Extensions" tab of `test/index.html`.
+Located in `combinators/`, tested in "Combinators" tab of `test/index.html`.
 
-**When adding an extension, also update:**
-- `web/extensions.html` (documentation)
+**When adding a combinator, also update:**
+- `web/combinators.html` (documentation)
 - `samples/index.html` (if adding a sample)
 
 | File | Function | Description |
@@ -151,7 +151,7 @@ GitHub Pages serves from root. CI screenshot tests run against these (see `snaps
 |------|---------|
 | `template.html` | Required HTML structure |
 | `getting-started.html` | Setup guide |
-| `extensions.html` | Extension documentation |
+| `combinators.html` | Combinator documentation |
 | `themes.html` | Theme showcase |
 | `comparison.html` | Editor comparison |
 | `performance.html` | Performance research |
@@ -160,7 +160,7 @@ GitHub Pages serves from root. CI screenshot tests run against these (see `snaps
 **assets/** (internal):
 - `reset.css` - CSS reset (web-specific)
 
-Templates: `extensions/_template.js`, `samples/_template.html`, `themes/_template.css`
+Templates: `combinators/_template.js`, `samples/_template.html`, `themes/_template.css`
 
 ## DOM Classes Reference
 

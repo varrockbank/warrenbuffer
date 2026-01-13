@@ -9,7 +9,7 @@ Inspired by the experience of terminal interfaces and Vim, Buffee is a microlibr
 - tiny: ~2kb (gz+min) fooprint, low memory/CPU overhead
 - performant: rivals native editors like Vim - no slowdown on large files
 - hassle-free: no build step, no NPM, no dependencies
-- programmable: extensions, hackable internals, minimal API
+- programmable: combinators, hackable internals, minimal API
 - heavy-duty: ~70m SLOC file capacity, 1B+ in high-capacity mode 
 
 Yes - like Emacs, it includes a text editor too.
@@ -64,7 +64,7 @@ To test: type "A" 100+ times and move cursor to end. If misaligned, try a differ
 Tab characters (`\t`) break grid alignment because browsers render them as variable-width. Buffee core does not sanitize input—if you set content containing tabs via `Model.s` or `Span.ins()`, they appear as-is.
 
 **Solutions:**
-- **BuffeeSanitize extension** — Automatically converts tabs to spaces, removes zero-width characters, and normalizes multi-width Unicode spaces. See [Sanitize extension](web/extensions.html#sanitize).
+- **BuffeeSanitize combinator** — Automatically converts tabs to spaces, removes zero-width characters, and normalizes multi-width Unicode spaces. See [Sanitize combinator](web/combinators.html#sanitize).
 - **Pre-sanitize** — Clean your text before passing to Buffee: `text.replace(/\t/g, '    ')`
 
 The keyboard controller already handles Tab key presses by inserting spaces (based on `Mode.s`), so typed tabs are not an issue—only programmatic content.
@@ -144,19 +144,19 @@ Container should have explicit height inherit some percentage from parent.
 **Span** `editor.Span` represents a text selection. Cursors are the special case of this where the
 anchor and the head/dot are the same. Text editing operations are defined relative to this selection.
 
-The controller are keyboard event handlers which route to operations on the selection. In the future, the basic controller will be refactored out of Buffee.js as an Extension such that you will have to bring-your-own controller by default. e.g. a "vim normal mode controller".
+The controller are keyboard event handlers which route to operations on the selection. In the future, the basic controller will be refactored out of Buffee.js as a Combinator such that you will have to bring-your-own controller by default. e.g. a "vim normal mode controller".
 
 See: [API Reference](docs/api.txt) | [Getting Started](docs/onboarding.md)
 
-## Extensibility
+## Combinators
 
-Extensions use the decorator pattern - pure functions that wrap the editor, being an editor instance themselves, meaning they can be combined:
+Combinators use the decorator pattern - pure functions that wrap the editor, being an editor instance themselves, meaning they can be combined:
 
 ```javascript
-// Single extension
+// Single combinator
 const editor = BuffeeHistory(new Buffee(container, config));
 
-// Multiple extensions (compose by nesting)
+// Multiple combinators (compose by nesting)
 const editor = BuffeeElementals(
   BuffeeSyntax(
     BuffeeHistory(
@@ -165,13 +165,13 @@ const editor = BuffeeElementals(
   )
 );
 
-// Extensions expose APIs on the editor instance
+// Combinators expose APIs on the editor instance
 editor.History.undo();
 editor.Syntax.setLanguage('javascript');
 editor.Elementals.addButton({ row: 0, col: 0, label: 'OK' });
 ```
 
-Available extensions:
+Available combinators:
 - **History** - Undo/redo with operation coalescing
 - **UndoTree** - Tree-based undo that preserves all branches
 - **Syntax** - Regex-based syntax highlighting
@@ -182,7 +182,7 @@ Available extensions:
 - **iOS** - Touch and on-screen keyboard support
 - **Sanitize** - Tab/Unicode normalization for programmatic content
 
-See: [Extensions](docs/extensions.md)
+See: [Combinators](docs/combinators.md)
 
 ## Versioning 
 

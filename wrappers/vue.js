@@ -1,14 +1,14 @@
 /**
  * @fileoverview Vue 3 wrapper for Buffee editor
- * @version 1.2.0
+ * @version 1.3.0
  *
  * Required: Include buffee.js and style.css before using this component.
- * Optional: Include extensions and theme CSS.
+ * Optional: Include combinators and theme CSS.
  *
- * Extensions: Pass an array of extension functions via the `extensions` prop.
- * Extensions are applied in order. Import or load them globally first:
- *   import BuffeeHistory from 'buffee/extensions/history.js';
- *   <BuffeeEditor :extensions="[BuffeeHistory, BuffeeSyntax]" />
+ * Combinators: Pass an array of combinator functions via the `combinators` prop.
+ * Combinators are applied in order. Import or load them globally first:
+ *   import BuffeeHistory from 'buffee/combinators/history.js';
+ *   <BuffeeEditor :combinators="[BuffeeHistory, BuffeeSyntax]" />
  *
  * Themes: The `theme` prop adds a CSS class (e.g., `buffee-themepack1-eva`).
  * You must load the theme CSS separately:
@@ -60,8 +60,8 @@ const BuffeeEditor = defineComponent({
     statusTop: { type: Boolean, default: false },
     /** Initial content as array of lines (pre-sanitized) */
     lines: { type: Array, default: undefined },
-    /** Array of extension functions to apply */
-    extensions: { type: Array, default: () => [] }
+    /** Array of combinator functions to apply */
+    combinators: { type: Array, default: () => [] }
   },
 
   emits: ['ready'],
@@ -84,13 +84,13 @@ const BuffeeEditor = defineComponent({
 
       let ed = new Buffee(container.value, config);
 
-      // Apply extensions in order
-      for (const ext of props.extensions) {
-        ed = ext(ed);
+      // Apply combinators in order
+      for (const comb of props.combinators) {
+        ed = comb(ed);
       }
 
-      // Add status line extension if available and not already in extensions
-      if (props.showStatus && typeof BuffeeStatusLine !== 'undefined' && !props.extensions.includes(BuffeeStatusLine)) {
+      // Add status line combinator if available and not already in combinators
+      if (props.showStatus && typeof BuffeeStatusLine !== 'undefined' && !props.combinators.includes(BuffeeStatusLine)) {
         ed = BuffeeStatusLine(ed);
       }
 

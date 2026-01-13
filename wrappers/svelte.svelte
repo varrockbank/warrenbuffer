@@ -1,14 +1,14 @@
 <!--
   @fileoverview Svelte wrapper for Buffee editor
-  @version 1.2.0
+  @version 1.3.0
 
   Required: Include buffee.js and style.css before using this component.
-  Optional: Include extensions and theme CSS.
+  Optional: Include combinators and theme CSS.
 
-  Extensions: Pass an array of extension functions via the `extensions` prop.
-  Extensions are applied in order. Import or load them globally first:
-    import BuffeeHistory from 'buffee/extensions/history.js';
-    <BuffeeEditor extensions={[BuffeeHistory, BuffeeSyntax]} />
+  Combinators: Pass an array of combinator functions via the `combinators` prop.
+  Combinators are applied in order. Import or load them globally first:
+    import BuffeeHistory from 'buffee/combinators/history.js';
+    <BuffeeEditor combinators={[BuffeeHistory, BuffeeSyntax]} />
 
   Themes: The `theme` prop adds a CSS class (e.g., `buffee-themepack1-eva`).
   You must load the theme CSS separately:
@@ -79,9 +79,9 @@
   export let lines = undefined;
 
   /**
-   * @type {Function[]} Array of extension functions to apply
+   * @type {Function[]} Array of combinator functions to apply
    */
-  export let extensions = [];
+  export let combinators = [];
 
   /**
    * @type {string} Additional CSS classes
@@ -109,13 +109,13 @@
 
     editor = new Buffee(container, config);
 
-    // Apply extensions in order
-    for (const ext of extensions) {
-      editor = ext(editor);
+    // Apply combinators in order
+    for (const comb of combinators) {
+      editor = comb(editor);
     }
 
-    // Add status line extension if available and not already in extensions
-    if (showStatus && typeof BuffeeStatusLine !== 'undefined' && !extensions.includes(BuffeeStatusLine)) {
+    // Add status line combinator if available and not already in combinators
+    if (showStatus && typeof BuffeeStatusLine !== 'undefined' && !combinators.includes(BuffeeStatusLine)) {
       editor = BuffeeStatusLine(editor);
     }
 

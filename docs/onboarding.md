@@ -92,13 +92,13 @@ new Buffee(el, { h: 25, w: 80 });
 | Cmd/Ctrl+A | Select all | - |
 | Cmd/Ctrl+C/X/V | Copy/Cut/Paste | - |
 
-## Extensions
+## Combinators
 
-Extensions add functionality via the decorator pattern:
+Combinators add functionality via the decorator pattern:
 
 ```javascript
 const editor = BuffeeStatusLine(new Buffee(el, opts));
 BuffeeHistory(editor);  // Adds undo/redo
 ```
 
-See [extensions.md](extensions.md) for available extensions.
+See [combinators.md](combinators.md) for available combinators.
