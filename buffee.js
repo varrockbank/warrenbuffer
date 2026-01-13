@@ -18,12 +18,12 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.7.2-alpha.1';
+  this.v = '15.7.3-alpha.1';
   this.$ = $;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
   // In case where we have cursor, we want head === tail.
-  const detachedHead = { y: 0, x: 0};
+  const detachedHead = {};
   let head   = { y: 0, x: 0 };
   let tail   = head;
   let maxCol = head.x;
