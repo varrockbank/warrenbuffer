@@ -32,8 +32,7 @@ See [comparison](https://varrockbank.github.io/buffee/web/comparison.html) and [
 
 ## The Magic Trick
 
-The crux is maintaining a small DOM footprint. This is achieved by maintain a virtual viewport and being 
-smart in surgically rendering only what's changed. 
+The crux is maintaining a small DOM footprint. This is achieved by maintain a virtual viewport and being smart in surgically rendering only what's changed. 
 
 The zeitgeist of webdev is VDOM. This does not come free. VDOM libraries are bulkier than Buffee in its entirety because they deal with arbitrary trees. Buffee avoids this 
 with a predictable and narrowly constrained UI surface space. 
@@ -173,7 +172,6 @@ editor.Elementals.addButton({ row: 0, col: 0, label: 'OK' });
 
 Available combinators:
 - **History** - Undo/redo with operation coalescing
-- **UndoTree** - Tree-based undo that preserves all branches
 - **Syntax** - Regex-based syntax highlighting
 - **Elementals** - DOM-based UI elements (buttons, inputs)
 - **TUI** - Terminal UI via text manipulation
@@ -182,7 +180,8 @@ Available combinators:
 - **iOS** - Touch and on-screen keyboard support
 - **Sanitize** - Tab/Unicode normalization for programmatic content
 
-See: [Combinators](docs/combinators.md)
+See: [Dev Guide on Combinators](docs/combinators.md)
+See: [Combinator Gallery](web/combinators.html)
 
 ## Versioning 
 
