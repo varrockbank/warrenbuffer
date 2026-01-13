@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.8.2-alpha.1';
+  this.v = '15.8.3-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -392,7 +392,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     e.preventDefault(); // take over the clipboard contents                   
     e.clipboardData.setData('text/plain', Span._.join('\n'));
     Span.del();
-    $lines.focus({ preventScroll: true });     // Return focus to editor
+    $lines.focus({ preventScroll: 1 });     // Return focus to editor
   });
 
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
@@ -402,8 +402,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
     const metaKeys = {
       v: () => {},
-      c: () => { $clip.focus({ preventScroll: true }); $clip.select(); },
-      x: () => { $clip.focus({ preventScroll: true }); $clip.select(); },
+      c: () => { $clip.focus({ preventScroll: 1 }); $clip.select(); },
+      x: () => { $clip.focus({ preventScroll: 1 }); $clip.select(); },
       z: () => { e.preventDefault(); if (this.History) this.History[sh ? 'redo' : 'undo'](); },
     },     special = {
       Backspace: () => { Span.del() },
