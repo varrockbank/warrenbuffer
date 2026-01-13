@@ -59,6 +59,7 @@ instance.Span
 A continuous text span from a starting and end coordinate.
 
 Span
+  ._                 Get selected lines
   .bounds(value)     returns bounds: truthy [start, end], falsey [head, tail]
   .dir               orientation: 1 (forward), -1 (backward), 0 (cursor)
   .mvX(value)        move horizontally : 1 right , -1 left
