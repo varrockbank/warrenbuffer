@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.9-alpha.1';
+  this.v = '15.9.10-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -238,6 +238,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
     },
   };
 
+
+  const cw = $caret.getBoundingClientRect().width;
   /**
    * Editor mode settings (shared between internal and external code).
    * @namespace Mode
@@ -255,7 +257,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     f: 0,                                      /** framecount                */
     mx: 0,                                     /** max column for vertical movement */
     ch,                                        /** line and character height */
-    cw: $caret.getBoundingClientRect().width,  /** computed character width  */
+    cw,                                        /** computed character width  */
     sub: [],                                   /** render callbacks          */
     ext: []                                    /** registered extensions     */
   };
@@ -362,8 +364,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
         cursorLeft = head.x;
 
         // Horizontal scroll to keep cursor in view
-        const {left: cl, right: cr} = lRect, rl = lRect.left + head.x * Mode.cw - $lines.scrollLeft, rr = rl + Mode.cw;
-        $lines.scrollLeft = Math.round(($lines.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / Mode.cw) * Mode.cw;
+        const {left: cl, right: cr} = lRect, rl = lRect.left + head.x * cw - $lines.scrollLeft, rr = rl + cw;
+        $lines.scrollLeft = Math.round(($lines.scrollLeft + (rl < cl ? rl - cl : rr > cr ? rr - cr : 0)) / cw) * cw;
       }
     }
     $caret.style.left = cursorLeft + 'ch';
