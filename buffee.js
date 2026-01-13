@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.9.8-alpha.1';
+  this.v = '15.9.9-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -102,8 +102,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
         const wordRe  = /[\p{L}\p{Nd}_]/u;
         const ok      = fwd ? () => j<n : () => j>0 ;
         const step    = fwd ? () => j++ : () => j-- ;
-        if (spaceRe.test(s[j])) { while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
-        else if (wordRe.test(s[j])) while (ok() && wordRe.test(s[j])) step();
+        if     (spaceRe.test(s[j])) {  while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
+        else if (wordRe.test(s[j]))    while (ok() && wordRe.test(s[j]))  step();
         else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
         head.x = j;
         render();
@@ -133,7 +133,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       const [left, right] = Span.bounds(1);
       const fwd = this.dir > 0;
       if (left.y === right.y) {
-        const text = Model._[left.y];
+        const text  = Model._[left.y];
         const slice = text.slice(left.x, right.x + fwd);
         return right.x >= text.length && left.y < Model.last ? [slice, ''] : [slice];
       }
@@ -146,7 +146,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
     /** Collapses selection to a cursor. Optionally sets position first. */
     cursor(p) {
-      if (p) { head.y = p.y; head.x = p.x; }
+      if (p) head.y = p.y, head.x = p.x;
       anchor.y = head.y;
       anchor.x = head.x;
       head     = anchor;
@@ -182,7 +182,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
         // Update cursor
         if (lines.length > 1) {
-                        head.y += lines.length - 1;
+                         head.y += lines.length - 1;
                Mode.mx = head.x  = lines[lines.length - 1].length;
         } else Mode.mx = head.x += lines[0]?.length || 0;
       }
@@ -219,15 +219,15 @@ function Buffee($, { h, w, s = 4 } = {}) {
     dent(n) {
       // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
-      const [first, second] = Span.bounds(1);
+      const [first, second]   = Span.bounds(1);
       for (let i = first.y; i <= second.y; i++) {
-        const line = Model._[i];
+        const line            = Model._[i];
         if (n > 0) Model._[i] = ' '.repeat(n) + line;
         else {
           const cursor = first.y === i && first || second.y === i && second;
           if (cursor) {
-            const right    = line.slice(cursor.x).search(/[^ ]|$/);
-            const toRemove = Math.min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
+            const right     = line.slice(cursor.x).search(/[^ ]|$/);
+            const toRemove  = Math.min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
             Model._[i]      = line.slice(toRemove);
             if (right < toRemove) cursor.x -= toRemove - right;
           } else Model._[i] = line.slice(Math.min(-n, line.search(/[^ ]|$/)));
@@ -397,19 +397,21 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
   // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
   const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
-  $lines.addEventListener('keydown', e => {
-    const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey;
 
-    const special = {
-      Backspace: () => Span.del(),
-      Enter: () => Span.ins(['', '']),
-      Tab: () => {
-        e.preventDefault();
-        (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]);
-      },
+  $lines.addEventListener('keydown', e => {
+    const cmd = e.metaKey || e.ctrlKey,
+            k = e.key,
+           sh = e.shiftKey,
+    arrowCode = arrowMap[k] || 0,
+      special = {
+        Backspace: () => Span.del(),
+        Enter: () => Span.ins(['', '']),
+        Tab: () => {
+          e.preventDefault();
+          (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]);
+        },
     };
 
-    const arrowCode = arrowMap[k] || 0;
     if (arrowCode) {
       e.preventDefault(); // prevents page scroll
       if (Mode.i < 0) return; // read-only mode: no navigation
@@ -417,8 +419,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
       const direction = arrowCode >> 31 | 1;
 
       if(cmd || e.altKey) {
-        if(!sh && Span.dir)      Span.cursor();
-        else if(sh && !Span.dir) Span.select();
+        if(!sh && Span.dir)           Span.cursor();
+        else if(sh && !Span.dir)      Span.select();
         if (arrowCode % 2) cmd ?      Span.mvLn(direction > 0) : Span.mvW(direction);
       } else if (!sh && Span.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
@@ -433,7 +435,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
           Span.cursor({ y: targetAbsRow, x: Mode.mx});
 
           // Scroll viewport if target is outside visible area
-          if (targetAbsRow < View.first) View.first = targetAbsRow;
+          if (targetAbsRow < View.first)     View.first = targetAbsRow;
           else if (targetAbsRow > View.last) View.first = targetAbsRow - View.n + 1;
           else render();
         }

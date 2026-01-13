@@ -1,6 +1,9 @@
 * Project Devlog
 
-** 15.9.8-alpha.1 [2026-01-13]  gz: 2510 / 2.45 KB (+11), br: 2316 / 2.26 KB (-2), min: 5553 / 5.42 KB (-2)
+** 15.9.9-alpha.1 [2026-01-13]  gz: 2510 / 2.45 KB (+14), br: 2315 / 2.26 KB (-1), min: 5553 / 5.42 KB (0)
+- golf: merge special into const chain in keydown handler
+
+** 15.9.8-alpha.1 [2026-01-13]  gz: 2496 / 2.44 KB (-3), br: 2316 / 2.26 KB (-1), min: 5553 / 5.42 KB (-2)
 - golf: simplify dent cursor detection with && ||
 
 ** 15.9.7-alpha.1 [2026-01-13]  gz: 2499 / 2.44 KB (+5), br: 2318 / 2.26 KB (+12), min: 5555 / 5.42 KB (+25)
