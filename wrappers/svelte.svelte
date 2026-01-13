@@ -12,7 +12,7 @@
     }
   </script>
 
-  <BuffeeEditor rows={10} theme="eva" on:ready={handleReady} />
+  <BuffeeEditor h={10} theme="eva" on:ready={handleReady} />
 -->
 
 <script>
@@ -21,17 +21,17 @@
   /**
    * @type {number} Fixed number of visible lines
    */
-  export let rows = undefined;
+  export let h = undefined;
 
   /**
    * @type {number} Fixed number of text columns
    */
-  export let cols = undefined;
+  export let w = undefined;
 
   /**
    * @type {number} Spaces per tab
    */
-  export let spaces = 4;
+  export let s = 4;
 
   /**
    * @type {string} Theme name (e.g., 'eva', 'nord', 'gruv')
@@ -85,7 +85,7 @@
   onMount(() => {
     if (!container || typeof Buffee === 'undefined') return;
 
-    const config = { rows, cols, spaces };
+    const config = { h, w, s };
 
     editor = new Buffee(container, config);
 

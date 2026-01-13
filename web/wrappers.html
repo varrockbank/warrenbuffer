@@ -30,7 +30,7 @@ function App() {
     }
   }, []);
 
-  return &lt;BuffeeEditor ref={editorRef} rows={10} theme="eva" /&gt;;
+  return &lt;BuffeeEditor ref={editorRef} h={10} theme="eva" /&gt;;
 }</pre>
 
   <h2>Svelte</h2>
@@ -46,7 +46,7 @@ function App() {
   }
 &lt;/script&gt;
 
-&lt;BuffeeEditor rows={10} theme="eva" on:ready={handleReady} /&gt;</pre>
+&lt;BuffeeEditor h={10} theme="eva" on:ready={handleReady} /&gt;</pre>
 
   <h2>Vue</h2>
   <p><a href="https://github.com/varrockbank/buffee/blob/main/wrappers/vue.js"><code>wrappers/vue.js</code></a></p>
@@ -60,16 +60,16 @@ function handleReady(editor) {
 &lt;/script&gt;
 
 &lt;template&gt;
-  &lt;BuffeeEditor :rows="10" theme="eva" @ready="handleReady" /&gt;
+  &lt;BuffeeEditor :h="10" theme="eva" @ready="handleReady" /&gt;
 &lt;/template&gt;</pre>
 
   <hr>
 
   <h2>Props</h2>
   <p>All wrappers support these props:</p>
-  <pre>rows         Number   Fixed number of visible lines
-cols         Number   Fixed number of text columns
-spaces       Number   Spaces per tab (default: 4)
+  <pre>h            Number   Fixed number of visible lines
+w            Number   Fixed number of text columns
+s            Number   Spaces per tab (default: 4)
 theme        String   Theme name (e.g., 'eva', 'nord', 'gruv')
 showGutter   Boolean  Show line numbers (default: true)
 gutterRight  Boolean  Position gutter on right side (default: false)
