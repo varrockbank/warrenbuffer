@@ -54,7 +54,8 @@
     const editorEl = document.getElementById('editor');
     const editor = BuffeeStatusLine(new Buffee(editorEl, { rows: 13 }));
 
-    editor.Model.s = 'Loading Star Wars ASCII movie...';
+    editor.Model._ = ['Loading Star Wars ASCII movie...'];
+    editor.render();
 
     let movieData = null;
     let frames = [];
@@ -87,13 +88,15 @@
         showFrame(750);
       } catch (err) {
         console.error("Error loading Star Wars movie:", err);
-        editor.Model.s = "Error loading movie. Check that sw.txt is in the assets directory.";
+        editor.Model._ = ["Error loading movie. Check that sw.txt is in the assets directory."];
+        editor.render();
       }
     }
 
     function showFrame(frameIndex) {
       if (frames.length > 0) {
-        editor.Model.s = frames[frameIndex % frames.length];
+        editor.Model._ = frames[frameIndex % frames.length].split('\n');
+        editor.render();
         document.getElementById('frame-counter').textContent = `${frameIndex + 1} / ${frames.length}`;
         document.getElementById('frame-slider').value = frameIndex;
       }

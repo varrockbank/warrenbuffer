@@ -112,8 +112,12 @@ editor.iOS.destroy() // Cleanup</pre>
   </ul>
   <pre>const editor = BuffeeSanitize(new Buffee(container, config))
 
-// Automatic sanitization on all inserts
-editor.Model.s = "text\twith\ttabs"  // tabs become spaces
+// Automatic sanitization on Model.ins() calls
+editor.Span.ins("text\twith\ttabs")  // tabs become spaces
+
+// Use sanitization utilities when setting Model._ directly
+editor.Model._ = editor.Sanitize.lines(["a\tb", "c\td"])
+editor.render()
 
 // Manual sanitization utilities
 editor.Sanitize.line("hello\tworld")   // "hello    world"

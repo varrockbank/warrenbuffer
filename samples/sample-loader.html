@@ -149,7 +149,7 @@
       } else {
         logs.Model._.push(s);
       }
-      logs.View.start = Math.max(0, logs.Model._.length - logs.View.n - 1);
+      logs.View.first = Math.max(0, logs.Model._.length - logs.View.n - 1);
       logs._render(true);
     }
 
@@ -157,7 +157,8 @@
       new Buffee(editorEl, { rows: 10, logger: log })
     ))));
 
-    editor.Model.s = 'Select a file to load...';
+    editor.Model._ = ['Select a file to load...'];
+    editor.render();
     editorEl.focus();
 
     // View controls

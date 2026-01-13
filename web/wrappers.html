@@ -25,7 +25,8 @@ function App() {
 
   useEffect(() => {
     if (editorRef.current) {
-      editorRef.current.Model.s = 'Hello, World!';
+      editorRef.current.Model._ = ['Hello, World!'];
+      editorRef.current.render();
     }
   }, []);
 
@@ -40,7 +41,8 @@ function App() {
 
   function handleReady(e) {
     editor = e.detail;
-    editor.Model.s = 'Hello, World!';
+    editor.Model._ = ['Hello, World!'];
+    editor.render();
   }
 &lt;/script&gt;
 
@@ -52,7 +54,8 @@ function App() {
 import BuffeeEditor from './vue.js';
 
 function handleReady(editor) {
-  editor.Model.s = 'Hello, World!';
+  editor.Model._ = ['Hello, World!'];
+  editor.render();
 }
 &lt;/script&gt;
 

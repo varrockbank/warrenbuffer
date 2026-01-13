@@ -196,50 +196,58 @@
     // 1. Auto-rows and auto-cols (default behavior)
     const elAutoBoth = document.getElementById('editor-auto-both');
     const edAutoBoth = BuffeeStatusLine(new Buffee(elAutoBoth));
-    edAutoBoth.Model.s = ruler(120) + '\n// Auto-rows and auto-cols\n// Drag corner to resize\n' +
-      Array.from({length: 20}, (_, i) => `Line ${i + 4}`).join('\n');
+    edAutoBoth.Model._ = [ruler(120), '// Auto-rows and auto-cols', '// Drag corner to resize'].concat(
+      Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
+    edAutoBoth.render();
 
     // 2. Fixed-rows, auto-cols
     const elFixedRowsAutoCols = document.getElementById('editor-fixed-rows-auto-cols');
     const edFixedRowsAutoCols = BuffeeStatusLine(new Buffee(elFixedRowsAutoCols, { rows: 8 }));
-    edFixedRowsAutoCols.Model.s = ruler(120) + '\n// Fixed 8 rows, auto-cols\nLine 3\n' +
-      Array.from({length: 20}, (_, i) => `Line ${i + 4}`).join('\n');
+    edFixedRowsAutoCols.Model._ = [ruler(120), '// Fixed 8 rows, auto-cols', 'Line 3'].concat(
+      Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
+    edFixedRowsAutoCols.render();
 
     // 3. rows smaller than container
     const elFixedRowsLarge = document.getElementById('editor-fixed-rows-large-container');
     const edFixedRowsLarge = BuffeeStatusLine(new Buffee(elFixedRowsLarge, { rows: 5 }));
-    edFixedRowsLarge.Model.s = ruler(80) + '\n// rows: 5 overrides container height\n' +
-      Array.from({length: 10}, (_, i) => `Line ${i + 3}`).join('\n');
+    edFixedRowsLarge.Model._ = [ruler(80), '// rows: 5 overrides container height'].concat(
+      Array.from({length: 10}, (_, i) => `Line ${i + 3}`));
+    edFixedRowsLarge.render();
 
     // 4. rows larger than container
     const elFixedRowsOverflow = document.getElementById('editor-fixed-rows-overflow');
     const edFixedRowsOverflow = BuffeeStatusLine(new Buffee(elFixedRowsOverflow, { rows: 20 }));
-    edFixedRowsOverflow.Model.s = ruler(80) + '\n// rows: 20 exceeds container height\n' +
-      Array.from({length: 25}, (_, i) => `Line ${i + 3}`).join('\n');
+    edFixedRowsOverflow.Model._ = [ruler(80), '// rows: 20 exceeds container height'].concat(
+      Array.from({length: 25}, (_, i) => `Line ${i + 3}`));
+    edFixedRowsOverflow.render();
 
     // 5. rows larger than container (scrollable)
     const elFixedRowsScroll = document.getElementById('editor-fixed-rows-scroll');
     const edFixedRowsScroll = BuffeeStatusLine(new Buffee(elFixedRowsScroll, { rows: 20 }));
-    edFixedRowsScroll.Model.s = ruler(80) + '\n// rows: 20 exceeds container height\n// Scroll to see more\n' +
-      Array.from({length: 25}, (_, i) => `Line ${i + 4}`).join('\n');
+    edFixedRowsScroll.Model._ = [ruler(80), '// rows: 20 exceeds container height', '// Scroll to see more'].concat(
+      Array.from({length: 25}, (_, i) => `Line ${i + 4}`));
+    edFixedRowsScroll.render();
 
     // 6. Auto-rows, fixed-cols (status bar stretches)
     const elFixedCols = document.getElementById('editor-fixed-cols');
     const edFixedCols = BuffeeStatusLine(new Buffee(elFixedCols, { cols: 40 }));
-    edFixedCols.Model.s = ruler(40) + '\n// Fixed 55 cols\n// Status bar stretches\n' +
-      Array.from({length: 20}, (_, i) => `Line ${i + 4}`).join('\n');
+    edFixedCols.Model._ = [ruler(40), '// Fixed 55 cols', '// Status bar stretches'].concat(
+      Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
+    edFixedCols.render();
 
     // 7. Auto-rows, fixed-cols (fit-content)
     const elFitContent = document.getElementById('editor-fit-content');
     const edFitContent = BuffeeStatusLine(new Buffee(elFitContent, { cols: 40 }));
-    edFitContent.Model.s = ruler(55) + '\n// Fixed 55 cols\n// width: fit-content\n' +
-      Array.from({length: 20}, (_, i) => `Line ${i + 4}`).join('\n');
+    edFitContent.Model._ = [ruler(55), '// Fixed 55 cols', '// width: fit-content'].concat(
+      Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
+    edFitContent.render();
 
     // 8. Auto-rows, fixed-cols (contain: inline-size)
     const elContain = document.getElementById('editor-contain');
     const edContain = BuffeeStatusLine(new Buffee(elContain, { cols: 20 }));
-    edContain.Model.s = ruler(20) + '\n// Fixed 20 cols\n// contain: inline-size\n' +
-      Array.from({length: 20}, (_, i) => `Line ${i + 4}`).join('\n');
+    edContain.Model._ = [ruler(20), '// Fixed 20 cols', '// contain: inline-size'].concat(
+      Array.from({length: 20}, (_, i) => `Line ${i + 4}`));
+    edContain.render();
 
   </script>
 </body>

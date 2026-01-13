@@ -123,12 +123,12 @@ Read-only. Returns the line height in pixels, derived from CSS variable `--buffe
 ## Model (`editor.Model`)
 
 ```javascript
-// Set content
-editor.Model.s = "Hello\nWorld";
+// Set content (array of lines)
+editor.Model._ = ["Hello", "World"];
 
 // Access lines
-editor.Model._;        // ["Hello", "World"]
-editor.Model.end;    // 1
+editor.Model._;       // ["Hello", "World"]
+editor.Model.last;    // 1
 ```
 
 ---
@@ -137,8 +137,8 @@ editor.Model.end;    // 1
 
 ```javascript
 // Read
-editor.View.start;  // First visible line (0-based)
-editor.View.end;    // Last visible line
+editor.View.first;  // First visible line (0-based)
+editor.View.last;   // Last visible line
 editor.View.n;   // Number of visible lines
 editor.View._;  // Array of visible line strings
 
@@ -322,13 +322,13 @@ editor.editMode = 'read';
 
 **Simple view-only mode:**
 ```javascript
-editor.Model.s = "Your content here";
+editor.Model._ = ["Your content here"];
 editor.editMode = 'navigate';
 ```
 
 **TUI mode** (for interactive elements):
 ```javascript
-editor.Model.s = "Your content here";
+editor.Model._ = ["Your content here"];
 editor.TUI.enabled = true;  // Sets editMode to 'read' automatically
 ```
 
@@ -358,7 +358,7 @@ BuffeeTreeSitter(editor, { parser: jsParser, query: jsQuery });
 editor.TreeSitter.enabled = true;
 
 // After modifying content, mark as dirty to trigger re-parse
-editor.Model.s = "function hello() { return 'world'; }";
+editor.Model._ = ["function hello() { return 'world'; }"];
 editor.TreeSitter.markDirty();
 
 // Force immediate re-parse

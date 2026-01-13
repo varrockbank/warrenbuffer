@@ -14,10 +14,11 @@
  * @param {number} [config.s=4] - Spaces per tab/indentation
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { rows: 25 });
- * editor.Model.s = 'Hello, World!';
+ * editor.Model._ = ['Hello, World!'];
+ * editor.render();
  */
 function Buffee($, { rows, cols, s = 4 } = {}) {
-  this.v = '15.3.0-alpha.1';
+  this.v = '15.4.0-alpha.1';
   this.$ = $;
   const spaceRe = /\s/, wordRe = /[\p{L}\p{Nd}_]/u;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
@@ -271,15 +272,6 @@ function Buffee($, { rows, cols, s = 4 } = {}) {
      * @returns {number} Zero-based index of the last line
      */
     get last() { return this._.length - 1 },
-
-    /**
-     * Sets the document content from a string. Splits on newlines.
-     * @param {string} text - The full document text
-     */
-    set s(text) {
-      this._ = text.split('\n');
-      render();
-    },
 
     /**
      * Primitive insert operation. Inserts lines at position.

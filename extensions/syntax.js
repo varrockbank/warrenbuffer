@@ -47,24 +47,6 @@ function BuffeeSyntax(editor) {
     }
   };
 
-  // Hook Model.s setter for bulk content changes
-  const textDescriptor = Object.getOwnPropertyDescriptor(Model, 's');
-  if (textDescriptor && textDescriptor.set) {
-    const originalTextSetter = textDescriptor.set;
-    Object.defineProperty(Model, 's', {
-      set: function(text) {
-        originalTextSetter.call(this, text);
-        if (enabled) {
-          // Full document change - reset cache completely
-          stateCache.length = 1;
-          stateCache[0] = 0;
-        }
-      },
-      get: textDescriptor.get,
-      configurable: true
-    });
-  }
-
   // Built-in token types with default colors
   const defaultColors = {
     keyword: '#C678DD',
@@ -258,13 +240,13 @@ function BuffeeSyntax(editor) {
     if (!enabled || !language) return;
 
     // Ensure we have state cache up to viewport end
-    ensureStateCache(viewport.start + viewport.n);
+    ensureStateCache(viewport.first + viewport.n);
 
     // Use $textLayer which contains the pre elements (not $container which is $e)
     const lineContainer = $textLayer || $container;
 
     for (let i = 0; i < viewport.n; i++) {
-      const absLine = viewport.start + i;
+      const absLine = viewport.first + i;
       if (absLine >= Model._.length) break;
 
       const lineEl = lineContainer.children[i];

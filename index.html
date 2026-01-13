@@ -187,7 +187,7 @@
 
     fetch("assets/instructions.txt")
       .then(response => response.text())
-      .then(source => primary.Model.s = source)
+      .then(source => { primary.Model._ = source.split('\n'); primary.render(); })
       .catch(err => console.error("Error reading instructions.txt:", err));
 
     // Fetch Hacker News as plaintext
@@ -218,7 +218,7 @@
     }
 
     fetchHackerNewsText()
-      .then(text => hackernews.Model.s = text)
+      .then(text => { hackernews.Model._ = text.split('\n'); hackernews.render(); })
       .catch(err => console.error("Error fetching Hacker News:", err));
 
     // TUI Mode Demo
@@ -350,7 +350,7 @@ const fileTemplate = `
     }
 
     // Initialize with template
-    tuiDemo.Model.s = fileTemplate.trim();
+    tuiDemo.Model._ = fileTemplate.trim().split('\n');
 
     // Show initial file (also creates the file list elements)
     loadFile('main.js');

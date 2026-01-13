@@ -329,13 +329,16 @@ if __name__ == "__main__":
     };
 
     // Load initial sample
-    editor.Model.s = samples.javascript;
+    editor.Model._ = samples.javascript.split('\n');
+    editor.render();
 
     // Language switcher
     langSelect.addEventListener('change', () => {
       const lang = langSelect.value;
       editor.Syntax.setLanguage(lang);
-      editor.Model.s = samples[lang];
+      editor.Syntax.clearCache();
+      editor.Model._ = samples[lang].split('\n');
+      editor.render();
       updateStateDisplay();
     });
 
@@ -430,8 +433,8 @@ if __name__ == "__main__":
       const viewport = editor.View;
       const lines = [];
 
-      for (let i = 0; i < viewport.n && viewport.start + i < editor.Model._.length; i++) {
-        const absLine = viewport.start + i;
+      for (let i = 0; i < viewport.n && viewport.first + i < editor.Model._.length; i++) {
+        const absLine = viewport.first + i;
         const state = cache[absLine] !== undefined ? cache[absLine] : '?';
         lines.push(`L${absLine + 1}: state=${state}`);
       }

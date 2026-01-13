@@ -67,18 +67,6 @@ function BuffeeSanitize(editor) {
     origIns(row, col, sanitizeLines(lines));
   };
 
-  // Wrap Model.s setter to sanitize content
-  const origSetter = Object.getOwnPropertyDescriptor(Model, 's') ||
-                     Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Model), 's');
-
-  Object.defineProperty(Model, 's', {
-    set(text) {
-      Model._ = sanitizeText(text).split('\n');
-      editor.render();
-    },
-    configurable: true
-  });
-
   // API
   const Sanitize = {
     /** Sanitize a single line */

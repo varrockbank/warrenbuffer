@@ -110,7 +110,7 @@ function BuffeeTreeSitter(editor, { parser, query }) {
       $line.textContent = viewport.lines[i] || null;
 
       // Apply highlighting
-      minJ = highlightLine($line, viewport.start + i, minJ);
+      minJ = highlightLine($line, viewport.first + i, minJ);
     }
   });
 

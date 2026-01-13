@@ -1,6 +1,8 @@
 Website
 16. everywhere in web page should use buffee 
 
-
-
 Model.end should return coordinate not just last line 
+
+Rename Mode to State 
+
+TODO: consolidate 182-220 on extensions.md

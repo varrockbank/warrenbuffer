@@ -10,11 +10,10 @@
 ```javascript
 BuffeeStatusLine(new Buffee(el, { rows: 20, cols: 80, s: 4 }));
 
-editor.Model.s = "content";   // Set content
-editor.Model._;               // ["line1", "line2"]
-editor.View.set(5);           // Scroll to line index 5
-editor.Span.ins("text");      // Insert at cursor
-editor.Span.cursor({y:0,x:0});// Move cursor
+editor.Model._ = ["line1", "line2"];  // Set content (array of lines)
+editor.View.set(5);                   // Scroll to line index 5
+editor.Span.ins(["text"]);            // Insert at cursor
+editor.Span.cursor({y:0,x:0});        // Move cursor
 ```
 
 ## Required HTML Structure
