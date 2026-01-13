@@ -52,8 +52,8 @@ const BuffeeEditor = defineComponent({
     showStatus: { type: Boolean, default: true },
     /** Position status bar at top */
     statusTop: { type: Boolean, default: false },
-    /** Initial editor content */
-    initialText: { type: String, default: '' }
+    /** Initial content as array of lines (pre-sanitized) */
+    lines: { type: Array, default: undefined }
   },
 
   emits: ['ready'],
@@ -83,8 +83,8 @@ const BuffeeEditor = defineComponent({
 
       editor.value = ed;
 
-      if (props.initialText) {
-        editor.value.Model._ = props.initialText.split('\n');
+      if (props.lines) {
+        editor.value.Model._ = props.lines;
         editor.value.View.render();
       }
 
