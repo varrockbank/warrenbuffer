@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '15.7.1-alpha.1';
+  this.v = '15.7.2-alpha.1';
   this.$ = $;
   // head.y and tail.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -334,9 +334,9 @@ function Buffee($, { h, w, s = 4 } = {}) {
   const RENDER = View.RENDER = delta => {
     if (delta) {
       let d = delta;
-      for (; d > 0; d--         ) for (let [a, f]   of viewportLayers) a.push(f.appendChild(document.createElement('pre')));
-      if  (delta > 0            ) for (let [, f, p] of viewportLayers) p?.appendChild(f);
-      for (d = delta; d < 0; d++) for (let [a]      of viewportLayers) a.pop()?.remove();
+      for (; d > 0; d--         ) for (const [a, f]   of viewportLayers) a.push(f.appendChild(document.createElement('pre')));
+      if  (delta > 0            ) for (const [, f, p] of viewportLayers) p?.appendChild(f);
+      for (d = delta; d < 0; d++) for (const [a]      of viewportLayers) a.pop()?.remove();
     }
     if ($rail) {
       const railCols = Math.max(railInit, (View.first + View.N).toString().length) + railPad;
@@ -353,7 +353,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     Mode.f++;
 
     // Update contents of line containers (reset to clean state)
-    for (let i = 0; i < View.N; i++) for (let [arr, , , update] of viewportLayers) arr[i] && update(arr[i], i);
+    for (let i = 0; i < View.N; i++) for (const [arr, , , update] of viewportLayers) arr[i] && update(arr[i], i);
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
@@ -379,14 +379,14 @@ function Buffee($, { h, w, s = 4 } = {}) {
     }
     $caret.style.left = cursorLeft + 'ch';
 
-    for (let hook of Mode.sub) hook($lines, View, delta);
+    for (const hook of Mode.sub) hook($lines, View, delta);
   }
   
   // Set container width if w specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
   w && !$rail && ($pane.style.width = `calc(${w}ch + ${padding * 2}px)`);
   // Set container height if h specified (don't use flex: 1). TODO: perhaps can just set on parent
-  if (h) for (let [, , p] of viewportLayers) p && (p.style.height = h * ch + 'px');
+  if (h) for (const [, , p] of viewportLayers) p && (p.style.height = h * ch + 'px');
   // Initial sizing render
   const resize = delta => {View.n += delta, RENDER(delta)};
   h ? resize(h) : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); resize(Math.floor($pane.clientHeight / ch) - View.n)}).observe($pane);
