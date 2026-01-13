@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 15.7.1-alpha.1 [2026-01-13]  gz: 2569 / 2.51 KB (-3), br: 2369 / 2.31 KB (-3), min: 5741 / 5.61 KB (-10)
+- perf: replace forEach with for..of loops
+
 ** 15.7.0-alpha.1 [2026-01-13]  gz: 2572 / 2.51 KB (-15), br: 2372 / 2.32 KB (-14), min: 5751 / 5.62 KB (-50)
 - api: remove View._ getter (unused, reduces API surface)
 
