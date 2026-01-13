@@ -68,9 +68,9 @@
   export let statusTop = false;
 
   /**
-   * @type {string} Initial editor content
+   * @type {string[]} Initial content as array of lines (pre-sanitized)
    */
-  export let initialText = '';
+  export let lines = undefined;
 
   /**
    * @type {string} Additional CSS classes
@@ -103,8 +103,8 @@
       editor = BuffeeStatusLine(editor);
     }
 
-    if (initialText) {
-      editor.Model._ = initialText.split('\n');
+    if (lines) {
+      editor.Model._ = lines;
       editor.View.render();
     }
 

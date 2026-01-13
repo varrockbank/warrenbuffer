@@ -38,7 +38,7 @@ import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react
  * @param {string} [props.className] - Additional CSS classes
  * @param {boolean} [props.showGutter=true] - Show line numbers
  * @param {boolean} [props.showStatus=true] - Show status bar
- * @param {string} [props.initialText] - Initial editor content
+ * @param {string[]} [props.lines] - Initial content as array of lines (pre-sanitized)
  * @param {Function} [props.onReady] - Callback when editor is initialized
  */
 const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
@@ -52,7 +52,7 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     gutterRight = false,
     showStatus = true,
     statusTop = false,
-    initialText = '',
+    lines,
     onReady
   } = props;
 
@@ -76,8 +76,8 @@ const BuffeeEditor = forwardRef(function BuffeeEditor(props, ref) {
     }
     editorRef.current = editor;
 
-    if (initialText) {
-      editor.Model._ = initialText.split('\n');
+    if (lines) {
+      editor.Model._ = lines;
       editor.View.render();
     }
 
