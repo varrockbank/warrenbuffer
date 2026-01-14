@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 17.1.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1813 / 1.77 KB (+32), br: 1683 / 1.64 KB (+31), min: 3719 / 3.63 KB (+64)
+*** combined (buffee): gz: 2373 / 2.32 KB (+87), br: 2187 / 2.14 KB (+77), min: 5094 / 4.97 KB (+270)
+- api: add plug(ctrl) and unplug() for swappable controllers
+- refactor: Buffee.controller as static, plugged in constructor
+
 ** 17.0.1-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1781 / 1.74 KB (+7), br: 1652 / 1.61 KB (+3), min: 3655 / 3.57 KB (+18)
 *** combined (buffee): gz: 2286 / 2.23 KB (+3), br: 2110 / 2.06 KB (+4), min: 4824 / 4.71 KB (-8)

@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffe($, { h, w, s = 4 } = {}) {
-  this.v = '17.0.1-alpha.1';
+  this.v = '17.1.0-alpha.1';
   this.$ = $;
   // y is 0-indexed model line numbers, x is column. 
   // cursor IFF head === anchor, else is a selection.
@@ -337,8 +337,11 @@ function Buffe($, { h, w, s = 4 } = {}) {
     for (const [,,p] of viewportLayers) p && (p.style.height = h * ch + 'px'); 
     View.n = h; 
   } else new ResizeObserver(() => {
-      lRect = $lines.getBoundingClientRect(); 
+      lRect = $lines.getBoundingClientRect();
       View.n = Math.floor($lines.clientHeight / ch)}
   ).observe($pane);
 
+  let _unplug;
+  this.plug = ctrl => { _unplug?.(); _unplug = ctrl(this); };
+  this.unplug = () => { _unplug?.(); _unplug = null; };
 }
