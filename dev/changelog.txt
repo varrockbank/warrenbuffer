@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 17.0.1-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1781 / 1.74 KB (+7), br: 1652 / 1.61 KB (+3), min: 3655 / 3.57 KB (+18)
+*** combined (buffee): gz: 2286 / 2.23 KB (+3), br: 2110 / 2.06 KB (+4), min: 4824 / 4.71 KB (-8)
+- refactor: expose $lines on Buffe, reuse in Buffee
+
 ** 17.0.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1774 / 1.73 KB, br: 1649 / 1.61 KB, min: 3637 / 3.55 KB
 *** combined (buffee): gz: 2283 / 2.23 KB, br: 2106 / 2.06 KB, min: 4832 / 4.72 KB

@@ -13,7 +13,7 @@
  */
 function Buffee($, opts) {
   Buffe.call(this, $, opts);
-  const { Span, Model, Mode, View } = this, render = View.render, $lines = $.querySelector('.buffee-lines');
+  const { Span, Model, Mode, View, $lines } = this, render = View.render;
 
   $lines.addEventListener('paste', e => {
     e.preventDefault();
