@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffe($, { h, w, s = 4 } = {}) {
-  this.v = '17.1.2-alpha.1';
+  this.v = '17.2.0-alpha.1';
   this.$ = $;
   // y is 0-indexed model line numbers, x is column. 
   // cursor IFF head === anchor, else is a selection.
