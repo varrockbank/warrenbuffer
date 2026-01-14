@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.4.4-alpha.1 [2026-01-14]  gz: 2213 / 2.16 KB (-13), br: 2044 / 2.00 KB (-10), min: 4730 / 4.62 KB (-22)
+- fix: arrow key with selection now collapses without extra movement
+
 ** 16.4.3-alpha.1 [2026-01-14]  gz: 2226 / 2.17 KB (-5), br: 2054 / 2.01 KB (-7), min: 4752 / 4.64 KB (-19)
 - golf: use .at(-1) instead of [x.length - 1]
 
