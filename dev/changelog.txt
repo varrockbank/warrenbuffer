@@ -1,5 +1,9 @@
 * Project Devlog
 
+** 16.1.1-alpha.1 [2026-01-14]  gz: 2556 / 2.50 KB (+10), br: 2365 / 2.31 KB (+9), min: 5683 / 5.55 KB (22)
+- fix: VimMotion w/b now land on START of word
+- refactor: rename VimMover to VimMotion
+
 ** 16.1.0-alpha.1 [2026-01-14]
 - refactor: extract Mover namespace with mvX, mvY, mvLn, mvW from Span
 
