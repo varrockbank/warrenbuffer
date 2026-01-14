@@ -2,7 +2,7 @@
  * @fileoverview React wrapper for Buffee editor
  * @version 1.3.0
  *
- * Required: Include buffee.js and style.css before using this component.
+ * Required: Include buffe.js, buffee.js and style.css before using this component.
  * Optional: Include combinators and theme CSS.
  *
  * Combinators: Pass an array of combinator functions via the `combinators` prop.

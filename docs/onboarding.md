@@ -6,6 +6,7 @@ Include the JavaScript and CSS:
 
 ```html
 <link rel="stylesheet" href="style.css">
+<script src="buffe.js"></script>
 <script src="buffee.js"></script>
 ```
 

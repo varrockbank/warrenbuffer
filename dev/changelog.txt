@@ -1,5 +1,12 @@
 * Project Devlog
 
+** 17.0.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1774 / 1.73 KB, br: 1649 / 1.61 KB, min: 3637 / 3.55 KB
+*** combined (buffee): gz: 2283 / 2.23 KB, br: 2106 / 2.06 KB, min: 4832 / 4.72 KB
+- refactor: split core (Buffe) from controller (Buffee)
+- buffe.js: core rendering engine without keyboard handling
+- buffee.js: extends Buffe, adds clipboard and keyboard controller
+
 ** 16.4.7-alpha.1 [2026-01-14]  gz: 2193 / 2.14 KB (0), br: 2026 / 1.98 KB (+1), min: 4658 / 4.55 KB (0)
 - refactor: formatting 
 
