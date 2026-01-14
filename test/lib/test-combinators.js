@@ -1419,11 +1419,12 @@ function defineExtensionTests() {
 
     // ===== EXTENSION REGISTRATION TESTS =====
     extRunner.describe('Extension Registration', () => {
-        extRunner.it('Mode.ext starts as empty array', () => {
+        extRunner.it('Mode.ext starts with core version', () => {
             const { editor, cleanup } = createTestEditor();
             try {
                 assertTrue(Array.isArray(editor.Mode.ext), 'Mode.ext should be an array');
-                assertEqual(editor.Mode.ext.length, 0, 'Mode.ext should be empty initially');
+                assertEqual(editor.Mode.ext.length, 1, 'Mode.ext should have one element initially');
+                assertTrue(/^\d+\.\d+\.\d+/.test(editor.Mode.ext[0]), 'First element should be version string');
             } finally {
                 cleanup();
             }
@@ -1549,8 +1550,8 @@ function defineExtensionTests() {
                 BuffeeStatusLine(editor);
                 BuffeeElementals(editor);
 
-                // Verify registration order
-                assertDeepEqual(editor.Mode.ext, [
+                // Verify registration order (first element is version)
+                assertDeepEqual(editor.Mode.ext.slice(1), [
                     'History',
                     'Sanitize',
                     'Syntax',
@@ -1574,9 +1575,9 @@ function defineExtensionTests() {
                     )
                 );
 
-                // Verify registration order (innermost first, dependencies before dependents)
+                // Verify registration order (first element is version, innermost first)
                 // TUI internally initializes Highlights, so Highlights registers before TUI
-                assertDeepEqual(decorated.Mode.ext, [
+                assertDeepEqual(decorated.Mode.ext.slice(1), [
                     'History',
                     'FileLoader',
                     'Highlights',
@@ -1594,7 +1595,7 @@ function defineExtensionTests() {
                 const extensions = [BuffeeHistory, BuffeeSanitize, BuffeeUndoTree];
                 extensions.reduce((ed, ext) => ext(ed), editor);
 
-                assertDeepEqual(editor.Mode.ext, [
+                assertDeepEqual(editor.Mode.ext.slice(1), [
                     'History',
                     'Sanitize',
                     'UndoTree'

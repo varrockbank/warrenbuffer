@@ -19,8 +19,8 @@
  */
 function Buffe($, { h, w, s = 4 } = {}) {
   if (!(this instanceof Buffe)) return new Buffe($, arguments[1]);
-  this.v = '17.3.0-alpha.1';
-  this.$ = $;
+
+  const coreVersion = '17.4.0-alpha.1';
   // y is 0-indexed model line numbers, x is column. 
   // cursor IFF head === anchor, else is a selection.
   const anchor = { y: 0, x: 0 }, detached = {};
@@ -33,6 +33,7 @@ function Buffe($, { h, w, s = 4 } = {}) {
   const [$pane ,$lines ,$caret ,$rail ,$ztxt ,$zsel ] =
         ['pane','lines','caret','rail','ztxt','zsel']
       .map(q => $.querySelector('.buffee-' + q));
+  this.$ = $;
   this.$lines = $lines;
   let lRect = $lines.getBoundingClientRect();
 
@@ -219,8 +220,10 @@ function Buffe($, { h, w, s = 4 } = {}) {
     ch,                                        /** line and character height */
     cw,                                        /** computed character width  */
     sub: [],                                   /** render callbacks          */
-    ext: []                                    /** registered extensions     */
+    ext: [coreVersion]                         /** registered extensions     */
   };
+
+
 
   /**
    * Document model managing text content.

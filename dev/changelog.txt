@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 17.4.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1840 / 1.80 KB (-4), br: 1704 / 1.66 KB (-1), min: 3772 / 3.68 KB (-8)
+*** combined (buffee): gz: 2402 / 2.35 KB (-4), br: 2219 / 2.17 KB (-1), min: 5169 / 5.05 KB (-8)
+- api: version string is now Mode.ext[0] instead of instance.v
+
 ** 17.3.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1844 / 1.80 KB (+31), br: 1705 / 1.67 KB (+19), min: 3780 / 3.69 KB (+61)
 *** combined (buffee): gz: 2406 / 2.35 KB (+22), br: 2220 / 2.17 KB (+13), min: 5177 / 5.06 KB (+61)
