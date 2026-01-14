@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.0.1-alpha.1 [2026-01-14]  gz: 2547 / 2.49 KB (+11), br: 2354 / 2.30 KB (+9), min: 5671 / 5.54 KB (22)
+- fix: select all on empty doc keeps cursor mode
+
 ** 16.0.0-alpha.1 [2026-01-13]  gz: 2536 / 2.48 KB (+13), br: 2345 / 2.29 KB (+12), min: 5649 / 5.52 KB (47)
 - feat: add Select All (Cmd+A)
 
