@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 17.8.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1809 / 1.77 KB (-4), br: 1675 / 1.64 KB (-1), min: 3708 / 3.62 KB (-10)
+*** combined (buffee): gz: 2378 / 2.32 KB (-3), br: 2190 / 2.14 KB (-1), min: 5122 / 5.00 KB (-10)
+- build: add terser pure_getters option (-10 bytes)
+
 ** 17.7.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1676 / 1.64 KB (-4), min: 3718 / 3.63 KB (0)
 *** combined (buffee): gz: 2381 / 2.33 KB (0), br: 2192 / 2.14 KB (-4), min: 5132 / 5.01 KB (0)

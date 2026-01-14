@@ -20,7 +20,7 @@
 function Buffe($, { h, w, s = 4 } = {}) {
   if (!(this instanceof Buffe)) return new Buffe($, arguments[1]);
 
-  const coreVersion = '17.7.0-alpha.1';
+  const coreVersion = '17.8.0-alpha.1';
   // y is 0-indexed model line numbers, x is column. 
   // cursor IFF head === anchor, else is a selection.
   const anchor = { y: 0, x: 0 }, detached = {};

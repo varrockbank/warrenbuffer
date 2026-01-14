@@ -70,7 +70,7 @@ function BuffeeNativeController(editor) {
  * const editor = Buffee(Buffe(document.getElementById('editor'), { h: 25 }));
  */
 function Buffee(editorOrEl, opts) {
-  const buffeeVersion = '17.7.0-alpha.1';
+  const buffeeVersion = '17.8.0-alpha.1';
   const editor = editorOrEl instanceof Buffe ? editorOrEl : new Buffe(editorOrEl, opts);
   editor.Ctrl = BuffeeNativeController(editor);
   editor.Mode.ext.push('Buffee@' + buffeeVersion);
