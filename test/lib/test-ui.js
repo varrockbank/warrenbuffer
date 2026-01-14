@@ -1,3 +1,47 @@
+        // Compare source vs minified build behavior
+        function compareBuildBehavior() {
+            // Create temporary container
+            const container = document.createElement('div');
+            container.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:600px;height:400px;';
+            container.innerHTML = `
+                <div class="buffee"><div class="buffee-pane">
+                    <div class="buffee-rail"></div>
+                    <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
+                </div></div>`;
+            document.body.appendChild(container);
+
+            try {
+                const el = container.querySelector('.buffee');
+
+                // Test source build
+                const srcEditor = BuffeeSource(BuffeSource(el.cloneNode(true), { h: 10 }));
+                srcEditor.Span.ins(['Hello', 'World']);
+                const srcState = {
+                    model: [...srcEditor.Model._],
+                    cursor: { ...srcEditor.Span.bounds()[0] },
+                    ext: srcEditor.Mode.ext[0]
+                };
+
+                // Test minified build
+                const minEditor = BuffeeMin(BuffeMin(el.cloneNode(true), { h: 10 }));
+                minEditor.Span.ins(['Hello', 'World']);
+                const minState = {
+                    model: [...minEditor.Model._],
+                    cursor: { ...minEditor.Span.bounds()[0] },
+                    ext: minEditor.Mode.ext[0]
+                };
+
+                // Compare states
+                const modelMatch = JSON.stringify(srcState.model) === JSON.stringify(minState.model);
+                const cursorMatch = srcState.cursor.y === minState.cursor.y && srcState.cursor.x === minState.cursor.x;
+                const versionMatch = srcState.ext === minState.ext;
+
+                return !(modelMatch && cursorMatch && versionMatch);
+            } finally {
+                container.remove();
+            }
+        }
+
         // DSL Syntax Highlighter
         function highlightDSL(code) {
             const lines = code.split('\n');
@@ -586,6 +630,18 @@
                 } else {
                     compileErrorTestsCount.textContent = '0';
                     testErrorWarning.style.display = 'none';
+                }
+
+                // Compare source vs minified builds
+                if (typeof BuffeSource !== 'undefined' && typeof BuffeMin !== 'undefined') {
+                    const mismatchWarning = document.getElementById('build-mismatch-warning');
+                    try {
+                        const mismatch = compareBuildBehavior();
+                        mismatchWarning.style.display = mismatch ? 'flex' : 'none';
+                    } catch (e) {
+                        console.error('Build comparison failed:', e);
+                        mismatchWarning.style.display = 'flex';
+                    }
                 }
             } catch (error) {
                 const resultsContainer = document.getElementById('test-results');
