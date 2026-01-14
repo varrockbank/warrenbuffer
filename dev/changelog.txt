@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.4.3-alpha.1 [2026-01-14]  gz: 2226 / 2.17 KB (-5), br: 2054 / 2.01 KB (-7), min: 4752 / 4.64 KB (-19)
+- golf: use .at(-1) instead of [x.length - 1]
+
 ** 16.4.2-alpha.1 [2026-01-14]  gz: 2231 / 2.18 KB (-3), br: 2062 / 2.01 KB (0), min: 4771 / 4.66 KB (-5)
 - golf: use cl instead of lRect.left (already destructured)
 

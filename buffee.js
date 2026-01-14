@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.4.2-alpha.1';
+  this.v = '16.4.3-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -128,7 +128,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         // Update cursor to end of inserted text
         if (lines.length > 1) {
           head.y     += lines.length - 1;
-          head.x      = lines[lines.length - 1].length;
+          head.x      = lines.at(-1).length;
         } else head.x = first.x + (lines[0]?.length || 0);
 
         this.cursor();
@@ -138,7 +138,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         // Update cursor
         if (lines.length > 1) {
                          head.y += lines.length - 1;
-               Mode.mx = head.x  = lines[lines.length - 1].length;
+               Mode.mx = head.x  = lines.at(-1).length;
         } else Mode.mx = head.x += lines[0]?.length || 0;
       }
       if (head.y > View.last) View.first = head.y - vN + 1;
@@ -229,7 +229,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      * Last coordinate in the document.
      * @returns {Position} Position of last character {y, x}
      */
-    get end() { const y = this._.length - 1; return { y, x: this._[y].length } },
+    get end() { return { y: this._.length - 1, x: this._.at(-1).length } },
 
     /**
      * Primitive insert operation. Inserts lines at position.
@@ -241,7 +241,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       const after = this._[row].slice(col);
       this._[row] = this._[row].slice(0, col) + lines[0];
       if (lines.length == 1) this._[row] += after;
-      else this._.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
+      else this._.splice(row + 1, 0, ...lines.slice(1, -1), lines.at(-1) + after);
     },
 
     /**
