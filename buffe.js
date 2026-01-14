@@ -13,12 +13,13 @@
  * @param {number} [options.w  ] - Fixed text columns (omit to fill parent)
  * @param {number} [options.s=4] - Spaces per tab/indentation
  * @example
- * const editor = new Buffe(document.getElementById('editor'), { h: 25 });
+ * const editor = Buffe(document.getElementById('editor'), { h: 25 });
  * editor.Model._ = ['Hello, World!'];
  * editor.View.render();
  */
 function Buffe($, { h, w, s = 4 } = {}) {
-  this.v = '17.2.0-alpha.1';
+  if (!(this instanceof Buffe)) return new Buffe($, arguments[1]);
+  this.v = '17.3.0-alpha.1';
   this.$ = $;
   // y is 0-indexed model line numbers, x is column. 
   // cursor IFF head === anchor, else is a selection.

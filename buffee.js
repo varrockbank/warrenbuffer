@@ -60,15 +60,14 @@ function BuffeeNativeController(editor) {
 }
 
 /**
- * Buffee - Combinator that adds default keyboard/clipboard controller.
+ * Buffee - Combinator that adds keyboard/clipboard controller.
  * @param {Buffe|HTMLElement} editorOrEl - Buffe instance or container element
  * @param {Object} [opts] - Options (only used if first arg is element)
  * @returns {Buffe} The extended editor instance
  * @example
- * // As combinator:
- * const editor = Buffee(new Buffe(el, { h: 25 }));
- * // Or shorthand:
- * const editor = Buffee(el, { h: 25 });
+ * const editor = Buffee(document.getElementById('editor'), { h: 25 });
+ * // Or chained:
+ * const editor = Buffee(Buffe(document.getElementById('editor'), { h: 25 }));
  */
 function Buffee(editorOrEl, opts) {
   const editor = editorOrEl instanceof Buffe ? editorOrEl : new Buffe(editorOrEl, opts);
