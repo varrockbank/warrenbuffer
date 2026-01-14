@@ -2,20 +2,20 @@
 # Pre-commit hook to generate minified dist file and check version bump
 
 # Get current versions
-BUFFEE_VERSION=$(grep 'this.v' buffee.js | sed "s/.*'\(.*\)'.*/\1/")
+BUFFEE_VERSION=$(grep 'this.v' buffe.js | sed "s/.*'\(.*\)'.*/\1/")
 STYLE_VERSION=$(grep '@version' style.css | sed 's/.*@version \(.*\)/\1/' | tr -d ' ')
 TEMPLATE_VERSION=$(grep '@version' web/template.html | sed 's/.*@version \(.*\) -->.*/\1/' | tr -d ' ')
 
-# Check if buffee.js is staged and needs version bump
-if git diff --cached --name-only | grep -q "^buffee.js$"; then
-    OLD_BUFFEE_VERSION=$(git show HEAD:buffee.js 2>/dev/null | grep 'this.v' | sed "s/.*'\(.*\)'.*/\1/")
-    NEW_BUFFEE_VERSION=$(git show :buffee.js | grep 'this.v' | sed "s/.*'\(.*\)'.*/\1/")
+# Check if buffe.js is staged and needs version bump
+if git diff --cached --name-only | grep -q "^buffe.js$"; then
+    OLD_BUFFEE_VERSION=$(git show HEAD:buffe.js 2>/dev/null | grep 'this.v' | sed "s/.*'\(.*\)'.*/\1/")
+    NEW_BUFFEE_VERSION=$(git show :buffe.js | grep 'this.v' | sed "s/.*'\(.*\)'.*/\1/")
 
     if [ "$OLD_BUFFEE_VERSION" = "$NEW_BUFFEE_VERSION" ] && [ -n "$OLD_BUFFEE_VERSION" ]; then
-        echo "✗ Error: buffee.js changed but version was not bumped"
+        echo "✗ Error: buffe.js changed but version was not bumped"
         echo "  Current version: $OLD_BUFFEE_VERSION"
         echo "  style.css version: $STYLE_VERSION"
-        echo "  Please bump this.v in buffee.js"
+        echo "  Please bump this.v in buffe.js"
         exit 1
     fi
     BUFFEE_VERSION=$NEW_BUFFEE_VERSION
@@ -29,7 +29,7 @@ if git diff --cached --name-only | grep -q "^style.css$"; then
     if [ "$OLD_STYLE_VERSION" = "$NEW_STYLE_VERSION" ] && [ -n "$OLD_STYLE_VERSION" ]; then
         echo "✗ Error: style.css changed but version was not bumped"
         echo "  Current version: $OLD_STYLE_VERSION"
-        echo "  buffee.js version: $BUFFEE_VERSION"
+        echo "  buffe.js version: $BUFFEE_VERSION"
         echo "  Please bump @version in style.css"
         exit 1
     fi
@@ -58,7 +58,7 @@ DEVLOG_VERSION=$(grep '^\*\* ' dev/changelog.txt | head -1 | sed 's/^\*\* \([^ ]
 
 if [ "$MAX_VERSION" != "$DEVLOG_VERSION" ]; then
     echo "✗ Error: changelog.txt version doesn't match the highest version"
-    echo "  buffee.js:     $BUFFEE_VERSION"
+    echo "  buffe.js:      $BUFFEE_VERSION"
     echo "  style.css:     $STYLE_VERSION"
     echo "  template.html: $TEMPLATE_VERSION"
     echo "  changelog.txt: $DEVLOG_VERSION"
@@ -66,96 +66,85 @@ if [ "$MAX_VERSION" != "$DEVLOG_VERSION" ]; then
     exit 1
 fi
 
-echo "Generating dist/buffee.min.js..."
+echo "Generating dist files..."
 
-# Get old sizes from HEAD (last committed version)
-if git rev-parse --verify HEAD >/dev/null 2>&1; then
-    if git cat-file -e HEAD:dist/buffee.min.js 2>/dev/null; then
-        OLD_SIZE=$(git show HEAD:dist/buffee.min.js | wc -c | tr -d ' ')
-        OLD_GZIPPED=$(git show HEAD:dist/buffee.min.js | gzip -cn | wc -c)
-        OLD_BROTLI=$(git show HEAD:dist/buffee.min.js | brotli -q 11 -c | wc -c | tr -d ' ')
+# Helper to format diff with sign
+format_diff() {
+    if [ $1 -gt 0 ]; then echo "+$1"; elif [ $1 -lt 0 ]; then echo "$1"; else echo "0"; fi
+}
+
+# Get old sizes from HEAD
+get_old_sizes() {
+    local file=$1
+    if git rev-parse --verify HEAD >/dev/null 2>&1 && git cat-file -e HEAD:$file 2>/dev/null; then
+        OLD_SIZE=$(git show HEAD:$file | wc -c | tr -d ' ')
+        OLD_GZIPPED=$(git show HEAD:$file | gzip -cn | wc -c)
+        OLD_BROTLI=$(git show HEAD:$file | brotli -q 11 -c | wc -c | tr -d ' ')
     else
-        OLD_SIZE=0
-        OLD_GZIPPED=0
-        OLD_BROTLI=0
+        OLD_SIZE=0; OLD_GZIPPED=0; OLD_BROTLI=0
     fi
-else
-    OLD_SIZE=0
-    OLD_GZIPPED=0
-    OLD_BROTLI=0
-fi
+}
 
-# Convert const to let for better compression (let compresses better than mixed const/let)
-perl -pe 's/\bconst\b/let/g' buffee.js | terser -c -m -o dist/buffee.min.js
-
-if [ $? -eq 0 ]; then
-    NEW_SIZE=$(wc -c < dist/buffee.min.js | tr -d ' ')
-    NEW_GZIPPED=$(gzip -cn dist/buffee.min.js | wc -c | tr -d ' ')
-    NEW_BROTLI=$(brotli -q 11 -c dist/buffee.min.js | wc -c | tr -d ' ')
+# Generate and report sizes for a minified file
+report_sizes() {
+    local label=$1 file=$2
+    NEW_SIZE=$(wc -c < $file | tr -d ' ')
+    NEW_GZIPPED=$(gzip -cn $file | wc -c | tr -d ' ')
+    NEW_BROTLI=$(brotli -q 11 -c $file | wc -c | tr -d ' ')
     MINIFIED_KB=$(echo "$NEW_SIZE" | awk '{printf "%.2f", $1/1024}')
     GZIPPED_KB=$(echo "$NEW_GZIPPED" | awk '{printf "%.2f", $1/1024}')
     BROTLI_KB=$(echo "$NEW_BROTLI" | awk '{printf "%.2f", $1/1024}')
 
-    echo "✓ Minification complete"
-    echo "  Minified:          ${NEW_SIZE} bytes (${MINIFIED_KB} KB)"
-    echo "  Gzipped+Minified:  ${NEW_GZIPPED} bytes (${GZIPPED_KB} KB)"
-    echo "  Brotli+Minified:   ${NEW_BROTLI} bytes (${BROTLI_KB} KB)"
+    echo "✓ $label"
+    echo "  min: ${NEW_SIZE} (${MINIFIED_KB} KB), gz: ${NEW_GZIPPED} (${GZIPPED_KB} KB), br: ${NEW_BROTLI} (${BROTLI_KB} KB)"
 
     if [ $OLD_SIZE -ne 0 ]; then
         DIFF=$((NEW_SIZE - OLD_SIZE))
         DIFF_GZIPPED=$((NEW_GZIPPED - OLD_GZIPPED))
         DIFF_BROTLI=$((NEW_BROTLI - OLD_BROTLI))
-
-        if [ $DIFF -gt 0 ]; then
-            echo "  Minified change:   +${DIFF} bytes"
-        elif [ $DIFF -lt 0 ]; then
-            echo "  Minified change:   ${DIFF} bytes"
-        else
-            echo "  Minified change:   (no change)"
-        fi
-
-        if [ $DIFF_GZIPPED -gt 0 ]; then
-            echo "  Gzipped change:    +${DIFF_GZIPPED} bytes"
-        elif [ $DIFF_GZIPPED -lt 0 ]; then
-            echo "  Gzipped change:    ${DIFF_GZIPPED} bytes"
-        else
-            echo "  Gzipped change:    (no change)"
-        fi
-
-        if [ $DIFF_BROTLI -gt 0 ]; then
-            echo "  Brotli change:     +${DIFF_BROTLI} bytes"
-        elif [ $DIFF_BROTLI -lt 0 ]; then
-            echo "  Brotli change:     ${DIFF_BROTLI} bytes"
-        else
-            echo "  Brotli change:     (no change)"
-        fi
+        echo "  change: min $(format_diff $DIFF), gz $(format_diff $DIFF_GZIPPED), br $(format_diff $DIFF_BROTLI)"
     fi
+}
 
-    git add dist/buffee.min.js
+# Generate dist/buffe.min.js (core only)
+get_old_sizes dist/buffe.min.js
+perl -pe 's/\bconst\b/let/g' buffe.js | terser -c -m -o dist/buffe.min.js
+if [ $? -ne 0 ]; then echo "✗ buffe.min.js minification failed"; exit 1; fi
+report_sizes "buffe.min.js (core)" dist/buffe.min.js
+CORE_SIZE=$NEW_SIZE; CORE_GZ=$NEW_GZIPPED; CORE_BR=$NEW_BROTLI
+CORE_MIN_KB=$MINIFIED_KB; CORE_GZ_KB=$GZIPPED_KB; CORE_BR_KB=$BROTLI_KB
+CORE_DIFF=${DIFF:-0}; CORE_DIFF_GZ=${DIFF_GZIPPED:-0}; CORE_DIFF_BR=${DIFF_BROTLI:-0}
 
-    # If changelog.txt is staged, append size info to the version line
-    if git diff --cached --name-only | grep -q "^dev/changelog.txt$"; then
-        if [ $OLD_SIZE -ne 0 ]; then
-            # Format the change values with sign
-            if [ $DIFF_GZIPPED -gt 0 ]; then DIFF_GZ_STR="+${DIFF_GZIPPED}"; elif [ $DIFF_GZIPPED -lt 0 ]; then DIFF_GZ_STR="${DIFF_GZIPPED}"; else DIFF_GZ_STR="0"; fi
-            if [ $DIFF_BROTLI -gt 0 ]; then DIFF_BR_STR="+${DIFF_BROTLI}"; elif [ $DIFF_BROTLI -lt 0 ]; then DIFF_BR_STR="${DIFF_BROTLI}"; else DIFF_BR_STR="0"; fi
-            SIZE_INFO="  gz: ${NEW_GZIPPED} / ${GZIPPED_KB} KB (${DIFF_GZ_STR}), br: ${NEW_BROTLI} / ${BROTLI_KB} KB (${DIFF_BR_STR}), min: ${NEW_SIZE} / ${MINIFIED_KB} KB (${DIFF})"
-        else
-            SIZE_INFO="  gz: ${NEW_GZIPPED} / ${GZIPPED_KB} KB, br: ${NEW_BROTLI} / ${BROTLI_KB} KB, min: ${NEW_SIZE} / ${MINIFIED_KB} KB"
-        fi
+# Generate dist/buffee.min.js (core + controller)
+get_old_sizes dist/buffee.min.js
+cat buffe.js buffee.js | perl -pe 's/\bconst\b/let/g' | terser -c -m -o dist/buffee.min.js
+if [ $? -ne 0 ]; then echo "✗ buffee.min.js minification failed"; exit 1; fi
+report_sizes "buffee.min.js (combined)" dist/buffee.min.js
+COMB_SIZE=$NEW_SIZE; COMB_GZ=$NEW_GZIPPED; COMB_BR=$NEW_BROTLI
+COMB_MIN_KB=$MINIFIED_KB; COMB_GZ_KB=$GZIPPED_KB; COMB_BR_KB=$BROTLI_KB
+COMB_DIFF=${DIFF:-0}; COMB_DIFF_GZ=${DIFF_GZIPPED:-0}; COMB_DIFF_BR=${DIFF_BROTLI:-0}
 
-        # Append size info to the first version line (** X.X.X [date])
-        # Find line number of first version header, then append size info
-        LINE_NUM=$(grep -n '^\*\* ' dev/changelog.txt | head -1 | cut -d: -f1)
-        if [ -n "$LINE_NUM" ]; then
-            sed -i '' "${LINE_NUM}s|\]$|]${SIZE_INFO}|" dev/changelog.txt
-        fi
-        git add dev/changelog.txt
+git add dist/buffe.min.js dist/buffee.min.js
+
+# If changelog.txt is staged, insert size info lines after version header (if not already present)
+if git diff --cached --name-only | grep -q "^dev/changelog.txt$"; then
+    LINE_NUM=$(grep -n '^\*\* ' dev/changelog.txt | head -1 | cut -d: -f1)
+    NEXT_LINE=$((LINE_NUM + 1))
+
+    # Only insert if next line doesn't already have size info
+    if [ -n "$LINE_NUM" ] && ! sed -n "${NEXT_LINE}p" dev/changelog.txt | grep -q '^\*\*\* '; then
+        # Build size info lines
+        CORE_INFO="*** core     (buffe) : gz: ${CORE_GZ} / ${CORE_GZ_KB} KB ($(format_diff $CORE_DIFF_GZ)), br: ${CORE_BR} / ${CORE_BR_KB} KB ($(format_diff $CORE_DIFF_BR)), min: ${CORE_SIZE} / ${CORE_MIN_KB} KB ($(format_diff $CORE_DIFF))"
+        COMB_INFO="*** combined (buffee): gz: ${COMB_GZ} / ${COMB_GZ_KB} KB ($(format_diff $COMB_DIFF_GZ)), br: ${COMB_BR} / ${COMB_BR_KB} KB ($(format_diff $COMB_DIFF_BR)), min: ${COMB_SIZE} / ${COMB_MIN_KB} KB ($(format_diff $COMB_DIFF))"
+
+        # Insert after version line
+        sed -i '' "${LINE_NUM}a\\
+${CORE_INFO}\\
+${COMB_INFO}
+" dev/changelog.txt
         echo "✓ Updated changelog.txt with size info"
     fi
-
-    exit 0
-else
-    echo "✗ Minification failed"
-    exit 1
+    git add dev/changelog.txt
 fi
+
+exit 0
