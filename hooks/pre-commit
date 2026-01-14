@@ -2,20 +2,34 @@
 # Pre-commit hook to generate minified dist file and check version bump
 
 # Get current versions
-BUFFEE_VERSION=$(grep "const coreVersion = '" buffe.js | sed "s/.*'\(.*\)'.*/\1/")
+BUFFE_VERSION=$(grep "const coreVersion = '" buffe.js | sed "s/.*'\(.*\)'.*/\1/")
+BUFFEE_VERSION=$(grep "const buffeeVersion = '" buffee.js | sed "s/.*'\(.*\)'.*/\1/")
 STYLE_VERSION=$(grep '@version' style.css | sed 's/.*@version \(.*\)/\1/' | tr -d ' ')
 TEMPLATE_VERSION=$(grep '@version' web/template.html | sed 's/.*@version \(.*\) -->.*/\1/' | tr -d ' ')
 
 # Check if buffe.js is staged and needs version bump
 if git diff --cached --name-only | grep -q "^buffe.js$"; then
-    OLD_BUFFEE_VERSION=$(git show HEAD:buffe.js 2>/dev/null | grep "const coreVersion = '" | sed "s/.*'\(.*\)'.*/\1/")
-    NEW_BUFFEE_VERSION=$(git show :buffe.js | grep "const coreVersion = '" | sed "s/.*'\(.*\)'.*/\1/")
+    OLD_BUFFE_VERSION=$(git show HEAD:buffe.js 2>/dev/null | grep "const coreVersion = '" | sed "s/.*'\(.*\)'.*/\1/")
+    NEW_BUFFE_VERSION=$(git show :buffe.js | grep "const coreVersion = '" | sed "s/.*'\(.*\)'.*/\1/")
+
+    if [ "$OLD_BUFFE_VERSION" = "$NEW_BUFFE_VERSION" ] && [ -n "$OLD_BUFFE_VERSION" ]; then
+        echo "✗ Error: buffe.js changed but version was not bumped"
+        echo "  Current version: $OLD_BUFFE_VERSION"
+        echo "  Please bump coreVersion in buffe.js"
+        exit 1
+    fi
+    BUFFE_VERSION=$NEW_BUFFE_VERSION
+fi
+
+# Check if buffee.js is staged and needs version bump
+if git diff --cached --name-only | grep -q "^buffee.js$"; then
+    OLD_BUFFEE_VERSION=$(git show HEAD:buffee.js 2>/dev/null | grep "const buffeeVersion = '" | sed "s/.*'\(.*\)'.*/\1/")
+    NEW_BUFFEE_VERSION=$(git show :buffee.js | grep "const buffeeVersion = '" | sed "s/.*'\(.*\)'.*/\1/")
 
     if [ "$OLD_BUFFEE_VERSION" = "$NEW_BUFFEE_VERSION" ] && [ -n "$OLD_BUFFEE_VERSION" ]; then
-        echo "✗ Error: buffe.js changed but version was not bumped"
+        echo "✗ Error: buffee.js changed but version was not bumped"
         echo "  Current version: $OLD_BUFFEE_VERSION"
-        echo "  style.css version: $STYLE_VERSION"
-        echo "  Please bump coreVersion in buffe.js"
+        echo "  Please bump buffeeVersion in buffee.js"
         exit 1
     fi
     BUFFEE_VERSION=$NEW_BUFFEE_VERSION
@@ -51,14 +65,15 @@ if git diff --cached --name-only | grep -q "^web/template.html$"; then
 fi
 
 # Determine the higher version for devlog check
-MAX_VERSION=$(printf '%s\n' "$BUFFEE_VERSION" "$STYLE_VERSION" "$TEMPLATE_VERSION" | sort -V | tail -1)
+MAX_VERSION=$(printf '%s\n' "$BUFFE_VERSION" "$BUFFEE_VERSION" "$STYLE_VERSION" "$TEMPLATE_VERSION" | sort -V | tail -1)
 
 # Check that devlog documents the higher version
 DEVLOG_VERSION=$(grep '^\*\* ' dev/changelog.txt | head -1 | sed 's/^\*\* \([^ ]*\).*/\1/')
 
 if [ "$MAX_VERSION" != "$DEVLOG_VERSION" ]; then
     echo "✗ Error: changelog.txt version doesn't match the highest version"
-    echo "  buffe.js:      $BUFFEE_VERSION"
+    echo "  buffe.js:      $BUFFE_VERSION"
+    echo "  buffee.js:     $BUFFEE_VERSION"
     echo "  style.css:     $STYLE_VERSION"
     echo "  template.html: $TEMPLATE_VERSION"
     echo "  changelog.txt: $DEVLOG_VERSION"
