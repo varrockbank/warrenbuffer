@@ -1,23 +1,9 @@
 /**
- * Buffee - Buffe editor with default keyboard/clipboard controller.
- * @constructor
- * @param {HTMLElement} $        - Container element
- * @param {Object} [options={} ] - Configuration options
- * @param {number} [options.h  ] - Fixed visible lines (omit to auto-fit)
- * @param {number} [options.w  ] - Fixed text columns (omit to fill parent)
- * @param {number} [options.s=4] - Spaces per tab/indentation
- * @example
- * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
- * editor.Model._ = ['Hello, World!'];
- * editor.View.render();
+ * Default keyboard/clipboard controller for Buffe.
+ * @param {Buffe} editor - Buffe instance
+ * @returns {Function} Cleanup function to remove event listeners
  */
-function Buffee($, opts) {
-  const editor = new Buffe($, opts);
-  editor.plug(Buffee.controller);
-  return editor;
-}
-
-Buffee.controller = editor => {
+function BuffeeNativeController(editor) {
   const { Span, Model, Mode, View, $lines } = editor, render = View.render;
 
   const onPaste = e => {
@@ -71,4 +57,22 @@ Buffee.controller = editor => {
     $lines.removeEventListener('cut', onCut);
     $lines.removeEventListener('keydown', onKeydown);
   };
-};
+}
+
+/**
+ * Buffee - Buffe editor with default keyboard/clipboard controller.
+ * @param {HTMLElement} $        - Container element
+ * @param {Object} [options={} ] - Configuration options
+ * @param {number} [options.h  ] - Fixed visible lines (omit to auto-fit)
+ * @param {number} [options.w  ] - Fixed text columns (omit to fill parent)
+ * @param {number} [options.s=4] - Spaces per tab/indentation
+ * @example
+ * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
+ * editor.Model._ = ['Hello, World!'];
+ * editor.View.render();
+ */
+function Buffee($, opts) {
+  const editor = new Buffe($, opts);
+  editor.plug(BuffeeNativeController);
+  return editor;
+}
