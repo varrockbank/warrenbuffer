@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 17.1.2-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1684 / 1.64 KB (+1), min: 3719 / 3.63 KB (0)
+*** combined (buffee): gz: 2358 / 2.30 KB (+6), br: 2182 / 2.13 KB (+12), min: 5069 / 4.95 KB (+17)
+- refactor: extract BuffeeNativeController as standalone function
+
 ** 17.1.1-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1683 / 1.64 KB (0), min: 3719 / 3.63 KB (0)
 *** combined (buffee): gz: 2352 / 2.30 KB (-21), br: 2170 / 2.12 KB (-16), min: 5052 / 4.93 KB (-42)
