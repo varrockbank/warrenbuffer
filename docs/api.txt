@@ -17,10 +17,13 @@ Top-level properties
 instance
   .v                 Version string
   .$                 Root DOM element
+  .$lines            Lines DOM element (for event listeners)
   .Model             see Model namespace below
   .View              see View  namespace below
   .Span              see Span  namespace below
   .Mode              see Mode  namespace below
+  .plug(ctrl)        Register controller (see Controllers section)
+  .unplug()          Remove current controller
 
 
 instance.Model
@@ -124,3 +127,64 @@ Mode (editor.Mode)
   .cw                Character width in pixels
   .sub               subscriptions for render callback
   .ext               Array of registered extension names (in order)
+
+
+Controllers
+------------------
+Controllers handle user input (keyboard, clipboard). Buffe provides a plug/unplug
+API for swappable controllers.
+
+instance
+  .plug(ctrl)        Register controller, auto-unplugs previous
+  .unplug()          Remove current controller
+  .$lines            DOM element for attaching event listeners
+
+A controller is a function that receives the editor instance and returns a
+cleanup function:
+
+  function MyController(editor) {
+    const { Span, Mode, $lines } = editor;
+
+    const onKeydown = e => {
+      if (e.key === 'Enter') Span.ins(['', '']);
+    };
+
+    $lines.addEventListener('keydown', onKeydown);
+
+    return () => {
+      $lines.removeEventListener('keydown', onKeydown);
+    };
+  }
+
+  // Usage
+  editor.plug(MyController);
+  editor.unplug();              // removes MyController
+  editor.plug(OtherController); // auto-unplugs before plugging
+
+
+BuffeeNativeController
+----------------------
+The default controller providing standard keyboard/clipboard handling:
+
+  - Arrow keys: cursor movement (with Shift for selection)
+  - Meta+Arrow: word/line jump
+  - Home/End: line start/end
+  - Backspace/Delete: character deletion
+  - Enter: new line
+  - Tab: indent (Shift+Tab to unindent)
+  - Meta+Z: undo (Shift for redo, requires History combinator)
+  - Meta+A: select all
+  - Meta+C/X/V: copy/cut/paste
+
+Buffee() is a factory that creates a Buffe and plugs BuffeeNativeController:
+
+  function Buffee($, opts) {
+    const editor = new Buffe($, opts);
+    editor.plug(BuffeeNativeController);
+    return editor;
+  }
+
+To use Buffe without the default controller:
+
+  const editor = new Buffe(element, opts);  // no controller
+  editor.plug(MyVimController);             // plug custom controller
