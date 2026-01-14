@@ -137,3 +137,32 @@ Buffers are the darkhorses of text editor implementations. They map 1:1 with the
 # VDOM vs DOM
 
 The zeitgeist of webdev is VDOM and efficient incrementality but this abstraction does not come free. Furthermore, the smallest VDOM diffing libraries are larger than buffee's entire footprint.
+
+## Code Golf Tricks
+
+### Arrow Key Detection via k[5]
+
+Arrow keys are detected using the 6th character of `KeyboardEvent.key`:
+
+```javascript
+{D:[1,'mvY'],U:[-1,'mvY'],L:[-1,h],R:[1,h]}[k[5]]
+```
+
+This works because:
+- `ArrowDown[5]` = 'D'
+- `ArrowUp[5]` = 'U'
+- `ArrowLeft[5]` = 'L'
+- `ArrowRight[5]` = 'R'
+
+No other standard `KeyboardEvent.key` values have D, U, L, or R (uppercase) at index 5:
+
+| Key | k[5] |
+|-----|------|
+| Backspace | 's' |
+| Delete | 'e' |
+| PageUp | 'p' |
+| PageDown | 'o' |
+| ScrollLock | 'l' (lowercase) |
+| PrintScreen | 'S' |
+
+This saves bytes vs checking `k === 'ArrowDown'` etc.
