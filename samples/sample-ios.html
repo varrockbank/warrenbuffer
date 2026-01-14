@@ -22,6 +22,16 @@
   <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / iOS Support</p>
 
   <h1>iOS Support</h1>
+  <p><a href="../combinators/ios.js">combinators/ios.js</a></p>
+  <pre>&lt;script src="buffe.js"&gt;&lt;/script&gt;
+&lt;script src="buffee.js"&gt;&lt;/script&gt;
+&lt;script src="combinators/ios.js"&gt;&lt;/script&gt;</pre>
+  <pre>let editor = Buffee(container, config)
+if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+  editor = BuffeeIOS(editor)
+}
+editor.iOS.focus()   // Show keyboard
+editor.iOS.destroy() // Cleanup</pre>
   <p>Touch interactions and on-screen keyboard input for iOS devices.</p>
 
   <h2>JavaScript</h2>

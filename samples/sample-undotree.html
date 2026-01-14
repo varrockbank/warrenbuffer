@@ -127,6 +127,17 @@
   <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Undo Tree Combinator</p>
 
   <h1>Undo Tree Combinator</h1>
+  <p><a href="../combinators/undotree.js">combinators/undotree.js</a></p>
+  <pre>&lt;script src="buffe.js"&gt;&lt;/script&gt;
+&lt;script src="buffee.js"&gt;&lt;/script&gt;
+&lt;script src="combinators/undotree.js"&gt;&lt;/script&gt;</pre>
+  <pre>BuffeeUndoTree(editor)
+editor.UndoTree.undo()
+editor.UndoTree.redo()         // Follow most recent branch
+editor.UndoTree.redo(0)        // Follow specific branch
+editor.UndoTree.branches()     // Get available branches
+editor.UndoTree.goToNode(id)   // Jump to any node
+editor.UndoTree.getTree()      // Get tree for visualization</pre>
   <p>Unlike linear history, undo tree preserves <strong>all branches</strong>. When you undo and make a new edit, you create a new branch instead of losing history.</p>
 
   <div class="controls">

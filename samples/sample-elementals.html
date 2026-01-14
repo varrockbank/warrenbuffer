@@ -52,6 +52,13 @@
   <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Elementals</p>
 
   <h1>Elementals - Layer-based UI</h1>
+  <p><a href="../combinators/elementals.js">combinators/elementals.js</a></p>
+  <pre>&lt;script src="buffe.js"&gt;&lt;/script&gt;
+&lt;script src="buffee.js"&gt;&lt;/script&gt;
+&lt;script src="combinators/elementals.js"&gt;&lt;/script&gt;</pre>
+  <pre>const editor = BuffeeElementals(Buffee(container, config))
+editor.Elementals.addButton({ row: 1, col: 5, label: 'OK' })
+editor.Elementals.enabled = true</pre>
   <p>Unlike tui-legacy which manipulates text content, Elementals creates actual DOM elements in a layer above the text.</p>
   <p>Press <kbd>Tab</kbd> to navigate, <kbd>Enter</kbd> to activate</p>
 

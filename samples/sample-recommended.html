@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>buffee - Recommended Setup</title>
+  <script src="../buffe.js"></script>
+  <script src="../buffee.js"></script>
+  <script src="../combinators/statusline.js"></script>
+  <script src="../combinators/history.js"></script>
+  <link rel="stylesheet" href="../assets/reset.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../themes/theme-boring.css">
+</head>
+<body class="sample">
+  <nav id="nav"></nav>
+  <script>
+    fetch('../web/navigation.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('nav').innerHTML = html);
+  </script>
+  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / Recommended Setup</p>
+
+  <h1>Recommended Setup</h1>
+  <p>The recommended configuration for most use cases: status bar and undo/redo.</p>
+  <pre>&lt;script src="buffe.js"&gt;&lt;/script&gt;
+&lt;script src="buffee.js"&gt;&lt;/script&gt;
+&lt;script src="combinators/statusline.js"&gt;&lt;/script&gt;
+&lt;script src="combinators/history.js"&gt;&lt;/script&gt;</pre>
+  <pre>const editor = BuffeeHistory(BuffeeStatusLine(new Buffee(el, { h: 20 })))</pre>
+
+  <div class="buffee buffee-themepack1-boring" id="editor">
+    <div class="no-select buffee-pane">
+      <div class="buffee-rail"></div>
+      <div class="buffee-lines" tabindex="0">
+        <div class="buffee-zsel"></div>
+        <blockquote class="buffee-ztxt"></blockquote>
+        <div class="buffee-layer-elements"></div>
+        <div class="buffee-caret"></div>
+      </div>
+    </div>
+    <div class="buffee-status">
+      <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
+      <div class="buffee-status-right">
+        Ln <span class="buffee-head-row"></span>, Col <span class="buffee-head-col"></span>
+        <span class="buffee-status-divider">|</span>
+        <span class="buffee-spaces"></span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Features</h2>
+  <ul>
+    <li><strong>StatusLine</strong> - Updates line count, cursor position in status bar</li>
+    <li><strong>History</strong> - Undo with <kbd>Cmd+Z</kbd>, redo with <kbd>Cmd+Shift+Z</kbd></li>
+  </ul>
+
+  <script>
+    const el = document.getElementById('editor');
+    const editor = BuffeeHistory(BuffeeStatusLine(new Buffee(el, { h: 15 })));
+
+    editor.Model._ = [
+      '// Recommended Buffee Setup',
+      '// Try typing and using Cmd+Z to undo',
+      '',
+      'function greet(name) {',
+      '    return "Hello, " + name + "!";',
+      '}',
+      '',
+      'console.log(greet("World"));'
+    ];
+    editor.View.render();
+
+    el.focus();
+  </script>
+</body>
+</html>
