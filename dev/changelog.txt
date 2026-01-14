@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.4.6-alpha.1 [2026-01-14]  gz: 2193 / 2.14 KB (+1), br: 2026 / 1.98 KB (-8), min: 4658 / 4.55 KB (4)
+- golf: combine h initialization cases
+
 ** 16.4.5-alpha.1 [2026-01-14]  gz: 2192 / 2.14 KB (-21), br: 2034 / 1.99 KB (-9), min: 4654 / 4.54 KB (-76)
 - refactor: simplify dent() function
 
