@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.3.5-alpha.1 [2026-01-14]  gz: 2286 / 2.23 KB (-3), br: 2111 / 2.06 KB (-6), min: 4950 / 4.83 KB (+9)
+- golf: inline fwd in Span._ getter for better compression
+
 ** 16.3.4-alpha.1 [2026-01-14]  gz: 2289 / 2.24 KB (-10), br: 2117 / 2.07 KB (-8), min: 4941 / 4.83 KB (-16)
 - golf: restructure arrow key handler to eliminate returns
 
