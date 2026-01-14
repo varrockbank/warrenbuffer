@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.3.4-alpha.1 [2026-01-14]  gz: 2289 / 2.24 KB (-10), br: 2117 / 2.07 KB (-8), min: 4941 / 4.83 KB (-16)
+- golf: restructure arrow key handler to eliminate returns
+
 ** 16.3.3-alpha.1 [2026-01-14]  gz: 2299 / 2.25 KB (+1), br: 2125 / 2.08 KB (-4), min: 4957 / 4.84 KB (-11)
 - golf: simplify cursor() using (p || head)
 
