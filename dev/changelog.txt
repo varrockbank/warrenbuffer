@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.4.2-alpha.1 [2026-01-14]  gz: 2231 / 2.18 KB (-3), br: 2062 / 2.01 KB (0), min: 4771 / 4.66 KB (-5)
+- golf: use cl instead of lRect.left (already destructured)
+
 ** 16.4.1-alpha.1 [2026-01-14]  gz: 2234 / 2.18 KB (-5), br: 2062 / 2.01 KB (-8), min: 4776 / 4.66 KB (-8)
 - golf: cursor() use default param instead of (p || head)
 
