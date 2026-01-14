@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.1-alpha.1';
+  this.v = '16.3.2-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -299,7 +299,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     Mode.f++;
 
     // Update contents of line containers (reset to clean state)
-    for (let i = 0; i < vN + !h; i++) for (const [arr, , , update] of viewportLayers) arr[i] && update(arr[i], i);
+    let i = vN + !h; while (i--) for (const [arr, , , update] of viewportLayers) arr[i] && update(arr[i], i);
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
