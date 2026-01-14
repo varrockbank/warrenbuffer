@@ -1,5 +1,10 @@
 * Project Devlog
 
+** 17.1.1-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1683 / 1.64 KB (0), min: 3719 / 3.63 KB (0)
+*** combined (buffee): gz: 2352 / 2.30 KB (-21), br: 2170 / 2.12 KB (-16), min: 5052 / 4.93 KB (-42)
+- refactor: Buffee as factory function, no prototype inheritance
+
 ** 17.1.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (+32), br: 1683 / 1.64 KB (+31), min: 3719 / 3.63 KB (+64)
 *** combined (buffee): gz: 2373 / 2.32 KB (+87), br: 2187 / 2.14 KB (+77), min: 5094 / 4.97 KB (+270)
