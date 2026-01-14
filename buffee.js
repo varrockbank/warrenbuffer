@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.2.0-alpha.1';
+  this.v = '16.3.0-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -43,16 +43,12 @@ function Buffee($, { h, w, s = 4 } = {}) {
   ].map(([e, f]) => [[], document.createDocumentFragment(), e, f]);
 
   /**
-   * Mover handles cursor movement primitives.
-   * Can be extended by VimMover to add vim-style motions with counts.
-   * @namespace Mover
+   * Span management for cursor and text selection operations.
+   * Handles text selection, insertion, deletion, and movement.
+   * @namespace Span
    */
-  const Mover = this.Mover = {
-    /**
-     * Moves the cursor/selection head vertically.
-     * @param {number} dir - Direction: positive for down, negative for up
-     * @param {boolean} [toEdge] - If truthy, go to edge (start if down, end if up) and update Mode.mx
-     */
+  const Span = this.Span = {
+    /** Moves cursor vertically. toEdge: go to start/end of line and update Mode.mx */
     mvY(dir, toEdge) {
       if (dir > 0 ? head.y < Model.end.y : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
@@ -62,27 +58,15 @@ function Buffee($, { h, w, s = 4 } = {}) {
         else render();
       }
     },
-
-    /**
-     * Moves the cursor/selection head horizontally.
-     * @param {number} dir - Direction: positive for right, negative for left
-     */
+    /** Moves cursor horizontally. Wraps to next/prev line at boundaries. */
     mvX(dir) {
       const right = dir > 0;
       if (right ? head.x < Model._[head.y].length : head.x) { Mode.mx = right ? ++head.x : --head.x; render(); }
-      else if (right ? head.y < Model.end.y : head.y) Mover.mvY(dir, 1);
+      else if (right ? head.y < Model.end.y : head.y) Span.mvY(dir, 1);
     },
-
-    /** Moves cursor to beginning (dir<0) or end (dir>0) of line. */
+    /** Moves cursor to beginning (dir<=0) or end (dir>0) of line. */
     mvLn(dir) { Mode.mx = head.x = dir > 0 ? Model._[head.y].length : 0; render(); },
-  };
 
-  /**
-   * Span management for cursor and text selection operations.
-   * Handles text selection, insertion, and deletion.
-   * @namespace Span
-   */
-  const Span = this.Span = {
     /**
      * Returns selection bounds. Pass truthy for document order, falsy for [head, anchor].
      * @param {boolean} [ordered] - If true, returns [start, end] in document order
@@ -380,7 +364,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         Span.cursor(Span.bounds(1)[a[0] > 0 | 0]);
         if (!cmd && (k[5] === 'L' || k[5] === 'R')) { render(); return; }
       } else if (sh && !Span.dir) Span.select();
-      Mover[a[1]](a[0]);
+      Span[a[1]](a[0]);
     } else if (k.length === 1) {
       const cmdMap = {
         z: () => this.History?.[sh ? 'redo' : 'undo'](),
