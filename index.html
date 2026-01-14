@@ -92,10 +92,12 @@
 
     <!-- About -->
     <section>
-      <h3>An ode to Vim and the terminal: Blazing fast and minimal</h3>
+      <h3>Blazing fast, inspired by the minimalist focus of Vim and the terminal</h3>
       <p>
        The core is rendering engine optimized for monospace plaintext in grid-layout.
       </p>
+
+      <pre><span style="color:#8959a8">const</span> textBuffer = <span style="color:#4271ae">Buffe</span>($DOM);</pre>
 
       <p>
         Buff(e) is a text buffer. It manages text lines (the model) and a viewport (the view)
@@ -104,10 +106,20 @@
         independent of text length. Fun fact: this project descended from an effort to view large distributed server logs in browser.
       </p>
 
+      <pre><span style="color:#8959a8">const</span> textEditor = <span style="color:#4271ae">Buffee</span>(<span style="color:#4271ae">Buffe</span>($DOM));</pre>
+
       <p>
         Buff(ee) is the complementary text editor. Buffe is Model-View, Buffee is <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model-View-Controller</a>.
         Buffe is ~1.6KB, Buffee adds ~500 bytes for fair keyboard controls. They were &lt;2KB bundled but the decoupling overhead is worth the flexibility. i.e. Clients can opt for <a href="http://localhost:8000/buffee/samples/sample-vimmotion.html">Vim controls</a>.
       </p>
+      <pre>
+<span style="color:#c18401">buffe</span>
+  <span style="color:#4271ae">.Model</span>             <span style="color:#718c00">Text Buffer</span>
+  <span style="color:#4271ae">.View</span>              <span style="color:#718c00">Viewport</span>
+  <span style="color:#4271ae">.Span</span>              <span style="color:#718c00">Cursor/Selection</span>
+  <span style="color:#4271ae">.Mode</span>              <span style="color:#718c00">Editor State</span>
+  <span style="color:#4271ae">.plug</span>(ctrl)        <span style="color:#718c00">Register controller</span>
+  <span style="color:#4271ae">.unplug</span>()          <span style="color:#718c00">Remove current controller</span></pre>
       <p>
         Hackability is virtue with an <a href="docs/api.txt">API surface</a> curated to be minimal but powerful.
         Primitive, CRDT friendly, editing operations are tightly coupled with rendering and buffer management as to maximize 
@@ -120,23 +132,29 @@
         Content/syntax aware features aside, Buffee rival performance of native editors. 
       </p>  
 
-      <h3>Combinator-oriented extension system?</h3>
+      <h3>Maximalist combinator-oriented extension system // Inspired by Neovim</h3>
   
       <p>
         The extension system is with combinators - functions that take as input a buffee instance and return a buffee instance with more functionality.
         This is novel because, unlike other text editors, Buffee is just a callable function that you can readily access and reprogram.
+
       </p>
-      <p>The Neovim paradigm is to be modular, consisting of many 
-        single-purpose extensions. Buffee follows the same philosophy, having a lightweight core with 
-        extensions that can be chained and combined, hence combinator.
-      </p>
-      <p>
+       <p>
         In fact, Buffee self-hosts by being implemented as a combinator extension of Buffe. 
       </p>
+      <pre><span style="color:#8959a8">const</span> editor = <span style="color:#4271ae">BuffeeVimMotion</span>(
+                 <span style="color:#4271ae">BuffeeSyntax</span>(
+                   <span style="color:#4271ae">BuffeeHistory</span>(
+                     <span style="color:#4271ae">BuffeeStatusLine</span>(
+                       <span style="color:#4271ae">Buffee</span>(
+                         <span style="color:#4271ae">Buffe</span>($DOM))))));</pre>
+      <p>Buffe follow's Neovim philosophy of "hyper-extensibility" and discrete single-purpose extensions.
+        These extensions can be chained and combined, hence combinator. Bring your own status line, controllers, everything. Build your own editor.
+      </p>
+ 
       <p>
         Explore: <a href="web/combinators.html">combinators</a>
       </p>
-     
 
     </section>
 

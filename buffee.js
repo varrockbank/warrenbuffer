@@ -71,7 +71,7 @@ function BuffeeNativeController(editor) {
  */
 function Buffee(editorOrEl, opts) {
   const editor = editorOrEl instanceof Buffe ? editorOrEl : new Buffe(editorOrEl, opts);
-  editor.plug(BuffeeNativeController);
+  editor.Ctrl = BuffeeNativeController(editor);
   editor.Mode.ext.push('Buffee');
   return editor;
 }
