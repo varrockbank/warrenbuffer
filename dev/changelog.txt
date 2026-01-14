@@ -1,6 +1,9 @@
 * Project Devlog
 
-** 16.3.0-alpha.1 [2026-01-14]  gz: 2306 / 2.25 KB (-8), br: 2135 / 2.08 KB (-12), min: 4970 / 4.85 KB (-19)
+** 16.3.1-alpha.1 [2026-01-14]  gz: 2306 / 2.25 KB (0), br: 2135 / 2.08 KB (-1), min: 4970 / 4.85 KB (-4)
+- golf: use Math.min for View.last getter
+
+** 16.3.0-alpha.1 [2026-01-14]  gz: 2306 / 2.25 KB (-8), br: 2137 / 2.09 KB (-10), min: 4974 / 4.86 KB (-15)
 - api: merge Mover into Span (mvX, mvY, mvLn now on Span)
 
 ** 16.2.0-alpha.1 [2026-01-14]  gz: 2314 / 2.26 KB (-242), br: 2148 / 2.10 KB (-216), min: 4989 / 4.87 KB (-694)

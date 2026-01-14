@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.0-alpha.1';
+  this.v = '16.3.1-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -272,11 +272,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /** @type {number} Number of visible lines */
     get n() { return vN; },
     set n(v) { const d = v - vN; vN = v; RENDER(d); },
-    /**
-     * Index of the last visible line.
-     * @returns {number} Index of the last line in the viewport
-     */
-    get last() { return vFirst + vN - 1 < Model.end.y ? vFirst + vN - 1 : Model.end.y; }
+    /** @type {number} Index of the last visible line */
+    get last() { return Math.min(vFirst + vN - 1, Model.end.y); }
   };
 
   // Add / remove lines, selections, rails as row changes
