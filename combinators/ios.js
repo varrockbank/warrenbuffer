@@ -97,7 +97,7 @@ function BuffeeIOS(editor) {
     let row = Math.max(0, Math.floor(y / lineHeight));
     const col = Math.max(0, Math.floor(x / ch));
     // Bounds check row to last meaningful viewport row
-    const linesFromViewFirst = Model.last - View.first;
+    const linesFromViewFirst = Model.end.y - View.first;
     const lastMeaningfulViewRow = Math.min(View.n - 1, linesFromViewFirst);
     row = Math.min(row, lastMeaningfulViewRow);
     // Convert to absolute row

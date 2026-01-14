@@ -1,7 +1,7 @@
 /**
  * @fileoverview BuffeeStatusLine - Status line extension for Buffee.
  * Updates status elements on each render when values change.
- * @version 1.3.0
+ * @version 1.4.0
  */
 
 /**
@@ -24,10 +24,12 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
 
   let lastRow = -1, lastCol = -1, lastEndRow = -1, lastEndCol = -1, lastHasSelection = false;
   let lastLineCount = -1, lastByteCount = -1, lastSpaces = -1;
-  let originalLineCount = null;
-  let originalByteCount = null;
+  let originalLineCount = 0;
+  let originalByteCount = 0;
 
   function computeByteCount() {
+    // UltraHighCapacity uses a Proxy that doesn't support iteration
+    if (editor.UltraHighCapacity?.enabled) return null;
     let bytes = 0;
     for (const line of Model._) {
       bytes += line.length + 1; // +1 for newline
@@ -39,13 +41,13 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     const [head, tail] = editor.Span.bounds();  // head first, unordered
     const [start, end] = editor.Span.bounds(1); // ordered by position
     const hasSelection = editor.Span.dir !== 0;
-    const lineCount = Model.last + 1;
+    const lineCount = Model.end.y + 1;
     const byteCount = computeByteCount();
 
     // Capture original counts on first non-empty content
-    if (originalLineCount === null && lineCount > 1) {
+    if (originalLineCount === 0 && (byteCount > 0 || lineCount > 1)) {
       originalLineCount = lineCount;
-      originalByteCount = byteCount;
+      originalByteCount = byteCount ?? 0;
     }
 
     if (showSelection && hasSelection) {
@@ -87,11 +89,7 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
     }
 
     if ($lineCounter && (lineCount !== lastLineCount || byteCount !== lastByteCount)) {
-      let text = `${lineCount}L`;
-      if (originalLineCount !== null) {
-        text += ` originally: ${originalLineCount}L ${originalByteCount} bytes`;
-      }
-      $lineCounter.textContent = text;
+      $lineCounter.textContent = `${lineCount}L, originally: ${originalLineCount}L ${originalByteCount} bytes`;
       lastLineCount = lineCount;
       lastByteCount = byteCount;
     }
@@ -105,8 +103,8 @@ function BuffeeStatusLine(editor, { showSelection = false } = {}) {
   editor.StatusLine = {
     /** Reset original counts (called before loading new file) */
     resetOriginal() {
-      originalLineCount = null;
-      originalByteCount = null;
+      originalLineCount = 0;
+      originalByteCount = 0;
       lastLineCount = -1;
       lastByteCount = -1;
     },

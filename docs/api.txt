@@ -46,7 +46,6 @@ View
   .n                 Get logical Viewport size - number of lines
   .n     = 20        Set viewport size 
   .last              Get Model index of last line viewport
-  .N                 Get Number of DOM containers (n + 1 if auto-fit)
   .render(delta)     Render content only (delta = viewport size change)
   .RENDER(delta)     Rebuild containers and render content
 

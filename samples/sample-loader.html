@@ -148,7 +148,7 @@
         logs.Model._.push(s);
       }
       logs.View.first = Math.max(0, logs.Model._.length - logs.View.n - 1);
-      logs._render(true);
+      logs.View.render();
     }
 
     const editor = BuffeeUltraHighCapacity(BuffeeFileLoader(BuffeeSanitize(BuffeeStatusLine(
