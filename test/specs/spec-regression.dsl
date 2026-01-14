@@ -54,6 +54,30 @@ EXPECT selection at 0,2-0,5
 left
 EXPECT cursor at 0,2
 
+## should collapse multi-line selection on up arrow (regression 16.4.3)
+### Up arrow with forward selection from 0,0 should collapse to start
+TYPE "Line 1"
+enter
+TYPE "Line 2"
+up
+left with meta
+down with shift
+EXPECT selection at 0,0-1,0
+up
+EXPECT cursor at 0,0
+
+## should collapse multi-line selection on down arrow (regression 16.4.3)
+### Down arrow with forward selection should collapse to end
+TYPE "Line 1"
+enter
+TYPE "Line 2"
+up
+left with meta
+down with shift
+EXPECT selection at 0,0-1,0
+down
+EXPECT cursor at 1,0
+
 ## should not throw on Cmd+C (regression c815ea2)
 ### Cmd+C should copy selected text to clipboard
 TYPE "Hello"
