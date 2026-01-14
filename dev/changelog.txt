@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 17.3.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1844 / 1.80 KB (+31), br: 1705 / 1.67 KB (+19), min: 3780 / 3.69 KB (+61)
+*** combined (buffee): gz: 2406 / 2.35 KB (+22), br: 2220 / 2.17 KB (+13), min: 5177 / 5.06 KB (+61)
+- api: Buffe callable without new for consistent function chaining
+- fix: use instanceof for robust Buffe detection in Buffee
+
 ** 17.2.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1686 / 1.65 KB (+3), min: 3719 / 3.63 KB (0)
 *** combined (buffee): gz: 2375 / 2.32 KB (+17), br: 2202 / 2.15 KB (+21), min: 5105 / 4.99 KB (+36)
