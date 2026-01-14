@@ -16,7 +16,7 @@
  * editor.VimMotion.move('10G');  // go to line 10
  */
 function BuffeeVimMotion(editor) {
-  const { Mover, Model, View, Span, Mode } = editor;
+  const { Model, View, Span, Mode } = editor;
   const { render } = View;
 
   /**
@@ -35,10 +35,10 @@ function BuffeeVimMotion(editor) {
     // Motion handlers
     const motions = {
       // Basic movement
-      h: () => { for (let i = 0; i < count; i++) Mover.mvX(-1); },
-      l: () => { for (let i = 0; i < count; i++) Mover.mvX(1); },
-      j: () => { for (let i = 0; i < count; i++) Mover.mvY(1); },
-      k: () => { for (let i = 0; i < count; i++) Mover.mvY(-1); },
+      h: () => { for (let i = 0; i < count; i++) Span.mvX(-1); },
+      l: () => { for (let i = 0; i < count; i++) Span.mvX(1); },
+      j: () => { for (let i = 0; i < count; i++) Span.mvY(1); },
+      k: () => { for (let i = 0; i < count; i++) Span.mvY(-1); },
 
       // Line positions
       '0': () => { Mode.mx = head.x = 0; render(); },
@@ -225,11 +225,11 @@ function BuffeeVimMotion(editor) {
 
       // Composed motions: next/prev line, first non-blank
       '+': () => {
-        for (let i = 0; i < count; i++) Mover.mvY(1);
+        for (let i = 0; i < count; i++) Span.mvY(1);
         motions['^']();
       },
       '-': () => {
-        for (let i = 0; i < count; i++) Mover.mvY(-1);
+        for (let i = 0; i < count; i++) Span.mvY(-1);
         motions['^']();
       },
     };
