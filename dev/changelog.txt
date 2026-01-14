@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.3.7-alpha.1 [2026-01-14]  gz: 2276 / 2.22 KB (-4), br: 2102 / 2.05 KB (-7), min: 4929 / 4.81 KB (-8)
+- golf: use template literal for digit count in rail width
+
 ** 16.3.6-alpha.1 [2026-01-14]  gz: 2280 / 2.23 KB (-6), br: 2108 / 2.06 KB (-3), min: 4937 / 4.82 KB (-13)
 - golf: use == instead of === throughout (same-type comparisons)
 
