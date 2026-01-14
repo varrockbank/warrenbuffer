@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.3.8-alpha.1 [2026-01-14]  gz: 2264 / 2.21 KB (-12), br: 2096 / 2.05 KB (-6), min: 4867 / 4.75 KB (-62)
+- golf: use raw vFirst/vN instead of View.first/View.n getters
+
 ** 16.3.7-alpha.1 [2026-01-14]  gz: 2276 / 2.22 KB (-4), br: 2102 / 2.05 KB (-7), min: 4929 / 4.81 KB (-8)
 - golf: use template literal for digit count in rail width
 
