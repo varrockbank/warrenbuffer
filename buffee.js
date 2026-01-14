@@ -7,22 +7,21 @@
 /**
  * Creates a new Buffee editor instance bound to $.
  * @constructor
- * @param {HTMLElement} $       - Container element
- * @param {Object} [config={} ] - Configuration options
- * @param {number} [config.h  ] - Fixed visible lines (omit to auto-fit)
- * @param {number} [config.w  ] - Fixed text columns (omit to fill parent)
- * @param {number} [config.s=4] - Spaces per tab/indentation
+ * @param {HTMLElement} $        - Container element
+ * @param {Object} [options={} ] - Configuration options
+ * @param {number} [options.h  ] - Fixed visible lines (omit to auto-fit)
+ * @param {number} [options.w  ] - Fixed text columns (omit to fill parent)
+ * @param {number} [options.s=4] - Spaces per tab/indentation
  * @example
  * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
  * editor.Model._ = ['Hello, World!'];
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.4.6-alpha.1';
+  this.v = '16.4.7-alpha.1';
   this.$ = $;
-  // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
-  // This allows selections to span beyond the viewport.
-  // In case where we have cursor, we want head === anchor.
+  // y is 0-indexed model line numbers, x is column. 
+  // cursor IFF head === anchor, else is a selection.
   const anchor = { y: 0, x: 0 }, detached = {};
   let head = anchor;
 
@@ -35,12 +34,12 @@ function Buffee($, { h, w, s = 4 } = {}) {
       .map(q => $.querySelector('.buffee-' + q));
   let lRect = $lines.getBoundingClientRect();
 
-  // [array, fragment, parent, updateFn]
   const viewportLayers = [
     [$ztxt, (el, i) => el.textContent = Model._[vFirst + i] ?? null],
     [$rail, (el, i) => el.textContent = vFirst + i + 1],
     [$zsel, (el   ) => el.style.width = 0]
-  ].map(([e, f]) => [[], document.createDocumentFragment(), e, f]);
+  ].map(([e, f]) => [[]      , document.createDocumentFragment(), e     , f       ]);
+  //                [elements, fragment                         , parent, updateFn]
 
   /**
    * Span management for cursor and text selection operations.
@@ -54,9 +53,9 @@ function Buffee($, { h, w, s = 4 } = {}) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(Mode.mx, len);
 
-        if (toEdge) Mode.mx = head.x;
+        if (toEdge)                                Mode.mx = head.x;
         if (head.y < vFirst || head.y > View.last) View.first = dir > 0 ? head.y - vN + 1 : head.y;
-        else render();
+        else                                       render();
       }
     },
     /** Moves cursor horizontally. Wraps to next/prev line at boundaries. */
@@ -112,7 +111,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     cursor(p = head) {
       anchor.y = p.y;
       anchor.x = p.x;
-      head = anchor;
+      head     = anchor;
     },
 
     /** Begins a new selection by detaching head from anchor. Optionally sets head position. */
@@ -229,11 +228,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /** @type {string[]} Array of text lines */
     _: [''],
 
-    /**
-     * Last coordinate in the document.
-     * @returns {Position} Position of last character {y, x}
-     */
-    get end() { return { y: this._.length - 1, x: this._.at(-1).length } },
+    /** @returns {Position} Position of last character {y, x} */
+    get end() { return {  y: this._.length - 1, x: this._.at(-1).length }},
 
     /**
      * Primitive insert operation. Inserts lines at position.
@@ -243,7 +239,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     ins(row, col, lines) {
       const after = this._[row].slice(col);
-      this._[row] = this._[row].slice(0, col) + lines[0];
+                             this._[row]  = this._[row].slice(0, col) + lines[0];
       if (lines.length == 1) this._[row] += after;
       else this._.splice(row + 1, 0, ...lines.slice(1, -1), lines.at(-1) + after);
     },
@@ -287,7 +283,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
     }
     if ($rail) {
       const railCols = Math.max(railInit, `${vFirst + vN + !h}`.length) + railPad;
-      $rail.style.width = railCols + 'ch';
+      
+             $rail.style.width = railCols + 'ch';
       if (w) $pane.style.width = `calc(${railCols + w}ch + ${padding * 4}px)`;
     }
     render(delta);
@@ -302,12 +299,16 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
-      // Sels
+      // Selections
       const [firstEdge, secondEdge] = Span.bounds(1);
       const rEnd = Math.min(vFirst + vN, secondEdge.y + 1);
       for (let r = Math.max(vFirst, firstEdge.y); r < rEnd; r++) {
-        const f = r == firstEdge.y, l = r == secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - vFirst];
-        style.left = (f ? firstEdge.x : 0) + 'ch';
+        const f       = r == firstEdge.y;
+        const l       = r == secondEdge.y;
+        const n       = Model._[r].length; 
+        const {style} = viewportLayers[2][0][r - vFirst];
+
+        style.left  = (f ? firstEdge.x : 0) + 'ch';
         style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? Math.min(secondEdge.x, n) : n + 1) + 'ch';
       }
 
