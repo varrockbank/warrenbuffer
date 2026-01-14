@@ -46,15 +46,33 @@
 
   <h2>Using Multiple Combinators</h2>
   <p>Compose combinators using the decorator pattern:</p>
-  <pre>const editor = BuffeeElementals(
-  BuffeeSyntax(
-    Buffee(container, config)
+  <pre><span style="color:#8959a8">const</span> editor = <span style="color:#4271ae">BuffeeElementals</span>(
+  <span style="color:#4271ae">BuffeeSyntax</span>(
+    <span style="color:#4271ae">Buffee</span>(container, config)
   )
 )</pre>
 
   <p>For many combinators, use <code>reduce</code> to avoid deep nesting:</p>
-  <pre>const combinators = [BuffeeHistory, BuffeeSyntax, BuffeeElementals]
-const editor = combinators.reduce((ed, comb) => comb(ed), new Buffee(container, config))</pre>
+  <pre><span style="color:#8959a8">const</span> combinators = [<span style="color:#4271ae">BuffeeHistory</span>, <span style="color:#4271ae">BuffeeSyntax</span>, <span style="color:#4271ae">BuffeeElementals</span>]
+<span style="color:#8959a8">const</span> editor = combinators.<span style="color:#4271ae">reduce</span>((ed, comb) => <span style="color:#4271ae">comb</span>(ed), <span style="color:#8959a8">new</span> <span style="color:#4271ae">Buffee</span>(container, config))</pre>
+
+  <h2>Writing a Combinator</h2>
+  <p>A combinator is a function that takes an editor instance and returns the same instance with added functionality:</p>
+  <pre><span style="color:#8959a8">function</span> <span style="color:#4271ae">BuffeeMyFeature</span>(editor) {
+  <span style="color:#999">// Access editor properties</span>
+  <span style="color:#8959a8">const</span> { Model, View, Mode, Selection } = editor
+
+  <span style="color:#999">// Add your functionality</span>
+  editor.MyFeature = {
+    <span style="color:#4271ae">lineCount</span>() { <span style="color:#8959a8">return</span> Model.n },
+    <span style="color:#4271ae">currentLine</span>() { <span style="color:#8959a8">return</span> Model._[Selection.head.r] }
+  }
+
+  <span style="color:#999">// Register and return</span>
+  Mode.ext.<span style="color:#4271ae">push</span>(<span style="color:#718c00">'MyFeature'</span>)
+  <span style="color:#8959a8">return</span> editor
+}</pre>
+  <p>Register your combinator with <code>Mode.ext.push()</code> so it appears in version info.</p>
 
 </body>
 </html>
