@@ -17,7 +17,15 @@ resources - test files, mostly for load testing
 
 ## Distributable
 
-There is no build process needed to vendor `Buffee` global function nor is there to work on the code. However, the minified distributable is created with globally installed `Terser`. This is done by a pre-commit hook ensuring `dist/buffee.min.js` is updated in sync. 
+There is no build process needed to vendor `Buffee` global function nor is there to work on the code. However, the minified distributable is created with globally installed `Terser`. This is done by a pre-commit hook ensuring `dist/buffee.min.js` is updated in sync.
+
+### const → let conversion
+
+The pre-commit hook converts `const` to `let` before minifying. This improves compression:
+- Using a single keyword (`let`) compresses better than mixed `const`/`let`
+- Source code keeps `const` for readability and intent
+- Only the minified output uses `let`
+
 `scripts/setup-hooks.sh` symlinks:
 
 ```sh
