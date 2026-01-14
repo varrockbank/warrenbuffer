@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.4-alpha.1';
+  this.v = '16.3.5-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -89,16 +89,14 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     get _() {
       const [left, right] = Span.bounds(1);
-      const fwd = this.dir > 0;
       if (left.y === right.y) {
-        const text  = Model._[left.y];
-        const slice = text.slice(left.x, right.x + fwd);
-        return right.x >= text.length && left.y < Model.end.y ? [slice, ''] : [slice];
+        const t = Model._[left.y], s = t.slice(left.x, right.x + (this.dir > 0));
+        return right.x >= t.length && left.y < Model.end.y ? [s, ''] : [s];
       }
       return [
-        Model._[left.y].slice(left.x), 
-        ...Model._.slice(left.y + 1, right.y), 
-        Model._[right.y].slice(0, right.x + fwd)
+        Model._[left.y].slice(left.x),
+        ...Model._.slice(left.y + 1, right.y),
+        Model._[right.y].slice(0, right.x + (this.dir > 0))
       ];
     },
 
