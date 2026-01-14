@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.4.5-alpha.1';
+  this.v = '16.4.6-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -29,17 +29,17 @@ function Buffee($, { h, w, s = 4 } = {}) {
   // Interface with HTML and CSS.
   const [ch    , padding ,  railInit , railPad  ] =
         ['cell','padding','rail-init','rail-pad']
-        .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
+      .map(p => parseFloat(getComputedStyle($).getPropertyValue('--buffee-' + p)));
   const [$pane ,$lines ,$caret ,$rail ,$ztxt ,$zsel ] =
         ['pane','lines','caret','rail','ztxt','zsel']
-        .map(q => $.querySelector('.buffee-' + q));
+      .map(q => $.querySelector('.buffee-' + q));
   let lRect = $lines.getBoundingClientRect();
 
   // [array, fragment, parent, updateFn]
   const viewportLayers = [
     [$ztxt, (el, i) => el.textContent = Model._[vFirst + i] ?? null],
     [$rail, (el, i) => el.textContent = vFirst + i + 1],
-    [$zsel, (el)    => el.style.width = 0]
+    [$zsel, (el   ) => el.style.width = 0]
   ].map(([e, f]) => [[], document.createDocumentFragment(), e, f]);
 
   /**
@@ -53,6 +53,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       if (dir > 0 ? head.y < Model.end.y : head.y > 0) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(Mode.mx, len);
+
         if (toEdge) Mode.mx = head.x;
         if (head.y < vFirst || head.y > View.last) View.first = dir > 0 ? head.y - vN + 1 : head.y;
         else render();
@@ -61,11 +62,17 @@ function Buffee($, { h, w, s = 4 } = {}) {
     /** Moves cursor horizontally. Wraps to next/prev line at boundaries. */
     mvX(dir) {
       const right = dir > 0;
-      if (right ? head.x < Model._[head.y].length : head.x) { Mode.mx = right ? ++head.x : --head.x; render(); }
-      else if (right ? head.y < Model.end.y : head.y) Span.mvY(dir, 1);
+      if (right ? head.x < Model._[head.y].length : head.x) { 
+        Mode.mx = right ? ++head.x : --head.x; 
+        render(); 
+      } else if (right ? head.y < Model.end.y : head.y) 
+        Span.mvY(dir, 1);
     },
     /** Moves cursor to beginning (dir<=0) or end (dir>0) of line. */
-    mvLn(dir) { Mode.mx = head.x = dir > 0 ? Model._[head.y].length : 0; render(); },
+    mvLn(dir) { 
+      Mode.mx = head.x = dir > 0 ? Model._[head.y].length : 0; 
+      render();
+    },
 
     /**
      * Returns selection bounds. Pass truthy for document order, falsy for [head, anchor].
@@ -80,7 +87,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
      * @returns {-1|0|1}
      */
     get dir() {
-      return head == anchor ? 0 : (anchor.y == head.y && anchor.x < head.x || anchor.y < head.y) ? 1 : -1;
+      return head == anchor ? 0 : 
+        (anchor.y == head.y && anchor.x < head.x || anchor.y < head.y) ? 1 : -1;
     },
 
     /**
@@ -260,16 +268,16 @@ function Buffee($, { h, w, s = 4 } = {}) {
   let vFirst = 0, vN = h ? 0 : -1;
   const View = this.View = {
     /** @type {number} Index of the first visible line (0-indexed) */
-    get first() { return vFirst; },
+    get first()  { return vFirst; },
     set first(v) { vFirst = Math.max(0, Math.min(v, Model.end.y)); RENDER(); },
     /** @type {number} Number of visible lines */
-    get n() { return vN; },
-    set n(v) { const d = v - vN; vN = v; RENDER(d); },
+    get n()      { return vN; },
+    set n(v)     { const d = v - vN; vN = v; RENDER(d); },
     /** @type {number} Index of the last visible line */
-    get last() { return Math.min(vFirst + vN - 1, Model.end.y); }
+    get last()   { return Math.min(vFirst + vN - 1, Model.end.y); }
   };
 
-  // Add / remove lines, selections, rails as row changes
+  /** Add / remove lines, selections, rails as row changes */
   const RENDER = View.RENDER = delta => {
     if (delta) {
       let d = delta;
@@ -285,9 +293,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     render(delta);
   };
 
-  /**
-   * Renders the editor viewport, selection, cursor, and calls extension hooks.
-   */
+  /** Renders the editor viewport, selection, cursor, and calls extension hooks. */
   const render = View.render = (delta = 0) => {
     Mode.f++;
 
@@ -324,10 +330,14 @@ function Buffee($, { h, w, s = 4 } = {}) {
   // Set container width if w specified
   // Width = rail(ch) + lines(ch) + margins(px): rail has margin*2, lines has margin*2
   w && !$rail && ($pane.style.width = `calc(${w}ch + ${padding * 2}px)`);
-  // Set container height if h specified (don't use flex: 1). TODO: perhaps can just set on parent
-  if (h) for (const [, , p] of viewportLayers) p && (p.style.height = h * ch + 'px');
-  // Initial sizing render
-  h ? View.n = h : new ResizeObserver(() => {lRect = $lines.getBoundingClientRect(); View.n = Math.floor($lines.clientHeight / ch)}).observe($pane);
+  // Set container height if h specified, otherwise use ResizeObserver
+  if (h) { 
+    for (const [,,p] of viewportLayers) p && (p.style.height = h * ch + 'px'); 
+    View.n = h; 
+  } else new ResizeObserver(() => {
+      lRect = $lines.getBoundingClientRect(); 
+      View.n = Math.floor($lines.clientHeight / ch)}
+  ).observe($pane);
 
   // Reading clipboard from the keydown listener involves a different security model.
   $lines.addEventListener('paste', e => {
