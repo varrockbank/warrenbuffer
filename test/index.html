@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>buffee - Tests</title>
+    <script>var useMin = new URLSearchParams(location.search).has('min');</script>
     <link rel="stylesheet" href="../assets/reset.css">
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="lib/vs2015.min.css">
@@ -224,6 +225,14 @@
         <button class="tab" data-tab="grammar">Grammar</button>
         <button class="tab" data-tab="diagnostics">AI Diagnostics</button>
         <span id="test-stale-warning" class="status-message warning" style="display: none;"><span class="warning-icon">⚠</span> source spec changed, recompile</span>
+        <span style="margin-left: auto; font-size: 0.85rem; color: #666;">
+            running tests against
+            <select id="build-select" onchange="location.href = this.value ? '?min' : '?'" style="font-size: 0.85rem;">
+                <option value="">source</option>
+                <option value="min">minified</option>
+            </select>
+        </span>
+        <script>document.getElementById('build-select').value = useMin ? 'min' : '';</script>
     </div>
     <div id="tab-tests" class="tab-content active">
         <main>
@@ -231,6 +240,10 @@
                 <span class="warning-icon">⚠</span>
                 <span id="test-error-text">Compilation errors. Some tests may have lines omitted</span>
                 <button id="test-error-details-btn" class="error-details-btn">Details</button>
+            </div>
+            <div id="build-mismatch-warning" class="test-error-banner" style="display: none; background: #f8d7da; border-color: #dc3545;">
+                <span class="warning-icon" style="color: #dc3545;">✗</span>
+                <span style="font-weight: 600; color: #721c24;">Source and minified builds produce different results!</span>
             </div>
             <div class="summary">
                 <div class="summary-item">
@@ -451,9 +464,17 @@ expect(3+5).toBe(8);               <span class="g-arr">→</span>  expect(3+5).t
     <!-- Syntax highlighting -->
     <script src="lib/highlight.min.js"></script>
 
-    <!-- Test dependencies -->
+    <!-- Load source build first, save references -->
     <script src="../buffe.js"></script>
     <script src="../buffee.js"></script>
+    <script>var BuffeSource = Buffe, BuffeeSource = Buffee;</script>
+    <!-- Load minified build, overwrites globals -->
+    <script src="../dist/buffee.min.js"></script>
+    <script>var BuffeMin = Buffe, BuffeeMin = Buffee;</script>
+    <!-- Restore based on mode (use ?min to test minified) -->
+    <script>
+        if (!useMin) { Buffe = BuffeSource; Buffee = BuffeeSource; }
+    </script>
     <script src="../combinators/statusline.js"></script>
     <script src="../combinators/syntax.js"></script>
     <script src="../combinators/elementals.js"></script>
