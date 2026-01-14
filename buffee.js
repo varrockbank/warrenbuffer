@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.3-alpha.1';
+  this.v = '16.3.4-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -355,12 +355,15 @@ function Buffee($, { h, w, s = 4 } = {}) {
     const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey, h = cmd ? 'mvLn' : 'mvX', a = {D:[1,'mvY'],U:[-1,'mvY'],L:[-1,h],R:[1,h]}[k[5]] || {Home:[0,'mvLn'],End:[1,'mvLn']}[k];
     if (a) {
       e.preventDefault();
-      if (Mode.i < 0) return;
-      if (!sh && Span.dir) {
-        Span.cursor(Span.bounds(1)[a[0] > 0 | 0]);
-        if (!cmd && (k[5] === 'L' || k[5] === 'R')) { render(); return; }
-      } else if (sh && !Span.dir) Span.select();
-      Span[a[1]](a[0]);
+      if (Mode.i >= 0) {
+        if (!sh && Span.dir) {
+          Span.cursor(Span.bounds(1)[a[0] > 0 | 0]);
+          (cmd || k[5] !== 'L' && k[5] !== 'R') ? Span[a[1]](a[0]) : render();
+        } else {
+          if (sh && !Span.dir) Span.select();
+          Span[a[1]](a[0]);
+        }
+      }
     } else if (k.length === 1) {
       const cmdMap = {
         z: () => this.History?.[sh ? 'redo' : 'undo'](),
