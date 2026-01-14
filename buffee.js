@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.4.4-alpha.1';
+  this.v = '16.4.5-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -172,23 +172,19 @@ function Buffee($, { h, w, s = 4 } = {}) {
     // intellij: move all selected lines by indentation of number s: spaces, unless there is not enough to unindent
     // Currently we follow intellij implementation but perhaps VSCode's is the best.
     dent(n) {
-      // Indent requires selection; unindent can work on current line without selection
       if (n > 0 && !this.dir) return;
-      const [first, second]   = Span.bounds(1);
-      for (let i = first.y; i <= second.y; i++) {
-        const line            = Model._[i];
-        if (n > 0) Model._[i] = ' '.repeat(n) + line;
+      const [a, b] = Span.bounds(1);
+      for (let y = a.y; y <= b.y; y++) {
+        const line = Model._[y];
+        if (n > 0) Model._[y] = ' '.repeat(n) + line;
         else {
-          const cursor = first.y == i && first || second.y == i && second;
-          if (cursor) {
-            const right     = line.slice(cursor.x).search(/[^ ]|$/);
-            const toRemove  = Math.min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
-            Model._[i]      = line.slice(toRemove);
-            if (right < toRemove) cursor.x -= toRemove - right;
-          } else Model._[i] = line.slice(Math.min(-n, line.search(/[^ ]|$/)));
+          const rm = Math.min(-n, line.search(/[^ ]|$/));
+          Model._[y] = line.slice(rm);
+          if (y === a.y) a.x = Math.max(0, a.x - rm);
+          if (y === b.y && a !== b) b.x = Math.max(0, b.x - rm);
         }
       }
-      if (n > 0) { first.x += n; second.x += n; }
+      if (n > 0) { a.x += n; b.x += n; }
       render();
     },
   };
