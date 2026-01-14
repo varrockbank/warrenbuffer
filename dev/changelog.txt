@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 17.2.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1686 / 1.65 KB (+3), min: 3719 / 3.63 KB (0)
+*** combined (buffee): gz: 2375 / 2.32 KB (+17), br: 2202 / 2.15 KB (+21), min: 5105 / 4.99 KB (+36)
+- api: Buffee as combinator pattern, accepts editor or element
+- api: Buffee registers in Mode.ext like other combinators
+
 ** 17.1.2-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1684 / 1.64 KB (+1), min: 3719 / 3.63 KB (0)
 *** combined (buffee): gz: 2358 / 2.30 KB (+6), br: 2182 / 2.13 KB (+12), min: 5069 / 4.95 KB (+17)

@@ -60,19 +60,19 @@ function BuffeeNativeController(editor) {
 }
 
 /**
- * Buffee - Buffe editor with default keyboard/clipboard controller.
- * @param {HTMLElement} $        - Container element
- * @param {Object} [options={} ] - Configuration options
- * @param {number} [options.h  ] - Fixed visible lines (omit to auto-fit)
- * @param {number} [options.w  ] - Fixed text columns (omit to fill parent)
- * @param {number} [options.s=4] - Spaces per tab/indentation
+ * Buffee - Combinator that adds default keyboard/clipboard controller.
+ * @param {Buffe|HTMLElement} editorOrEl - Buffe instance or container element
+ * @param {Object} [opts] - Options (only used if first arg is element)
+ * @returns {Buffe} The extended editor instance
  * @example
- * const editor = new Buffee(document.getElementById('editor'), { h: 25 });
- * editor.Model._ = ['Hello, World!'];
- * editor.View.render();
+ * // As combinator:
+ * const editor = Buffee(new Buffe(el, { h: 25 }));
+ * // Or shorthand:
+ * const editor = Buffee(el, { h: 25 });
  */
-function Buffee($, opts) {
-  const editor = new Buffe($, opts);
+function Buffee(editorOrEl, opts) {
+  const editor = editorOrEl.Model ? editorOrEl : new Buffe(editorOrEl, opts);
   editor.plug(BuffeeNativeController);
+  editor.Mode.ext.push('Buffee');
   return editor;
 }
