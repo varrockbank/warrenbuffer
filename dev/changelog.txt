@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 17.6.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1680 / 1.64 KB (+1), min: 3718 / 3.63 KB (0)
+*** combined (buffee): gz: 2377 / 2.32 KB (0), br: 2192 / 2.14 KB (0), min: 5117 / 5.00 KB (0)
+- add @version to buffee.js, tracked by pre-commit hook
+- docs: add versioning section to api.txt
+
 ** 17.5.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (-27), br: 1679 / 1.64 KB (-25), min: 3718 / 3.63 KB (-54)
 *** combined (buffee): gz: 2377 / 2.32 KB (-25), br: 2192 / 2.14 KB (-26), min: 5117 / 5.00 KB (-52)

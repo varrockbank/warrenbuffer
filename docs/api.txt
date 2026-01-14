@@ -13,6 +13,20 @@ const textEditor = Buffee(Buffe(element, { h, w, s }))
   s        number   4         Tab width (0 = hard tabs)
 
 
+Versioning
+----------
+Each file tracks its own version. Versions must be >= buffe.js (the core):
+
+  buffe.js       coreVersion constant      Core rendering engine
+  buffee.js      buffeeVersion constant    Controller combinator
+  style.css      @version comment          Stylesheet
+  template.html  @version HTML comment     HTML structure
+
+Versions appear in Mode.ext: ['17.6.0-alpha.1', 'Buffee@17.6.0-alpha.1', ...]
+The changelog (dev/changelog.txt) tracks the highest version across all files.
+Pre-commit hook enforces version bumps when files change.
+
+
 Top-level properties
 --------------------
 instance
