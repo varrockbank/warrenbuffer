@@ -3,7 +3,8 @@ Buffee API Reference
 
 Instantiation
 -------------
-const instance = new Buffee(element, { h, w, s })
+const textBuffer = Buffe(element, { h, w, s })
+const textEditor = Buffee(Buffe(element, { h, w, s }))
 
   Option   Type     Default   Description
   ------   ------   -------   ----------------------
@@ -21,9 +22,7 @@ instance
   .View              see View  namespace below
   .Span              see Span  namespace below
   .Mode              see Mode  namespace below
-  .plug(ctrl)        Register controller (see Controllers section)
-  .unplug()          Remove current controller
-
+  .Ctrl              Undefined by default. Controllers are added here by convention.
 
 instance.Model
 --------------------
@@ -130,16 +129,15 @@ Mode (editor.Mode)
 
 Controllers
 ------------------
-Controllers handle user input (keyboard, clipboard). Buffe provides a plug/unplug
-API for swappable controllers.
+Controllers handle user input (keyboard, clipboard, mouse, etc). Buffe core
+has no built-in controller - it's purely model/view.
 
-instance
-  .plug(ctrl)        Register controller, auto-unplugs previous
-  .unplug()          Remove current controller
-  .$lines            DOM element for attaching event listeners
+Contract: A Controller is a function that:
+  1. Receives an editor instance
+  2. Attaches event listeners to editor.$lines
+  3. Returns a cleanup function to remove listeners
 
-A controller is a function that receives the editor instance and returns a
-cleanup function:
+Convention: Store the cleanup function on editor.Ctrl so you can call it later.
 
   function MyController(editor) {
     const { Span, Mode, $lines } = editor;
@@ -156,9 +154,9 @@ cleanup function:
   }
 
   // Usage
-  editor.plug(MyController);
-  editor.unplug();              // removes MyController
-  editor.plug(OtherController); // auto-unplugs before plugging
+  editor.Ctrl = MyController(editor);  // attach controller, store cleanup
+  editor.Ctrl();                       // call cleanup to remove listeners
+  editor.Ctrl = OtherController(editor);
 
 
 BuffeeNativeController
@@ -175,15 +173,15 @@ The default controller providing standard keyboard/clipboard handling:
   - Meta+A: select all
   - Meta+C/X/V: copy/cut/paste
 
-Buffee() is a factory that creates a Buffe and plugs BuffeeNativeController:
+Buffee() is a combinator that adds BuffeeNativeController:
 
-  function Buffee($, opts) {
-    const editor = new Buffe($, opts);
-    editor.plug(BuffeeNativeController);
+  function Buffee(editorOrEl, opts) {
+    const editor = editorOrEl instanceof Buffe ? editorOrEl : Buffe(editorOrEl, opts);
+    editor.Ctrl = BuffeeNativeController(editor);
     return editor;
   }
 
 To use Buffe without the default controller:
 
-  const editor = new Buffe(element, opts);  // no controller
-  editor.plug(MyVimController);             // plug custom controller
+  const editor = Buffe(element, opts);      // no controller
+  editor.Ctrl = MyVimController(editor);    // set custom controller
