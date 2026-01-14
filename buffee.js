@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.7-alpha.1';
+  this.v = '16.3.8-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -37,8 +37,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
   // [array, fragment, parent, updateFn]
   const viewportLayers = [
-    [$ztxt, (el, i) => el.textContent = Model._[View.first + i] ?? null],
-    [$rail, (el, i) => el.textContent = View.first + i + 1],
+    [$ztxt, (el, i) => el.textContent = Model._[vFirst + i] ?? null],
+    [$rail, (el, i) => el.textContent = vFirst + i + 1],
     [$zsel, (el)    => el.style.width = 0]
   ].map(([e, f]) => [[], document.createDocumentFragment(), e, f]);
 
@@ -54,7 +54,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         const len = Model._[dir > 0 ? ++head.y : --head.y].length;
         head.x = toEdge ? (dir > 0 ? 0 : len) : Math.min(Mode.mx, len);
         if (toEdge) Mode.mx = head.x;
-        if (head.y < View.first || head.y > View.last) View.first = dir > 0 ? head.y - View.n + 1 : head.y;
+        if (head.y < vFirst || head.y > View.last) View.first = dir > 0 ? head.y - vN + 1 : head.y;
         else render();
       }
     },
@@ -141,7 +141,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
                Mode.mx = head.x  = lines[lines.length - 1].length;
         } else Mode.mx = head.x += lines[0]?.length || 0;
       }
-      if (head.y > View.last) View.first = head.y - View.n + 1;
+      if (head.y > View.last) View.first = head.y - vN + 1;
       else render();
     },
 
@@ -157,7 +157,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         // At start of line - delete newline (join with previous line)
         head.x = Model._[head.y - 1].length;
         Model.del(head.y - 1, head.x, head.y, 0);
-        if (--head.y < View.first) View.first = head.y;
+        if (--head.y < vFirst) View.first = head.y;
         else render();
       }
     },
@@ -282,7 +282,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       for (d = delta; d < 0; d++) for (const [a]      of viewportLayers) a.pop()?.remove();
     }
     if ($rail) {
-      const railCols = Math.max(railInit, `${View.first + vN + !h}`.length) + railPad;
+      const railCols = Math.max(railInit, `${vFirst + vN + !h}`.length) + railPad;
       $rail.style.width = railCols + 'ch';
       if (w) $pane.style.width = `calc(${railCols + w}ch + ${padding * 4}px)`;
     }
@@ -300,18 +300,18 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
     let cursorLeft = -1;
     if(Mode.i >= 0) {
-      // Sels 
+      // Sels
       const [firstEdge, secondEdge] = Span.bounds(1);
-      const rEnd = Math.min(View.first + View.n, secondEdge.y + 1);
-      for (let r = Math.max(View.first, firstEdge.y); r < rEnd; r++) {
-        const f = r == firstEdge.y, l = r == secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.first];
+      const rEnd = Math.min(vFirst + vN, secondEdge.y + 1);
+      for (let r = Math.max(vFirst, firstEdge.y); r < rEnd; r++) {
+        const f = r == firstEdge.y, l = r == secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - vFirst];
         style.left = (f ? firstEdge.x : 0) + 'ch';
         style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? Math.min(secondEdge.x, n) : n + 1) + 'ch';
       }
 
       // Cursor
-      const headViewRow = head.y - View.first;
-      if (headViewRow >= 0 && headViewRow < View.n) {
+      const headViewRow = head.y - vFirst;
+      if (headViewRow >= 0 && headViewRow < vN) {
         $caret.style.top = headViewRow * ch + 'px';
         cursorLeft = head.x;
 
