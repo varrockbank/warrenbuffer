@@ -1,5 +1,11 @@
 * Project Devlog
 
+** 17.7.0-alpha.1 [2026-01-14]
+*** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1676 / 1.64 KB (-4), min: 3718 / 3.63 KB (0)
+*** combined (buffee): gz: 2381 / 2.33 KB (0), br: 2192 / 2.14 KB (-4), min: 5132 / 5.01 KB (0)
+- test: add unit tests for Mode.ext versioning
+- test: add createBareEditor helper for testing Buffe without Buffee
+
 ** 17.6.0-alpha.1 [2026-01-14]
 *** core     (buffe) : gz: 1813 / 1.77 KB (0), br: 1680 / 1.64 KB (+1), min: 3718 / 3.63 KB (0)
 *** combined (buffee): gz: 2377 / 2.32 KB (0), br: 2192 / 2.14 KB (0), min: 5117 / 5.00 KB (0)

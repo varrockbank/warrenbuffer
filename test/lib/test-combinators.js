@@ -115,6 +115,24 @@ function createTestEditor(opts = {}) {
     return { editor, container, cleanup: () => container.remove() };
 }
 
+// Creates a bare Buffe editor (no Buffee controller) for testing core behavior
+function createBareEditor(opts = {}) {
+    const container = document.createElement('div');
+    container.style.cssText = 'position: absolute; left: -9999px; top: -9999px; width: 600px; height: 400px; visibility: hidden;';
+    container.innerHTML = `
+        <div class="buffee no-select">
+            <div class="no-select buffee-pane">
+                <div class="buffee-rail"></div>
+                <div class="buffee-lines" tabindex="0"><div class="buffee-zsel"></div><blockquote class="buffee-ztxt"></blockquote><div class="buffee-layer-elements"></div><div class="buffee-caret"></div></div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(container);
+    const el = container.querySelector('.buffee');
+    const editor = Buffe(el, { h: 10, ...opts });
+    return { editor, container, cleanup: () => container.remove() };
+}
+
 // ===========================================
 // Extension Test Definitions
 // ===========================================
@@ -1419,12 +1437,23 @@ function defineExtensionTests() {
 
     // ===== EXTENSION REGISTRATION TESTS =====
     extRunner.describe('Extension Registration', () => {
-        extRunner.it('Mode.ext starts with core version', () => {
-            const { editor, cleanup } = createTestEditor();
+        extRunner.it('Buffe Mode.ext starts with core version only', () => {
+            const { editor, cleanup } = createBareEditor();
             try {
                 assertTrue(Array.isArray(editor.Mode.ext), 'Mode.ext should be an array');
-                assertEqual(editor.Mode.ext.length, 1, 'Mode.ext should have one element initially');
+                assertEqual(editor.Mode.ext.length, 1, 'Bare Buffe should have one element');
                 assertTrue(/^\d+\.\d+\.\d+/.test(editor.Mode.ext[0]), 'First element should be version string');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('Buffee registers with version in Mode.ext', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                assertEqual(editor.Mode.ext.length, 2, 'Buffee editor should have two elements');
+                assertTrue(/^\d+\.\d+\.\d+/.test(editor.Mode.ext[0]), 'First element should be core version');
+                assertTrue(/^Buffee@\d+\.\d+\.\d+/.test(editor.Mode.ext[1]), 'Second element should be Buffee@version');
             } finally {
                 cleanup();
             }
@@ -1550,8 +1579,8 @@ function defineExtensionTests() {
                 BuffeeStatusLine(editor);
                 BuffeeElementals(editor);
 
-                // Verify registration order (first element is version)
-                assertDeepEqual(editor.Mode.ext.slice(1), [
+                // Verify registration order (first two elements are core version and Buffee@version)
+                assertDeepEqual(editor.Mode.ext.slice(2), [
                     'History',
                     'Sanitize',
                     'Syntax',
@@ -1575,9 +1604,9 @@ function defineExtensionTests() {
                     )
                 );
 
-                // Verify registration order (first element is version, innermost first)
+                // Verify registration order (first two are core version and Buffee@version)
                 // TUI internally initializes Highlights, so Highlights registers before TUI
-                assertDeepEqual(decorated.Mode.ext.slice(1), [
+                assertDeepEqual(decorated.Mode.ext.slice(2), [
                     'History',
                     'FileLoader',
                     'Highlights',
@@ -1595,7 +1624,7 @@ function defineExtensionTests() {
                 const extensions = [BuffeeHistory, BuffeeSanitize, BuffeeUndoTree];
                 extensions.reduce((ed, ext) => ext(ed), editor);
 
-                assertDeepEqual(editor.Mode.ext.slice(1), [
+                assertDeepEqual(editor.Mode.ext.slice(2), [
                     'History',
                     'Sanitize',
                     'UndoTree'
