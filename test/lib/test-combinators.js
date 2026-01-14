@@ -1082,6 +1082,287 @@ function defineExtensionTests() {
         });
     });
 
+    // ===== VIMMOVER TESTS =====
+    extRunner.describe('VimMotion', () => {
+        extRunner.it('attaches VimMotion object to editor', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                assertTrue(!editor.VimMotion, 'VimMotion should not exist before extension');
+                BuffeeVimMotion(editor);
+                assertTrue(!!editor.VimMotion, 'VimMotion should be attached after extension');
+                assertTrue(typeof editor.VimMotion.move === 'function', 'Should have move method');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves right with l', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello'];
+                editor.View.render();
+                editor.VimMotion.move('l');
+                assertEqual(editor.Span.bounds()[0].x, 1, 'Should be at col 1');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves left with h', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello'];
+                editor.Span.bounds()[0].x = 3;
+                editor.View.render();
+                editor.VimMotion.move('h');
+                assertEqual(editor.Span.bounds()[0].x, 2, 'Should be at col 2');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves down with j', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['line1', 'line2', 'line3'];
+                editor.View.render();
+                editor.VimMotion.move('j');
+                assertEqual(editor.Span.bounds()[0].y, 1, 'Should be at row 1');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves up with k', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['line1', 'line2', 'line3'];
+                editor.Span.bounds()[0].y = 2;
+                editor.View.render();
+                editor.VimMotion.move('k');
+                assertEqual(editor.Span.bounds()[0].y, 1, 'Should be at row 1');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('supports count prefix for basic motions', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello World'];
+                editor.View.render();
+                editor.VimMotion.move('5l');
+                assertEqual(editor.Span.bounds()[0].x, 5, 'Should be at col 5 after 5l');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to start of line with 0', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello World'];
+                editor.Span.bounds()[0].x = 6;
+                editor.View.render();
+                editor.VimMotion.move('0');
+                assertEqual(editor.Span.bounds()[0].x, 0, 'Should be at col 0');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to end of line with $', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello'];
+                editor.View.render();
+                editor.VimMotion.move('$');
+                assertEqual(editor.Span.bounds()[0].x, 5, 'Should be at col 5 (end)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to first non-blank with ^', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['    Hello'];
+                editor.View.render();
+                editor.VimMotion.move('^');
+                assertEqual(editor.Span.bounds()[0].x, 4, 'Should be at col 4 (first non-blank)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves by word with w', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello World'];
+                editor.View.render();
+                editor.VimMotion.move('w');
+                assertEqual(editor.Span.bounds()[0].x, 6, 'Should be at col 6 (start of World)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves by word backwards with b', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello World'];
+                editor.Span.bounds()[0].x = 8;
+                editor.View.render();
+                editor.VimMotion.move('b');
+                assertEqual(editor.Span.bounds()[0].x, 6, 'Should be at col 6 (start of World)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to end of word with e', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello World'];
+                editor.View.render();
+                editor.VimMotion.move('e');
+                assertEqual(editor.Span.bounds()[0].x, 4, 'Should be at col 4 (end of Hello)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves by WORD with W', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['foo.bar baz'];
+                editor.View.render();
+                editor.VimMotion.move('W');
+                assertEqual(editor.Span.bounds()[0].x, 8, 'Should be at col 8 (start of baz)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves by WORD backwards with B', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['foo.bar baz'];
+                editor.Span.bounds()[0].x = 10;
+                editor.View.render();
+                editor.VimMotion.move('B');
+                assertEqual(editor.Span.bounds()[0].x, 8, 'Should be at col 8 (start of baz)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to end of WORD with E', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['foo.bar baz'];
+                editor.View.render();
+                editor.VimMotion.move('E');
+                assertEqual(editor.Span.bounds()[0].x, 6, 'Should be at col 6 (end of foo.bar)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('goes to last line with G', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['line1', 'line2', 'line3', 'line4', 'line5'];
+                editor.View.render();
+                editor.VimMotion.move('G');
+                assertEqual(editor.Span.bounds()[0].y, 4, 'Should be at last line (row 4)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('goes to specific line with count + G', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['line1', 'line2', 'line3', 'line4', 'line5'];
+                editor.View.render();
+                editor.VimMotion.move('3G');
+                assertEqual(editor.Span.bounds()[0].y, 2, 'Should be at line 3 (row 2)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('goes to first line with gg', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['line1', 'line2', 'line3'];
+                editor.Span.bounds()[0].y = 2;
+                editor.View.render();
+                editor.VimMotion.move('gg');
+                assertEqual(editor.Span.bounds()[0].y, 0, 'Should be at first line (row 0)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to next line first non-blank with +', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['Hello', '    World'];
+                editor.View.render();
+                editor.VimMotion.move('+');
+                assertEqual(editor.Span.bounds()[0].y, 1, 'Should be at row 1');
+                assertEqual(editor.Span.bounds()[0].x, 4, 'Should be at first non-blank (col 4)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('moves to prev line first non-blank with -', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                editor.Model._ = ['    Hello', 'World'];
+                editor.Span.bounds()[0].y = 1;
+                editor.View.render();
+                editor.VimMotion.move('-');
+                assertEqual(editor.Span.bounds()[0].y, 0, 'Should be at row 0');
+                assertEqual(editor.Span.bounds()[0].x, 4, 'Should be at first non-blank (col 4)');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('registers itself in Mode.ext', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                assertTrue(editor.Mode.ext.includes('VimMotion'), 'Mode.ext should include VimMotion');
+            } finally {
+                cleanup();
+            }
+        });
+    });
+
     // ===== STATUSLINE TESTS =====
     extRunner.describe('StatusLine', () => {
         extRunner.it('updates line count when Model._ is set and render is called', () => {
@@ -1243,6 +1524,16 @@ function defineExtensionTests() {
             try {
                 BuffeeUndoTree(editor);
                 assertTrue(editor.Mode.ext.includes('UndoTree'), 'Mode.ext should include UndoTree');
+            } finally {
+                cleanup();
+            }
+        });
+
+        extRunner.it('VimMotion registers itself', () => {
+            const { editor, cleanup } = createTestEditor();
+            try {
+                BuffeeVimMotion(editor);
+                assertTrue(editor.Mode.ext.includes('VimMotion'), 'Mode.ext should include VimMotion');
             } finally {
                 cleanup();
             }

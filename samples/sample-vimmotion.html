@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>buffee - VimMotion Extension</title>
+  <script src="../buffee.js"></script>
+  <script src="../combinators/statusline.js"></script>
+  <script src="../combinators/vimmotion.js"></script>
+  <link rel="stylesheet" href="../assets/reset.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../themes/theme-boring.css">
+  <link rel="stylesheet" href="../themes/theme-neo.css">
+  <style>
+    .motion-panel {
+      margin: 20px 0;
+      padding: 15px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      font-family: monospace;
+    }
+    .motion-input {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .motion-input input {
+      background: #333;
+      border: 1px solid #555;
+      color: #0f0;
+      padding: 8px 12px;
+      font-size: 16px;
+      font-family: monospace;
+      width: 120px;
+      border-radius: 4px;
+    }
+    .motion-input button {
+      background: #333;
+      border: 1px solid #555;
+      color: #fff;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .motion-input button:hover {
+      background: #444;
+    }
+    .quick-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-buttons button {
+      background: #222;
+      border: 1px solid #444;
+      color: #0f0;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-family: monospace;
+      border-radius: 4px;
+      min-width: 50px;
+    }
+    .quick-buttons button:hover {
+      background: #333;
+      border-color: #0f0;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .button-row-label {
+      color: #888;
+      font-size: 12px;
+      min-width: 60px;
+      display: flex;
+      align-items: center;
+    }
+    .motion-table {
+      margin-top: 20px;
+      background: #fff;
+      color: #000;
+      border-radius: 8px;
+      padding: 15px;
+    }
+    .motion-table h2 {
+      color: #000;
+    }
+    .motion-table table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .motion-table th, .motion-table td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .motion-table th {
+      background: #f4f4f4;
+    }
+    .motion-table code {
+      color: #000;
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="sample">
+  <nav id="nav"></nav>
+  <script>
+    fetch('../web/navigation.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('nav').innerHTML = html);
+  </script>
+  <p><a href="../index.html">home</a> / <a href="index.html">samples</a> / VimMotion Extension</p>
+
+  <h1>VimMotion Extension</h1>
+  <p>Adds vim-style motion commands with count support to Buffee.</p>
+  <p><code>BuffeeVimMotion(new Buffee(el, { h: 15 }))</code></p>
+
+  <div class="motion-panel">
+    <div class="motion-input">
+      <label>Motion:</label>
+      <input type="text" id="motion-input" placeholder="e.g., 5j, w, G">
+      <button onclick="executeMotion()">Execute</button>
+    </div>
+    <div class="quick-buttons">
+      <div class="button-row">
+        <span class="button-row-label">Basic:</span>
+        <button onclick="runMotion('h', event)">h</button>
+        <button onclick="runMotion('l', event)">l</button>
+        <button onclick="runMotion('j', event)">j</button>
+        <button onclick="runMotion('k', event)">k</button>
+        <button onclick="runMotion('3h', event)">3h</button>
+        <button onclick="runMotion('3l', event)">3l</button>
+        <button onclick="runMotion('5j', event)">5j</button>
+        <button onclick="runMotion('5k', event)">5k</button>
+      </div>
+      <div class="button-row">
+        <span class="button-row-label">Word:</span>
+        <button onclick="runMotion('w', event)">w</button>
+        <button onclick="runMotion('b', event)">b</button>
+        <button onclick="runMotion('e', event)">e</button>
+        <button onclick="runMotion('3w', event)">3w</button>
+        <button onclick="runMotion('3b', event)">3b</button>
+        <button onclick="runMotion('3e', event)">3e</button>
+      </div>
+      <div class="button-row">
+        <span class="button-row-label">WORD:</span>
+        <button onclick="runMotion('W', event)">W</button>
+        <button onclick="runMotion('B', event)">B</button>
+        <button onclick="runMotion('E', event)">E</button>
+        <button onclick="runMotion('3W', event)">3W</button>
+        <button onclick="runMotion('3B', event)">3B</button>
+        <button onclick="runMotion('3E', event)">3E</button>
+      </div>
+      <div class="button-row">
+        <span class="button-row-label">Line:</span>
+        <button onclick="runMotion('0', event)">0</button>
+        <button onclick="runMotion('$', event)">$</button>
+        <button onclick="runMotion('^', event)">^</button>
+        <button onclick="runMotion('+', event)">+</button>
+        <button onclick="runMotion('-', event)">-</button>
+        <button onclick="runMotion('3+', event)">3+</button>
+        <button onclick="runMotion('3-', event)">3-</button>
+      </div>
+      <div class="button-row">
+        <span class="button-row-label">Go to:</span>
+        <button onclick="runMotion('gg', event)">gg</button>
+        <button onclick="runMotion('G', event)">G</button>
+        <button onclick="runMotion('5G', event)">5G</button>
+        <button onclick="runMotion('10G', event)">10G</button>
+        <button onclick="runMotion('5gg', event)">5gg</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="buffee buffee-themepack1-neo" id="editor">
+    <div class="no-select buffee-pane">
+      <div class="buffee-rail"></div>
+      <div class="buffee-lines" tabindex="0">
+        <div class="buffee-zsel"></div>
+        <blockquote class="buffee-ztxt"></blockquote>
+        <div class="buffee-layer-elements"></div>
+        <div class="buffee-caret"></div>
+      </div>
+    </div>
+    <div class="buffee-status">
+      <div class="buffee-status-left"><span class="buffee-linecount"></span></div>
+      <div class="buffee-status-right">
+        Ln <span class="buffee-head-row"></span>, Col <span class="buffee-head-col"></span>
+        <span class="buffee-status-divider">|</span>
+        <span class="buffee-spaces"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="motion-table">
+    <h2>Supported Motions</h2>
+    <table>
+      <tr><th>Motion</th><th>Description</th><th>Example</th></tr>
+      <tr><td><code>h</code>, <code>l</code></td><td>Left / Right</td><td><code>5h</code> = 5 chars left</td></tr>
+      <tr><td><code>j</code>, <code>k</code></td><td>Down / Up</td><td><code>10j</code> = 10 lines down</td></tr>
+      <tr><td><code>w</code>, <code>b</code></td><td>Next / Previous word start</td><td><code>3w</code> = 3 words forward</td></tr>
+      <tr><td><code>e</code></td><td>End of word</td><td><code>2e</code> = end of 2nd word</td></tr>
+      <tr><td><code>W</code>, <code>B</code>, <code>E</code></td><td>WORD motions (whitespace-delimited)</td><td><code>W</code> = next WORD</td></tr>
+      <tr><td><code>0</code></td><td>Start of line</td><td></td></tr>
+      <tr><td><code>$</code></td><td>End of line</td><td></td></tr>
+      <tr><td><code>^</code></td><td>First non-blank character</td><td></td></tr>
+      <tr><td><code>gg</code></td><td>Go to line (default: first)</td><td><code>5gg</code> = line 5</td></tr>
+      <tr><td><code>G</code></td><td>Go to line (default: last)</td><td><code>10G</code> = line 10</td></tr>
+      <tr><td><code>+</code>, <code>-</code></td><td>Next/prev line, first non-blank</td><td><code>3+</code> = 3 lines down, first non-blank</td></tr>
+    </table>
+  </div>
+
+  <h2>Usage</h2>
+  <pre><code>const editor = BuffeeVimMotion(new Buffee(el, { h: 15 }));
+
+// Execute motions programmatically
+editor.VimMotion.move('5j');   // down 5 lines
+editor.VimMotion.move('w');    // next word
+editor.VimMotion.move('10G');  // go to line 10
+editor.VimMotion.move('$');    // end of line</code></pre>
+
+  <script>
+    const el = document.getElementById('editor');
+    const editor = BuffeeVimMotion(BuffeeStatusLine(new Buffee(el, { h: 15 })));
+
+    // Sample content
+    editor.Model._ = [
+      '// VimMotion Demo - Try the motions above!',
+      '',
+      'function fibonacci(n) {',
+      '    if (n <= 1) return n;',
+      '    return fibonacci(n - 1) + fibonacci(n - 2);',
+      '}',
+      '',
+      'const numbers = [1, 2, 3, 4, 5];',
+      'const doubled = numbers.map(x => x * 2);',
+      '',
+      '// WORD vs word:',
+      '// "word" = alphanumeric sequences OR punctuation sequences',
+      '// "WORD" = any non-whitespace sequence',
+      '',
+      'console.log("Result:", fibonacci(10));',
+      '',
+      '// Try these motions:',
+      '//   w  - next word',
+      '//   W  - next WORD (includes punctuation)',
+      '//   5j - down 5 lines',
+      '//   G  - end of file',
+      '//   ^  - first non-blank on line',
+    ];
+    editor.View.render();
+
+    function runMotion(motion, e) {
+      if (e) e.preventDefault();
+      editor.VimMotion.move(motion);
+      el.querySelector('.buffee-lines').focus({ preventScroll: true });
+    }
+
+    function executeMotion() {
+      const input = document.getElementById('motion-input');
+      if (input.value) {
+        runMotion(input.value);
+        input.value = '';
+      }
+    }
+
+    // Allow Enter to execute motion
+    document.getElementById('motion-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') executeMotion();
+    });
+  </script>
+</body>
+</html>
