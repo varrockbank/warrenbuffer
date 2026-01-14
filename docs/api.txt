@@ -15,7 +15,6 @@ const instance = new Buffee(element, { h, w, s })
 Top-level properties
 --------------------
 instance
-  .v                 Version string
   .$                 Root DOM element
   .$lines            Lines DOM element (for event listeners)
   .Model             see Model namespace below
@@ -126,7 +125,7 @@ Mode (editor.Mode)
   .ch                Line height in pixels
   .cw                Character width in pixels
   .sub               subscriptions for render callback
-  .ext               Array of registered extension names (in order)
+  .ext               Array: [coreVersion, ...extensions] - version string first, then extension names
 
 
 Controllers
