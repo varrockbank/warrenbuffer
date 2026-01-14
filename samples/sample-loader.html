@@ -48,6 +48,16 @@
 
   <h1>Ultra High Capacity</h1>
   <p><a href="../combinators/fileloader.js">combinators/fileloader.js</a> | <a href="../combinators/ultrahighcapacity.js">combinators/ultrahighcapacity.js</a></p>
+  <pre>// FileLoader - multiple loading strategies
+const editor = BuffeeFileLoader(BuffeeSanitize(Buffee(container, config)))
+await editor.FileLoader.naiveLoad(file)           // &lt;10M lines
+await editor.FileLoader.chunkedBlobLoad(file)     // &lt;70M lines
+await editor.FileLoader.streamLoad(file)
+
+// UltraHighCapacity - gzip-compressed for 1B+ lines
+const editor = BuffeeUltraHighCapacity(Buffee(container, config))
+editor.UltraHighCapacity.activate(50000)
+await editor.UltraHighCapacity.appendLines(lines)</pre>
   <p>Load and display files with millions or billions of lines using various loading strategies.</p>
 
   <div id="read-only-indicator" class="read-only-indicator hidden">

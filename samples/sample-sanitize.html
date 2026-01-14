@@ -22,6 +22,15 @@
 
   <h1>Sanitize Combinator</h1>
   <p><a href="../combinators/sanitize.js">combinators/sanitize.js</a></p>
+  <pre>const editor = BuffeeSanitize(new Buffee(container, config))
+
+// Automatic sanitization on Span.ins() calls
+editor.Span.ins("text\twith\ttabs")  // tabs become spaces
+
+// Manual sanitization utilities
+editor.Sanitize.line("hello\tworld")   // "hello    world"
+editor.Sanitize.text("a\tb\nc\td")     // sanitize multi-line string
+editor.Sanitize.lines(["a\tb", "c\td"]) // sanitize array of lines</pre>
   <p>Automatically converts tabs to spaces and normalizes problematic Unicode characters.</p>
   <p><code>BuffeeSanitize(new Buffee(el, {}))</code></p>
 

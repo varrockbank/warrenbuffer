@@ -118,6 +118,22 @@
 
   <h1>VimMotion Extension</h1>
   <p><a href="../combinators/vimmotion.js">combinators/vimmotion.js</a></p>
+  <pre>const editor = BuffeeVimMotion(new Buffee(container, config))
+
+// Basic motions
+editor.VimMotion.move('h')    // left
+editor.VimMotion.move('j')    // down
+editor.VimMotion.move('5j')   // down 5 lines
+
+// Word motions
+editor.VimMotion.move('w')    // next word start
+editor.VimMotion.move('b')    // previous word start
+
+// Line motions
+editor.VimMotion.move('0')    // start of line
+editor.VimMotion.move('$')    // end of line
+editor.VimMotion.move('gg')   // first line
+editor.VimMotion.move('G')    // last line</pre>
   <p>Adds vim-style motion commands with count support to Buffee.</p>
   <p><code>BuffeeVimMotion(new Buffee(el, { h: 15 }))</code></p>
 
