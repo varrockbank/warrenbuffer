@@ -12,10 +12,10 @@
  * editor.View.render();
  */
 function Buffee($, opts) {
-  Buffe.call(this, $, opts);
-  this.plug(Buffee.controller);
+  const editor = new Buffe($, opts);
+  editor.plug(Buffee.controller);
+  return editor;
 }
-Buffee.prototype = Object.create(Buffe.prototype);
 
 Buffee.controller = editor => {
   const { Span, Model, Mode, View, $lines } = editor, render = View.render;
