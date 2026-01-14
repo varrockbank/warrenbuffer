@@ -13,23 +13,27 @@
  */
 function Buffee($, opts) {
   Buffe.call(this, $, opts);
-  const { Span, Model, Mode, View, $lines } = this, render = View.render;
+  this.plug(Buffee.controller);
+}
+Buffee.prototype = Object.create(Buffe.prototype);
 
-  $lines.addEventListener('paste', e => {
+Buffee.controller = editor => {
+  const { Span, Model, Mode, View, $lines } = editor, render = View.render;
+
+  const onPaste = e => {
     e.preventDefault();
     Span.ins(e.clipboardData.getData('text/plain').split('\n'));
-  });
-  $lines.addEventListener('copy', e => {
+  };
+  const onCopy = e => {
     e.preventDefault();
     e.clipboardData.setData('text/plain', Span._.join('\n'));
-  });
-  $lines.addEventListener('cut', e => {
+  };
+  const onCut = e => {
     e.preventDefault();
     e.clipboardData.setData('text/plain', Span._.join('\n'));
     Span.del();
-  });
-
-  $lines.addEventListener('keydown', e => {
+  };
+  const onKeydown = e => {
     const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey, h = cmd ? 'mvLn' : 'mvX', a = {D:[1,'mvY'],U:[-1,'mvY'],L:[-1,h],R:[1,h]}[k[5]] || {Home:[0,'mvLn'],End:[1,'mvLn']}[k];
     if (a) {
       e.preventDefault();
@@ -44,7 +48,7 @@ function Buffee($, opts) {
       }
     } else if (k.length == 1) {
       const cmdMap = {
-        z: () => this.History?.[sh ? 'redo' : 'undo'](),
+        z: () => editor.History?.[sh ? 'redo' : 'undo'](),
         a: () => { const e = Model.end; Span.cursor({y: 0, x: 0}); if (e.y || e.x) Span.select(e); render(); },
       };
       if (cmd) { if (cmdMap[k]) { e.preventDefault(); cmdMap[k](); } }
@@ -54,6 +58,17 @@ function Buffee($, opts) {
       Enter: () => Span.ins(['', '']),
       Tab: () => { e.preventDefault(); (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]); },
     })[k]?.()
-  });
-}
-Buffee.prototype = Object.create(Buffe.prototype);
+  };
+
+  $lines.addEventListener('paste', onPaste);
+  $lines.addEventListener('copy', onCopy);
+  $lines.addEventListener('cut', onCut);
+  $lines.addEventListener('keydown', onKeydown);
+
+  return () => {
+    $lines.removeEventListener('paste', onPaste);
+    $lines.removeEventListener('copy', onCopy);
+    $lines.removeEventListener('cut', onCut);
+    $lines.removeEventListener('keydown', onKeydown);
+  };
+};
