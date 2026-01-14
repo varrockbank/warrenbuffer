@@ -34,7 +34,11 @@
       .then(r => r.text())
       .then(html => document.getElementById('nav').innerHTML = html);
   </script>
-  <p><strong>Buffee, the text slayer</strong> <a href="dev/changelog.txt" id="buffee-version" style="font-family: monospace"></a> — embeddable terminal-like text editor for netizens — compact, fast, unbounded</p>
+  <p><strong>Buffee, the text slayer</strong> <a href="dev/changelog.txt" id="buffee-version" style="font-family: monospace"></a> — embeddable terminal-like text editor for netizens — lean, hackable, unbounded</p>
+
+  <blockquote style="font-style: italic; margin: 16px 0; padding-left: 16px; border-left: 3px solid #666;">
+    "If Neovim is the modern Vim, and <a href="https://helix-editor.com/">Helix</a> is the post-modern Vim, then Buffee is the post-post-modern Vim."
+  </blockquote>
 
   <div class="point">
     <div>
@@ -88,29 +92,36 @@
 
     <!-- About -->
     <section>
-      <h3>Blazing fast and minimalist text interface, Inspired by Vim and the terminal: </h3>
+      <h3>An ode to Vim and the terminal: Blazing fast and minimal</h3>
       <p>
-        The core (Buffe.js) rendering engine for monospace plaintext in grid-layout.
-        
-      
-      </p>
-
-      <p>As a text buffer, Buffee is efficient by maintaining a viewport with a small DOM footprint. Performance does not degrade with the length of the text.
-        In fact, this project descend from an initiative to inspect massive distributed server logs in browser, distilling breakthroughs in that space.
-      </p>
-
-      <p>To maximize performance, the implementation tightly couples text editing capabilities with the rendering and text buffering core.
+       The core is rendering engine optimized for monospace plaintext in grid-layout.
       </p>
 
       <p>
-        Credit to the wizards of V8. Compactness was feasible with V8 arrays being viable as a text buffer. 
+        Buff(e) is a text buffer. It manages text lines (the model) and a viewport (the view)
+        <span style="font-style: italic;">into</span> these lines onto the grid.
+        Crucially, retaining a small DOM footprint, 
+        independent of text length. Fun fact: this project descended from an effort to view large distributed server logs in browser.
+      </p>
+
+      <p>
+        Buff(ee) is the complementary text editor. Buffe is Model-View, Buffee is <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model-View-Controller</a>.
+        Buffe is ~1.6KB, Buffee adds ~500 bytes for fair keyboard controls. They were &lt;2KB bundled but the decoupling overhead is worth the flexibility. i.e. Clients can opt for <a href="http://localhost:8000/buffee/samples/sample-vimmotion.html">Vim controls</a>.
+      </p>
+      <p>
+        Hackability is virtue with an <a href="docs/api.txt">API surface</a> curated to be minimal but powerful.
+        Primitive, CRDT friendly, editing operations are tightly coupled with rendering and buffer management as to maximize 
+        performance. Buffe also owns cursor/selection (multi-cursor coming soon).
+      </p>
+
+      <p>
+        The V8 team played big role in keeping the code compact -- they made Arrays (not actually arrays) viable as a text buffer.
         Compare with complex structures, plural, needed by native editors, e.g. <a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">piecetable</a>. 
-        Content and syntax aware considerations aside, Buffee rivals the performance of native text editors. 
+        Content/syntax aware features aside, Buffee rival performance of native editors. 
       </p>  
 
-      <h3>Combinator-oriented extension system, adopting Neovim's modular ethos</h3>
-      <p>
-        Buffee is designed to be hackable with a minimal but powerful API: <a href="docs/api.txt">API cheatsheet</a></h3>
+      <h3>Combinator-oriented extension system?</h3>
+  
       <p>
         The extension system is with combinators - functions that take as input a buffee instance and return a buffee instance with more functionality.
         This is novel because, unlike other text editors, Buffee is just a callable function that you can readily access and reprogram.
@@ -120,9 +131,13 @@
         extensions that can be chained and combined, hence combinator.
       </p>
       <p>
+        In fact, Buffee self-hosts by being implemented as a combinator extension of Buffe. 
+      </p>
+      <p>
         Explore: <a href="web/combinators.html">combinators</a>
       </p>
-   
+     
+
     </section>
 
     <!-- TUI Mode Demo -->
@@ -182,7 +197,7 @@
     window.primary = primary;
 
     // Set version from Buffee instance
-    document.getElementById('buffee-version').textContent = '( v' + primary.v + ' )';
+    document.getElementById('buffee-version').textContent = '( v' + primary.Mode.ext[0] + ' )';
 
     const hackerNewsElement = document.getElementById('hackernews');
     const hackernews = BuffeeStatusLine(new Buffee(hackerNewsElement, { h: 20 }));
