@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.0.0-alpha.1';
+  this.v = '16.0.1-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -415,7 +415,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     },
       cmdMap = {
         z: () => this.History?.[sh ? 'redo' : 'undo'](),
-        a: () => { Span.cursor({y: 0, x: 0}); Span.select(Model.end); render(); },
+        a: () => { const e = Model.end; Span.cursor({y: 0, x: 0}); if (e.y || e.x) Span.select(e); render(); },
     };
 
     if (arrowCode) {
