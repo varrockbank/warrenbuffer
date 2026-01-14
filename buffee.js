@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.0.1-alpha.1';
+  this.v = '16.1.0-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -43,18 +43,11 @@ function Buffee($, { h, w, s = 4 } = {}) {
   ].map(([e, f]) => [[], document.createDocumentFragment(), e, f]);
 
   /**
-   * Span management for cursor and text selection operations.
-   * Handles cursor movement, text selection, insertion, and deletion.
-   * @namespace Span
+   * Mover handles cursor movement primitives.
+   * Can be extended by VimMover to add vim-style motions with counts.
+   * @namespace Mover
    */
-  const Span = this.Span = {
-    /**
-     * Returns selection bounds. Pass truthy for document order, falsy for [head, anchor].
-     * @param {boolean} [ordered] - If true, returns [start, end] in document order
-     * @returns {[Position, Position]} Array of positions
-     */
-    bounds: ordered => ordered && Span.dir > 0 ? [anchor, head] : [head, anchor],
-
+  const Mover = this.Mover = {
     /**
      * Moves the cursor/selection head vertically.
      * @param {number} dir - Direction: positive for down, negative for up
@@ -77,7 +70,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     mvX(dir) {
       const right = dir > 0;
       if (right ? head.x < Model._[head.y].length : head.x) { Mode.mx = right ? ++head.x : --head.x; render(); }
-      else if (right ? head.y < Model.end.y : head.y) this.mvY(dir, 1);
+      else if (right ? head.y < Model.end.y : head.y) Mover.mvY(dir, 1);
     },
 
     /**
@@ -91,7 +84,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     },
 
     /**
-     * Moves cursor by word in direction. dir: +1 forward, -1 backward. Future: other values for multi-word jumps.
+     * Moves cursor by word in direction. dir: +1 forward, -1 backward.
      */
     mvW(dir) {
       const s = Model._[head.y], n = s.length, fwd = dir > 0;
@@ -115,6 +108,20 @@ function Buffee($, { h, w, s = 4 } = {}) {
         else                                  render();
       }
     },
+  };
+
+  /**
+   * Span management for cursor and text selection operations.
+   * Handles text selection, insertion, and deletion.
+   * @namespace Span
+   */
+  const Span = this.Span = {
+    /**
+     * Returns selection bounds. Pass truthy for document order, falsy for [head, anchor].
+     * @param {boolean} [ordered] - If true, returns [start, end] in document order
+     * @returns {[Position, Position]} Array of positions
+     */
+    bounds: ordered => ordered && Span.dir > 0 ? [anchor, head] : [head, anchor],
 
     /**
      * Whether there is an active text selection (vs just a cursor).
@@ -427,7 +434,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       if(cmd || e.altKey) {
         if(!sh && Span.dir)           Span.cursor();
         else if(sh && !Span.dir)      Span.select();
-        if (arrowCode % 2) cmd ?      Span.mvLn(direction > 0) : Span.mvW(direction);
+        if (arrowCode % 2) cmd ?      Mover.mvLn(direction > 0) : Mover.mvW(direction);
       } else if (!sh && Span.dir) { // no meta key, no shift key, selection.
         if (arrowCode % 2) {
           Span.cursor(Span.bounds(1)[direction > 0 | 0]);
@@ -447,7 +454,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         }
       } else { // no meta key.
         if (sh && !Span.dir) Span.select();
-        Span[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
+        Mover[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
       }
     } else if (k.length === 1) {
       if (cmd) { if (cmdMap[k]) { e.preventDefault(); cmdMap[k](); } }
