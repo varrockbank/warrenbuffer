@@ -46,7 +46,7 @@
                 text = text.replace(/\b(TYPE|PRESS|EXPECT|at|with)\b/g, '<span class="dsl-keyword">$1</span>');
 
                 // Special keys (movement keys)
-                text = text.replace(/\b(backspace|enter|left|right|up|down)\b/g, '<span class="dsl-special-key">$1</span>');
+                text = text.replace(/\b(backspace|enter|left|right|up|down|home|end)\b/g, '<span class="dsl-special-key">$1</span>');
 
                 // Single character literals (like "a" in "PRESS a")
                 text = text.replace(/\b([a-zA-Z])\b/g, '<span class="dsl-special-key">$1</span>');
