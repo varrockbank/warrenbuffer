@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.2-alpha.1';
+  this.v = '16.3.3-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -104,10 +104,9 @@ function Buffee($, { h, w, s = 4 } = {}) {
 
     /** Collapses selection to a cursor. Optionally sets position first. */
     cursor(p) {
-      if (p) head.y = p.y, head.x = p.x;
-      anchor.y = head.y;
-      anchor.x = head.x;
-      head     = anchor;
+      anchor.y = (p || head).y;
+      anchor.x = (p || head).x;
+      head = anchor;
     },
 
     /** Begins a new selection by detaching head from anchor. Optionally sets head position. */

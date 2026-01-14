@@ -1,5 +1,8 @@
 * Project Devlog
 
+** 16.3.3-alpha.1 [2026-01-14]  gz: 2299 / 2.25 KB (+1), br: 2125 / 2.08 KB (-4), min: 4957 / 4.84 KB (-11)
+- golf: simplify cursor() using (p || head)
+
 ** 16.3.2-alpha.1 [2026-01-14]  gz: 2298 / 2.24 KB (-8), br: 2129 / 2.08 KB (-6), min: 4968 / 4.85 KB (-2)
 - perf: use a reverse while when rendering line containers
 
