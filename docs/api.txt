@@ -71,14 +71,14 @@ Span
 
 instance.Mover
 ------------------
-Cursor movement primitives. Can be extended by VimMover to add vim-style
-motions with counts.
-
 Mover
-  .mvX(dir)          move horizontally : 1 right , -1 left
-  .mvY(dir, toEdge)  move vertically   : 1 down  , -1 up. toEdge: go to edge
-  .mvLn(toEnd)       move to line edge : 1 end   ,  0 start (smart home)
-  .mvW(dir)          move by words     : 1 next  , -1 prev
+  .mvX(dir)          move horizontally    : 1 right , -1 left
+  .mvY(dir, toEdge)  move vertically      : 1 down  , -1 up. toEdge: go to edge
+  .mvLn(dir)         move to edge of line : 1 end, beginning otherwise
+
+See BuffeeVimMotion combinator for more expressive vim-style motions such as move word, 
+move line. 
+
 
 Direct position manipulation
 ----------------------------

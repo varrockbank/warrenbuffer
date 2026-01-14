@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.1.1-alpha.1';
+  this.v = '16.2.0-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -73,41 +73,8 @@ function Buffee($, { h, w, s = 4 } = {}) {
       else if (right ? head.y < Model.end.y : head.y) Mover.mvY(dir, 1);
     },
 
-    /**
-     * Moves cursor to line edge.
-     * @param {boolean} toEnd - If truthy, go to end; otherwise go to start (smart home)
-     */
-    mvLn(toEnd) {
-      const line = Model._[head.y];
-      Mode.mx = head.x = toEnd ? line.length : (c => c > 0 && c < head.x ? c : 0)(line.search(/[^ ]/));
-      render();
-    },
-
-    /**
-     * Moves cursor by word in direction. dir: +1 forward, -1 backward.
-     */
-    mvW(dir) {
-      const s = Model._[head.y], n = s.length, fwd = dir > 0;
-      if (head.x !== (fwd ? n : 0)) {
-        // Move within line
-        let j         = head.x;
-        const spaceRe = /\s/;
-        const wordRe  = /[\p{L}\p{Nd}_]/u;
-        const ok      = fwd ? () => j<n : () => j>0 ;
-        const step    = fwd ? () => j++ : () => j-- ;
-        if     (spaceRe.test(s[j])) {  while (ok() && spaceRe.test(s[j])) step(); while (ok() && wordRe.test(s[j])) step(); }
-        else if (wordRe.test(s[j]))    while (ok() && wordRe.test(s[j]))  step();
-        else { const c = s[j]; step(); while (ok() && s[j] === c) step(); }
-        head.x = j;
-        render();
-      } else if (fwd ? head.y < Model.end.y : head.y > 0) {
-                                              // At edge - move to adjacent line
-                                              head.x = fwd ? 0 : Model._[--head.y].length;
-        if (fwd && ++head.y > View.last)      View.first = head.y - View.n + 1;
-        else if (!fwd && head.y < View.first) View.first = head.y;
-        else                                  render();
-      }
-    },
+    /** Moves cursor to beginning (dir<0) or end (dir>0) of line. */
+    mvLn(dir) { Mode.mx = head.x = dir > 0 ? Model._[head.y].length : 0; render(); },
   };
 
   /**
@@ -404,64 +371,27 @@ function Buffee($, { h, w, s = 4 } = {}) {
     Span.del();
   });
 
-  // Arrow key encoding: ±1 = horizontal, ±2 = vertical, sign = direction
-  const arrowMap = { ArrowDown: 2, ArrowUp: -2, ArrowLeft: -1, ArrowRight: 1 };
-
   $lines.addEventListener('keydown', e => {
-    const cmd = e.metaKey || e.ctrlKey,
-            k = e.key,
-           sh = e.shiftKey,
-    arrowCode = arrowMap[k] || 0,
-      special = {
-        Backspace: () => Span.del(),
-        Enter: () => Span.ins(['', '']),
-        Tab: () => {
-          e.preventDefault();
-          (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]);
-        },
-    },
-      cmdMap = {
+    const cmd = e.metaKey || e.ctrlKey, k = e.key, sh = e.shiftKey, h = cmd ? 'mvLn' : 'mvX', a = {D:[1,'mvY'],U:[-1,'mvY'],L:[-1,h],R:[1,h]}[k[5]] || {Home:[0,'mvLn'],End:[1,'mvLn']}[k];
+    if (a) {
+      e.preventDefault();
+      if (Mode.i < 0) return;
+      if (!sh && Span.dir) {
+        Span.cursor(Span.bounds(1)[a[0] > 0 | 0]);
+        if (!cmd && (k[5] === 'L' || k[5] === 'R')) { render(); return; }
+      } else if (sh && !Span.dir) Span.select();
+      Mover[a[1]](a[0]);
+    } else if (k.length === 1) {
+      const cmdMap = {
         z: () => this.History?.[sh ? 'redo' : 'undo'](),
         a: () => { const e = Model.end; Span.cursor({y: 0, x: 0}); if (e.y || e.x) Span.select(e); render(); },
-    };
-
-    if (arrowCode) {
-      e.preventDefault(); // prevents page scroll
-      if (Mode.i < 0) return; // read-only mode: no navigation
-      // arrowCode: ±1 horizontal, ±2 vertical. direction: -1 (up/left), 1 (down/right)
-      const direction = arrowCode >> 31 | 1;
-
-      if(cmd || e.altKey) {
-        if(!sh && Span.dir)           Span.cursor();
-        else if(sh && !Span.dir)      Span.select();
-        if (arrowCode % 2) cmd ?      Mover.mvLn(direction > 0) : Mover.mvW(direction);
-      } else if (!sh && Span.dir) { // no meta key, no shift key, selection.
-        if (arrowCode % 2) {
-          Span.cursor(Span.bounds(1)[direction > 0 | 0]);
-          render();
-        } else {
-          const edge = Span.bounds(1)[direction > 0 | 0];
-          // edge.y is already absolute
-          const targetAbsRow = Math.max(0, Math.min(edge.y + direction, Model.end.y));
-
-          Mode.mx = Math.min(edge.x, Model._[targetAbsRow].length);
-          Span.cursor({ y: targetAbsRow, x: Mode.mx});
-
-          // Scroll viewport if target is outside visible area
-          if (targetAbsRow < View.first)     View.first = targetAbsRow;
-          else if (targetAbsRow > View.last) View.first = targetAbsRow - View.n + 1;
-          else render();
-        }
-      } else { // no meta key.
-        if (sh && !Span.dir) Span.select();
-        Mover[arrowCode % 2 ? 'mvX' : 'mvY'](direction);
-      }
-    } else if (k.length === 1) {
+      };
       if (cmd) { if (cmdMap[k]) { e.preventDefault(); cmdMap[k](); } }
-      else if (Mode.i > 0) {
-        k === ' ' && e.preventDefault();
-        Span.ins([k]);
-      }
-    } else if (special[k] && Mode.i >= 1) { special[k](); }
+      else if (Mode.i > 0) { k === ' ' && e.preventDefault(); Span.ins([k]); }
+    } else if (Mode.i >= 1) ({
+      Backspace: () => Span.del(),
+      Enter: () => Span.ins(['', '']),
+      Tab: () => { e.preventDefault(); (Span.dir || sh) ? Span.dent(sh ? -Mode.s : Mode.s) : Span.ins([' '.repeat(Mode.s)]); },
+    })[k]?.()
   });
 }

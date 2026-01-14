@@ -18,7 +18,9 @@ const Key = {
   ArrowLeft: 'ArrowLeft',
   ArrowRight: 'ArrowRight',
   ArrowUp: 'ArrowUp',
-  ArrowDown: 'ArrowDown'
+  ArrowDown: 'ArrowDown',
+  Home: 'Home',
+  End: 'End'
 };
 
 const VALID_KEYS = new Set(Object.values(Key));

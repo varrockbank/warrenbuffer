@@ -1,13 +1,14 @@
 * Project Devlog
 
-** 16.1.1-alpha.1 [2026-01-14]  gz: 2556 / 2.50 KB (+10), br: 2365 / 2.31 KB (+9), min: 5683 / 5.55 KB (22)
-- fix: VimMotion w/b now land on START of word
-- refactor: rename VimMover to VimMotion
+** 16.2.0-alpha.1 [2026-01-14]  gz: 2314 / 2.26 KB (-242), br: 2148 / 2.10 KB (-216), min: 4989 / 4.87 KB (-694)
+- api: simplify Mover to mvX, mvY, mvLn (remove mvW)
+- feat: add Home/End key support
+- feat: Cmd+Left/Right moves to line start/end
 
-** 16.1.0-alpha.1 [2026-01-14]
+** 16.1.0-alpha.1 [2026-01-14]  gz: 2568 / 2.51 KB (+9), br: 2365 / 2.31 KB (+11), min: 5683 / 5.55 KB (+12)
 - refactor: extract Mover namespace with mvX, mvY, mvLn, mvW from Span
 
-** 16.0.1-alpha.1 [2026-01-14]
+** 16.0.1-alpha.1 [2026-01-14]  gz: 2559 / 2.50 KB (+23), br: 2354 / 2.30 KB (+9), min: 5671 / 5.54 KB (+22)
 - fix: select all on empty doc keeps cursor mode
 
 ** 16.0.0-alpha.1 [2026-01-13]  gz: 2536 / 2.48 KB (+13), br: 2345 / 2.29 KB (+12), min: 5649 / 5.52 KB (47)

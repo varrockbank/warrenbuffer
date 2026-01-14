@@ -23,7 +23,9 @@ class DSLTranspiler {
     this.specialKeyMap = {
       'backspace': 'Backspace',
       'enter': 'Enter',
-      'tab': 'Tab'
+      'tab': 'Tab',
+      'home': 'Home',
+      'end': 'End'
     };
   }
 

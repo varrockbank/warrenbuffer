@@ -209,6 +209,63 @@ right with meta, shift
 EXPECT selection at 0,0-0,16
 
 
+# Home/End key navigation
+
+## should move to start of line with Home
+### Home key moves to start of line
+TYPE "Hello World"
+home
+EXPECT cursor at 0,0
+
+## should move to end of line with End
+### End key moves to end of line
+TYPE "Hello World"
+home
+end
+EXPECT cursor at 0,11
+
+## should move to start with Home from middle
+### Home from middle of line
+TYPE "Hello World"
+left 3 times
+home
+EXPECT cursor at 0,0
+
+## should move to end with End from middle
+### End from middle of line
+TYPE "Hello World"
+left 3 times
+end
+EXPECT cursor at 0,11
+
+## should select to start with Shift+Home
+### Shift+Home selects to start
+TYPE "Hello World"
+home with shift
+EXPECT selection at 0,0-0,11
+
+## should select to end with Shift+End
+### Shift+End selects to end
+TYPE "Hello World"
+home
+end with shift
+EXPECT selection at 0,0-0,11
+
+## should select from middle to start with Shift+Home
+### Shift+Home from middle
+TYPE "Hello World"
+left 3 times
+home with shift
+EXPECT selection at 0,0-0,8
+
+## should select from middle to end with Shift+End
+### Shift+End from middle
+TYPE "Hello World"
+left 3 times
+end with shift
+EXPECT selection at 0,8-0,11
+
+
 # Word movement
 
 ## should scroll viewport up when moveBackWord at first viewport line
