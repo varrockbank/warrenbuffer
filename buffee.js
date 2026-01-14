@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.5-alpha.1';
+  this.v = '16.3.6-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -80,7 +80,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      * @returns {-1|0|1}
      */
     get dir() {
-      return head === anchor ? 0 : (anchor.y === head.y && anchor.x < head.x || anchor.y < head.y) ? 1 : -1;
+      return head == anchor ? 0 : (anchor.y == head.y && anchor.x < head.x || anchor.y < head.y) ? 1 : -1;
     },
 
     /**
@@ -89,7 +89,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     get _() {
       const [left, right] = Span.bounds(1);
-      if (left.y === right.y) {
+      if (left.y == right.y) {
         const t = Model._[left.y], s = t.slice(left.x, right.x + (this.dir > 0));
         return right.x >= t.length && left.y < Model.end.y ? [s, ''] : [s];
       }
@@ -179,7 +179,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
         const line            = Model._[i];
         if (n > 0) Model._[i] = ' '.repeat(n) + line;
         else {
-          const cursor = first.y === i && first || second.y === i && second;
+          const cursor = first.y == i && first || second.y == i && second;
           if (cursor) {
             const right     = line.slice(cursor.x).search(/[^ ]|$/);
             const toRemove  = Math.min(-n, line.slice(0, cursor.x).search(/[^ ]|$/) + right);
@@ -240,7 +240,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
     ins(row, col, lines) {
       const after = this._[row].slice(col);
       this._[row] = this._[row].slice(0, col) + lines[0];
-      if (lines.length === 1) this._[row] += after;
+      if (lines.length == 1) this._[row] += after;
       else this._.splice(row + 1, 0, ...lines.slice(1, -1), lines[lines.length - 1] + after);
     },
 
@@ -253,7 +253,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
      */
     del(row, col, endRow, endCol) {
       this._[row] = this._[row].slice(0, col) + this._[endRow].slice(endCol);
-      if (row !== endRow) this._.splice(row + 1, endRow - row);
+      if (row != endRow) this._.splice(row + 1, endRow - row);
     }
   };
 
@@ -304,7 +304,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       const [firstEdge, secondEdge] = Span.bounds(1);
       const rEnd = Math.min(View.first + View.n, secondEdge.y + 1);
       for (let r = Math.max(View.first, firstEdge.y); r < rEnd; r++) {
-        const f = r === firstEdge.y, l = r === secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.first];
+        const f = r == firstEdge.y, l = r == secondEdge.y, n = Model._[r].length, {style} = viewportLayers[2][0][r - View.first];
         style.left = (f ? firstEdge.x : 0) + 'ch';
         style.width = (f && l ? secondEdge.x - firstEdge.x : f ? n - firstEdge.x + 1 : l ? Math.min(secondEdge.x, n) : n + 1) + 'ch';
       }
@@ -356,19 +356,19 @@ function Buffee($, { h, w, s = 4 } = {}) {
       if (Mode.i >= 0) {
         if (!sh && Span.dir) {
           Span.cursor(Span.bounds(1)[a[0] > 0 | 0]);
-          (cmd || k[5] !== 'L' && k[5] !== 'R') ? Span[a[1]](a[0]) : render();
+          (cmd || k[5] != 'L' && k[5] != 'R') ? Span[a[1]](a[0]) : render();
         } else {
           if (sh && !Span.dir) Span.select();
           Span[a[1]](a[0]);
         }
       }
-    } else if (k.length === 1) {
+    } else if (k.length == 1) {
       const cmdMap = {
         z: () => this.History?.[sh ? 'redo' : 'undo'](),
         a: () => { const e = Model.end; Span.cursor({y: 0, x: 0}); if (e.y || e.x) Span.select(e); render(); },
       };
       if (cmd) { if (cmdMap[k]) { e.preventDefault(); cmdMap[k](); } }
-      else if (Mode.i > 0) { k === ' ' && e.preventDefault(); Span.ins([k]); }
+      else if (Mode.i > 0) { k == ' ' && e.preventDefault(); Span.ins([k]); }
     } else if (Mode.i >= 1) ({
       Backspace: () => Span.del(),
       Enter: () => Span.ins(['', '']),
