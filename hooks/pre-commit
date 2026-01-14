@@ -123,7 +123,7 @@ report_sizes() {
 
 # Generate dist/buffe.min.js (core only)
 get_old_sizes dist/buffe.min.js
-perl -pe 's/\bconst\b/let/g' buffe.js | terser -c -m -o dist/buffe.min.js
+perl -pe 's/\bconst\b/let/g' buffe.js | terser -c pure_getters -m -o dist/buffe.min.js
 if [ $? -ne 0 ]; then echo "✗ buffe.min.js minification failed"; exit 1; fi
 report_sizes "buffe.min.js (core)" dist/buffe.min.js
 CORE_SIZE=$NEW_SIZE; CORE_GZ=$NEW_GZIPPED; CORE_BR=$NEW_BROTLI
@@ -132,7 +132,7 @@ CORE_DIFF=${DIFF:-0}; CORE_DIFF_GZ=${DIFF_GZIPPED:-0}; CORE_DIFF_BR=${DIFF_BROTL
 
 # Generate dist/buffee.min.js (core + controller)
 get_old_sizes dist/buffee.min.js
-cat buffe.js buffee.js | perl -pe 's/\bconst\b/let/g' | terser -c -m -o dist/buffee.min.js
+cat buffe.js buffee.js | perl -pe 's/\bconst\b/let/g' | terser -c pure_getters -m -o dist/buffee.min.js
 if [ $? -ne 0 ]; then echo "✗ buffee.min.js minification failed"; exit 1; fi
 report_sizes "buffee.min.js (combined)" dist/buffee.min.js
 COMB_SIZE=$NEW_SIZE; COMB_GZ=$NEW_GZIPPED; COMB_BR=$NEW_BROTLI
