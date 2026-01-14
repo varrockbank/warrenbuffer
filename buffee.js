@@ -18,7 +18,7 @@
  * editor.View.render();
  */
 function Buffee($, { h, w, s = 4 } = {}) {
-  this.v = '16.3.6-alpha.1';
+  this.v = '16.3.7-alpha.1';
   this.$ = $;
   // head.y and anchor.y are ABSOLUTE line numbers (Model indices, not viewport-relative).
   // This allows selections to span beyond the viewport.
@@ -282,7 +282,7 @@ function Buffee($, { h, w, s = 4 } = {}) {
       for (d = delta; d < 0; d++) for (const [a]      of viewportLayers) a.pop()?.remove();
     }
     if ($rail) {
-      const railCols = Math.max(railInit, (View.first + vN + !h).toString().length) + railPad;
+      const railCols = Math.max(railInit, `${View.first + vN + !h}`.length) + railPad;
       $rail.style.width = railCols + 'ch';
       if (w) $pane.style.width = `calc(${railCols + w}ch + ${padding * 4}px)`;
     }
