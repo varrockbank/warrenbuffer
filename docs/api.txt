@@ -20,6 +20,7 @@ instance
   .Model             see Model namespace below
   .View              see View  namespace below
   .Span              see Span  namespace below
+  .Mover             see Mover namespace below
   .Mode              see Mode  namespace below
 
 
@@ -61,15 +62,23 @@ Span
   ._                 Get selected lines
   .bounds(value)     returns bounds: truthy [start, end], falsey [head, tail]
   .dir               orientation: 1 (forward), -1 (backward), 0 (cursor)
-  .mvX(value)        move horizontally : 1 right , -1 left
-  .mvY(value)        move vertically   : 1 down  , -1 up
-  .mvLn(value)       move to '\n'      : 1 end   ,  0 front
-  .mvW(value)        move by words     : 1 next  , -1 prev
   .del()             delete text Span-wise
   .ins(lines)        insert lines (string[]) Span-wise
   .select(pos)       make selection, optionally set head to {y, x}
   .cursor(pos)       make cursor, optionally at {y, x}
   .dent(value)       indent or unindent : 1 indent, -1 unindent
+
+
+instance.Mover
+------------------
+Cursor movement primitives. Can be extended by VimMover to add vim-style
+motions with counts.
+
+Mover
+  .mvX(dir)          move horizontally : 1 right , -1 left
+  .mvY(dir, toEdge)  move vertically   : 1 down  , -1 up. toEdge: go to edge
+  .mvLn(toEnd)       move to line edge : 1 end   ,  0 start (smart home)
+  .mvW(dir)          move by words     : 1 next  , -1 prev
 
 Direct position manipulation
 ----------------------------
