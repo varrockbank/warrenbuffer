@@ -5,6 +5,12 @@
   <title>buffee - Examples</title>
   <link rel="stylesheet" href="../assets/reset.css">
   <link rel="stylesheet" href="../style.css">
+  <style>
+    table { border: none; margin-bottom: 2rem; margin-left: 1rem; }
+    td { padding: 0.25rem 0.5rem; text-align: left; border: none; }
+    td:first-child { white-space: nowrap; }
+    td:first-child::before { content: "•"; margin-right: 0.5rem; }
+  </style>
 </head>
 <body>
   <nav id="nav"></nav>
@@ -18,32 +24,32 @@
   <h1>Examples</h1>
 
   <h2>Core</h2>
-  <ul>
-    <li><a href="sample-basic.html">sample-basic</a> - Simple editable text editor</li>
-    <li><a href="sample-gutter-status.html">sample-gutter-status</a> - Gutter and status bar options</li>
-    <li><a href="sample-sizing.html">sample-sizing</a> - Editor sizing with character units</li>
-  </ul>
+  <table>
+    <tr><td><a href="sample-basic.html">sample-basic</a></td><td>Simple editable text editor</td></tr>
+    <tr><td><a href="sample-gutter-status.html">sample-gutter-status</a></td><td>Gutter and status bar options</td></tr>
+    <tr><td><a href="sample-sizing.html">sample-sizing</a></td><td>Editor sizing with character units</td></tr>
+  </table>
 
   <h2>Combinators</h2>
-  <ul>
-    <li><a href="sample-history.html">sample-history</a> - Undo/redo with history combinator</li>
-    <li><a href="sample-undotree.html">sample-undotree</a> - Tree-based undo with branch navigation</li>
-    <li><a href="sample-syntax.html">sample-syntax</a> - Regex-based syntax highlighting</li>
-    <li><a href="sample-elementals.html">sample-elementals</a> - Layer-based UI elements (DOM nodes)</li>
-    <li><a href="sample-tui.html">sample-tui</a> - TUI elements via text manipulation</li>
-    <li><a href="sample-loader.html">sample-loader</a> - Load files with millions/billions of lines</li>
-    <li><a href="sample-readonly.html">sample-readonly</a> - Read-only mode (TUI and UHC)</li>
-    <li><a href="sample-ios.html">sample-ios</a> - iOS touch and keyboard support</li>
-    <li><a href="sample-sanitize.html">sample-sanitize</a> - Tab and Unicode sanitization</li>
-    <li><a href="sample-vimmotion.html">sample-vimmotion</a> - Vim-style motion commands</li>
-  </ul>
+  <table>
+    <tr><td><a href="sample-history.html">sample-history</a></td><td>Undo/redo with history combinator</td></tr>
+    <tr><td><a href="sample-undotree.html">sample-undotree</a></td><td>Tree-based undo with branch navigation</td></tr>
+    <tr><td><a href="sample-syntax.html">sample-syntax</a></td><td>Regex-based syntax highlighting</td></tr>
+    <tr><td><a href="sample-elementals.html">sample-elementals</a></td><td>Layer-based UI elements (DOM nodes)</td></tr>
+    <tr><td><a href="sample-tui.html">sample-tui</a></td><td>TUI elements via text manipulation</td></tr>
+    <tr><td><a href="sample-loader.html">sample-loader</a></td><td>Load files with millions/billions of lines</td></tr>
+    <tr><td><a href="sample-readonly.html">sample-readonly</a></td><td>Read-only mode (TUI and UHC)</td></tr>
+    <tr><td><a href="sample-ios.html">sample-ios</a></td><td>iOS touch and keyboard support</td></tr>
+    <tr><td><a href="sample-sanitize.html">sample-sanitize</a></td><td>Tab and Unicode sanitization</td></tr>
+    <tr><td><a href="sample-vimmotion.html">sample-vimmotion</a></td><td>Vim-style motion commands</td></tr>
+  </table>
 
   <h2>Fun Examples</h2>
-  <ul>
-    <li><a href="sample-movie.html">sample-movie</a> - Star Wars ASCII animation player</li>
-    <li><a href="sample-matrix.html">sample-matrix</a> - Matrix digital rain effect</li>
-    <li><a href="sample-conway.html">sample-conway</a> - Conway's Game of Life</li>
-  </ul>
+  <table>
+    <tr><td><a href="sample-movie.html">sample-movie</a></td><td>Star Wars ASCII animation player</td></tr>
+    <tr><td><a href="sample-matrix.html">sample-matrix</a></td><td>Matrix digital rain effect</td></tr>
+    <tr><td><a href="sample-conway.html">sample-conway</a></td><td>Conway's Game of Life</td></tr>
+  </table>
 
 </body>
 </html>
